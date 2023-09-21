@@ -52,7 +52,7 @@ WORKDIR /app
 #RUN poetry install --only main --no-interaction --no-ansi
 
 RUN rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
-
+COPY requirements.txt ./ 
 RUN pip install -r requirements.txt \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
   
@@ -74,8 +74,8 @@ COPY gunicorn.ini manage.py ./
 RUN touch /app/.env
 COPY .git ./.git
 COPY govapp ./govapp
-RUN cd /app/govapp/frontend; npm install
-RUN cd /app/govapp/frontend; npm run build
+#RUN cd /app/govapp/frontend; npm install
+#RUN cd /app/govapp/frontend; npm run build
 RUN python manage.py collectstatic --noinput
 RUN apt-get install --no-install-recommends -y python3-pil
 RUN apt-get install --no-install-recommends -y postgis 
