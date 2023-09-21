@@ -44,12 +44,13 @@ RUN pip install --upgrade pip
 # Install Python libs using pyproject.toml and poetry.lock
 FROM builder_base_pbsv2 as python_libs_pbsv2
 WORKDIR /app
-ENV POETRY_VERSION=1.3.2
-RUN curl -sSL https://install.python-poetry.org | python -
-RUN ln -s /root/.local/bin/poetry /usr/bin/poetry
-RUN poetry config virtualenvs.create false
-COPY pyproject.toml poetry.lock ./
-RUN poetry install --only main --no-interaction --no-ansi
+#ENV POETRY_VERSION=1.3.2
+#RUN curl -sSL https://install.python-poetry.org | python -
+#RUN ln -s /root/.local/bin/poetry /usr/bin/poetry
+#RUN poetry config virtualenvs.create false
+#COPY pyproject.toml poetry.lock ./
+#RUN poetry install --only main --no-interaction --no-ansi
+
 RUN rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
 
 # Install the project (ensure that frontend projects have been built prior to this step).
