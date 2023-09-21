@@ -1,0 +1,1 @@
+DATABASE_URL="sqlite://db/sqlite.db"  DEBUG=True python manage.py runserver 0.0.0.0:9151
