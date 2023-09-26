@@ -15,17 +15,17 @@ module.exports = {
     publicPath: '/static/pbsv2_vue/',
     filenameHashing: false,
     chainWebpack: (config) => {
-        config.resolve.alias.set(
-            '@vue-utils',
-            path.resolve(__dirname, 'src/utils/vue')
-        );
-        config.resolve.alias.set(
-            '@common-utils',
-            path.resolve(__dirname, 'src/components/common/')
-        );
+        // config.resolve.alias.set(
+        //     '@vue-utils',
+        //     path.resolve(__dirname, 'src/utils/vue')
+        // );
+        // config.resolve.alias.set(
+        //     '@common-utils',
+        //     path.resolve(__dirname, 'src/components/common/')
+        // );
         config.resolve.alias.set(
             '@static-root',
-            path.resolve(__dirname, '../../../staticfiles_ll/')
+            path.resolve(__dirname, '../../../staticfiles/')
         );
 
         // https://ckeditor.com/docs/ckeditor5/latest/installation/integrations/vuejs-v3.html#webpack
@@ -102,6 +102,10 @@ module.exports = {
                 //index: true,
                 writeToDisk: true,
             },
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+            },		
             client: {
                 webSocketURL: 'ws://0.0.0.0:' + port + '/ws',
             },

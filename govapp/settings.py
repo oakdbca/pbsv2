@@ -46,6 +46,7 @@ else:
 
 # Application definition
 INSTALLED_APPS = [
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -63,6 +64,7 @@ INSTALLED_APPS = [
     "django_cron",
 ]
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -123,7 +125,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "govapp/static",  # Look for static files in the frontend
-    BASE_DIR / "govapp/frontend/node_modules"  # node modules that are collected and used in the frontend
+    #BASE_DIR / "govapp/frontend/node_modules"  # node modules that are collected and used in the frontend
 ]
 
 # Default primary key field type
@@ -222,3 +224,4 @@ TIME_ZONE = 'Australia/Perth'
 
 
 
+CORS_ORIGIN_ALLOW_ALL = True

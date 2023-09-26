@@ -37,7 +37,7 @@ admin.site.site_title = conf.settings.PROJECT_TITLE
 urlpatterns = [
     # Home Page
     urls.path("", views.HomePage.as_view(), name="home"),
-
+    urls.path("test", views.HomePage.as_view(), name="test"),
     # Django Administration
     urls.path("admin/", admin.site.urls),\
 ]
