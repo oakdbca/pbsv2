@@ -11,7 +11,7 @@ export default {
 
 
 </script>
-THIS IS A TEST
+
 <style>
 .popover {
     max-width: 100% !important;

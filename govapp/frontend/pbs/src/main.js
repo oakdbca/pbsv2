@@ -1,3 +1,4 @@
+console.log("JASON 1");
 import { createApp } from 'vue';
 import router from './router';
 import App from './App';
@@ -65,8 +66,6 @@ app.config.globalProperties.$filters = {
         return JSON.stringify(val, null, indent);
     },
 };
-// Cors
-var cors = require("cors");
-app.use(cors())
+
 app.use(router).use(govVue3Components).use(CKEditor);
 router.isReady().then(() => app.mount('#app'));
