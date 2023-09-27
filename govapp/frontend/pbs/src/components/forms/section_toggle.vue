@@ -95,8 +95,6 @@ export default {
                 return;
             }
 
-            // $(this.$refs.section_body)[0].__vnode.children[0].children[0].component.ctx.$refs.organisation_contacts_datatable.vmDataTable.draw()
-
             // Get a list of all the nodes in the slot section
             let formSection_vnode = $(
                 this.$refs.section_body

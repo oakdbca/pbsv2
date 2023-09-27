@@ -4,7 +4,6 @@ import Test from '@/components/test/test.vue';
 
 var NotFoundComponent = null;
 const router = createRouter({
-    //history: createWebHistory(process.env.BASE_URL),
     history: createWebHistory(),
     strict: false,
     routes: [

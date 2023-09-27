@@ -53,14 +53,14 @@
                 :class="ffu_input_element_classname"
                 @change="handleChangeWrapper"
             />
-            <div v-if="replace_button_by_text">
+            <div v-if="replaceButtonByText">
                 <span
                     :id="'button-' + name"
                     class="btn btn-primary ffu-input-text"
                     @click="button_clicked(name)"
                 >
                     <i class="fa fa-upload" aria-hidden="true"></i>&nbsp;
-                    {{ text_string }}</span
+                    {{ textString }}</span
                 >
             </div>
         </div>
@@ -120,21 +120,21 @@ export default {
         },
 
         // For optional text button
-        replace_button_by_text: {
+        replaceButtonByText: {
             type: Boolean,
             default: false,
         },
-        text_string: {
+        textString: {
             type: String,
             default: 'Attach Document',
         },
-        approval_type: {
+        approvalType: {
             type: Number,
-            required: false,
+            required: true,
         },
-        approval_type_document_type: {
+        approvalTypeDocumentType: {
             type: Number,
-            required: false,
+            required: true,
         },
     },
     emits: ['update-parent', 'update-temp-doc-coll-id'],
@@ -157,7 +157,7 @@ export default {
             }
         },
         ffu_input_element_classname: function () {
-            if (this.replace_button_by_text) {
+            if (this.replaceButtonByText) {
                 return 'ffu-input-elem';
             }
             return '';
@@ -213,7 +213,7 @@ export default {
 
     methods: {
         button_clicked: function (value) {
-            if (this.replace_button_by_text) {
+            if (this.replaceButtonByText) {
                 // Input field id contains the document name which may contain
                 // special characters (e.g. !"#$%&'()*+,./:;<=>?@[]^`{|}~)
                 // Exact match treats values as strings.
@@ -343,10 +343,10 @@ export default {
                     );
                 }
                 formData.append('input_name', this.name);
-                formData.append('approval_type', this.approval_type);
+                formData.append('approval_type', this.approvalType);
                 formData.append(
                     'approval_type_document_type',
-                    this.approval_type_document_type
+                    this.approvalTypeDocumentType
                 );
                 formData.append('filename', e.target.files[0].name);
                 formData.append('_file', this.uploadFile(e));
