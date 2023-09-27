@@ -1,4 +1,4 @@
-"""Provides Common Utilities, Helpers and Mixins for Kaartdijin Boodja Apps."""
+"""Provides Common Utilities, Helpers and Mixins for Prescribed Burns System Apps."""
 
 from . import azure
 from . import mixins

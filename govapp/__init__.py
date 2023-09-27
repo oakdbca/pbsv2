@@ -1,1 +1,1 @@
-"""The Kaartdijin Boodja DBCA Django Project."""
+"""The Prescribed Burns System DBCA Django Project."""

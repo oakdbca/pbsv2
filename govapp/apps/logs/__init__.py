@@ -1,1 +1,1 @@
-"""Kaartdijin Boodja Logs Django Application."""
+"""Prescribed Burns System Logs Django Application."""

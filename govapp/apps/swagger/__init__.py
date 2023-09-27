@@ -1,1 +1,1 @@
-"""Kaartdijin Boodja Swagger UI Django Application."""
+"""Prescribed Burns System Swagger UI Django Application."""

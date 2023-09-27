@@ -1,4 +1,4 @@
-"""WSGI config for the Kaartdijin Boodja project.
+"""WSGI config for the Prescribed Burns System project.
 
 It exposes the WSGI callable as a module-level variable named `application`.
 

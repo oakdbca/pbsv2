@@ -1,1 +1,1 @@
-"""Kaartdijin Boodja Catalogue Django Application Management Commands."""
+"""Prescribed Burns System Catalogue Django Application Management Commands."""
