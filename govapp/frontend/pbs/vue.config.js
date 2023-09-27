@@ -8,7 +8,7 @@ const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 
 // Useful plugin to find out what is making the bundle so big
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const port = process.env.PORT ? parseInt(process.env.PORT) : 9072;
+const port = process.env.PORT ? parseInt(process.env.PORT) : 9152;
 
 module.exports = {
     outputDir: path.resolve(__dirname, '../../static/pbsv2_vue'),
@@ -103,9 +103,10 @@ module.exports = {
                 writeToDisk: true,
             },
             headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-            },		
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers':
+                    'Origin, X-Requested-With, Content-Type, Accept',
+            },
             client: {
                 webSocketURL: 'ws://0.0.0.0:' + port + '/ws',
             },

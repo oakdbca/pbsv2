@@ -104,6 +104,9 @@ uwsgi*.ini
 npm locks
 *-lock.json
 
+# npm build files
+govapp/static/pbsv2_vue/
+
 git_history_recent
 
 *.csv

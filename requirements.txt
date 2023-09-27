@@ -14,6 +14,7 @@ python-dateutil==2.8.2
 django-reversion==5.0.5
 django-reversion-rest-framework==1.1.2
 django-cron==0.6.0
+django-cors-headers==4.2.0
 py7zr==0.20.6
 httpx==0.25.0
 owslib==0.29.2
