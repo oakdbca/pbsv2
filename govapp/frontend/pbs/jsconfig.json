@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "checkJs": false,
+      "baseUrl": ".",
+      "paths": {
+        "~/*": ["./src/*"],
+        "@/*": ["./src/*"],
+        "~~/*": ["./*"],
+        "@@/*": ["./*"],
+        "@vue-utils/*": ["./src/utils/vue/*"],
+        "@common-utils/*": ["./src/utils/common/*"],
+        "@static-root/*": ["../../../staticfiles/*"],
+      }
+    },
+    "exclude": ["node_modules", "**/node_modules/*"]
+  }
