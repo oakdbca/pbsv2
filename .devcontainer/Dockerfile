@@ -4,9 +4,14 @@ ENV POETRY_VERSION=1.6.1
 ARG workspace_folder
 ENV WORKSPACE_FOLDER=$workspace_folder
 
-RUN apt update && \
+# Install GDAL and others
+RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable && \
+    apt update && \
     apt install -y sudo && \
-    sudo apt install -y locate
+    sudo apt install -y locate && \
+    sudo apt install --no-install-recommends -y gdal-bin libgdal-dev python3-gdal && \
+    gdal-config --version && \
+    sleep 1
 
 # Add a non-root user
 ARG USERNAME=container
@@ -31,7 +36,8 @@ RUN pip install "poetry==$POETRY_VERSION" && \
     echo "Poetry binary location: $(which poetry)" && \
     echo "Poetry version: $(poetry --version)" && \
     echo "Workspace folder: $WORKSPACE_FOLDER" && \
-    sleep 1
+    sleep 1 && \
+    pip install gdal==`gdal-config --version`
 
 # Install Poetry dependencies
 FROM build_dev_poetry_install AS build_dev_poetry_install_deps
