@@ -8,6 +8,7 @@ ENV PRODUCTION_EMAIL=True
 ENV SECRET_KEY="ThisisNotRealKey"
 ENV SITE_DOMAIN='dbca.wa.gov.au'
 ENV BPAY_ALLOWED=False
+ENV POETRY_VERSION=1.6.1
 
 # Use Australian Mirrors
 RUN sed 's/archive.ubuntu.com/au.archive.ubuntu.com/g' /etc/apt/sources.list > /etc/apt/sourcesau.list
@@ -17,12 +18,12 @@ RUN mv /etc/apt/sourcesau.list /etc/apt/sources.list
 RUN apt-get clean
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install --no-install-recommends -y curl wget git libmagic-dev gcc binutils python3 python3-setuptools python3-dev python3-pip tzdata cron gpg-agent 
+RUN apt-get install --no-install-recommends -y curl wget git libmagic-dev gcc binutils python3 python3-setuptools python3-dev python3-pip tzdata cron gpg-agent
 RUN apt-get install --no-install-recommends -y libpq-dev patch
 RUN apt-get install --no-install-recommends -y postgresql-client mtr systemd
 RUN apt-get install --no-install-recommends -y vim postgresql-client ssh htop
 RUN apt-get install --no-install-recommends -y rsyslog
-RUN apt-get install --no-install-recommends -y software-properties-common 
+RUN apt-get install --no-install-recommends -y software-properties-common
 RUN add-apt-repository ppa:deadsnakes/ppa -y
 RUN apt update
 RUN apt-get install --no-install-recommends -y  python3.10
@@ -46,10 +47,14 @@ FROM builder_base_pbsv2 as python_libs_pbsv2
 WORKDIR /app
 
 RUN rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
-COPY requirements.txt ./ 
-RUN pip install -r requirements.txt \
+# COPY requirements.txt ./
+# RUN pip install -r requirements.txt \
+  # && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
+COPY pyproject.toml poetry.lock ./
+RUN pip install "poetry==$POETRY_VERSION" \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
-  
+RUN --mount=type=cache,target=~/.cache/pypoetry/cache poetry install --only main --no-interaction --no-ansi
+
 # Install the project (ensure that frontend projects have been built prior to this step).
 FROM python_libs_pbsv2
 COPY timezone /etc/timezone
@@ -70,9 +75,10 @@ COPY .git ./.git
 COPY govapp ./govapp
 RUN cd /app/govapp/frontend/pbs; npm install
 RUN cd /app/govapp/frontend/pbs; npm run build
-RUN python manage.py collectstatic --noinput
+# RUN python manage.py collectstatic --noinput
+RUN poetry run python manage.py collectstatic --no-input
 RUN apt-get install --no-install-recommends -y python3-pil
-RUN apt-get install --no-install-recommends -y postgis 
+RUN apt-get install --no-install-recommends -y postgis
 EXPOSE 8080
 HEALTHCHECK --interval=1m --timeout=5s --start-period=10s --retries=3 CMD ["wget", "-q", "-O", "-", "http://localhost:8080/"]
 CMD ["/startup.sh"]

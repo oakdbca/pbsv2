@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "pbsv2"
+version = "1.0.0"
+description = "A Vue.js project"
+authors = ["DBCA OIM <asi@dbca.wa.gov.au>"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "4.2.5"
+djangorestframework = "3.14.0"
+python-decouple = "3.8"
+dj-database-url = "2.1.0"
+psycopg2 = "2.9.7"
+gunicorn = "21.2.0"
+whitenoise = "6.5.0"
+dbca-utils = {git = "https://github.com/dbca-wa/dbca-utils.git", rev = "1.1.1"}
+webtemplate_dbca = {git = "https://github.com/dbca-wa/webtemplate2.git"}
+wagov_utils = {git = "https://github.com/dbca-wa/wagov_utils.git"}
+drf-spectacular = "0.26.4"
+django-filter = "23.3"
+python-dateutil = "2.8.2"
+django-reversion = "5.0.5"
+django-reversion-rest-framework = "1.1.2"
+django-cron = "0.6.0"
+django-cors-headers = "4.2.0"
+py7zr = "0.20.6"
+httpx = "0.25.0"
+owslib = "0.29.2"
+numpy = "1.24.4"
+
+
+[tool.poetry.dev-dependencies]
+django-debug-toolbar = "^3.4.0"
+ipython = "^8.3.0"
+ipdb = "^0.13.9"
+pylint = "2.13.8"
+flake8 = "4.0.1"
+autopep8 = "1.6.0"
+black = "22.3.0"
+
+[build-system]
+requires = ["poetry-core>=1.6.1"]
+build-backend = "poetry.core.masonry.api"
