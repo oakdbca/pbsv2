@@ -4,7 +4,6 @@ from rest_framework import routers
 # Local
 from govapp.apps.accounts import views
 
-
 # Router
 router = routers.DefaultRouter()
 router.register("users", views.UserViewSet)

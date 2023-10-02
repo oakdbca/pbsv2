@@ -1,25 +1,19 @@
-
-# Standard
 import logging
+from typing import Any, Optional, Union
 
-# Third-Party
-from django import conf
-from django import template
+from django import conf, template
 from django.core import mail
 from django.template import loader
 from django.utils import html
-
-# Typing
-from typing import Any, Optional, Union
-
-# email
-from wagov_utils.components.utils.email import TemplateEmailBase as WAGovUtilsTemplateEmailBase
+from wagov_utils.components.utils.email import (
+    TemplateEmailBase as WAGovUtilsTemplateEmailBase,
+)
 
 # Logging
 log = logging.getLogger(__name__)
 
-class TemplateEmailBase(WAGovUtilsTemplateEmailBase):
 
+class TemplateEmailBase(WAGovUtilsTemplateEmailBase):
     def send_to(
         self,
         *users: Any,
@@ -33,17 +27,20 @@ class TemplateEmailBase(WAGovUtilsTemplateEmailBase):
         """
         # Filter the supplied users to only objects that have an `email`
         # attribute, and cast them to a set to eliminate any duplicated
-            
+
         for user in users:
-            if not hasattr(user, 'email'):
+            if not hasattr(user, "email"):
                 continue
             context = context if context else {}
-            context['first_name'] = user.first_name if hasattr(user, 'first_name') else user.name
+            context["first_name"] = (
+                user.first_name if hasattr(user, "first_name") else user.name
+            )
             self.send(user.email, context=context)
 
 
 class OLDTemplateEmailBase:
     """Base Class for a Template Email."""
+
     subject = ""
     html_template = "base_email.html"
     txt_template = "base_email.txt"
@@ -61,7 +58,7 @@ class OLDTemplateEmailBase:
         """
         # Filter the supplied users to only objects that have an `email`
         # attribute, and cast them to a set to eliminate any duplicated
-        filtered_emails = set(u.email for u in users if hasattr(u, "email"))
+        filtered_emails = {u.email for u in users if hasattr(u, "email")}
 
         # Loop through users
         for email in filtered_emails:

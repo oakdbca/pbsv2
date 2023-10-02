@@ -1,13 +1,12 @@
-
 # Third-Party
-from django.db import models
+# Typing
+from typing import Union
+
 from django.contrib.auth import models as auth_models
+from django.db import models
 
 # Local
 from govapp.apps.logs import models as logs_models
-
-# Typing
-from typing import Union
 
 
 def add_to_actions_log(

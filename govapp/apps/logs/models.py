@@ -1,10 +1,8 @@
-
 # Third-Party
 from django.contrib import auth
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes import models as ct_models
 from django.db import models
-
 
 # Shortcuts
 UserModel = auth.get_user_model()
@@ -12,6 +10,7 @@ UserModel = auth.get_user_model()
 
 class CommunicationsLogEntryType(models.IntegerChoices):
     """Enumeration for a Communications Log Entry Type."""
+
     EMAIL = 1
     PHONE = 2
     MAIL = 3
@@ -21,6 +20,7 @@ class CommunicationsLogEntryType(models.IntegerChoices):
 
 class CommunicationsLogEntry(models.Model):
     """Model for a Communications Log Entry."""
+
     # Generic Foreign Key
     # See: https://docs.djangoproject.com/en/3.2/ref/contrib/contenttypes/#generic-relations
     content_type = models.ForeignKey(ct_models.ContentType, on_delete=models.CASCADE)
@@ -35,10 +35,13 @@ class CommunicationsLogEntry(models.Model):
     fromm = models.TextField(blank=True)
     subject = models.TextField(blank=True)
     text = models.TextField(blank=True)
-    user = models.ForeignKey(UserModel, related_name="communications_log_entries", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        UserModel, related_name="communications_log_entries", on_delete=models.CASCADE
+    )
 
     class Meta:
         """Communications Log Entry Model Metadata."""
+
         verbose_name = "Communications Log Entry"
         verbose_name_plural = "Communications Log Entries"
 
@@ -50,7 +53,7 @@ class CommunicationsLogEntry(models.Model):
         """
         # Generate String and Return
         return f"{self.content_type.name} - {self.content_object}"
-    
+
     @property
     def username(self) -> str:
         """Provides a string of user's name that combined first and last name.
@@ -64,15 +67,21 @@ class CommunicationsLogEntry(models.Model):
 
 class CommunicationsLogDocument(models.Model):
     """Model for a Communications Log Document."""
+
     name = models.TextField(blank=True)
     description = models.TextField(blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    entry = models.ForeignKey(CommunicationsLogEntry, related_name="documents", on_delete=models.CASCADE)
+    entry = models.ForeignKey(
+        CommunicationsLogEntry, related_name="documents", on_delete=models.CASCADE
+    )
     file = models.FileField(upload_to="documents")
-    user = models.ForeignKey(UserModel, related_name="communications_log_documents", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        UserModel, related_name="communications_log_documents", on_delete=models.CASCADE
+    )
 
     class Meta:
         """Communications Log Document Model Metadata."""
+
         verbose_name = "Communications Log Document"
         verbose_name_plural = "Communications Log Documents"
 
@@ -88,6 +97,7 @@ class CommunicationsLogDocument(models.Model):
 
 class ActionsLogEntry(models.Model):
     """Model for an Actions Log Entry."""
+
     # Generic Foreign Key
     # See: https://docs.djangoproject.com/en/3.2/ref/contrib/contenttypes/#generic-relations
     content_type = models.ForeignKey(ct_models.ContentType, on_delete=models.CASCADE)
@@ -95,12 +105,15 @@ class ActionsLogEntry(models.Model):
     content_object = fields.GenericForeignKey("content_type", "object_id")
 
     # Actions Log Entry Fields
-    who = models.ForeignKey(UserModel, related_name="actions_log_entries", on_delete=models.CASCADE)
+    who = models.ForeignKey(
+        UserModel, related_name="actions_log_entries", on_delete=models.CASCADE
+    )
     when = models.DateTimeField(auto_now_add=True)
     what = models.TextField()
 
     class Meta:
         """Actions Log Entry Model Metadata."""
+
         verbose_name = "Actions Log Entry"
         verbose_name_plural = "Actions Log Entries"
 
@@ -112,7 +125,7 @@ class ActionsLogEntry(models.Model):
         """
         # Generate String and Return
         return f"{self.content_object}"
-    
+
     @property
     def username(self) -> str:
         """Provides a string of user's name that combined first and last name.
@@ -122,4 +135,3 @@ class ActionsLogEntry(models.Model):
         """
         # Generate String and Return
         return f"{self.who.first_name} {self.who.last_name}"
-        

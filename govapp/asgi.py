@@ -13,7 +13,6 @@ import os
 # Third-Party
 from django.core import asgi
 
-
 # Set Django settings environment variable
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "govapp.settings")
 

@@ -1,12 +1,10 @@
-# Third-Party
+from collections.abc import Iterable
+from typing import Union
+
 from django import conf
 from django.contrib import auth
 from django.contrib.auth import models
 from django.db.models import query
-
-# Typing
-from typing import Iterable, Union
-
 
 # Shortcuts
 UserModel = auth.get_user_model()
@@ -19,9 +17,7 @@ def all_administrators() -> Iterable[models.User]:
         models.User: Users in the administrator group.
     """
     # Retrieve and Yield
-    yield from UserModel.objects.filter(
-        groups__id=conf.settings.GROUP_ADMINISTRATOR_ID
-    )
+    yield from UserModel.objects.filter(groups__id=conf.settings.GROUP_ADMINISTRATOR_ID)
 
 
 def all_catalogue_editors() -> Iterable[models.User]:
@@ -48,7 +44,9 @@ def is_administrator(user: Union[models.User, models.AnonymousUser]) -> bool:
     # Check and Return
     return (
         not isinstance(user, models.AnonymousUser)  # Must be logged in
-        and user.groups.filter(id=conf.settings.GROUP_ADMINISTRATOR_ID).exists()  # Must be in group
+        and user.groups.filter(
+            id=conf.settings.GROUP_ADMINISTRATOR_ID
+        ).exists()  # Must be in group
     )
 
 
@@ -64,7 +62,9 @@ def is_catalogue_editor(user: Union[models.User, models.AnonymousUser]) -> bool:
     # Check and Return
     return (
         not isinstance(user, models.AnonymousUser)  # Must be logged in
-        and user.groups.filter(id=conf.settings.GROUP_CATALOGUE_EDITOR_ID).exists()  # Must be in group
+        and user.groups.filter(
+            id=conf.settings.GROUP_CATALOGUE_EDITOR_ID
+        ).exists()  # Must be in group
     )
 
 

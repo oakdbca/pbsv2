@@ -5,12 +5,7 @@ import logging
 from django import conf
 from django.core import management
 from drf_spectacular import utils as drf_utils
-from rest_framework import decorators
-from rest_framework import request
-from rest_framework import response
-from rest_framework import routers
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import decorators, request, response, routers, status, viewsets
 
 # Local
 from govapp.apps.accounts import permissions
@@ -22,6 +17,7 @@ log = logging.getLogger(__name__)
 @drf_utils.extend_schema(tags=["Management Commands"])
 class ManagementCommands(viewsets.ViewSet):
     """Management Commands View Set."""
+
     permission_classes = [permissions.IsInAdministratorsGroup]
 
     @drf_utils.extend_schema(request=None, responses={status.HTTP_204_NO_CONTENT: None})
@@ -44,7 +40,9 @@ class ManagementCommands(viewsets.ViewSet):
             # be able to run the scanner if its already running. The `--force`
             # option is used to allow us to call the scanner whenever we want,
             # but it does not bypass the concurrency locking.
-            management.call_command("runcrons", conf.settings.CRON_SCANNER_CLASS, "--force")
+            management.call_command(
+                "runcrons", conf.settings.CRON_SCANNER_CLASS, "--force"
+            )
 
         except Exception as exc:
             # Log
@@ -73,7 +71,11 @@ class ManagementCommands(viewsets.ViewSet):
             # be able to run the scanner if its already running. The `--force`
             # option is used to allow us to call the scanner whenever we want,
             # but it does not bypass the concurrency locking.
-            management.call_command("runcrons", "govapp.apps.catalogue.cron.DirectoryScannerCronJob", "--force")
+            management.call_command(
+                "runcrons",
+                "govapp.apps.catalogue.cron.DirectoryScannerCronJob",
+                "--force",
+            )
 
         except Exception as exc:
             # Log
@@ -102,7 +104,11 @@ class ManagementCommands(viewsets.ViewSet):
             # be able to run the scanner if its already running. The `--force`
             # option is used to allow us to call the scanner whenever we want,
             # but it does not bypass the concurrency locking.
-            management.call_command("runcrons", "govapp.apps.catalogue.cron.SharepointScannerCronJob", "--force")
+            management.call_command(
+                "runcrons",
+                "govapp.apps.catalogue.cron.SharepointScannerCronJob",
+                "--force",
+            )
 
         except Exception as exc:
             # Log
@@ -124,7 +130,11 @@ class ManagementCommands(viewsets.ViewSet):
         """
         # Handle Errors
         try:
-            management.call_command("runcrons", "govapp.apps.publisher.cron.PublishGeoServerQueueCronJob", "--force")
+            management.call_command(
+                "runcrons",
+                "govapp.apps.publisher.cron.PublishGeoServerQueueCronJob",
+                "--force",
+            )
 
         except Exception as exc:
             # Log
@@ -132,7 +142,8 @@ class ManagementCommands(viewsets.ViewSet):
 
         # Return Response
         return response.Response(status=status.HTTP_204_NO_CONTENT)
-    
+
+
 # Router
 router = routers.DefaultRouter()
 router.register("commands", ManagementCommands, basename="commands")

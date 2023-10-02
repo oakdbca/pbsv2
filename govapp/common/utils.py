@@ -1,9 +1,8 @@
-
 # Third-Party
-from django.db import models
-
 # Typing
 from typing import Any, Optional
+
+from django.db import models
 
 
 def filtered_manager(**kwargs: Any) -> models.manager.BaseManager:
@@ -15,6 +14,7 @@ def filtered_manager(**kwargs: Any) -> models.manager.BaseManager:
     Returns:
         models.manager.BaseManager: Generated Filtered Manager.
     """
+
     # Construct Class
     class Manager(models.Manager):
         def get_queryset(self) -> models.QuerySet:

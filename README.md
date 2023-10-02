@@ -79,7 +79,7 @@ $ PORT=9072 npm run dev
 They are:
 - `govapp`
   - contains the department base templates, base packages and backend code
-- `govapp/frontend` 
+- `govapp/frontend`
   - Contains node web app frontend code
 
 

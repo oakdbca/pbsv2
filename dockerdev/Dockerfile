@@ -3,7 +3,7 @@ FROM dbcawa/gis_kaartdijin_boodja:latest as builder_base_pbsv2_dev
 
 RUN apt-get update
 RUN apt-get install --no-install-recommends -y patch
-RUN apt-get install --no-install-recommends -y libpq-dev git ssh sudo 
+RUN apt-get install --no-install-recommends -y libpq-dev git ssh sudo
 RUN apt-get install --no-install-recommends -y screen
 RUN apt-get install --no-install-recommends -y virtualenv
 RUN apt-get install --no-install-recommends -y graphviz
@@ -16,7 +16,7 @@ RUN echo 'if ! [ -n "${SUDO_USER}" -a -n "${SUDO_PS1}" ]; then' >> /etc/bash.bas
 RUN echo "export PS1='\[\e[0;31mdev:\e[0;32m \u@\h:~ \e[0;34m\W\$\e\[\e[0m\] '" >> /etc/bash.bashrc
 RUN echo "fi" >> /etc/bash.bashrc
 
-# For windows 
+# For windows
 RUN groupadd -g 1000 docker
 RUN useradd -g 1000 -u 10000 docker -s /bin/bash
 RUN mkdir /home/docker
