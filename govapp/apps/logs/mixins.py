@@ -1,35 +1,46 @@
-
-
 # Third-Party
 from django import shortcuts
 from django.contrib.contenttypes import models as ct_models
 from django.db import models as db_models
 from drf_spectacular import utils as drf_utils
-from rest_framework import decorators
-from rest_framework import exceptions
-from rest_framework import parsers
-from rest_framework import request
-from rest_framework import response
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import (
+    decorators,
+    exceptions,
+    parsers,
+    request,
+    response,
+    status,
+    viewsets,
+)
 
 # Local
-from govapp.apps.logs import models
-from govapp.apps.logs import serializers
+from govapp.apps.logs import models, serializers
 
 
 class CommunicationsLogMixin:
     """Provides Communications Log API Endpoints for a Model Viewset."""
 
-    @drf_utils.extend_schema(filters=True, responses=serializers.CommunicationsLogEntrySerializer(many=True))
+    @drf_utils.extend_schema(
+        filters=True, responses=serializers.CommunicationsLogEntrySerializer(many=True)
+    )
     @decorators.action(
         detail=True,
         methods=["GET"],
         url_path=r"logs/communications",
         filterset_class=None,
-        search_fields=["to", "cc", "fromm", "subject", "text", "user__username", "user__email"],
+        search_fields=[
+            "to",
+            "cc",
+            "fromm",
+            "subject",
+            "text",
+            "user__username",
+            "user__email",
+        ],
     )
-    def communications_logs_list(self, request: request.Request, pk: str) -> response.Response:
+    def communications_logs_list(
+        self, request: request.Request, pk: str
+    ) -> response.Response:
         """Retrieves the Communications Log Entries List for this Model.
 
         Args:
@@ -93,7 +104,9 @@ class CommunicationsLogMixin:
         responses=serializers.CommunicationsLogCreateEntrySerializer,
     )
     @communications_logs_list.mapping.post
-    def communications_logs_create(self, request: request.Request, pk: str) -> response.Response:
+    def communications_logs_create(
+        self, request: request.Request, pk: str
+    ) -> response.Response:
         """Creates a Communications Log Entry for this Model.
 
         Args:
@@ -125,9 +138,15 @@ class CommunicationsLogMixin:
         # Return Response
         return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @drf_utils.extend_schema(filters=False, responses=serializers.CommunicationsLogEntrySerializer)
-    @decorators.action(detail=True, methods=["GET"], url_path=r"logs/communications/(?P<log_pk>\d+)")
-    def communications_logs_detail(self, request: request.Request, pk: str, log_pk: str) -> response.Response:
+    @drf_utils.extend_schema(
+        filters=False, responses=serializers.CommunicationsLogEntrySerializer
+    )
+    @decorators.action(
+        detail=True, methods=["GET"], url_path=r"logs/communications/(?P<log_pk>\d+)"
+    )
+    def communications_logs_detail(
+        self, request: request.Request, pk: str, log_pk: str
+    ) -> response.Response:
         """Retrieves a Communications Log Entry for this Model.
 
         Args:
@@ -176,7 +195,9 @@ class CommunicationsLogMixin:
         url_path=r"logs/communications/(?P<log_pk>\d+)/file",
         parser_classes=[parsers.MultiPartParser],
     )
-    def communications_logs_add_file(self, request: request.Request, pk: str, log_pk: str) -> response.Response:
+    def communications_logs_add_file(
+        self, request: request.Request, pk: str, log_pk: str
+    ) -> response.Response:
         """Adds a File to a Communications Log Entry for this Model.
 
         Args:
@@ -233,7 +254,9 @@ class CommunicationsLogMixin:
 class ActionsLogMixin:
     """Provides Actions Log API Endpoints for a Model Viewset."""
 
-    @drf_utils.extend_schema(filters=True, responses=serializers.ActionsLogEntrySerializer(many=True))
+    @drf_utils.extend_schema(
+        filters=True, responses=serializers.ActionsLogEntrySerializer(many=True)
+    )
     @decorators.action(
         detail=True,
         methods=["GET"],
@@ -300,9 +323,15 @@ class ActionsLogMixin:
         # Return Response
         return self.get_paginated_response(data=serializer.data)
 
-    @drf_utils.extend_schema(filters=False, responses=serializers.ActionsLogEntrySerializer)
-    @decorators.action(detail=True, methods=["GET"], url_path=r"logs/actions/(?P<log_pk>\d+)")
-    def actions_logs_detail(self, request: request.Request, pk: str, log_pk: str) -> response.Response:
+    @drf_utils.extend_schema(
+        filters=False, responses=serializers.ActionsLogEntrySerializer
+    )
+    @decorators.action(
+        detail=True, methods=["GET"], url_path=r"logs/actions/(?P<log_pk>\d+)"
+    )
+    def actions_logs_detail(
+        self, request: request.Request, pk: str, log_pk: str
+    ) -> response.Response:
         """Retrieves an Actions Log Entry for this Model.
 
         Args:

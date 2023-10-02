@@ -1,13 +1,11 @@
 # Third-Party
-from rest_framework import permissions
-from rest_framework import request
-from rest_framework import viewsets
+# Typing
+from typing import Any
+
+from rest_framework import permissions, request, viewsets
 
 # Local
 from govapp.apps.accounts import utils
-
-# Typing
-from typing import Any
 
 
 class IsInAdministratorsGroup(permissions.BasePermission):

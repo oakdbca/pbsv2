@@ -1,20 +1,14 @@
+from collections.abc import Iterable
+from typing import Any, Optional
 
-# Third-Party
+import reversion
 from django import http
 from django.db import models
 from django.db.models import options
 from drf_spectacular import utils
-from rest_framework import decorators
-from rest_framework import request
-from rest_framework import response
-from rest_framework import serializers
-from rest_framework import viewsets
+from rest_framework import decorators, request, response, serializers, viewsets
 from reversion import models as reversion_models
 from reversion_rest_framework import mixins as reversion_mixins
-import reversion
-
-# Typing
-from typing import Any, Iterable, Optional
 
 
 class HistoryMixin(reversion_mixins.HistoryMixin):
@@ -61,6 +55,7 @@ class RevisionedMixin(models.Model):
 
     class Meta:
         """Revisioned Mixin Metadata."""
+
         abstract = True
 
     def save(
@@ -152,7 +147,7 @@ def add_actions(
     model_description = f"{model_name} Model Serializer."
     name_retrieve = f"{field.name}_retrieve"
     name_list = f"{field.name}_list"
-    url_retrieve = fr"{field.name}/(?P<pk>[^/.]+)"
+    url_retrieve = rf"{field.name}/(?P<pk>[^/.]+)"
 
     # Create Mock Serializer for Schema
     serializer: serializers.ListSerializer = utils.inline_serializer(  # type: ignore
@@ -169,13 +164,17 @@ def add_actions(
     serializer.child.__class__.__doc__ = model_description
 
     # Construct Dynamic Retrieve Action Method
-    def action_retrieve(self: viewsets.GenericViewSet, request: request.Request, pk: str) -> response.Response:
+    def action_retrieve(
+        self: viewsets.GenericViewSet, request: request.Request, pk: str
+    ) -> response.Response:
         if obj := results.get(pk):
             return response.Response(obj)
         raise http.Http404
 
     # Construct Dynamic List Action Method
-    def action_list(self: viewsets.GenericViewSet, request: request.Request) -> response.Response:
+    def action_list(
+        self: viewsets.GenericViewSet, request: request.Request
+    ) -> response.Response:
         return self.get_paginated_response(
             data=self.paginate_queryset(
                 queryset=list(results.values()),
@@ -188,12 +187,18 @@ def add_actions(
 
     # Apply Action Decorators
     # This must be done after the actions are renamed
-    action_retrieve = decorators.action(detail=False, url_name=name_retrieve, url_path=url_retrieve)(action_retrieve)
-    action_list = decorators.action(detail=False, url_name=name_list, url_path=field.name)(action_list)
+    action_retrieve = decorators.action(
+        detail=False, url_name=name_retrieve, url_path=url_retrieve
+    )(action_retrieve)
+    action_list = decorators.action(
+        detail=False, url_name=name_list, url_path=field.name
+    )(action_list)
 
     # Apply Schema Decorators
     # This must be done after the action decorator is applied
-    action_retrieve = utils.extend_schema(responses=serializer.child, filters=False)(action_retrieve)
+    action_retrieve = utils.extend_schema(responses=serializer.child, filters=False)(
+        action_retrieve
+    )
     action_list = utils.extend_schema(responses=serializer, filters=False)(action_list)
 
     # Set Action Attributes on Class

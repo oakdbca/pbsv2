@@ -1,18 +1,14 @@
-# Standard
 import argparse
+from typing import Any
 
-# Third-Party
 from django.core.management import base
 
-# Local
 from govapp.apps.emails import emails
-
-# Typing
-from typing import Any
 
 
 class Command(base.BaseCommand):
     """Email Management Command."""
+
     # Help string
     help = "Sends an email"  # noqa: A003
 

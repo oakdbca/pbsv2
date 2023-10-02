@@ -18,14 +18,12 @@ Examples:
 
 
 # Third-Party
-from django import conf
-from django import urls
+from django import conf, urls
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 # Local
 from govapp import views
-
 
 # Admin Site Settings
 admin.site.site_header = conf.settings.PROJECT_TITLE
@@ -39,10 +37,16 @@ urlpatterns = [
     urls.path("", views.HomePage.as_view(), name="home"),
     urls.path("test", views.HomePage.as_view(), name="test"),
     # Django Administration
-    urls.path("admin/", admin.site.urls),\
+    urls.path("admin/", admin.site.urls),
 ]
 
 # DBCA Template URLs
-urlpatterns.append(urls.path("logout/", auth_views.LogoutView.as_view(), {"next_page": "/"}, name="logout"))
+urlpatterns.append(
+    urls.path(
+        "logout/", auth_views.LogoutView.as_view(), {"next_page": "/"}, name="logout"
+    )
+)
 if conf.settings.ENABLE_DJANGO_LOGIN:
-    urlpatterns.append(urls.re_path(r"^ssologin/", auth_views.LoginView.as_view(), name="ssologin"))
+    urlpatterns.append(
+        urls.re_path(r"^ssologin/", auth_views.LoginView.as_view(), name="ssologin")
+    )

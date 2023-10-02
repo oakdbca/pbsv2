@@ -1,12 +1,11 @@
 """DBCA Django Project Middleware."""
 
 
-# Third-Party
-from django import http
-
 # Typing
 from typing import Callable
 
+# Third-Party
+from django import http
 
 # Type Shortcuts
 GetResponseFunction = Callable[[http.HttpRequest], http.HttpResponse]

@@ -1,17 +1,11 @@
-
 # Third-Party
 from django.contrib import auth
 from django.contrib.auth import models
 from drf_spectacular import utils
-from rest_framework import decorators
-from rest_framework import request
-from rest_framework import response
-from rest_framework import viewsets
+from rest_framework import decorators, request, response, viewsets
 
 # Local
-from govapp.apps.accounts import serializers
-from govapp.apps.accounts import filters
-
+from govapp.apps.accounts import filters, serializers
 
 # Shortcuts
 UserModel = auth.get_user_model()
@@ -21,6 +15,7 @@ GroupModel = models.Group
 @utils.extend_schema(tags=["Accounts - Users"])
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """User View Set."""
+
     queryset = UserModel.objects.all()
     serializer_class = serializers.UserSerializer
     filterset_class = filters.UserFilter
@@ -49,5 +44,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 @utils.extend_schema(tags=["Accounts - Groups"])
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     """Group View Set."""
+
     queryset = GroupModel.objects.all()
     serializer_class = serializers.GroupSerializer

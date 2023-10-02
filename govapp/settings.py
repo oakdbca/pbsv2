@@ -10,16 +10,13 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 
-# Standard
+import json
 import os
 import pathlib
 import platform
-import json 
 
-# Third-Party
 import decouple
 import dj_database_url
-
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
@@ -37,9 +34,9 @@ PROJECT_VERSION = "v2"
 # SECURITY WARNING: don't allow all hosts in production!
 SECRET_KEY = decouple.config("SECRET_KEY")
 DEBUG = decouple.config("DEBUG", default=False, cast=bool)
-ALLOWED_HOSTS=[""]
+ALLOWED_HOSTS = [""]
 if DEBUG is True:
-    ALLOWED_HOSTS=["*"]
+    ALLOWED_HOSTS = ["*"]
 else:
     ALLOWED_HOSTS_STRING = decouple.config("ALLOWED_HOSTS", default='[""]')
     ALLOWED_HOSTS = json.loads(ALLOWED_HOSTS_STRING)
@@ -104,13 +101,17 @@ WSGI_APPLICATION = "govapp.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
-    "default": decouple.config("DATABASE_URL", cast=dj_database_url.parse, default="sqlite://memory"),
+    "default": decouple.config(
+        "DATABASE_URL", cast=dj_database_url.parse, default="sqlite://memory"
+    ),
 }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -119,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 LANGUAGE_CODE = "en-us"
-#TIME_ZONE = "UTC"
+# TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -129,7 +130,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "govapp/static",  # Look for static files in the frontend
-    #BASE_DIR / "govapp/frontend/node_modules"  # node modules that are collected and used in the frontend
+    # BASE_DIR / "govapp/frontend/node_modules"  # node modules that are collected and used in the frontend
 ]
 
 # Default primary key field type
@@ -151,8 +152,12 @@ CACHES = {
 DEV_APP_BUILD_URL = decouple.config("DEV_APP_BUILD_URL", default=None)
 ENABLE_DJANGO_LOGIN = decouple.config("ENABLE_DJANGO_LOGIN", default=False, cast=bool)
 LEDGER_TEMPLATE = "bootstrap5"
-GIT_COMMIT_HASH = os.popen(f"cd {BASE_DIR}; git log -1 --format=%H").read()  # noqa: S605
-GIT_COMMIT_DATE = os.popen(f"cd {BASE_DIR}; git log -1 --format=%cd").read()  # noqa: S605
+GIT_COMMIT_HASH = os.popen(
+    f"cd {BASE_DIR}; git log -1 --format=%H"
+).read()  # noqa: S605
+GIT_COMMIT_DATE = os.popen(
+    f"cd {BASE_DIR}; git log -1 --format=%cd"
+).read()  # noqa: S605
 VERSION_NO = "2.00"
 
 # Django REST Framework Settings
@@ -203,25 +208,23 @@ LOGGING = {
 
 
 # Email
-#DISABLE_EMAIL = decouple.config("DISABLE_EMAIL", default=False, cast=bool)
-#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# DISABLE_EMAIL = decouple.config("DISABLE_EMAIL", default=False, cast=bool)
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_BACKEND = "wagov_utils.components.utils.email_backend.EmailBackend"
 EMAIL_HOST = decouple.config("EMAIL_HOST", default="smtp.lan.fyi")
 EMAIL_PORT = decouple.config("EMAIL_PORT", default=25, cast=int)
 DEFAULT_FROM_EMAIL = "no-reply@dbca.wa.gov.au"
 EMAIL_INSTANCE = decouple.config("EMAIL_INSTANCE", default="PROD")
 NON_PROD_EMAIL = decouple.config("NON_PROD_EMAIL", default="")
-PRODUCTION_EMAIL= decouple.config("PRODUCTION_EMAIL", default=False, cast=bool)
+PRODUCTION_EMAIL = decouple.config("PRODUCTION_EMAIL", default=False, cast=bool)
 EMAIL_DELIVERY = decouple.config("EMAIL_DELIVERY", default="off")
 
 # Cron Jobs
 # https://django-cron.readthedocs.io/en/latest/installation.html
 # https://django-cron.readthedocs.io/en/latest/configuration.html
-#CRON_SCANNER_CLASS = "govapp.apps.catalogue.cron.ScannerCronJob"
+# CRON_SCANNER_CLASS = "govapp.apps.catalogue.cron.ScannerCronJob"
 CRON_SCANNER_PERIOD_MINS = 3  # Run every 5 minutes
-CRON_CLASSES = [
-
-]
+CRON_CLASSES = []
 
 
 # Temporary Fix for ARM Architecture
@@ -231,4 +234,4 @@ if platform.machine() == "arm64":
 
 
 # Django Timezone
-TIME_ZONE = 'Australia/Perth'
+TIME_ZONE = "Australia/Perth"
