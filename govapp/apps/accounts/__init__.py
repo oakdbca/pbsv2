@@ -1,1 +1,1 @@
-"""Kaartdijin Boodja Accounts Django Application."""
+"""Prescribed Burns System Accounts Django Application."""

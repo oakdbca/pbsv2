@@ -1,4 +1,3 @@
-console.log("JASON 1");
 import { createApp } from 'vue';
 import router from './router';
 import App from './App';

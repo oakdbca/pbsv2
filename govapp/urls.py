@@ -1,4 +1,4 @@
-"""Kaartdijin Boodja URL Configuration.
+"""Prescribed Burns System URL Configuration.
 
 The `urlpatterns` list routes URLs to views.
 For more information please see:

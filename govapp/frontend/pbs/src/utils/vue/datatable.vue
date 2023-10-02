@@ -59,23 +59,6 @@ export default {
             $(vm.table).resize(function () {
                 vm.vmDataTable.draw(true);
             });
-            // $(vm.table).on('draw.dt', function () {
-            //     console.log('draw datatable');
-            //     vm.vmDataTable.columns
-            //         .adjust()
-            //         .responsive.rebuild()
-            //         .responsive.recalc();
-            // });
-            // $(vm.table).init(function () {
-            //     console.log('init datatable');
-            //     vm.$nextTick(() => {
-            //         vm.vmDataTable.columns
-            //             .adjust()
-            //             .responsive.rebuild()
-            //             .responsive.recalc()
-            //             .draw();
-            //     });
-            // });
         },
     },
 };

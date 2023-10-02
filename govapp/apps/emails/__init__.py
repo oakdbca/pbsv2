@@ -1,1 +1,1 @@
-"""Kaartdijin Boodja Emails Django Application."""
+"""Prescribed Burns System Emails Django Application."""

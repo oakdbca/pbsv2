@@ -1,4 +1,4 @@
-"""Kaartdijin Boodja Emails Django Application Configuration."""
+"""Prescribed Burns System Emails Django Application Configuration."""
 
 
 # Third-Party

@@ -1,4 +1,4 @@
-"""ASGI config for the Kaartdijin Boodja project.
+"""ASGI config for the Prescribed Burns System project.
 
 It exposes the ASGI callable as a module-level variable named `application`.
 
