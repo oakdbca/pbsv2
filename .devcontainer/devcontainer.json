@@ -39,5 +39,5 @@
 		9155
 	],
 	"initializeCommand": "${localEnv:HOME}/docker-scripts-dev/windows_vbox/postgres_docker_load.sh",
-	"postCreateCommand": "poetry install --no-interaction --no-ansi && poetry run python manage.py collectstatic --no-input"
+	"postCreateCommand": "poetry install --no-interaction --no-ansi && poetry run python manage.py collectstatic --no-input && pre-commit run --all-files"
 }
