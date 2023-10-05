@@ -1,4 +1,11 @@
-module.exports = {
+import * as bootstrap from 'bootstrap';
+import moment from 'moment'; // default import
+
+export default {
+    /**
+     * Formats an error object into a string
+     * @param {Error|any} err An error object
+     */
     formatError: function (err) {
         let returnStr = '';
         // object {}
@@ -47,6 +54,10 @@ module.exports = {
             }
         }
     },
+    /**
+     * Escape HTML special characters
+     * @param {String} htmlStr The string to escape
+     */
     escapeHtml: function (htmlStr) {
         return htmlStr
             .replace(/&/g, '&amp;')
@@ -55,6 +66,10 @@ module.exports = {
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
     },
+    /**
+     * Returns a cookie value by name
+     * @param {String} name The name of the cookie
+     */
     getCookie: function (name) {
         var value = null;
         if (document.cookie && document.cookie !== '') {

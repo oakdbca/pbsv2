@@ -1,4 +1,4 @@
-import { constants } from '@/utils/hooks';
+import { NetworkError } from '@/utils/errors';
 
 export default {
     /**
@@ -16,20 +16,28 @@ export default {
         return new Promise((resolve, reject) => {
             let f = options === undefined ? fetch(url) : fetch(url, options);
             f.then(async (response) => {
-                const data = await response.json();
-                if (!response.ok) {
-                    let error =
-                        (data.constructor.name === 'Array' && data) ||
-                        (data && data.message) ||
-                        response.statusText;
-                    console.error(error);
-                    reject(error);
+                const contentType = response.headers.get('content-type');
+                if (contentType === null) return Promise.resolve(null);
+
+                let data;
+                if (contentType === 'application/vnd.ogc.wms_xml') {
+                    // KMI WMS returns XML
+                    data = await response.text();
+                } else {
+                    data = await response.json();
+                    if (!response.ok) {
+                        let error =
+                            (data.constructor.name === 'Array' && data) ||
+                            (data && data.message) ||
+                            response.statusText;
+                        console.error(error);
+                        reject(error);
+                    }
                 }
                 resolve(data);
             }).catch((error) => {
                 console.error(`There was an error fetching from ${url}`, error);
-                error = new Error(constants.ERRORS.NETWORK_ERROR);
-                reject(error);
+                reject(new NetworkError());
             });
         });
     },
