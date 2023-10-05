@@ -93,7 +93,7 @@ export default {
         fileTypes: {
             type: String,
             default: function () {
-                var file_types =
+                const file_types =
                     'image/*,' +
                     'video/*,' +
                     'audio/*,' +
@@ -230,7 +230,7 @@ export default {
             }
         },
         get_documents: async function () {
-            var formData = new FormData();
+            const formData = new FormData();
             this.show_spinner = true;
 
             if (this.document_action_url) {
@@ -252,14 +252,14 @@ export default {
         },
         delete_all_documents: function () {
             console.log('aho');
-            for (let item of this.documents) {
+            for (const item of this.documents) {
                 this.delete_document(item);
             }
         },
         delete_document: async function (
             /** @type {{ id: string | Blob; }} */ file
         ) {
-            var formData = new FormData();
+            const formData = new FormData();
             this.show_spinner = true;
 
             formData.append('action', 'delete');
@@ -283,7 +283,7 @@ export default {
         cancel: async function () {
             this.show_spinner = true;
 
-            let formData = new FormData();
+            const formData = new FormData();
             formData.append('action', 'cancel');
             formData.append('input_name', this.name);
             if (this.commsLogId) {
@@ -305,7 +305,7 @@ export default {
             let _file = null;
 
             if (e.target.files && e.target.files[0]) {
-                let reader = new FileReader();
+                const reader = new FileReader();
                 reader.readAsDataURL(e.target.files[0]);
                 reader.onload = function (e) {
                     _file = e.target.result;
@@ -345,7 +345,7 @@ export default {
          * @param {any} e
          */
         save_document: async function (e) {
-            var formData = new FormData();
+            const formData = new FormData();
             if (this.document_action_url) {
                 formData.append('action', 'save');
                 if (this.commsLogId) {

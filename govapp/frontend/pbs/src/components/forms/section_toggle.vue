@@ -85,8 +85,8 @@ export default {
         },
     },
     mounted: function () {
-        // @ts-ignore
-        // eslint-disable-next-line no-undef
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore, eslint-disable-next-line no-undef
         chevron_toggle.init();
     },
     methods: {
@@ -97,7 +97,7 @@ export default {
             }
             // Using a type guard to check if the object has a __vnode
             let formSection_vnode = [];
-            let sectionBody = this.$refs.section_body;
+            const sectionBody = this.$refs.section_body;
             if (sectionBody && sectionBody[0] && sectionBody[0].__vnode) {
                 formSection_vnode = sectionBody[0].__vnode.children.reduce(
                     (objs, obj) => {
@@ -112,7 +112,7 @@ export default {
 
             formSection_vnode.forEach((vnode) => {
                 // Store child elements within each node to a list
-                let refs = Array();
+                const refs = [];
                 if (vnode.children) {
                     vnode.children.map((child) => {
                         if (child.component) {

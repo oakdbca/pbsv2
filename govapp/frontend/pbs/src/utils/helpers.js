@@ -71,11 +71,11 @@ export default {
      * @param {String} name The name of the cookie
      */
     getCookie: function (name) {
-        var value = null;
+        let value = null;
         if (document.cookie && document.cookie !== '') {
-            let cookies = document.cookie.split(';');
+            const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
-                let cookie = cookies[i].trim();
+                const cookie = cookies[i].trim();
                 if (
                     cookie.substring(0, name.length + 1).trim() ===
                     name + '='
@@ -100,7 +100,7 @@ export default {
         return endpoint;
     },
     enablePopovers: function () {
-        let popoverTriggerList = [].slice.call(
+        const popoverTriggerList = [].slice.call(
             document.querySelectorAll('[data-bs-toggle="popover"]')
         );
         popoverTriggerList.map(function (popoverTriggerEl) {
@@ -108,8 +108,8 @@ export default {
         });
     },
     getFileIconClass: function (filepath, additional_class_names = []) {
-        let ext = filepath.split('.').pop().toLowerCase();
-        let classname = additional_class_names;
+        const ext = filepath.split('.').pop().toLowerCase();
+        const classname = additional_class_names;
 
         if (['png', 'jpg', 'jpeg', 'bmp', 'tiff', 'tif'].includes(ext)) {
             classname.push('bi-file-image-fill');

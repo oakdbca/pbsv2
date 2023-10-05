@@ -14,7 +14,7 @@ export default {
      */
     fetchUrl: async function (url, options) {
         return new Promise((resolve, reject) => {
-            let f = options === undefined ? fetch(url) : fetch(url, options);
+            const f = options === undefined ? fetch(url) : fetch(url, options);
             f.then(async (response) => {
                 const contentType = response.headers.get('content-type');
                 if (contentType === null) return Promise.resolve(null);
@@ -26,7 +26,7 @@ export default {
                 } else {
                     data = await response.json();
                     if (!response.ok) {
-                        let error =
+                        const error =
                             (data.constructor.name === 'Array' && data) ||
                             (data && data.message) ||
                             response.statusText;
