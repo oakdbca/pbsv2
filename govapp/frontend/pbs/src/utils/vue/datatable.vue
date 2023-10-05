@@ -53,8 +53,8 @@ export default {
     },
     methods: {
         initEvents: function () {
-            let vm = this;
-            var options = Object.assign(vm.dtOptions);
+            const vm = this;
+            const options = Object.assign(vm.dtOptions);
             vm.vmDataTable = $(vm.table).DataTable(options);
             $(vm.table).resize(function () {
                 vm.vmDataTable.draw(true);
