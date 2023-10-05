@@ -1,6 +1,10 @@
 {
     "compilerOptions": {
-      "checkJs": false,
+      "checkJs": true,
+      "resolveJsonModule": true,
+      "moduleResolution": "node",
+      "target": "ES6",
+      "lib": ["esnext", "dom"],
       "baseUrl": ".",
       "paths": {
         "~/*": ["./src/*"],
@@ -12,5 +16,15 @@
         "@static-root/*": ["../../../staticfiles/*"],
       }
     },
+    "typeAcquisition": {
+      "enable": true,
+      "include": [
+          "jquery",
+          "uuid",
+          "bootstrap"
+          // "sweetalert2", // Swal already comes with type defs
+      ]
+    },
+    "include": ["src/**/*"], // Include all files in the src folder
     "exclude": ["node_modules", "**/node_modules/*"]
   }
