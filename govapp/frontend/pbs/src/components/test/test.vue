@@ -7,7 +7,9 @@ import { NotImplementedError } from '@/utils/errors';
 import { utils, helpers } from '@/utils/hooks';
 
 /**
- * @constant {string} testUrl - Test URL for testing fetchUrl
+ * Test URL for testing fetchUrl
+ * @constant testUrl
+ * @type {string}
  */
 const testUrlOk = `https://kmi.dbca.wa.gov.au/geoserver/public/wms/?SERVICE=WMS&VERSION=1.0.0&REQUEST=GetCapabilities`;
 
@@ -23,6 +25,13 @@ export default {
         this.testErrors();
         this.testFetch(testUrlOk);
         this.testFetch('https://fail.to.fetch');
+        /**
+         * @type {DateStr} date_str
+         */
+        const date_str = '2021-01-01';
+        this.testDate(date_str);
+        this.testDate(null);
+        this.testDate(undefined);
     },
     methods: {
         testErrors: () => {
@@ -44,6 +53,13 @@ export default {
                 .catch(() => {
                     console.log(`${url} failed`);
                 });
+        },
+        /**
+         * @function testDate
+         * @param {DateStr} date_str
+         */
+        testDate: (date_str) => {
+            console.log(helpers.formatDateForAPI(new Date(date_str)));
         },
     },
 };

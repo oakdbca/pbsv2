@@ -25,6 +25,10 @@ export default {
         }
         return returnStr;
     },
+    /**
+     *
+     * @param {Error} errors
+     */
     formatErrorV2: function (errors) {
         if (typeof errors === 'string') {
             return errors;
@@ -89,6 +93,11 @@ export default {
         }
         return value;
     },
+    /**
+     *
+     * @param {string} api_string
+     * @param {string} addition
+     */
     add_endpoint_join: function (api_string, addition) {
         // assumes api_string has trailing forward slash '/' character required for POST
         let endpoint = api_string + addition;
@@ -107,6 +116,11 @@ export default {
             new bootstrap.Popover(popoverTriggerEl); // eslint-disable-line no-undef
         });
     },
+    /**
+     *
+     * @param {string} filepath
+     * @param {string[]=} additional_class_names
+     */
     getFileIconClass: function (filepath, additional_class_names = []) {
         const ext = filepath.split('.').pop().toLowerCase();
         const classname = additional_class_names;
@@ -131,7 +145,12 @@ export default {
 
         return classname.join(' ');
     },
-    formatDateForAPI: function (data, format = 'DD/MM/YYYY') {
-        return data ? moment(data).format(format) : ''; // eslint-disable-line no-undef
+    /**
+     *
+     * @param {Date} date
+     * @param {string=} format
+     */
+    formatDateForAPI: function (date, format = 'DD/MM/YYYY') {
+        return date ? moment(date).format(format) : '';
     },
 };

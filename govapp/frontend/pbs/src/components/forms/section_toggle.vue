@@ -90,8 +90,12 @@ export default {
         chevron_toggle.init();
     },
     methods: {
+        /**
+         * Redraws all datatables within the section when it is opened
+         * @param {Event} evt An event object
+         */
         toggle_show_hide: function (evt) {
-            if (!evt.target.classList.contains('down-chevron-open')) {
+            if (!evt.target['classList'].contains('down-chevron-open')) {
                 // Only redraw the datatable if the section is being opened
                 return;
             }

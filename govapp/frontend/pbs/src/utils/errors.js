@@ -67,8 +67,9 @@ export class NotImplementedError extends GovAppBaseError {
  */
 export class NetworkError extends GovAppBaseError {
     /**
-     * @constructor
-     * @param {string=} message
+     * Creates a new NetworkError
+     * @class
+     * @param {string=} message  The error message
      * @this {NetworkError}
      */
     constructor(message = null) {
