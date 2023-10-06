@@ -14,7 +14,7 @@
         "@@/*": ["./*"],
         "@vue-utils/*": ["./src/utils/vue/*"],
         "@common-utils/*": ["./src/utils/common/*"],
-        "@static-root/*": ["../../../staticfiles/*"],
+        "@static-root/*": ["../../../staticfiles/*"]
       }
     },
     "typeAcquisition": {
