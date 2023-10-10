@@ -66,7 +66,7 @@ export default {
     },
     watch: {
         filters_expanded: function () {
-            let chevron_icon = $('#' + this.chevron_elem_id);
+            const chevron_icon = $('#' + this.chevron_elem_id);
             if (this.filters_expanded) {
                 chevron_icon.addClass('chev_rotated');
             } else {
@@ -82,13 +82,13 @@ export default {
     methods: {
         toggle_filters_button_clicked: function () {
             // Bootstrap add a 'collapsed' class name to the element
-            let filters_expanded_when_clicked = $(
+            const filters_expanded_when_clicked = $(
                 '#' + this.button_elem_id
             ).hasClass('collapsed');
             this.filters_expanded = !filters_expanded_when_clicked;
         },
         show_warning_icon: function (show) {
-            let warning_icon = $('#' + this.warning_icon_id);
+            const warning_icon = $('#' + this.warning_icon_id);
             if (show) {
                 warning_icon.css('opacity', 1);
                 this.warning_icon_title = 'filter(s) applied';

@@ -69,6 +69,8 @@
 
 <script>
 import { api_endpoints, helpers } from '@/utils/hooks';
+import Swal from 'sweetalert2';
+
 export default {
     name: 'FileField',
     props: {
@@ -91,7 +93,7 @@ export default {
         fileTypes: {
             type: String,
             default: function () {
-                var file_types =
+                const file_types =
                     'image/*,' +
                     'video/*,' +
                     'audio/*,' +
@@ -169,10 +171,10 @@ export default {
             let url = '';
             if (this.documentActionUrl == 'temporary_document') {
                 if (!this.temporary_document_collection_id) {
-                    url = api_endpoints.temporary_document;
+                    url = api_endpoints.temporary_document();
                 } else {
                     url =
-                        api_endpoints.temporary_document +
+                        api_endpoints.temporary_document() +
                         this.temporary_document_collection_id +
                         '/process_temp_document/';
                 }
@@ -185,7 +187,7 @@ export default {
     watch: {
         documents: {
             handler: async function () {
-                await this.$emit('update-parent');
+                this.$emit('update-parent');
             },
             deep: true,
         },
@@ -199,7 +201,7 @@ export default {
         },
     },
     mounted: async function () {
-        await this.$nextTick(async () => {
+        await this.$nextTick().then(async () => {
             if (
                 this.documentActionUrl === 'temporary_document' &&
                 !this.temporary_document_collection_id
@@ -210,9 +212,8 @@ export default {
             }
         });
     },
-
     methods: {
-        button_clicked: function (value) {
+        button_clicked: function (/** @type {any} */ value) {
             if (this.replaceButtonByText) {
                 // Input field id contains the document name which may contain
                 // special characters (e.g. !"#$%&'()*+,./:;<=>?@[]^`{|}~)
@@ -220,14 +221,16 @@ export default {
                 $(`input[id='${value}']`).trigger('click');
             }
         },
-        handleChange: async function (e) {
+        handleChange: async function (
+            /** @type {{ target: { files: string | any[]; }; }} */ e
+        ) {
             console.log('Change', e.target.files);
             if (e.target.files.length > 0) {
                 await this.save_document(e);
             }
         },
         get_documents: async function () {
-            var formData = new FormData();
+            const formData = new FormData();
             this.show_spinner = true;
 
             if (this.document_action_url) {
@@ -249,12 +252,14 @@ export default {
         },
         delete_all_documents: function () {
             console.log('aho');
-            for (let item of this.documents) {
+            for (const item of this.documents) {
                 this.delete_document(item);
             }
         },
-        delete_document: async function (file) {
-            var formData = new FormData();
+        delete_document: async function (
+            /** @type {{ id: string | Blob; }} */ file
+        ) {
+            const formData = new FormData();
             this.show_spinner = true;
 
             formData.append('action', 'delete');
@@ -278,7 +283,7 @@ export default {
         cancel: async function () {
             this.show_spinner = true;
 
-            let formData = new FormData();
+            const formData = new FormData();
             formData.append('action', 'cancel');
             formData.append('input_name', this.name);
             if (this.commsLogId) {
@@ -293,11 +298,14 @@ export default {
             }
             this.show_spinner = false;
         },
+        /**
+         * @param {{ target: { files: any[]; }; }} e
+         */
         uploadFile(e) {
             let _file = null;
 
             if (e.target.files && e.target.files[0]) {
-                let reader = new FileReader();
+                const reader = new FileReader();
                 reader.readAsDataURL(e.target.files[0]);
                 reader.onload = function (e) {
                     _file = e.target.result;
@@ -306,6 +314,10 @@ export default {
             }
             return _file;
         },
+        /**
+         * A handler
+         * @param {any} e
+         */
         handleChangeWrapper: async function (e) {
             this.show_spinner = true;
             if (
@@ -319,7 +331,7 @@ export default {
                 const resData = await res.json();
                 this.temporary_document_collection_id = resData.id;
                 await this.handleChange(e);
-                await this.$emit(
+                this.$emit(
                     'update-temp-doc-coll-id',
                     this.temporary_document_collection_id
                 );
@@ -328,9 +340,12 @@ export default {
             }
             this.show_spinner = false;
         },
-
+        /**
+         * Save document to database
+         * @param {any} e
+         */
         save_document: async function (e) {
-            var formData = new FormData();
+            const formData = new FormData();
             if (this.document_action_url) {
                 formData.append('action', 'save');
                 if (this.commsLogId) {
@@ -343,10 +358,10 @@ export default {
                     );
                 }
                 formData.append('input_name', this.name);
-                formData.append('approval_type', this.approvalType);
+                formData.append('approval_type', this.approvalType.toString());
                 formData.append(
                     'approval_type_document_type',
-                    this.approvalTypeDocumentType
+                    this.approvalTypeDocumentType.toString()
                 );
                 formData.append('filename', e.target.files[0].name);
                 formData.append('_file', this.uploadFile(e));
@@ -370,7 +385,7 @@ export default {
                         this.commsLogId = data.comms_instance_id;
                     })
                     .catch((error) => {
-                        swal.fire({
+                        Swal.fire({
                             title: 'File Error',
                             text: error,
                             icon: 'error',

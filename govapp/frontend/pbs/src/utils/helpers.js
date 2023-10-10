@@ -1,4 +1,11 @@
-module.exports = {
+import * as bootstrap from 'bootstrap';
+import moment from 'moment'; // default import
+
+export default {
+    /**
+     * Formats an error object into a string
+     * @param {Error|any} err An error object
+     */
     formatError: function (err) {
         let returnStr = '';
         // object {}
@@ -18,6 +25,10 @@ module.exports = {
         }
         return returnStr;
     },
+    /**
+     *
+     * @param {Error} errors
+     */
     formatErrorV2: function (errors) {
         if (typeof errors === 'string') {
             return errors;
@@ -47,6 +58,10 @@ module.exports = {
             }
         }
     },
+    /**
+     * Escape HTML special characters
+     * @param {String} htmlStr The string to escape
+     */
     escapeHtml: function (htmlStr) {
         return htmlStr
             .replace(/&/g, '&amp;')
@@ -55,12 +70,16 @@ module.exports = {
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
     },
+    /**
+     * Returns a cookie value by name
+     * @param {String} name The name of the cookie
+     */
     getCookie: function (name) {
-        var value = null;
+        let value = null;
         if (document.cookie && document.cookie !== '') {
-            let cookies = document.cookie.split(';');
+            const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
-                let cookie = cookies[i].trim();
+                const cookie = cookies[i].trim();
                 if (
                     cookie.substring(0, name.length + 1).trim() ===
                     name + '='
@@ -74,6 +93,11 @@ module.exports = {
         }
         return value;
     },
+    /**
+     *
+     * @param {string} api_string
+     * @param {string} addition
+     */
     add_endpoint_join: function (api_string, addition) {
         // assumes api_string has trailing forward slash '/' character required for POST
         let endpoint = api_string + addition;
@@ -85,16 +109,21 @@ module.exports = {
         return endpoint;
     },
     enablePopovers: function () {
-        let popoverTriggerList = [].slice.call(
+        const popoverTriggerList = [].slice.call(
             document.querySelectorAll('[data-bs-toggle="popover"]')
         );
         popoverTriggerList.map(function (popoverTriggerEl) {
             new bootstrap.Popover(popoverTriggerEl); // eslint-disable-line no-undef
         });
     },
+    /**
+     *
+     * @param {string} filepath
+     * @param {string[]=} additional_class_names
+     */
     getFileIconClass: function (filepath, additional_class_names = []) {
-        let ext = filepath.split('.').pop().toLowerCase();
-        let classname = additional_class_names;
+        const ext = filepath.split('.').pop().toLowerCase();
+        const classname = additional_class_names;
 
         if (['png', 'jpg', 'jpeg', 'bmp', 'tiff', 'tif'].includes(ext)) {
             classname.push('bi-file-image-fill');
@@ -116,7 +145,12 @@ module.exports = {
 
         return classname.join(' ');
     },
-    formatDateForAPI: function (data, format = 'DD/MM/YYYY') {
-        return data ? moment(data).format(format) : ''; // eslint-disable-line no-undef
+    /**
+     *
+     * @param {Date} date
+     * @param {string=} format
+     */
+    formatDateForAPI: function (date, format = 'DD/MM/YYYY') {
+        return date ? moment(date).format(format) : '';
     },
 };

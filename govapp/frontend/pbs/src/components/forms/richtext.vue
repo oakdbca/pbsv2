@@ -53,11 +53,10 @@ export default {
     },
     emits: ['textChanged'],
     data() {
-        var remove_buttons = '';
-        let vm = this;
+        let remove_buttons = '';
 
-        if (!vm.canViewRichtextSrc) {
-            // eslint-disable-next-line no-unused-vars
+        if (!this.canViewRichtextSrc) {
+            // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
             remove_buttons = 'Source,About';
         }
         return {

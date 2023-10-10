@@ -46,18 +46,16 @@ export default {
     },
     computed: {},
     mounted: function () {
-        let vm = this;
-        vm.table = $('#' + vm.id);
+        this.table = $('#' + this.id);
         $.fn.dataTable.ext.errMode = 'throw';
-        vm.initEvents();
+        this.initEvents();
     },
     methods: {
         initEvents: function () {
-            let vm = this;
-            var options = Object.assign(vm.dtOptions);
-            vm.vmDataTable = $(vm.table).DataTable(options);
-            $(vm.table).resize(function () {
-                vm.vmDataTable.draw(true);
+            const options = Object.assign(this.dtOptions);
+            this.vmDataTable = $(this.table).DataTable(options);
+            $(this.table).resize(() => {
+                this.vmDataTable.draw(true);
             });
         },
     },

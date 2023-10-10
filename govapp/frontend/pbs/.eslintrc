@@ -1,17 +1,21 @@
 {
+    "parser": "vue-eslint-parser",
     "extends": [
         "eslint:recommended",
         "plugin:vue/vue3-recommended",
+        "@vue/typescript/recommended",
         "prettier"
     ],
     "plugins": [
         "vue",
-        "prettier"
+        "prettier",
+        "@typescript-eslint"
     ],
     "rules": {
         "prettier/prettier": "error"
     },
     "parserOptions": {
+        "parser": "@typescript-eslint/parser",
         "sourceType": "module",
         "ecmaVersion": 11
     },
