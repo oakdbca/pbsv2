@@ -104,6 +104,9 @@ DATABASES = {
     "default": decouple.config(
         "DATABASE_URL", cast=dj_database_url.parse, default="sqlite://memory"
     ),
+    "test": decouple.config(
+        "TEST_DATABASE_URL", cast=dj_database_url.parse, default="sqlite://memory"
+    ),
 }
 
 # Password validation
@@ -119,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en-au"
 # TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = True
