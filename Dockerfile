@@ -118,4 +118,4 @@ FROM install_build_vue3_pbsv2 as launch_pbsv2
 
 EXPOSE 8080
 HEALTHCHECK --interval=1m --timeout=5s --start-period=10s --retries=3 CMD ["wget", "-q", "-O", "-", "http://localhost:8080/"]
-CMD ["/startup.sh"]
+CMD ["/pre_startup.sh"]
