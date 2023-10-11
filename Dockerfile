@@ -30,7 +30,6 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update && \
     gnupg \
     gcc \
     git \
-    gunicorn \
     htop \
     libmagic-dev \
     libproj-dev \
