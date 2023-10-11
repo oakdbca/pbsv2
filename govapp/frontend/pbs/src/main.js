@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import router from './router';
-import App from './App';
+import App from './App.vue';
 import helpers from '@/utils/helpers';
 import { extendMoment } from 'moment-range';
 import CKEditor from '@ckeditor/ckeditor5-vue';
@@ -9,12 +9,15 @@ import 'datatables.net-bs5';
 import 'datatables.net-buttons-bs5';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-buttons/js/dataTables.buttons.js';
-import jsZip from 'jszip';
+const jsZip = require('jszip');
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 window.JSZip = jsZip;
 import 'datatables.net-buttons/js/buttons.html5.js';
 import 'select2';
 import 'currency.js';
 import 'jquery-validation';
+import moment from 'moment';
 
 import 'sweetalert2/dist/sweetalert2.css';
 import '@dbca/gov-vue3-components/dist/library.css';
@@ -35,8 +38,9 @@ const customHeadersJSON = new Headers({
     'X-CSRFToken': helpers.getCookie('csrftoken'),
     'Content-Type': 'application/json',
 });
-// eslint-disable-next-line no-global-assign
-fetch = ((originalFetch) => {
+
+const fetch = window.fetch;
+window.fetch = ((originalFetch) => {
     return (...args) => {
         if (args.length > 1) {
             if (typeof args[1].body === 'string') {

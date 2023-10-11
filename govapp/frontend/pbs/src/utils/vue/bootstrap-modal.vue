@@ -143,7 +143,12 @@ export default {
             };
         },
         show: function () {
-            return this.$parent.isModalOpen;
+            // Using a type guard to bypass type assertion expressions not being available in JS files
+            const parent = this.$parent;
+            if (parent && 'isModalOpen' in parent) {
+                return parent.isModalOpen;
+            }
+            return false;
         },
     },
     watch: {
@@ -184,7 +189,10 @@ export default {
         },
         cancel() {
             this.$emit('cancel');
-            this.$parent.close();
+            const parent = this.$parent;
+            if ('close' in parent && typeof parent.close === 'function') {
+                parent.close();
+            }
         },
         clickMask() {
             if (!this.force) {

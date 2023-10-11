@@ -58,7 +58,7 @@
         "vue": "^3.3",
         "vue-multiselect": "^3.0.0-beta.2",
         "vue-router": "^4.0",
-	"cors": "2.8"
+	    "cors": "2.8"
     },
     "engines": {
         "node": ">= 4.0.0",
@@ -70,6 +70,11 @@
         "not ie <= 8"
     ],
     "devDependencies": {
+        "@types/bootstrap": "^5.2.7",
+        "@types/jquery": "^3.5.20",
+        "@types/uuid": "^9.0.4",
+        "@typescript-eslint/parser": "^6.7.4",
+        "@vue/eslint-config-typescript": "^12.0.0",
         "eslint": "^8.15",
         "eslint-config-prettier": "^9.0",
         "eslint-plugin-prettier": "^5.0",
