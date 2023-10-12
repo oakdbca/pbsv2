@@ -47,6 +47,7 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 
 # Application definition
 INSTALLED_APPS = [
+    "reversion",
     "django.contrib.auth",
     "django.contrib.admin",
     "django.contrib.contenttypes",
@@ -58,10 +59,10 @@ INSTALLED_APPS = [
     "govapp",
     "govapp.apps.accounts",
     "govapp.apps.swagger",
+    "govapp.apps.main",
     "rest_framework",
     "drf_spectacular",
     "django_filters",
-    "reversion",
     "django_cron",
     "django_extensions",
 ]
