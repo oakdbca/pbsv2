@@ -1,0 +1,142 @@
+[
+    {
+        "model": "main.district",
+        "pk": 1,
+        "fields": {
+            "name": "GOLDFIELDS REGION"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 2,
+        "fields": {
+            "name": "EAST KIMBERLEY"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 3,
+        "fields": {
+            "name": "WEST KIMBERLEY"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 4,
+        "fields": {
+            "name": "GERALDTON"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 5,
+        "fields": {
+            "name": "MOORA"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 6,
+        "fields": {
+            "name": "SHARK BAY"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 7,
+        "fields": {
+            "name": "EXMOUTH"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 8,
+        "fields": {
+            "name": "PILBARA REGION"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 9,
+        "fields": {
+            "name": "ALBANY"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 10,
+        "fields": {
+            "name": "ESPERANCE"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 11,
+        "fields": {
+            "name": "BLACKWOOD"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 12,
+        "fields": {
+            "name": "WELLINGTON"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 13,
+        "fields": {
+            "name": "PERTH HILLS"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 14,
+        "fields": {
+            "name": "SWAN COASTAL"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 15,
+        "fields": {
+            "name": "DONNELLY"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 16,
+        "fields": {
+            "name": "FRANKLAND"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 17,
+        "fields": {
+            "name": "CENTRAL WHEATBELT"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 18,
+        "fields": {
+            "name": "WHEATBELT REGION"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 20,
+        "fields": {
+            "name": "TURQUOISE COAST"
+        }
+    },
+    {
+        "model": "main.district",
+        "pk": 22,
+        "fields": {
+            "name": "MURCHISON"
+        }
+    }
+]
