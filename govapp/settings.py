@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "django_cron",
     "django_extensions",
     "coverage",
+    "protected_media.apps.ProtectedMediaConfig",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -242,3 +243,13 @@ if platform.machine() == "arm64":
 
 # Django Timezone
 TIME_ZONE = "Australia/Perth"
+
+# Protected Media
+PROTECTED_MEDIA_ROOT = "%s/protected/" % BASE_DIR
+PROTECTED_MEDIA_URL = "/protected"
+if DEBUG is False:
+    PROTECTED_MEDIA_SERVER = "nginx"  # Defaults to "django"
+PROTECTED_MEDIA_LOCATION_PREFIX = "/internal"  # Prefix used in nginx config
+PROTECTED_MEDIA_AS_DOWNLOADS = (
+    False  # Controls inclusion of a Content-Disposition header
+)
