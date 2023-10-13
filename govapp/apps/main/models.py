@@ -12,13 +12,23 @@ class AbstractModelMeta(ABCMeta, type(models.Model)):
 
 
 class NameableModel(models.Model):
-    name = models.CharField(max_length=255, null=False, blank=False)
+    name = models.CharField(max_length=255, unique=True, null=False, blank=False)
 
     class Meta:
         abstract = True
 
     def __str__(self):
         return self.name
+
+
+class DisplayNameableModel(models.Model):
+    display_name = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.display_name
 
 
 class ReferenceableModel(models.Model):
@@ -114,3 +124,23 @@ class ModelFile(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Region(DisplayNameableModel, NameableModel):
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        if not self.display_name:
+            return self.name
+        return self.display_name
+
+
+class District(DisplayNameableModel, NameableModel):
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        if not self.display_name:
+            return self.name
+        return self.display_name
