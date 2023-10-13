@@ -1,7 +1,10 @@
 from abc import ABCMeta, abstractmethod
 
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from protected_media.models import ProtectedFileField
 
 
 class AbstractModelMeta(ABCMeta, type(models.Model)):
@@ -76,11 +79,38 @@ class AssignableModel(models.Model, metaclass=AbstractModelMeta):
         """Models implementing this class must define a function
         that checks if a user is assignable to the model.
 
-        Returns: A tuple of (bool, str) where the bool is True (and str is empty) if the user is assignable
-        If the user is not assigned, the str is the reason why the user is not assignable.
+        Returns:
+            A tuple of (bool, str) where the bool is True (and str is empty) if the user is assignable
+            If the user is not assigned, the str is the reason why the user is not assignable.
 
         Args:
             user: The auth user model instance to check
 
         """
         return True, ""
+
+
+def file_upload_location(instance, filename):
+    return f"uploads/{instance._meta.model_name}/{filename}"
+
+
+class ModelFile(models.Model):
+    file = ProtectedFileField(upload_to=file_upload_location)
+    name = models.CharField(max_length=255, null=False, blank=False)
+    description = models.TextField(null=True, blank=True)
+    uploaded_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, null=True, blank=True
+    )
+    datetime_uploaded = models.DateTimeField(auto_now_add=True)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
+
+    def __str__(self):
+        return self.name
