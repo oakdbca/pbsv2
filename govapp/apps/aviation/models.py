@@ -7,9 +7,11 @@ from model_utils.models import StatusModel, TimeStampedModel
 
 from govapp.apps.main.models import (
     AssignableModel,
+    District,
     ModelFile,
     NameableModel,
     ReferenceableModel,
+    Region,
 )
 
 
@@ -35,7 +37,12 @@ class AviationRequest(
         ("declined", "Declined"),
         ("approved", "Approved"),
     )
-
+    region = models.ForeignKey(
+        Region, on_delete=models.PROTECT, null=False, blank=False
+    )
+    district = models.ForeignKey(
+        District, on_delete=models.PROTECT, null=False, blank=False
+    )
     ignition_method = models.ForeignKey(
         IgnitionMethod, on_delete=models.PROTECT, null=False, blank=False
     )
