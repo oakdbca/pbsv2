@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericStackedInline
+
+from govapp.apps.main.models import ModelFile
 
 from .models import AircraftRegistration, AircraftType, AviationRequest, IgnitionMethod
 
@@ -15,6 +18,12 @@ class AircraftRegistrationAdmin(admin.ModelAdmin):
     pass
 
 
+class ModelFileInline(GenericStackedInline):
+    model = ModelFile
+    extra = 0
+    verbose_name = "Decision File"
+
+
 class AviationRequestAdmin(admin.ModelAdmin):
     list_display = (
         "reference_number",
@@ -28,6 +37,7 @@ class AviationRequestAdmin(admin.ModelAdmin):
         "decision_made_by",
         "decision_datetime",
     )
+    inlines = [ModelFileInline]
 
 
 admin.site.register(IgnitionMethod, IgnitionMethodAdmin)

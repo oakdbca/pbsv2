@@ -1,10 +1,16 @@
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils import timezone
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
 
-from govapp.apps.main.models import AssignableModel, NameableModel, ReferenceableModel
+from govapp.apps.main.models import (
+    AssignableModel,
+    ModelFile,
+    NameableModel,
+    ReferenceableModel,
+)
 
 
 class IgnitionMethod(NameableModel):
@@ -56,6 +62,7 @@ class AviationRequest(
     )
     decision_datetime = models.DateTimeField(null=True, blank=True)
     decision_text = models.TextField(null=True, blank=True)
+    decision_files = GenericRelation(ModelFile)
 
     def approve(self, decision_made_by: User, approve_text: str) -> None:
         self.status = self.STATUS.approved
