@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "django_filters",
     "django_cron",
     "django_extensions",
+    "coverage",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
