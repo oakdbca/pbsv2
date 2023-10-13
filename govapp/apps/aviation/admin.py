@@ -1,20 +1,21 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline
 
+from govapp.apps.main.admin import DeleteRestrictedAdmin
 from govapp.apps.main.models import ModelFile
 
 from .models import AircraftRegistration, AircraftType, AviationRequest, IgnitionMethod
 
 
-class IgnitionMethodAdmin(admin.ModelAdmin):
+class IgnitionMethodAdmin(DeleteRestrictedAdmin):
     pass
 
 
-class AircraftTypeAdmin(admin.ModelAdmin):
+class AircraftTypeAdmin(DeleteRestrictedAdmin):
     pass
 
 
-class AircraftRegistrationAdmin(admin.ModelAdmin):
+class AircraftRegistrationAdmin(DeleteRestrictedAdmin):
     pass
 
 
@@ -24,7 +25,7 @@ class ModelFileInline(GenericStackedInline):
     verbose_name = "Decision File"
 
 
-class AviationRequestAdmin(admin.ModelAdmin):
+class AviationRequestAdmin(DeleteRestrictedAdmin):
     list_display = (
         "reference_number",
         "status",
