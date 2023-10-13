@@ -41,7 +41,11 @@ class AviationRequest(
     )
     datetime_requested = models.DateTimeField(null=False, blank=False)
     duration = models.DecimalField(
-        max_digits=10, decimal_places=2, null=False, blank=False
+        max_digits=10,
+        decimal_places=2,
+        null=False,
+        blank=False,
+        help_text="The duration in hours (e.g. 1.5)",
     )
     decision_made_by = models.ForeignKey(
         User,
