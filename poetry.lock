@@ -658,6 +658,20 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-coverage-plugin"
+version = "3.1.0"
+description = "Django template coverage.py plugin"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django_coverage_plugin-3.1.0-py3-none-any.whl", hash = "sha256:eb0ea8ffdb0db11a02994fc99be6500550efb496c350d709f418ff3d8e553a67"},
+    {file = "django_coverage_plugin-3.1.0.tar.gz", hash = "sha256:223d34bf92bebadcb8b7b89932480e41c7bd98b44a8156934488fbe7f4a71f99"},
+]
+
+[package.dependencies]
+coverage = "*"
+
+[[package]]
 name = "django-cron"
 version = "0.6.0"
 description = "Running python crons in a Django project"
@@ -2437,4 +2451,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "2de50a19d13f7df2911b54bc0545db4fecbb650395e538a04c04f04685ea893b"
+content-hash = "4bff087eb6e7c8731b2778bbda0c62251e62d4589f22c69f97dfdf8b73f2f80f"
