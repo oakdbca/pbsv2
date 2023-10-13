@@ -743,6 +743,16 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-protected-media"
+version = "1.0.2"
+description = "A simple Django app to serve protected media"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-protected-media-1.0.2.tar.gz", hash = "sha256:a72a28f84eebec53950cfa506842f9d532fd1f5c23078f9c09e94fd98c99aacb"},
+]
+
+[[package]]
 name = "django-reversion"
 version = "5.0.6"
 description = "An extension to the Django web framework that provides version control for model instances."
@@ -2467,4 +2477,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "239a9e6c0ed58a458cc2b4ec689bf1a5f5a51c066b8f3052842cd4fe0b0c3de6"
+content-hash = "2d809f5c1f62facbf3a8bf1525ddbc47c3c342fda90829d2551ed47ae4f74f2f"
