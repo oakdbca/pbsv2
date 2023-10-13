@@ -14,6 +14,9 @@ class NameableModel(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.name
+
 
 class ReferenceableModel(models.Model):
     reference_number = models.CharField(
@@ -80,4 +83,4 @@ class AssignableModel(models.Model, metaclass=AbstractModelMeta):
             user: The auth user model instance to check
 
         """
-        pass
+        return True, ""
