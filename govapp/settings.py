@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "webtemplate_dbca",
     "govapp",
     "govapp.apps.accounts",
+    "govapp.apps.aviation",
     "govapp.apps.swagger",
     "govapp.apps.main",
     "rest_framework",
