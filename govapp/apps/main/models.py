@@ -142,7 +142,7 @@ class District(DisplayNameableModel, NameableModel):
     )
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["region", "name"]
 
     def __str__(self):
         if not self.display_name:
