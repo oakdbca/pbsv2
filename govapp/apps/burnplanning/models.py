@@ -16,6 +16,7 @@ from govapp.apps.main.models import (
     District,
     NameableModel,
     ReferenceableModel,
+    UniqueNameableModel,
     YearField,
 )
 
@@ -31,7 +32,9 @@ class BurnPlanUnitManager(models.Manager):
         )
 
 
-class BurnPlanUnit(ReferenceableModel, NameableModel, StatusModel, TimeStampedModel):
+class BurnPlanUnit(
+    ReferenceableModel, UniqueNameableModel, StatusModel, TimeStampedModel
+):
     """A burn plan unit is a model to contain geometry information for
     an area that may be assigned to a burn plan element"""
 
@@ -94,27 +97,30 @@ class BurnPlanUnitDistrict(TimeStampedModel):
         unique_together = ("burn_plan_unit", "district")
 
 
-class Treatment(NameableModel, ArchivableModel, TimeStampedModel):
+class Treatment(UniqueNameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class Justification(NameableModel, ArchivableModel, TimeStampedModel):
+class Justification(UniqueNameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class Purpose(NameableModel, ArchivableModel, TimeStampedModel):
+class Purpose(UniqueNameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class Program(NameableModel, ArchivableModel, TimeStampedModel):
+class Program(UniqueNameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class OutputLeaderType(NameableModel, ArchivableModel, TimeStampedModel):
+class OutputLeaderType(UniqueNameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
 class OutputLeader(NameableModel, ArchivableModel, TimeStampedModel):
+    burn_plan_element = models.ForeignKey(
+        "BurnPlanElement", on_delete=models.CASCADE, related_name="output_leaders"
+    )
     type = models.ForeignKey(
         OutputLeaderType, on_delete=models.PROTECT, null=True, blank=True
     )
@@ -127,7 +133,11 @@ class OutputLeader(NameableModel, ArchivableModel, TimeStampedModel):
 
 
 class BurnPlanElement(
-    ReferenceableModel, NameableModel, StatusModel, AssignableModel, TimeStampedModel
+    ReferenceableModel,
+    UniqueNameableModel,
+    StatusModel,
+    AssignableModel,
+    TimeStampedModel,
 ):
     """A burn plan element is a model to contain information about a burn plan
     element. A burn plan element is a component of a burn plan and may be
@@ -163,7 +173,6 @@ class BurnPlanElement(
     )
     purposes = models.ManyToManyField(Purpose)
     programs = models.ManyToManyField(Program)
-    output_leaders = models.ManyToManyField("OutputLeader")
 
     def __str__(self):
         return f"{self.reference_number} ({self.name})"
@@ -171,3 +180,13 @@ class BurnPlanElement(
     def user_is_assignable(self, user: User) -> tuple[bool, str]:
         # Todo define conditions for user being assignable to a burn plan element
         return super().user_is_assignable(user)
+
+    def save(self, *args, **kwargs):
+        for output_leader_types in OutputLeaderType.objects.all():
+            output_leader, created = OutputLeader.objects.get_or_create(
+                type=output_leader_types, burn_plan_element=self
+            )
+            if created:
+                logger.info(f"Created output leader: {output_leader}")
+
+        return super().save(*args, **kwargs)

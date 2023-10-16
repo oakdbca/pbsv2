@@ -7,6 +7,7 @@ from .models import (
     BurnPlanUnit,
     BurnPlanUnitDistrict,
     Justification,
+    OutputLeader,
     OutputLeaderType,
     Program,
     Purpose,
@@ -32,9 +33,7 @@ class BurnPlanUnitAdmin(admin.ModelAdmin):
 
 
 class OutputLeaderInline(admin.TabularInline):
-    model = BurnPlanElement.output_leaders.through
-    verbose_name = "Output Leader"
-    verbose_name_plural = "Output Leaders"
+    model = OutputLeader
     extra = 0
 
 
@@ -59,3 +58,4 @@ admin.site.register(Justification)
 admin.site.register(Purpose)
 admin.site.register(Program)
 admin.site.register(OutputLeaderType)
+admin.site.register(OutputLeader)
