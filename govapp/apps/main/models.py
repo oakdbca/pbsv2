@@ -3,12 +3,19 @@ from abc import ABCMeta, abstractmethod
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from protected_media.models import ProtectedFileField
 
 
 class AbstractModelMeta(ABCMeta, type(models.Model)):
     pass
+
+
+class YearField(models.IntegerField):
+    def __init__(self, *args, **kwargs):
+        kwargs["validators"] = [MinValueValidator(2023), MaxValueValidator(2100)]
+        super().__init__(*args, **kwargs)
 
 
 class NameableModel(models.Model):
@@ -98,6 +105,31 @@ class AssignableModel(models.Model, metaclass=AbstractModelMeta):
 
         """
         return True, ""
+
+
+class ArchivableModelManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(archived=False)
+
+    def archived(self):
+        return self.get_queryset().filter(archived=True)
+
+
+class ArchivableModel(models.Model):
+    objects = ArchivableModelManager()
+
+    archived = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+    def archive(self):
+        self.archived = True
+        self.save()
+
+    def unarchive(self):
+        self.archived = False
+        self.save()
 
 
 def file_upload_location(instance, filename):
