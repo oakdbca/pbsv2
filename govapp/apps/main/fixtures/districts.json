@@ -3,6 +3,7 @@
         "model": "main.district",
         "pk": 1,
         "fields": {
+            "region": 1,
             "name": "GOLDFIELDS REGION"
         }
     },
@@ -10,6 +11,7 @@
         "model": "main.district",
         "pk": 2,
         "fields": {
+            "region": 2,
             "name": "EAST KIMBERLEY"
         }
     },
@@ -17,6 +19,7 @@
         "model": "main.district",
         "pk": 3,
         "fields": {
+            "region": 2,
             "name": "WEST KIMBERLEY"
         }
     },
@@ -24,6 +27,7 @@
         "model": "main.district",
         "pk": 4,
         "fields": {
+            "region": 3,
             "name": "GERALDTON"
         }
     },
@@ -31,6 +35,7 @@
         "model": "main.district",
         "pk": 5,
         "fields": {
+            "region": 3,
             "name": "MOORA"
         }
     },
@@ -38,6 +43,7 @@
         "model": "main.district",
         "pk": 6,
         "fields": {
+            "region": 3,
             "name": "SHARK BAY"
         }
     },
@@ -45,6 +51,7 @@
         "model": "main.district",
         "pk": 7,
         "fields": {
+            "region": 4,
             "name": "EXMOUTH"
         }
     },
@@ -52,6 +59,7 @@
         "model": "main.district",
         "pk": 8,
         "fields": {
+            "region": 4,
             "name": "PILBARA REGION"
         }
     },
@@ -59,6 +67,7 @@
         "model": "main.district",
         "pk": 9,
         "fields": {
+            "region": 5,
             "name": "ALBANY"
         }
     },
@@ -66,6 +75,7 @@
         "model": "main.district",
         "pk": 10,
         "fields": {
+            "region": 5,
             "name": "ESPERANCE"
         }
     },
@@ -73,6 +83,7 @@
         "model": "main.district",
         "pk": 11,
         "fields": {
+            "region": 6,
             "name": "BLACKWOOD"
         }
     },
@@ -80,6 +91,7 @@
         "model": "main.district",
         "pk": 12,
         "fields": {
+            "region": 6,
             "name": "WELLINGTON"
         }
     },
@@ -87,6 +99,7 @@
         "model": "main.district",
         "pk": 13,
         "fields": {
+            "region": 7,
             "name": "PERTH HILLS"
         }
     },
@@ -94,6 +107,7 @@
         "model": "main.district",
         "pk": 14,
         "fields": {
+            "region": 7,
             "name": "SWAN COASTAL"
         }
     },
@@ -101,6 +115,7 @@
         "model": "main.district",
         "pk": 15,
         "fields": {
+            "region": 8,
             "name": "DONNELLY"
         }
     },
@@ -108,6 +123,7 @@
         "model": "main.district",
         "pk": 16,
         "fields": {
+            "region": 8,
             "name": "FRANKLAND"
         }
     },
@@ -115,6 +131,7 @@
         "model": "main.district",
         "pk": 17,
         "fields": {
+            "region": 9,
             "name": "CENTRAL WHEATBELT"
         }
     },
@@ -122,6 +139,7 @@
         "model": "main.district",
         "pk": 18,
         "fields": {
+            "region": 9,
             "name": "WHEATBELT REGION"
         }
     },
@@ -129,6 +147,7 @@
         "model": "main.district",
         "pk": 20,
         "fields": {
+            "region": 3,
             "name": "TURQUOISE COAST"
         }
     },
@@ -136,6 +155,7 @@
         "model": "main.district",
         "pk": 22,
         "fields": {
+            "region": 3,
             "name": "MURCHISON"
         }
     }

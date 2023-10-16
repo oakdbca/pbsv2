@@ -137,6 +137,10 @@ class Region(DisplayNameableModel, NameableModel):
 
 
 class District(DisplayNameableModel, NameableModel):
+    region = models.ForeignKey(
+        Region, on_delete=models.CASCADE, null=False, blank=False
+    )
+
     class Meta:
         ordering = ["name"]
 
