@@ -1,13 +1,17 @@
 from logging import getLogger
 
+from django.conf import settings
 from django.contrib.gis.db.models import PolygonField
 from django.contrib.gis.db.models.functions import Area
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.functions import Cast
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
 
 from govapp.apps.main.models import (
+    ArchivableModel,
+    AssignableModel,
     District,
     NameableModel,
     ReferenceableModel,
@@ -87,3 +91,81 @@ class BurnPlanUnitDistrict(TimeStampedModel):
     class Meta:
         verbose_name_plural = "Burn Plan Unit Districts"
         unique_together = ("burn_plan_unit", "district")
+
+
+class Treatment(ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel):
+    pass
+
+
+class Justification(
+    ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel
+):
+    pass
+
+
+class Purpose(ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel):
+    pass
+
+
+class Program(ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel):
+    pass
+
+
+class OutputLeaderType(
+    ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel
+):
+    pass
+
+
+class OutputLeader(
+    ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel
+):
+    type = models.ForeignKey(
+        OutputLeaderType, on_delete=models.PROTECT, null=True, blank=True
+    )
+    indicative_treatement_year = YearField(null=True, blank=True)
+    revised_indicative_treatment_year = YearField(null=True, blank=True)
+    preferred_season = models.CharField(
+        max_length=255, choices=settings.SEASON_CHOICES, null=True, blank=True
+    )
+    comments = models.TextField(null=True, blank=True)
+
+
+class BurnPlanElement(
+    ReferenceableModel, NameableModel, StatusModel, AssignableModel, TimeStampedModel
+):
+    """A burn plan element is a model to contain information about a burn plan
+    element. A burn plan element is a component of a burn plan and may be
+    assigned to a burn plan unit"""
+
+    MODEL_PREFIX = "BPE"
+
+    STATUS = Choices(
+        ("draft", "Draft"),
+        ("current", "Current"),
+        ("discarded", "discarded"),
+        ("retired", "Retired"),
+    )
+
+    year = YearField(null=True, blank=True)
+    last_relevant_treatment_year = YearField(null=True, blank=True)
+    indicative_treatment_year = YearField(null=True, blank=True)
+    revised_indicative_treatment_year = YearField(null=True, blank=True)
+    return_interval = models.IntegerField(
+        null=True, blank=True, validators=[MinValueValidator(1)]
+    )
+    preferred_season = models.CharField(
+        max_length=255, choices=settings.SEASON_CHOICES, null=True, blank=True
+    )
+    treatment = models.OneToOneField(
+        to=Treatment, on_delete=models.PROTECT, null=True, blank=True
+    )
+    justification = models.OneToOneField(
+        to=Justification, on_delete=models.PROTECT, null=True, blank=True
+    )
+    purposes = models.ManyToManyField(Purpose)
+    programs = models.ManyToManyField(Program)
+    output_leaders = models.ManyToManyField("OutputLeader")
+
+    def __str__(self):
+        return f"{self.reference_number} ({self.name})"
