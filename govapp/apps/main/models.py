@@ -18,8 +18,28 @@ class YearField(models.IntegerField):
         super().__init__(*args, **kwargs)
 
 
-class NameableModel(models.Model):
+class UniqueNameableModel(models.Model):
     name = models.CharField(max_length=255, unique=True, null=False, blank=False)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
+
+class NameableModel(models.Model):
+    name = models.CharField(max_length=255, null=False, blank=False)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
+
+class NullableNameableModel(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -158,7 +178,7 @@ class ModelFile(models.Model):
         return self.name
 
 
-class Region(DisplayNameableModel, NameableModel):
+class Region(DisplayNameableModel, UniqueNameableModel):
     class Meta:
         ordering = ["name"]
 
@@ -168,7 +188,7 @@ class Region(DisplayNameableModel, NameableModel):
         return self.display_name
 
 
-class District(DisplayNameableModel, NameableModel):
+class District(DisplayNameableModel, UniqueNameableModel):
     region = models.ForeignKey(
         Region, on_delete=models.CASCADE, null=False, blank=False
     )
