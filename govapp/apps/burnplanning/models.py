@@ -2,13 +2,17 @@ from logging import getLogger
 
 from django.contrib.gis.db.models import PolygonField
 from django.contrib.gis.db.models.functions import Area
-from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.functions import Cast
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
 
-from govapp.apps.main.models import District, NameableModel, ReferenceableModel
+from govapp.apps.main.models import (
+    District,
+    NameableModel,
+    ReferenceableModel,
+    YearField,
+)
 
 logger = getLogger(__name__)
 
@@ -26,6 +30,8 @@ class BurnPlanUnit(ReferenceableModel, NameableModel, StatusModel, TimeStampedMo
     """A burn plan unit is a model to contain geometry information for
     an area that may be assigned to a burn plan element"""
 
+    MODEL_PREFIX = "BPU"
+
     objects = BurnPlanUnitManager()
 
     STATUS = Choices(
@@ -42,12 +48,8 @@ class BurnPlanUnit(ReferenceableModel, NameableModel, StatusModel, TimeStampedMo
         editable=False,
     )
     polygon = PolygonField(blank=True, null=True)
-    active_from = models.IntegerField(
-        validators=[MinValueValidator(2023)], null=True, blank=True
-    )
-    active_to = models.IntegerField(
-        validators=[MinValueValidator(2023)], null=True, blank=True
-    )
+    active_from = YearField(null=True, blank=True)
+    active_to = YearField(null=True, blank=True)
     allow_recording_of_hectares = models.BooleanField(default=False)
 
     def __str__(self):
