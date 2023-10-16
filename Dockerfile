@@ -103,9 +103,8 @@ COPY --chown=oim:oim .git ./.git
 
 # Collect static files
 FROM python_dependencies_pbsv2 as collect_static_pbsv2
-USER oim
 RUN touch /app/.env
-RUN poetry run python manage.py collectstatic --no-input
+RUN poetry run python manage.py collectstatic --no-input --verbosity 3
 
 # Do a clean install of the vue 3 application
 FROM collect_static_pbsv2 as install_build_vue3_pbsv2
