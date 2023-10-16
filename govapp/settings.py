@@ -255,3 +255,10 @@ PROTECTED_MEDIA_LOCATION_PREFIX = "/internal"  # Prefix used in nginx config
 PROTECTED_MEDIA_AS_DOWNLOADS = (
     False  # Controls inclusion of a Content-Disposition header
 )
+
+SEASON_CHOICES = (
+    ("autumn", "Autumn"),
+    ("winter", "Winter"),
+    ("spring", "Spring"),
+    ("summer", "Summer"),
+)
