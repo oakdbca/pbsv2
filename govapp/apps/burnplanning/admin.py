@@ -5,8 +5,13 @@ from govapp.apps.main.admin import DeleteRestrictedAdmin
 from .models import BurnPlanUnit, BurnPlanUnitDistrict
 
 
+class BurnPlanUnitDistrictInline(admin.TabularInline):
+    model = BurnPlanUnitDistrict
+    extra = 0
+
+
 class BurnPlanUnitAdmin(admin.ModelAdmin):
-    pass
+    inlines = [BurnPlanUnitDistrictInline]
 
 
 class BurnPlanUnitDistrictAdmin(DeleteRestrictedAdmin):
@@ -14,4 +19,3 @@ class BurnPlanUnitDistrictAdmin(DeleteRestrictedAdmin):
 
 
 admin.site.register(BurnPlanUnit, BurnPlanUnitAdmin)
-admin.site.register(BurnPlanUnitDistrict, BurnPlanUnitDistrictAdmin)
