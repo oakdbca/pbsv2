@@ -20,6 +20,14 @@ class BurnPlanUnitDistrictInline(admin.TabularInline):
 
 
 class BurnPlanUnitAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "active_from",
+        "active_to",
+        "status",
+        "created",
+        "modified",
+    )
     inlines = [BurnPlanUnitDistrictInline]
 
 
@@ -31,6 +39,14 @@ class OutputLeaderInline(admin.TabularInline):
 
 
 class BurnPlanElementAdmin(DeleteRestrictedAdmin):
+    list_display = (
+        "name",
+        "burn_plan_unit",
+        "treatment",
+        "justification",
+        "created",
+        "modified",
+    )
     inlines = [OutputLeaderInline]
     exclude = ("output_leaders",)
 
