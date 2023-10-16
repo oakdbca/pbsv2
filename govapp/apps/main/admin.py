@@ -25,7 +25,7 @@ class RegionAdmin(DeleteRestrictedAdmin):
 
 
 class DistrictAdmin(DeleteRestrictedAdmin):
-    list_display = ("id", "name", "display_name")
+    list_display = ("id", "region", "name", "display_name")
 
     def has_change_permission(
         self, request: HttpRequest, obj: Any | None = ...
