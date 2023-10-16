@@ -46,7 +46,7 @@ class BurnPlanUnit(ReferenceableModel, NameableModel, StatusModel, TimeStampedMo
         ("retired", "Retired"),
     )
 
-    district = models.ManyToManyField(
+    districts = models.ManyToManyField(
         District,
         through="BurnPlanUnitDistrict",
         through_fields=("burn_plan_unit", "district"),
