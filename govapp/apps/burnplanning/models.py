@@ -1,6 +1,7 @@
 from logging import getLogger
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PolygonField
 from django.contrib.gis.db.models.functions import Area
 from django.core.validators import MinValueValidator
@@ -93,33 +94,27 @@ class BurnPlanUnitDistrict(TimeStampedModel):
         unique_together = ("burn_plan_unit", "district")
 
 
-class Treatment(ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel):
+class Treatment(NameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class Justification(
-    ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel
-):
+class Justification(NameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class Purpose(ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel):
+class Purpose(NameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class Program(ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel):
+class Program(NameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class OutputLeaderType(
-    ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel
-):
+class OutputLeaderType(NameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class OutputLeader(
-    ReferenceableModel, NameableModel, ArchivableModel, TimeStampedModel
-):
+class OutputLeader(NameableModel, ArchivableModel, TimeStampedModel):
     type = models.ForeignKey(
         OutputLeaderType, on_delete=models.PROTECT, null=True, blank=True
     )
@@ -147,6 +142,9 @@ class BurnPlanElement(
         ("retired", "Retired"),
     )
 
+    burn_plan_unit = models.OneToOneField(
+        to=BurnPlanUnit, on_delete=models.PROTECT, null=True, blank=True
+    )
     year = YearField(null=True, blank=True)
     last_relevant_treatment_year = YearField(null=True, blank=True)
     indicative_treatment_year = YearField(null=True, blank=True)
@@ -169,3 +167,7 @@ class BurnPlanElement(
 
     def __str__(self):
         return f"{self.reference_number} ({self.name})"
+
+    def user_is_assignable(self, user: User) -> tuple[bool, str]:
+        # Todo define conditions for user being assignable to a burn plan element
+        return super().user_is_assignable(user)
