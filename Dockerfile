@@ -103,7 +103,7 @@ COPY --chown=oim:oim .git ./.git
 
 # Collect static files
 FROM python_dependencies_pbsv2 as collect_static_pbsv2
-
+USER oim
 RUN touch /app/.env
 RUN poetry run python manage.py collectstatic --no-input
 
