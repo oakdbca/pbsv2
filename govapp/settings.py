@@ -139,8 +139,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
-    BASE_DIR / "govapp/static",  # Look for static files in the frontend
-    # BASE_DIR / "govapp/frontend/node_modules"  # node modules that are collected and used in the frontend
+    os.path.join(os.path.join(BASE_DIR, "govapp", "static")),
 ]
 
 # Default primary key field type
