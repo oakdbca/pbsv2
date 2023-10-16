@@ -23,9 +23,6 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    # - script: "docker pull dbcawa/pbsv2:latest"
-    #   displayName: Pull latest docker image for layer caching
-    #   continueOnError: true # for first build, no cache     
     - task: Docker@2
       displayName: Build an image and Push
       inputs:
@@ -36,7 +33,6 @@ stages:
               $(tagDate)
         containerRegistry: DockerHub
         repository: dbcawa/pbsv2
-        arguments: '--cache-from=dbcawa/pbsv2:latest'         
       env:
         DOCKER_BUILDKIT: 1
 
