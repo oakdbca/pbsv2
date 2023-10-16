@@ -9,21 +9,21 @@ from govapp.apps.main.models import (
     AssignableModel,
     District,
     ModelFile,
-    NameableModel,
     ReferenceableModel,
     Region,
+    UniqueNameableModel,
 )
 
 
-class IgnitionMethod(NameableModel):
+class IgnitionMethod(UniqueNameableModel):
     pass
 
 
-class AircraftType(NameableModel):
+class AircraftType(UniqueNameableModel):
     pass
 
 
-class AircraftRegistration(NameableModel):
+class AircraftRegistration(UniqueNameableModel):
     pass
 
 
