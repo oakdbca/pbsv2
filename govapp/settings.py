@@ -47,9 +47,11 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 
 # Application definition
 INSTALLED_APPS = [
+    "reversion",
     "django.contrib.auth",
     "django.contrib.admin",
     "django.contrib.contenttypes",
+    "django.contrib.gis",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
@@ -57,12 +59,17 @@ INSTALLED_APPS = [
     "webtemplate_dbca",
     "govapp",
     "govapp.apps.accounts",
+    "govapp.apps.aviation",
+    "govapp.apps.burnplanning",
     "govapp.apps.swagger",
+    "govapp.apps.main",
     "rest_framework",
     "drf_spectacular",
     "django_filters",
-    "reversion",
     "django_cron",
+    "django_extensions",
+    "coverage",
+    "protected_media.apps.ProtectedMediaConfig",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -238,3 +245,20 @@ if platform.machine() == "arm64":
 
 # Django Timezone
 TIME_ZONE = "Australia/Perth"
+
+# Protected Media
+PROTECTED_MEDIA_ROOT = "%s/protected/" % BASE_DIR
+PROTECTED_MEDIA_URL = "/protected"
+if DEBUG is False:
+    PROTECTED_MEDIA_SERVER = "nginx"  # Defaults to "django"
+PROTECTED_MEDIA_LOCATION_PREFIX = "/internal"  # Prefix used in nginx config
+PROTECTED_MEDIA_AS_DOWNLOADS = (
+    False  # Controls inclusion of a Content-Disposition header
+)
+
+SEASON_CHOICES = (
+    ("autumn", "Autumn"),
+    ("winter", "Winter"),
+    ("spring", "Spring"),
+    ("summer", "Summer"),
+)

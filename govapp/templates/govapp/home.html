@@ -1,7 +1,7 @@
 {% extends 'govapp/base.html' %}
 
 {% block content %}
-<div id="app"><center>PLEASE WAIT</center></div>
+<div id="app"></div>
 {% if app_build_url %}
 <script defer src="/static/pbsv2_vue/js/chunk-vendors.js"></script>
 <script type="module" type="text/javascript" src="{{ app_build_url }}"></script>

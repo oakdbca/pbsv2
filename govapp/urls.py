@@ -36,6 +36,8 @@ urlpatterns = [
     # Home Page
     urls.path("", views.HomePage.as_view(), name="home"),
     urls.path("test", views.HomePage.as_view(), name="test"),
+    # Protected media
+    urls.path("protected/", urls.include("protected_media.urls")),
     # Django Administration
     urls.path("admin/", admin.site.urls),
 ]

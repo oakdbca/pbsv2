@@ -28,6 +28,12 @@ py7zr = "^0.20"
 httpx = "^0.25"
 owslib = "^0.29"
 numpy = "^1.25"
+django-extensions = "^3.2"
+django-model-utils = "^4.3"
+coverage = "^7.3"
+django-coverage-plugin = "^3.1"
+setuptools = "^68.2.2"
+django-protected-media = "^1.0"
 
 
 [tool.poetry.dev-dependencies]

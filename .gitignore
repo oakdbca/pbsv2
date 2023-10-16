@@ -86,6 +86,7 @@ target/
 
 # media
 media/
+protected/
 
 # Database/fixture dumps
 *.pgdump

@@ -1,17 +1,14 @@
 {% extends "webtemplate_dbca/base_b5_auth_session.html" %}
+{% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="/static/common/css/select2.css?ver={{ GIT_COMMIT_HASH }}"/>
-    <link rel="stylesheet" type="text/css" href="/static/common/css/select2-bootstrap-5-theme.css?ver={{ GIT_COMMIT_HASH }}"/>
-    <link rel="icon" type="image/png" href="/static/common/img/favicon.ico">
-
+    <link rel="icon" type="image/png" href="{% static 'common/img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'pbsv2/css/base.css' %}?v={{build_tag}}">
+    <link rel="stylesheet" href="{% static 'pbsv2_vue/css/app.css' %}?v={{build_tag}}">
+    <link rel="stylesheet" href="{% static 'pbsv2_vue/css/chunk-vendors.css' %}?v={{build_tag}}">
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/common/js/select2.js?ver={{ GIT_COMMIT_HASH }}"></script>
-
-
-<!-- any extra javascript goes here -->
 {% endblock %}
 
 {% block header_top_menu %}
@@ -85,6 +82,13 @@
 </div>
 {% endblock %}
 {% block custom_js %}
+<script language="javascript">
+        var env = {
+            "kmi_server_url": "{{ KMI_SERVER_URL }}"
+        }
+</script>
+<script type="text/javascript" src="{% static 'pbsv2_vue/js/chunk-vendors.js' %}?v={{build_tag}}"></script>
+<script type="text/javascript" src="{% static 'pbsv2_vue/js/app.js' %}?v={{build_tag}}"></script>
 {% endblock %}
 
 {% block page_footer %}
