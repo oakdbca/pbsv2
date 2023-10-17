@@ -6,6 +6,7 @@ LABEL maintainer="asi@dbca.wa.gov.au"
 LABEL org.opencontainers.image.source="https://github.com/dbca-wa/pbsv2"
 
 ENV DEBIAN_FRONTEND=noninteractive \
+    DEB_PYTHON_INSTALL_LAYOUT=deb \
     DEBUG=True \
     TZ=Australia/Perth \
     PRODUCTION_EMAIL=True \
@@ -41,6 +42,7 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update && \
     python3-dev \
     python3-pip \
     python3-setuptools \
+    python3-gdal \
     rsyslog \
     software-properties-common \
     sqlite3 \
@@ -49,12 +51,8 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update && \
     tzdata \
     vim \
     wget && \
-    # Install GDAL
-    add-apt-repository ppa:ubuntugis/ubuntugis-unstable && \
-    apt-get update && \
-    apt-get install --no-install-recommends -y gdal-bin python3-gdal && \
-    rm -rf /var/lib/apt/lists/* && \
-    update-ca-certificates
+    update-ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
 # install node 20
 RUN mkdir -p /etc/apt/keyrings && \
@@ -103,8 +101,8 @@ COPY --chown=oim:oim .git ./.git
 
 # Collect static files
 FROM python_dependencies_pbsv2 as collect_static_pbsv2
-RUN touch /app/.env
-RUN poetry run python manage.py collectstatic --no-input --verbosity 3
+RUN touch /app/.env && \
+    poetry run python manage.py collectstatic --no-input
 
 # Do a clean install of the vue 3 application
 FROM collect_static_pbsv2 as install_build_vue3_pbsv2
