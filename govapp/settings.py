@@ -37,8 +37,10 @@ DEBUG = decouple.config("DEBUG", default=False, cast=bool)
 ALLOWED_HOSTS = [""]
 if DEBUG is True:
     ALLOWED_HOSTS = ["*"]
+    CSRF_TRUSTED_ORIGINS = ["*"]
 else:
     ALLOWED_HOSTS_STRING = decouple.config("ALLOWED_HOSTS", default='[""]')
+    CSRF_TRUSTED_ORIGINS = decouple.config("CSRF_TRUSTED_ORIGINS", default='[""]')
     ALLOWED_HOSTS = json.loads(ALLOWED_HOSTS_STRING)
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
