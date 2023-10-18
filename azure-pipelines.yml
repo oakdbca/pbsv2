@@ -12,30 +12,47 @@ variables:
   tag: '$(Build.BuildId)'
   tagDate: $[ format('{0:yyyy}.{0:MM}.{0:dd}.{0:HH}.{0:mm}{0:ss}', pipeline.startTime) ]
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  imageRepository: 'dbcawa/pbsv2'
+  containerRegistry: 'DockerHub'
 
 stages:
 - stage: Build
   condition: and(succeeded(), eq(variables.isMain, 'true'))
   displayName: Build image
+  
   jobs:
   - job: Build
     displayName: Build
     pool:
       vmImage: ubuntu-latest
     steps:
+    
+    - script: "docker pull $(registryName)/$(imageRepository):latest"
+      displayName: "Pull latest for layer caching"
+      condition: ne(variables['USE_BUILD_CACHE'], 'false')
+      continueOnError: true # for the first build, tags will not exist yet
     - task: Docker@2
-      displayName: Build an image and Push
+      displayName: Build an image
       inputs:
-        command: buildAndPush
+        command: build
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
               latest
               $(tagDate)
-        containerRegistry: DockerHub
-        repository: dbcawa/pbsv2
+        containerRegistry: '$(containerRegistry)'
+        repository: '$(imageRepository)'
+        arguments: '--target builder --cache-from=$(containerRegistry)/$(imageRepository):latest'
       env:
         DOCKER_BUILDKIT: 1
-
+    - task: Docker@2
+      displayName: "Push image"
+      inputs:
+        command: push
+        containerRegistry: "$(containerRegistry)"
+        repository: $(imageRepository)
+        tags: |
+          $(tag)
+          latest
     - task: Docker@2
       displayName: Dev Build image and Push
       inputs:
