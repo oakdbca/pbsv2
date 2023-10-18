@@ -52,8 +52,8 @@ stages:
         containerRegistry: "$(containerRegistry)"
         repository: $(imageRepository)
         tags: |
-          $(tag)
           latest
+          $(tagDate)
     - task: Docker@2
       displayName: Dev Build image and Push
       inputs:
