@@ -42,7 +42,7 @@ stages:
               $(tagDate)
         containerRegistry: '$(containerRegistry)'
         repository: '$(imageRepository)'
-        arguments: '--target builder --cache-from=$(registryName)/$(imageRepository):latest'
+        arguments: '--cache-from=$(registryName)/$(imageRepository):latest'
       env:
         DOCKER_BUILDKIT: 1
     - task: Docker@2
