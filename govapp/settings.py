@@ -37,13 +37,12 @@ DEBUG = decouple.config("DEBUG", default=False, cast=bool)
 ALLOWED_HOSTS = [""]
 if DEBUG is True:
     ALLOWED_HOSTS = ["*"]
+    CSRF_TRUSTED_ORIGINS = ["https://*.dbca.wa.gov.au"]
 else:
     ALLOWED_HOSTS_STRING = decouple.config("ALLOWED_HOSTS", default='[""]')
+    CSRF_TRUSTED_ORIGINS = decouple.config("CSRF_TRUSTED_ORIGINS", default='[""]')
     ALLOWED_HOSTS = json.loads(ALLOWED_HOSTS_STRING)
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^http:\/\/localhost:\d+$",
-]
 
 # Application definition
 INSTALLED_APPS = [
@@ -74,7 +73,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
