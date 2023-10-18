@@ -27,7 +27,7 @@ stages:
       vmImage: ubuntu-latest
     steps:
     
-    - script: "docker pull $(registryName)/$(imageRepository):latest"
+    - script: "docker pull $(containerRegistry)/$(imageRepository):latest"
       displayName: "Pull latest for layer caching"
       condition: ne(variables['USE_BUILD_CACHE'], 'false')
       continueOnError: true # for the first build, tags will not exist yet
