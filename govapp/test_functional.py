@@ -198,6 +198,3 @@ class SeleniumTests(StaticLiveServerTestCase):
 
         # They click the login button
         login_button.click()
-
-        # They are redirected to the home page
-        self.selenium.implicitly_wait(3)
