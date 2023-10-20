@@ -9,14 +9,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-
 import json
 import os
 import pathlib
 import platform
+from typing import Any
 
 import decouple
 import dj_database_url
+import django_stubs_ext
+
+django_stubs_ext.monkeypatch()
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
@@ -195,7 +198,7 @@ SPECTACULAR_SETTINGS = {
 
 # Logging
 # https://docs.djangoproject.com/en/3.2/topics/logging/
-LOGGING = {
+LOGGING: dict[str, Any] = {
     "version": 1,
     "disable_existing_loggers": True,
     "formatters": {
@@ -235,7 +238,7 @@ if DEBUG is True:
 
 
 # Email
-# DISABLE_EMAIL = decouple.config("DISABLE_EMAIL", default=False, cast=bool)
+DISABLE_EMAIL = decouple.config("DISABLE_EMAIL", default=False, cast=bool)
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_BACKEND = "wagov_utils.components.utils.email_backend.EmailBackend"
 EMAIL_HOST = decouple.config("EMAIL_HOST", default="smtp.lan.fyi")
@@ -251,7 +254,7 @@ EMAIL_DELIVERY = decouple.config("EMAIL_DELIVERY", default="off")
 # https://django-cron.readthedocs.io/en/latest/configuration.html
 # CRON_SCANNER_CLASS = "govapp.apps.catalogue.cron.ScannerCronJob"
 CRON_SCANNER_PERIOD_MINS = 3  # Run every 5 minutes
-CRON_CLASSES = []
+CRON_CLASSES: list[str] = []
 
 
 # Temporary Fix for ARM Architecture
@@ -273,6 +276,9 @@ PROTECTED_MEDIA_AS_DOWNLOADS = (
     False  # Controls inclusion of a Content-Disposition header
 )
 
+# Todo do we need this?
+AZURE_OUTPUT_SYNC_DIRECTORY = ""
+
 SEASON_CHOICES = (
     ("autumn", "Autumn"),
     ("winter", "Winter"),
@@ -282,19 +288,34 @@ SEASON_CHOICES = (
 
 # Groups
 
+CORPORATE_EXECUTIVE = "Corporate Executive"
+DISTRICT_DUTY_OFFICER = "District Duty Officer"
+DISTRICT_FIRE_COORDINATOR = "District Fire Coordinator"
+DISTRICT_MANAGER = "District Manager"
+DJANGO_ADMIN = "Django Admin"
+FMSB_REPRESENTATIVE = "FMSB Representative"
+OFFICER = "Officer"
+REGIONAL_DUTY_OFFICER = "Regional Duty Officer"
+REGIONAL_LEADER_FIRE = "Regional Leader Fire"
+REGIONAL_MANAGER = "Regional Manager"
+SCHEDULER = "Scheduler"
+STATE_AVIATION = "State Aviation"
+STATE_DUTY_OFFICER = "State Duty Officer"
+STATE_MANAGER = "State Manager"
+
 DJANGO_GROUPS = [
-    "Corporate Executive",
-    "District Duty Officer",
-    "District Fire Coordinator",
-    "District Manager",
-    "Django Admin",
-    "FMSB Representative",
-    "Officer",
-    "Regional Duty Officer",
-    "Regional Leader Fire",
-    "Regional Manager",
-    "Scheduler",
-    "State Aviation",
-    "State Duty Officer",
-    "State Manager",
+    CORPORATE_EXECUTIVE,
+    DISTRICT_DUTY_OFFICER,
+    DISTRICT_FIRE_COORDINATOR,
+    DISTRICT_MANAGER,
+    DJANGO_ADMIN,
+    FMSB_REPRESENTATIVE,
+    OFFICER,
+    REGIONAL_DUTY_OFFICER,
+    REGIONAL_LEADER_FIRE,
+    REGIONAL_MANAGER,
+    SCHEDULER,
+    STATE_AVIATION,
+    STATE_DUTY_OFFICER,
+    STATE_MANAGER,
 ]

@@ -4,7 +4,7 @@ from typing import Union
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth import models
-from django.db.models import query
+from django.db.models import Q
 
 # Shortcuts
 UserModel = auth.get_user_model()
@@ -36,11 +36,11 @@ def is_administrator(user: Union[models.User, models.AnonymousUser]) -> bool:
     )
 
 
-def limit_to_administrators() -> query.Q:
+def limit_to_administrators() -> Q:
     """Limits a fields choice to only objects in the Administrators group.
 
     Returns:
-        query.Q: Query to limit object to those in the Administrators group.
+        Q: Query to limit object to those in the Administrators group.
     """
     # Construct Query and Return
-    return query.Q(groups__pk=settings.DJANGO_ADMIN)
+    return Q(groups__pk=settings.DJANGO_ADMIN)

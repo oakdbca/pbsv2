@@ -21,6 +21,8 @@ class CommunicationsLogEntryType(models.IntegerChoices):
 class CommunicationsLogEntry(models.Model):
     """Model for a Communications Log Entry."""
 
+    objects: models.Manager
+
     # Generic Foreign Key
     # See: https://docs.djangoproject.com/en/3.2/ref/contrib/contenttypes/#generic-relations
     content_type = models.ForeignKey(ct_models.ContentType, on_delete=models.CASCADE)
@@ -97,6 +99,8 @@ class CommunicationsLogDocument(models.Model):
 
 class ActionsLogEntry(models.Model):
     """Model for an Actions Log Entry."""
+
+    objects: models.Manager
 
     # Generic Foreign Key
     # See: https://docs.djangoproject.com/en/3.2/ref/contrib/contenttypes/#generic-relations
