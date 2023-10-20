@@ -39,7 +39,7 @@ django-selenium = "^0.9.8"
 django-storages = "^1.14.2"
 
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.2"
 ipython = "^8.3"
 ipdb = "^0.13"
@@ -47,6 +47,8 @@ pylint = "^3.0"
 flake8 = "^6.1"
 autopep8 = "^2.0"
 black = "^23.9"
+mypy = "^1.6.1"
+django-stubs = "^4.2.5"
 
 [build-system]
 requires = ["poetry-core>=1.6.1"]
