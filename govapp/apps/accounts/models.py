@@ -1,7 +1,9 @@
-from django.contrib.auth.models import User
+from django.contrib import auth
 from django.db import models
 
 from govapp.apps.main.models import District
+
+User = auth.get_user_model()
 
 
 class Profile(models.Model):

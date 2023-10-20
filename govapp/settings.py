@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     "govapp.apps.burnplanning",
     "govapp.apps.swagger",
     "govapp.apps.main",
-    "govapp.apps.users",
     "rest_framework",
     "drf_spectacular",
     "django_filters",
