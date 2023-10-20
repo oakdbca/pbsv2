@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "govapp.apps.burnplanning",
     "govapp.apps.swagger",
     "govapp.apps.main",
+    "govapp.apps.users",
     "rest_framework",
     "drf_spectacular",
     "django_filters",
@@ -279,3 +280,22 @@ SEASON_CHOICES = (
     ("spring", "Spring"),
     ("summer", "Summer"),
 )
+
+# Groups
+
+DJANGO_GROUPS = [
+    "Corporate Executive",
+    "District Duty Officer",
+    "District Fire Coordinator",
+    "District Manager",
+    "Django Admin",
+    "FMSB Representative",
+    "Officer",
+    "Regional Duty Officer",
+    "Regional Leader Fire",
+    "Regional Manager",
+    "Scheduler",
+    "State Aviation",
+    "State Duty Officer",
+    "State Manager",
+]
