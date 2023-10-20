@@ -50,6 +50,10 @@ black = "^23.9"
 mypy = "^1.6.1"
 django-stubs = "^4.2.5"
 
+
+[tool.poetry.group.dev-dependencies.dependencies]
+djangorestframework-stubs = "^3.14.4"
+
 [build-system]
 requires = ["poetry-core>=1.6.1"]
 build-backend = "poetry.core.masonry.api"

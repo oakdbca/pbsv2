@@ -868,6 +868,30 @@ django = ">=3.0"
 pytz = "*"
 
 [[package]]
+name = "djangorestframework-stubs"
+version = "3.14.4"
+description = "PEP-484 stubs for django-rest-framework"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "djangorestframework-stubs-3.14.4.tar.gz", hash = "sha256:8ee8719bfeb647b92cc200e15b3cc9813d2e4468c8190777a55a121542a4b2d4"},
+    {file = "djangorestframework_stubs-3.14.4-py3-none-any.whl", hash = "sha256:5be8275dd05d6629b3d1688929586ef7b6bc66b4f3f728b5e0389305f07c7a7f"},
+]
+
+[package.dependencies]
+django-stubs = ">=4.2.5"
+mypy = ">=0.991"
+requests = ">=2.0.0"
+types-PyYAML = ">=5.4.3"
+types-requests = ">=0.1.12"
+typing-extensions = ">=3.10.0"
+
+[package.extras]
+compatible-mypy = ["mypy (>=1.6.0,<1.7.0)"]
+coreapi = ["coreapi (>=2.0.0)"]
+markdown = ["types-Markdown (>=0.1.5)"]
+
+[[package]]
 name = "drf-spectacular"
 version = "0.26.5"
 description = "Sane and flexible OpenAPI 3 schema generation for Django REST framework"
@@ -2596,6 +2620,20 @@ files = [
 ]
 
 [[package]]
+name = "types-requests"
+version = "2.31.0.10"
+description = "Typing stubs for requests"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "types-requests-2.31.0.10.tar.gz", hash = "sha256:dc5852a76f1eaf60eafa81a2e50aefa3d1f015c34cf0cba130930866b1b22a92"},
+    {file = "types_requests-2.31.0.10-py3-none-any.whl", hash = "sha256:b32b9a86beffa876c0c3ac99a4cd3b8b51e973fb8e3bd4e0a6bb32c7efad80fc"},
+]
+
+[package.dependencies]
+urllib3 = ">=2"
+
+[[package]]
 name = "typing-extensions"
 version = "4.8.0"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -2723,4 +2761,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "cb8b5d9a9b4ef794cbd22db967036446f7d4e84982535e7d7263ee35e25cc73c"
+content-hash = "82466130adfff3ae35f8f77d2cbdad9887fc7daabdd1daf33de43c52b99b966a"
