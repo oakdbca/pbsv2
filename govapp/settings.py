@@ -9,22 +9,38 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-
 import json
 import os
 import pathlib
 import platform
+from typing import Any
 
 import decouple
 import dj_database_url
+import django_stubs_ext
+import sentry_sdk
+
+django_stubs_ext.monkeypatch()
+
+ENABLE_SENTRY = decouple.config("ENABLE_SENTRY", default=False, cast=bool)
+if ENABLE_SENTRY:
+    sentry_sdk.init(
+        dsn="https://2821da8164c0ca4d252b6ab70f605e41@sentry-uat.dbca.wa.gov.au/3",
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        traces_sample_rate=1.0,
+    )
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Project specific settings
-PROJECT_TITLE = "Prescribed Burns Systems V2"
-PROJECT_DESCRIPTION = "Fire systems"
+PROJECT_TITLE = "Bushfire Mitigation System"
+PROJECT_DESCRIPTION = (
+    "A system to manage risk, planning, implementation and post-implementation "
+    "review for the mitigation of bushfires in Western Australia"
+)
 PROJECT_VERSION = "v2"
 
 # Quick-start development settings - unsuitable for production
@@ -192,13 +208,14 @@ SPECTACULAR_SETTINGS = {
 
 # Logging
 # https://docs.djangoproject.com/en/3.2/topics/logging/
-LOGGING = {
+LOGGING: dict[str, Any] = {
     "version": 1,
     "disable_existing_loggers": True,
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(name)s [Line:%(lineno)s][%(funcName)s] %(message)s"
         },
+        "simple": {"format": "%(levelname)s %(message)s"},
     },
     "handlers": {
         "console": {
@@ -206,16 +223,32 @@ LOGGING = {
             "level": "DEBUG",
             "formatter": "verbose",
         },
+        "console_simple": {
+            "class": "logging.StreamHandler",
+            "level": "DEBUG",
+            "formatter": "simple",
+        },
     },
     "root": {
         "handlers": ["console"],
         "level": "INFO",
     },
+    "loggers": {
+        "govapp": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
 }
+
+if DEBUG is True:
+    LOGGING["loggers"]["govapp"]["handlers"] = ["console_simple"]
+    LOGGING["loggers"]["govapp"]["level"] = "DEBUG"
+    LOGGING["loggers"]["govapp"]["propagate"] = False
 
 
 # Email
-# DISABLE_EMAIL = decouple.config("DISABLE_EMAIL", default=False, cast=bool)
+DISABLE_EMAIL = decouple.config("DISABLE_EMAIL", default=False, cast=bool)
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_BACKEND = "wagov_utils.components.utils.email_backend.EmailBackend"
 EMAIL_HOST = decouple.config("EMAIL_HOST", default="smtp.lan.fyi")
@@ -231,7 +264,7 @@ EMAIL_DELIVERY = decouple.config("EMAIL_DELIVERY", default="off")
 # https://django-cron.readthedocs.io/en/latest/configuration.html
 # CRON_SCANNER_CLASS = "govapp.apps.catalogue.cron.ScannerCronJob"
 CRON_SCANNER_PERIOD_MINS = 3  # Run every 5 minutes
-CRON_CLASSES = []
+CRON_CLASSES: list[str] = []
 
 
 # Temporary Fix for ARM Architecture
@@ -253,9 +286,46 @@ PROTECTED_MEDIA_AS_DOWNLOADS = (
     False  # Controls inclusion of a Content-Disposition header
 )
 
+# Todo do we need this?
+AZURE_OUTPUT_SYNC_DIRECTORY = ""
+
 SEASON_CHOICES = (
     ("autumn", "Autumn"),
     ("winter", "Winter"),
     ("spring", "Spring"),
     ("summer", "Summer"),
 )
+
+# Groups
+
+CORPORATE_EXECUTIVE = "Corporate Executive"
+DISTRICT_DUTY_OFFICER = "District Duty Officer"
+DISTRICT_FIRE_COORDINATOR = "District Fire Coordinator"
+DISTRICT_MANAGER = "District Manager"
+DJANGO_ADMIN = "Django Admin"
+FMSB_REPRESENTATIVE = "FMSB Representative"
+OFFICER = "Officer"
+REGIONAL_DUTY_OFFICER = "Regional Duty Officer"
+REGIONAL_LEADER_FIRE = "Regional Leader Fire"
+REGIONAL_MANAGER = "Regional Manager"
+SCHEDULER = "Scheduler"
+STATE_AVIATION = "State Aviation"
+STATE_DUTY_OFFICER = "State Duty Officer"
+STATE_MANAGER = "State Manager"
+
+DJANGO_GROUPS = [
+    CORPORATE_EXECUTIVE,
+    DISTRICT_DUTY_OFFICER,
+    DISTRICT_FIRE_COORDINATOR,
+    DISTRICT_MANAGER,
+    DJANGO_ADMIN,
+    FMSB_REPRESENTATIVE,
+    OFFICER,
+    REGIONAL_DUTY_OFFICER,
+    REGIONAL_LEADER_FIRE,
+    REGIONAL_MANAGER,
+    SCHEDULER,
+    STATE_AVIATION,
+    STATE_DUTY_OFFICER,
+    STATE_MANAGER,
+]

@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from typing import Any
 
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -7,8 +8,10 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from protected_media.models import ProtectedFileField
 
+model_type: Any = type(models.Model)
 
-class AbstractModelMeta(ABCMeta, type(models.Model)):
+
+class AbstractModelMeta(ABCMeta, model_type):
     pass
 
 
@@ -92,7 +95,7 @@ class ReferenceableModel(models.Model):
         return self._meta.model_name
 
 
-class AssignableModel(models.Model, metaclass=AbstractModelMeta):
+class AssignableModel(models.Model, metaclass=AbstractModelMeta):  # type: ignore
     assigned_to = models.ForeignKey(
         User, on_delete=models.PROTECT, null=True, blank=True
     )
@@ -188,10 +191,12 @@ class Region(DisplayNameableModel, UniqueNameableModel):
         return self.display_name
 
 
-class District(DisplayNameableModel, UniqueNameableModel):
+class District(DisplayNameableModel, UniqueNameableModel):  # type: ignore
     region = models.ForeignKey(
         Region, on_delete=models.CASCADE, null=False, blank=False
     )
+
+    burn_plan_units: models.Manager
 
     class Meta:
         ordering = ["region", "name"]

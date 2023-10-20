@@ -1,4 +1,5 @@
 from logging import getLogger
+from typing import Any
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -32,7 +33,7 @@ class BurnPlanUnitManager(models.Manager):
         )
 
 
-class BurnPlanUnit(
+class BurnPlanUnit(  # type: ignore
     ReferenceableModel, UniqueNameableModel, StatusModel, TimeStampedModel
 ):
     """A burn plan unit is a model to contain geometry information for
@@ -49,12 +50,19 @@ class BurnPlanUnit(
         ("retired", "Retired"),
     )
 
-    districts = models.ManyToManyField(
+    # Define types for dynamically added managers to keep mypy happy
+    draft: models.Manager
+    current: models.Manager
+    discarded: models.Manager
+    retired: models.Manager
+
+    districts: models.ManyToManyField[District, Any] = models.ManyToManyField(
         District,
         through="BurnPlanUnitDistrict",
         through_fields=("burn_plan_unit", "district"),
         editable=False,
     )
+
     polygon = PolygonField(blank=True, null=True)
     active_from = YearField(null=True, blank=True)
     active_to = YearField(null=True, blank=True)
@@ -139,10 +147,6 @@ class BurnPlanElement(
     AssignableModel,
     TimeStampedModel,
 ):
-    """A burn plan element is a model to contain information about a burn plan
-    element. A burn plan element is a component of a burn plan and may be
-    assigned to a burn plan unit"""
-
     MODEL_PREFIX = "BPE"
 
     STATUS = Choices(
@@ -151,6 +155,12 @@ class BurnPlanElement(
         ("discarded", "discarded"),
         ("retired", "Retired"),
     )
+
+    # Define types for dynamically added managers to keep mypy happy
+    draft: models.Manager
+    current: models.Manager
+    discarded: models.Manager
+    retired: models.Manager
 
     burn_plan_unit = models.OneToOneField(
         to=BurnPlanUnit, on_delete=models.PROTECT, null=True, blank=True

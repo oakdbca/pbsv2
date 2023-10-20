@@ -37,6 +37,13 @@ class AviationRequest(
         ("declined", "Declined"),
         ("approved", "Approved"),
     )
+
+    # Define types for dynamically added managers to keep mypy happy
+    draft: models.Manager
+    submitted: models.Manager
+    declined: models.Manager
+    approved: models.Manager
+
     region = models.ForeignKey(
         Region, on_delete=models.PROTECT, null=False, blank=False
     )

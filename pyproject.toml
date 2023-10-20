@@ -36,9 +36,10 @@ setuptools = "^68.2.2"
 django-protected-media = "^1.0"
 selenium = "^4.14.0"
 django-selenium = "^0.9.8"
+django-storages = "^1.14.2"
 
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.2"
 ipython = "^8.3"
 ipdb = "^0.13"
@@ -46,6 +47,14 @@ pylint = "^3.0"
 flake8 = "^6.1"
 autopep8 = "^2.0"
 black = "^23.9"
+mypy = "^1.6.1"
+django-stubs = "^4.2.5"
+django-stubs-ext = "^4.2.5"
+sentry-sdk = {extras = ["django"], version = "^1.32.0"}
+
+
+[tool.poetry.group.dev-dependencies.dependencies]
+djangorestframework-stubs = "^3.14.4"
 
 [build-system]
 requires = ["poetry-core>=1.6.1"]
