@@ -23,8 +23,11 @@ BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Project specific settings
-PROJECT_TITLE = "Prescribed Burns Systems V2"
-PROJECT_DESCRIPTION = "Fire systems"
+PROJECT_TITLE = "Bushfire Mitigation System"
+PROJECT_DESCRIPTION = (
+    "A system to manage risk, planning, implementation and post-implementation "
+    "review for the mitigation of bushfires in Western Australia"
+)
 PROJECT_VERSION = "v2"
 
 # Quick-start development settings - unsuitable for production
@@ -211,7 +214,14 @@ LOGGING = {
         "handlers": ["console"],
         "level": "INFO",
     },
+    "govapp": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
 }
+
+if DEBUG is True:
+    LOGGING["govapp"]["level"] = "DEBUG"
 
 
 # Email

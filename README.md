@@ -1,5 +1,5 @@
-# Prescribed Burns System
-Prescribed Burns System is a web application for managing of planned burns accross western australia.
+# Bushfire Mitigation System
+A system to manage risk, planning, implementation and post-implementation review for the mitigation of bushfires in Western Australia
 
 ## Backend
 The backend of Prescribed Burns System is a [Python](https://www.python.org/) [Django](https://www.djangoproject.com/) project
