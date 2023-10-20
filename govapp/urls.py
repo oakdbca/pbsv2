@@ -31,6 +31,11 @@ admin.site.index_title = conf.settings.PROJECT_TITLE
 admin.site.site_title = conf.settings.PROJECT_TITLE
 
 
+# To test sentry
+def trigger_error(request):
+    division_by_zero = 1 / 0  # noqa
+
+
 # Django URL Patterns
 urlpatterns = [
     # Home Page
@@ -40,6 +45,7 @@ urlpatterns = [
     urls.path("protected/", urls.include("protected_media.urls")),
     # Django Administration
     urls.path("admin/", admin.site.urls),
+    urls.path("sentry-debug/", trigger_error),
 ]
 
 # DBCA Template URLs

@@ -50,6 +50,7 @@ black = "^23.9"
 mypy = "^1.6.1"
 django-stubs = "^4.2.5"
 django-stubs-ext = "^4.2.5"
+sentry-sdk = {extras = ["django"], version = "^1.32.0"}
 
 
 [tool.poetry.group.dev-dependencies.dependencies]

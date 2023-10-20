@@ -18,9 +18,16 @@ from typing import Any
 import decouple
 import dj_database_url
 import django_stubs_ext
+import sentry_sdk
 
 django_stubs_ext.monkeypatch()
 
+sentry_sdk.init(
+    dsn="https://2821da8164c0ca4d252b6ab70f605e41@sentry-uat.dbca.wa.gov.au/3",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+)
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 STATIC_ROOT = BASE_DIR / "staticfiles"
