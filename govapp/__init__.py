@@ -1,6 +1,6 @@
-# """The Prescribed Burns System DBCA Django Project."""
-# import importlib.util
+"""The Prescribed Burns System DBCA Django Project."""
+import importlib.util
 
-# mypy_package = importlib.util.find_spec("mypy")
-# if mypy_package:
-#     from .checks import mypy  # noqa: F401
+mypy_package = importlib.util.find_spec("mypy")
+if mypy_package:
+    from .checks import mypy  # noqa: F401
