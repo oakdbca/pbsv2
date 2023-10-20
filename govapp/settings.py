@@ -22,12 +22,15 @@ import sentry_sdk
 
 django_stubs_ext.monkeypatch()
 
-sentry_sdk.init(
-    dsn="https://2821da8164c0ca4d252b6ab70f605e41@sentry-uat.dbca.wa.gov.au/3",
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    traces_sample_rate=1.0,
-)
+ENABLE_SENTRY = decouple.config("ENABLE_SENTRY", default=False, cast=bool)
+if ENABLE_SENTRY:
+    sentry_sdk.init(
+        dsn="https://2821da8164c0ca4d252b6ab70f605e41@sentry-uat.dbca.wa.gov.au/3",
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        traces_sample_rate=1.0,
+    )
+
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 STATIC_ROOT = BASE_DIR / "staticfiles"
