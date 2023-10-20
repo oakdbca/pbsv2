@@ -202,6 +202,7 @@ LOGGING = {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(name)s [Line:%(lineno)s][%(funcName)s] %(message)s"
         },
+        "simple": {"format": "%(levelname)s %(message)s"},
     },
     "handlers": {
         "console": {
@@ -209,19 +210,28 @@ LOGGING = {
             "level": "DEBUG",
             "formatter": "verbose",
         },
+        "console_simple": {
+            "class": "logging.StreamHandler",
+            "level": "DEBUG",
+            "formatter": "simple",
+        },
     },
     "root": {
         "handlers": ["console"],
         "level": "INFO",
     },
-    "govapp": {
-        "handlers": ["console"],
-        "level": "INFO",
+    "loggers": {
+        "govapp": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
     },
 }
 
 if DEBUG is True:
-    LOGGING["govapp"]["level"] = "DEBUG"
+    LOGGING["loggers"]["govapp"]["handlers"] = ["console_simple"]
+    LOGGING["loggers"]["govapp"]["level"] = "DEBUG"
+    LOGGING["loggers"]["govapp"]["propagate"] = False
 
 
 # Email
