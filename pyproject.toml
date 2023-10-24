@@ -37,6 +37,7 @@ django-protected-media = "^1.0"
 selenium = "^4.14"
 django-selenium = "^0.9"
 django-storages = "^1.14"
+sentry-sdk = {extras = ["django"], version = "^1.32"}
 
 [tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.2"
@@ -49,7 +50,6 @@ black = "^23.9"
 mypy = "^1.6.1"
 django-stubs = "^4.2"
 django-stubs-ext = "^4.2"
-sentry-sdk = {extras = ["django"], version = "^1.32"}
 djangorestframework-stubs = "^3.14"
 
 [build-system]
