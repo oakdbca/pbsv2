@@ -17,18 +17,23 @@ from typing import Any
 
 import decouple
 import dj_database_url
-import django_stubs_ext
 import sentry_sdk
 
-django_stubs_ext.monkeypatch()
+DEBUG = decouple.config("DEBUG", default=False, cast=bool)
 
-ENABLE_SENTRY = decouple.config("ENABLE_SENTRY", default=False, cast=bool)
-if ENABLE_SENTRY:
+if DEBUG is True:
+    import django_stubs_ext
+
+    django_stubs_ext.monkeypatch()
+
+SENTRY_DSN = decouple.config("SENTRY_DSN", default=None)
+if SENTRY_DSN:
     sentry_sdk.init(
-        dsn="https://2821da8164c0ca4d252b6ab70f605e41@sentry-uat.dbca.wa.gov.au/3",
+        dsn=f"{SENTRY_DSN}",
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
         traces_sample_rate=1.0,
+        environment=decouple.config("ENVIRONMENT", default="dev"),
     )
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
@@ -49,7 +54,6 @@ PROJECT_VERSION = "v2"
 # SECURITY WARNING: don't run with debug turned on in production!
 # SECURITY WARNING: don't allow all hosts in production!
 SECRET_KEY = decouple.config("SECRET_KEY")
-DEBUG = decouple.config("DEBUG", default=False, cast=bool)
 ALLOWED_HOSTS = [""]
 if DEBUG is True:
     ALLOWED_HOSTS = ["*"]
