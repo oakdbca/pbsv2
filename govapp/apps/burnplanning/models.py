@@ -1,5 +1,4 @@
 from logging import getLogger
-from typing import Any
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -56,7 +55,7 @@ class BurnPlanUnit(  # type: ignore
     discarded: models.Manager
     retired: models.Manager
 
-    districts: models.ManyToManyField[District, Any] = models.ManyToManyField(
+    districts: models.ManyToManyField = models.ManyToManyField(
         District,
         through="BurnPlanUnitDistrict",
         through_fields=("burn_plan_unit", "district"),
