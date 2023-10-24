@@ -20,20 +20,21 @@ import dj_database_url
 import sentry_sdk
 
 DEBUG = decouple.config("DEBUG", default=False, cast=bool)
+ENVIRONMENT = decouple.config("ENVIRONMENT", default="local")
 
-if DEBUG is True:
+if DEBUG is True and ENVIRONMENT == "local":
     import django_stubs_ext
 
     django_stubs_ext.monkeypatch()
 
 SENTRY_DSN = decouple.config("SENTRY_DSN", default=None)
-if SENTRY_DSN:
+if SENTRY_DSN and ENVIRONMENT != "local":
     sentry_sdk.init(
         dsn=f"{SENTRY_DSN}",
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
         traces_sample_rate=1.0,
-        environment=decouple.config("ENVIRONMENT", default="dev"),
+        environment=ENVIRONMENT,
     )
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
