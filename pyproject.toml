@@ -32,12 +32,11 @@ django-extensions = "^3.2"
 django-model-utils = "^4.3"
 coverage = "^7.3"
 django-coverage-plugin = "^3.1"
-setuptools = "^68.2.2"
+setuptools = "^68.2"
 django-protected-media = "^1.0"
-selenium = "^4.14.0"
-django-selenium = "^0.9.8"
-django-storages = "^1.14.2"
-
+selenium = "^4.14"
+django-selenium = "^0.9"
+django-storages = "^1.14"
 
 [tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.2"
@@ -48,13 +47,10 @@ flake8 = "^6.1"
 autopep8 = "^2.0"
 black = "^23.9"
 mypy = "^1.6.1"
-django-stubs = "^4.2.5"
-django-stubs-ext = "^4.2.5"
-sentry-sdk = {extras = ["django"], version = "^1.32.0"}
-
-
-[tool.poetry.group.dev-dependencies.dependencies]
-djangorestframework-stubs = "^3.14.4"
+django-stubs = "^4.2"
+django-stubs-ext = "^4.2"
+sentry-sdk = {extras = ["django"], version = "^1.32"}
+djangorestframework-stubs = "^3.14"
 
 [build-system]
 requires = ["poetry-core>=1.6.1"]
