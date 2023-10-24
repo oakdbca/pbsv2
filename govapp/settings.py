@@ -20,7 +20,7 @@ import dj_database_url
 import sentry_sdk
 
 DEBUG = decouple.config("DEBUG", default=False, cast=bool)
-ENVIRONMENT = decouple.config("ENVIRONMENT", default="local")
+ENVIRONMENT = decouple.config("ENVIRONMENT", default="dev")
 
 if DEBUG is True and ENVIRONMENT == "local":
     import django_stubs_ext
