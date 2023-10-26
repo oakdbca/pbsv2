@@ -1,65 +1,65 @@
 [
-    {
-        "model": "main.region",
-        "pk": 1,
-        "fields": {
-            "name": "GOLDFIELDS"
-        }
-    },
-    {
-        "model": "main.region",
-        "pk": 2,
-        "fields": {
-            "name": "KIMBERLEY"
-        }
-    },
-    {
-        "model": "main.region",
-        "pk": 3,
-        "fields": {
-            "name": "MIDWEST"
-        }
-    },
-    {
-        "model": "main.region",
-        "pk": 4,
-        "fields": {
-            "name": "PILBARA"
-        }
-    },
-    {
-        "model": "main.region",
-        "pk": 5,
-        "fields": {
-            "name": "SOUTH COAST"
-        }
-    },
-    {
-        "model": "main.region",
-        "pk": 6,
-        "fields": {
-            "name": "SOUTH WEST"
-        }
-    },
-    {
-        "model": "main.region",
-        "pk": 7,
-        "fields": {
-            "name": "SWAN"
-        }
-    },
-    {
-        "model": "main.region",
-        "pk": 8,
-        "fields": {
-            "name": "WARREN"
-        }
-    },
-    {
-        "model": "main.region",
-        "pk": 9,
-        "fields": {
-            "name": "WHEATBELT"
-        }
+  {
+    "model": "main.region",
+    "pk": 1,
+    "fields": {
+      "name": "GOLDFIELDS"
     }
+  },
+  {
+    "model": "main.region",
+    "pk": 2,
+    "fields": {
+      "name": "KIMBERLEY"
+    }
+  },
+  {
+    "model": "main.region",
+    "pk": 3,
+    "fields": {
+      "name": "MIDWEST"
+    }
+  },
+  {
+    "model": "main.region",
+    "pk": 4,
+    "fields": {
+      "name": "PILBARA"
+    }
+  },
+  {
+    "model": "main.region",
+    "pk": 5,
+    "fields": {
+      "name": "SOUTH COAST"
+    }
+  },
+  {
+    "model": "main.region",
+    "pk": 6,
+    "fields": {
+      "name": "SOUTH WEST"
+    }
+  },
+  {
+    "model": "main.region",
+    "pk": 7,
+    "fields": {
+      "name": "SWAN"
+    }
+  },
+  {
+    "model": "main.region",
+    "pk": 8,
+    "fields": {
+      "name": "WARREN"
+    }
+  },
+  {
+    "model": "main.region",
+    "pk": 9,
+    "fields": {
+      "name": "WHEATBELT"
+    }
+  }
 ]

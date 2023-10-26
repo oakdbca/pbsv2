@@ -1,31 +1,26 @@
 {
     "compilerOptions": {
-      "checkJs": true,
-      "resolveJsonModule": true,
-      "moduleResolution": "node",
-      "module": "esnext",
-      "target": "es6",
-      "lib": ["esnext", "dom"],
-      "baseUrl": ".",
-      "paths": {
-        "~/*": ["./src/*"],
-        "@/*": ["./src/*"],
-        "~~/*": ["./*"],
-        "@@/*": ["./*"],
-        "@vue-utils/*": ["./src/utils/vue/*"],
-        "@common-utils/*": ["./src/utils/common/*"],
-        "@static-root/*": ["../../../staticfiles/*"]
-      }
+        "checkJs": true,
+        "resolveJsonModule": true,
+        "moduleResolution": "node",
+        "module": "esnext",
+        "target": "es6",
+        "lib": ["esnext", "dom"],
+        "baseUrl": ".",
+        "paths": {
+            "~/*": ["./src/*"],
+            "@/*": ["./src/*"],
+            "~~/*": ["./*"],
+            "@@/*": ["./*"],
+            "@vue-utils/*": ["./src/utils/vue/*"],
+            "@common-utils/*": ["./src/utils/common/*"],
+            "@static-root/*": ["../../../staticfiles/*"]
+        }
     },
     "typeAcquisition": {
-      "enable": true,
-      "include": [
-          "jquery",
-          "uuid",
-          "bootstrap"
-          // "sweetalert2", // Swal already comes with type defs
-      ]
+        "enable": true,
+        "include": ["jquery", "uuid", "bootstrap"]
     },
-    "include": ["src/**/*"], // Include all files in the src folder
+    "include": ["src/**/*"],
     "exclude": ["node_modules", "**/node_modules/*"]
-  }
+}

@@ -1,38 +1,35 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Python: Django",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/manage.py",
-            "args": [
-                "runserver",
-                "0.0.0.0:9151"
-            ],
-            "django": true,
-            "env": {"PYDEVD_WARN_SLOW_RESOLVE_TIMEOUT": "10"}
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "env": { "PORT": "9152" },
-            "name": "Node: Chrome",
-            "url": "http://localhost:9151",
-            "webRoot": "${workspaceFolder}/govapp/frontend/pbs/",
-            "skipFiles": [
-                "${workspaceFolder}/govapp/frontend/pbs/node_modules/**/",
-                "*/<node_internals>/**",
-                "*/<node_modules>/**"
-            ],
-            "sourceMaps": true,
-            "smartStep": true,
-            "outFiles": [
-                "${workspaceFolder}/govapp/frontend/pbs/src/**/*.js",
-                "${workspaceFolder}/govapp/frontend/pbs/src/**/*.vue",
-                "${workspaceFolder}/govapp/frontend/pbs/**/*.html"
-            ],
-            "preLaunchTask": "node: serve",
-        }
-    ]
-  }
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Django",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["runserver", "0.0.0.0:9151"],
+      "django": true,
+      "env": { "PYDEVD_WARN_SLOW_RESOLVE_TIMEOUT": "10" }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "env": { "PORT": "9152" },
+      "name": "Node: Chrome",
+      "url": "http://localhost:9151",
+      "webRoot": "${workspaceFolder}/govapp/frontend/pbs/",
+      "skipFiles": [
+        "${workspaceFolder}/govapp/frontend/pbs/node_modules/**/",
+        "*/<node_internals>/**",
+        "*/<node_modules>/**"
+      ],
+      "sourceMaps": true,
+      "smartStep": true,
+      "outFiles": [
+        "${workspaceFolder}/govapp/frontend/pbs/src/**/*.js",
+        "${workspaceFolder}/govapp/frontend/pbs/src/**/*.vue",
+        "${workspaceFolder}/govapp/frontend/pbs/**/*.html"
+      ],
+      "preLaunchTask": "node: serve"
+    }
+  ]
+}

@@ -1,43 +1,35 @@
 {
-	"name": "Prescribed Burns System Development",
-	// "image": "dbcawa/docker_app_dev:pbsv2_dev_latest",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"context": "..",
-		"args": {
-			// "--no-cache": "true",
-			"--progress": "plain",
-			"workspace_folder": "/data/data/projects/pbsv2/"
-		},
-		"target": "build_dev_poetry_install"
-	},
-	"remoteUser": "container",
-	"workspaceFolder": "/data/data/projects/pbsv2/",
-	"mounts": [
-		"type=bind,source=/data/,target=/data/",
-		"type=bind,source=/data/data/containerhome/,target=/home/container/"
-	],
-	"appPort": [
-		"7021:8080",
-		"9151:9151",
-		"9152:9152",
-		"9153:9153",
-		"9154:9154",
-		"9155:9155"
-	],
-	"runArgs": [
-		"--env-file",
-		"${localEnv:HOME}/vscode-env/pbsv2.env",
-		"--hostname",
-		"pbsv2-dev"
-	],
-	"forwardPorts": [
-		9151,
-		9152,
-		9153,
-		9154,
-		9155
-	],
-	"initializeCommand": "${localEnv:HOME}/docker-scripts-dev/windows_vbox/postgres_docker_load.sh",
-	"postCreateCommand": "poetry install --no-interaction --no-ansi && poetry run python manage.py collectstatic --no-input && pre-commit run --all-files"
+  "name": "Prescribed Burns System Development",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "..",
+    "args": {
+      "--progress": "plain",
+      "workspace_folder": "/data/data/projects/pbsv2/"
+    },
+    "target": "build_dev_poetry_install"
+  },
+  "remoteUser": "container",
+  "workspaceFolder": "/data/data/projects/pbsv2/",
+  "mounts": [
+    "type=bind,source=/data/,target=/data/",
+    "type=bind,source=/data/data/containerhome/,target=/home/container/"
+  ],
+  "appPort": [
+    "7021:8080",
+    "9151:9151",
+    "9152:9152",
+    "9153:9153",
+    "9154:9154",
+    "9155:9155"
+  ],
+  "runArgs": [
+    "--env-file",
+    "${localEnv:HOME}/vscode-env/pbsv2.env",
+    "--hostname",
+    "pbsv2-dev"
+  ],
+  "forwardPorts": [9151, 9152, 9153, 9154, 9155],
+  "initializeCommand": "${localEnv:HOME}/docker-scripts-dev/windows_vbox/postgres_docker_load.sh",
+  "postCreateCommand": "poetry install --no-interaction --no-ansi && poetry run python manage.py collectstatic --no-input && pre-commit run --all-files"
 }
