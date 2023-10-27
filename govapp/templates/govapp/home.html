@@ -1,18 +1,13 @@
-{% extends 'govapp/base.html' %} {% block content %}
+{% extends 'govapp/base.html' %}
+
+{% block content %}
 <div id="app"></div>
 {% if app_build_url %}
 <script defer src="/static/pbsv2_vue/js/chunk-vendors.js"></script>
 <script type="module" type="text/javascript" src="{{ app_build_url }}"></script>
 {% else %}
-<script
-  type="module"
-  type="text/javascript"
-  src="/static/common/js/index.js?ver={{ GIT_COMMIT_HASH }}"
-></script>
+<script type="module" type="text/javascript" src="/static/common/js/index.js?ver={{ GIT_COMMIT_HASH }}"></script>
 {% endif %}
-<script
-  type="text/javascript"
-  src="/static/common/css/index.css?ver={{ GIT_COMMIT_HASH }}"
-></script>
+<script type="text/javascript" src="/static/common/css/index.css?ver={{ GIT_COMMIT_HASH }}"></script>
 
 {% endblock %}

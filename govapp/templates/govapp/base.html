@@ -1,90 +1,104 @@
-{% extends "webtemplate_dbca/base_b5_auth_session.html" %} {% load static %} {%
-block extra_css %}
-<link
-  rel="icon"
-  type="image/png"
-  href="{% static 'common/img/favicon.ico' %}"
-/>
-<link
-  rel="stylesheet"
-  href="{% static 'pbsv2/css/base.css' %}?v={{build_tag}}"
-/>
-<link
-  rel="stylesheet"
-  href="{% static 'pbsv2_vue/css/app.css' %}?v={{build_tag}}"
-/>
-<link
-  rel="stylesheet"
-  href="{% static 'pbsv2_vue/css/chunk-vendors.css' %}?v={{build_tag}}"
-/>
-{% endblock %} {% block extra_js %} {% endblock %} {% block header_top_menu %}
-{% endblock %} {% block top_menu %} {% endblock %} {% block menubottom %}
+{% extends "webtemplate_dbca/base_b5_auth_session.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="icon" type="image/png" href="{% static 'common/img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'pbsv2/css/base.css' %}?v={{build_tag}}">
+    <link rel="stylesheet" href="{% static 'pbsv2_vue/css/app.css' %}?v={{build_tag}}">
+    <link rel="stylesheet" href="{% static 'pbsv2_vue/css/chunk-vendors.css' %}?v={{build_tag}}">
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}
+
+{% block header_top_menu %}
+{% endblock %}
+
+{% block top_menu %}
+{% endblock %}
+
+{% block menubottom %}
 <!-- value -->
-{%endblock %} {% block menu_items_left_brand %} {%endblock %} {% block
-menu_dropdown %} {% if request.user.is_superuser or is_django_admin %} {%
-include 'webtemplate_dbca/includes/staff_menu.html' %} {% endif %} {% block
-menu_extra_dropdown_staff_top %} {% if request.user.is_superuser or is_admin %}
-{% include 'webtemplate_dbca/includes/staff_menu_extras.html' %} {% endif %} {%
-endblock %}
+{%endblock %}
 
-<li><a class="dropdown-item" href="{% url 'logout' %}?next=/">Logout</a></li>
-{% endblock %} {% block menu_items2_right %} {% if request.user.is_authenticated
-%} {% else %}
+{% block menu_items_left_brand %}
+{%endblock %}
+
+{% block menu_dropdown %}
+    {% if request.user.is_superuser or is_django_admin %}
+        {% include 'webtemplate_dbca/includes/staff_menu.html' %}
+    {% endif %}
+    {% block menu_extra_dropdown_staff_top %}
+        {% if request.user.is_superuser or is_admin %}
+            {% include 'webtemplate_dbca/includes/staff_menu_extras.html' %}
+        {% endif %}
+    {% endblock %}
+
+    <li><a class="dropdown-item" href="{% url 'logout' %}?next=/">Logout</a></li>
+{% endblock %}
+
+
+{% block menu_items2_right %}
+{% if request.user.is_authenticated %}
+
+{% else %}
 <a href="/ssologin" class="btn btn-primary btn-sm">Login</a>
-{% endif %} {% endblock %} {% block menu_spacer %}
-<br />
-{% endblock %} {% block extra_style %}
-<style>
-  .footer {
-    background-color: lightgrey;
-  }
-</style>
-{% endblock %} {% block page_content %}
-<div class="container-fluid">
-  <!-- Messages  -->
-  {% if messages %}
-  <div class="row">
-    <div class="col">
-      {% for message in messages %}
-      <div
-        class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %}"
-      >
-        {{ message|safe }}
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  {% endif %}
+{% endif %}
+{% endblock %}
 
-  <div class="row">
-    <div class="col">{% block page_content_inner %}{% endblock %}</div>
-  </div>
-</div>
-{% endblock %} {% block custom_js %}
-<script language="javascript">
-  var env = {
-    kmi_server_url: "{{ KMI_SERVER_URL }}",
-  };
-</script>
-<script
-  type="text/javascript"
-  src="{% static 'pbsv2_vue/js/chunk-vendors.js' %}?v={{build_tag}}"
-></script>
-<script
-  type="text/javascript"
-  src="{% static 'pbsv2_vue/js/app.js' %}?v={{build_tag}}"
-></script>
-{% endblock %} {% block page_footer %}
-<footer class="footer mt-auto py-3">
-  <div class="container-fluid">
+
+{% block menu_spacer %}
+<BR>
+{% endblock %}
+
+{% block extra_style %}
+<style>
+    .footer {
+        background-color: lightgrey
+    }
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div class="container-fluid">
+    <!-- Messages  -->
+    {% if messages %}
     <div class="row">
-      <div class="col">
-        <small class="float-right"
-          >&copy; Department of Biodiversity, Conservation and
-          Attractions</small
-        >
-      </div>
+        <div class="col">
+            {% for message in messages %}
+            <div class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %}">
+                {{ message|safe }}
+            </div>
+            {% endfor %}
+        </div>
     </div>
-  </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col">
+            {% block page_content_inner %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block custom_js %}
+<script language="javascript">
+        var env = {
+            "kmi_server_url": "{{ KMI_SERVER_URL }}"
+        }
+</script>
+<script type="text/javascript" src="{% static 'pbsv2_vue/js/chunk-vendors.js' %}?v={{build_tag}}"></script>
+<script type="text/javascript" src="{% static 'pbsv2_vue/js/app.js' %}?v={{build_tag}}"></script>
+{% endblock %}
+
+{% block page_footer %}
+<footer class="footer mt-auto py-3">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <small class="float-right">&copy; Department of Biodiversity, Conservation and Attractions</small>
+            </div>
+        </div>
+    </div>
 </footer>
 {% endblock page_footer %}
