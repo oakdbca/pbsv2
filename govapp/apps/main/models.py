@@ -205,3 +205,19 @@ class District(DisplayNameableModel, UniqueNameableModel):  # type: ignore
         if not self.display_name:
             return self.name
         return self.display_name
+
+
+class Lga(DisplayNameableModel, UniqueNameableModel):  # type: ignore
+    district = models.ForeignKey(
+        District, on_delete=models.CASCADE, null=False, blank=False
+    )
+
+    # operational_areas: models.Manager
+
+    class Meta:
+        ordering = ["district", "name"]
+
+    def __str__(self):
+        if not self.display_name:
+            return self.name
+        return self.display_name
