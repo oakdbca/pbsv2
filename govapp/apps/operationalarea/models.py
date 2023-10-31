@@ -42,22 +42,14 @@ class OperationalAreaApproval(TimeStampedModel):
         null=True, blank=True
     )
 
+    class Meta:
+        verbose_name = "Operational Area Approval"
+        verbose_name_plural = "Operational Area Approvals"
+
     def __str__(self):
         if self.lga:
             return f"{self.approver} {self.APPROVAL_TYPE} {self.lga}"
         return f"{self.approver} {self.APPROVAL_TYPE}"
-
-
-class OperationalAreaRiskFactor(models.Model):
-    risk_factor = models.ForeignKey(RiskFactor, on_delete=models.CASCADE)
-    contributing_factor = models.ForeignKey(
-        ContributingFactor,
-        null=True,
-        blank=True,
-        on_delete=models.PROTECT,
-        related_name="risk_factors",
-    )
-    values_affected = models.TextField(null=True, blank=True)
 
 
 class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
@@ -96,11 +88,7 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     approvals: models.ManyToManyField = models.ManyToManyField(
         OperationalAreaApproval, blank=True, related_name="operational_areas"
     )
-
-    # Risk Factors
-    risk_factors = models.ManyToManyField(
-        OperationalAreaRiskFactor, blank=True, related_name="operational_areas"
-    )
+    # Risk Factors: OperationalAreaRiskFactor
 
     def __str__(self):
         return f"{self.reference_number} ({self.name})"
@@ -118,3 +106,18 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
             # TODO How to get the selected program?
             return self.burn_plan_unit.programs.first().program
         return None
+
+
+class OperationalAreaRiskFactor(models.Model):
+    operational_area = models.ForeignKey(
+        OperationalArea, null=True, blank=True, on_delete=models.CASCADE
+    )
+    risk_factor = models.ForeignKey(RiskFactor, on_delete=models.CASCADE)
+    contributing_factor = models.ForeignKey(
+        ContributingFactor,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="risk_factors",
+    )
+    values_affected = models.TextField(null=True, blank=True)
