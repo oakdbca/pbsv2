@@ -13,7 +13,7 @@ from govapp.apps.main.models import (
     UniqueNameableModel,
     file_upload_location,
 )
-from govapp.apps.risk.models import RiskFactor
+from govapp.apps.risk.models import ContributingFactor, RiskFactor
 
 logger = getLogger(__name__)
 
@@ -46,6 +46,18 @@ class OperationalAreaApproval(TimeStampedModel):
         if self.lga:
             return f"{self.approver} {self.APPROVAL_TYPE} {self.lga}"
         return f"{self.approver} {self.APPROVAL_TYPE}"
+
+
+class OperationalAreaRiskFactor(models.Model):
+    risk_factor = models.ForeignKey(RiskFactor, on_delete=models.CASCADE)
+    contributing_factor = models.ForeignKey(
+        ContributingFactor,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="risk_factors",
+    )
+    values_affected = models.TextField(null=True, blank=True)
 
 
 class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
@@ -87,7 +99,7 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
 
     # Risk Factors
     risk_factors = models.ManyToManyField(
-        RiskFactor, blank=True, related_name="operational_areas"
+        OperationalAreaRiskFactor, blank=True, related_name="operational_areas"
     )
 
     def __str__(self):
