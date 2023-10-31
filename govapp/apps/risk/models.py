@@ -10,7 +10,7 @@ logger = getLogger(__name__)
 
 
 class ContributingFactor(UniqueNameableModel, TimeStampedModel):
-    factors = DecimalRangeField(default_bounds="[0,1]", blank=True, null=True)  # type: ignore
+    factors = DecimalRangeField(default_bounds="[]", blank=True, null=True)  # type: ignore
 
 
 class RiskFactor(UniqueNameableModel, TimeStampedModel):

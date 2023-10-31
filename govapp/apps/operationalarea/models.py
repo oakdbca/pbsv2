@@ -3,7 +3,7 @@ from logging import getLogger
 from django.contrib.gis.db.models import MultiLineStringField, MultiPolygonField
 from django.db import models
 from model_utils import Choices
-from model_utils.models import StatusModel, TimeStampedModel
+from model_utils.models import TimeStampedModel
 from protected_media.models import ProtectedFileField
 
 from govapp.apps.burnplanning.models import BurnPlanUnit
@@ -48,9 +48,7 @@ class OperationalAreaApproval(TimeStampedModel):
         return f"{self.approver} {self.APPROVAL_TYPE}"
 
 
-class OperationalArea(
-    ReferenceableModel, UniqueNameableModel, StatusModel, TimeStampedModel
-):
+class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
     MODEL_PREFIX = "OP"
 
     burn_plan_unit: models.ForeignKey = models.ForeignKey(

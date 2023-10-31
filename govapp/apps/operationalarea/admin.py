@@ -10,7 +10,7 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
     model = OperationalArea
     list_display = (
         # "name",
-        "operational_name",
+        "operation_name",
     )
     # exclude = ("output_leaders",)
 
