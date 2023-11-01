@@ -6,6 +6,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models.fields.related_descriptors import ReverseManyToOneDescriptor
 from protected_media.models import ProtectedFileField
 
 model_type: Any = type(models.Model)
@@ -191,10 +192,12 @@ class Region(DisplayNameableModel, UniqueNameableModel):
         return self.display_name
 
 
-class District(DisplayNameableModel, UniqueNameableModel):  # type: ignore
+class District(DisplayNameableModel, UniqueNameableModel):
     region = models.ForeignKey(
         Region, on_delete=models.CASCADE, null=False, blank=False
     )
+
+    burnplanunitdistricts: ReverseManyToOneDescriptor
 
     burn_plan_units: models.Manager
 
