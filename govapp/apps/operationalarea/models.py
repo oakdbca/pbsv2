@@ -8,6 +8,7 @@ from protected_media.models import ProtectedFileField
 
 from govapp.apps.burnplanning.models import BurnPlanUnit
 from govapp.apps.main.models import (
+    DisplayNameableModel,
     Lga,
     ReferenceableModel,
     UniqueNameableModel,
@@ -18,8 +19,13 @@ from govapp.apps.risk.models import ContributingFactor, RiskFactor
 logger = getLogger(__name__)
 
 
-class OperationalAreaApproval(TimeStampedModel):
+# Let's call the class LegalApproval to not confuse with an Approval model
+class LegalApproval(DisplayNameableModel):
     """Burn Program and Operational Area approvals"""
+
+    objects = models.Manager()
+
+    operationalareaapprovals: "models.Manager[OperationalAreaApproval]"
 
     # TODO What is the difference between an approval and an endorsement?
     APPROVAL_TYPE = Choices(
@@ -43,8 +49,8 @@ class OperationalAreaApproval(TimeStampedModel):
     )
 
     class Meta:
-        verbose_name = "Operational Area Approval"
-        verbose_name_plural = "Operational Area Approvals"
+        verbose_name = "Operational Area Legal/Approval"
+        verbose_name_plural = "Operational Area Legal/Approvals"
 
     def __str__(self):
         if self.lga:
@@ -54,6 +60,10 @@ class OperationalAreaApproval(TimeStampedModel):
 
 class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
     MODEL_PREFIX = "OP"
+
+    objects = models.Manager()
+
+    operationalareaapprovals: "models.Manager[OperationalAreaApproval]"
 
     burn_plan_unit: models.ForeignKey = models.ForeignKey(
         BurnPlanUnit,
@@ -85,8 +95,12 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     )
 
     # Legal / Approvals
-    approvals: models.ManyToManyField = models.ManyToManyField(
-        OperationalAreaApproval, blank=True, related_name="operational_areas"
+    legal_approvals: models.ManyToManyField = models.ManyToManyField(
+        LegalApproval,
+        related_name="operational_areas",
+        through="OperationalAreaApproval",
+        through_fields=("operational_area", "legal_approval"),
+        editable=False,
     )
     # Risk Factors: OperationalAreaRiskFactor
 
@@ -106,6 +120,29 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
             # TODO How to get the selected program?
             return self.burn_plan_unit.programs.first().program
         return None
+
+
+class OperationalAreaApproval(TimeStampedModel):
+    operational_area = models.ForeignKey(
+        OperationalArea,
+        on_delete=models.CASCADE,
+        related_name="operationalareaapprovals",
+    )
+    legal_approval = models.ForeignKey(
+        LegalApproval,
+        on_delete=models.CASCADE,
+        related_name="operationalareaapprovals",
+    )
+
+    class Meta:
+        verbose_name_plural = "Operational Area Legal/Approvals"
+        unique_together = ("operational_area", "legal_approval")
+
+    def __str__(self):
+        return (
+            f"Operational Area: {self.operational_area} "
+            f"has legal/approval: {self.legal_approval}"
+        )
 
 
 class OperationalAreaRiskFactor(models.Model):

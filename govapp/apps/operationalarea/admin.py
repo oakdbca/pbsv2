@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from govapp.apps.main.admin import DeleteRestrictedAdmin
 
-from .models import OperationalArea, OperationalAreaApproval, OperationalAreaRiskFactor
+from .models import LegalApproval, OperationalArea, OperationalAreaRiskFactor
 
 
 class OperationalAreaRiskFactorInline(admin.TabularInline):
@@ -11,7 +11,7 @@ class OperationalAreaRiskFactorInline(admin.TabularInline):
 
 
 class OperationalAreaApprovalInline(admin.TabularInline):
-    model = OperationalArea.approvals.through
+    model = OperationalArea.legal_approvals.through
     extra = 0
     verbose_name = "Operational Area Approval"
     verbose_name_plural = "Operational Area Approvals"
@@ -29,9 +29,9 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
     # exclude = ("output_leaders",)
 
 
-@admin.register(OperationalAreaApproval)
+@admin.register(LegalApproval)
 class ApprovalAdmin(admin.ModelAdmin):
-    model = OperationalAreaApproval
+    model = LegalApproval
     list_display = ("approver",)
 
 
