@@ -3,7 +3,7 @@ from typing import Any
 from django.contrib import admin
 from django.http.request import HttpRequest
 
-from .models import District, ModelFile, Region
+from .models import District, Lga, ModelFile, Region
 
 
 class DeleteRestrictedAdmin(admin.ModelAdmin):
@@ -33,6 +33,16 @@ class DistrictAdmin(DeleteRestrictedAdmin):
         return request.user.is_superuser
 
 
+class LgaAdmin(DeleteRestrictedAdmin):
+    list_display = ("id", "district", "name", "display_name")
+
+    def has_change_permission(
+        self, request: HttpRequest, obj: Any | None = ...
+    ) -> bool:
+        return request.user.is_superuser
+
+
 admin.site.register(ModelFile, ModelFileAdmin)
 admin.site.register(Region, RegionAdmin)
 admin.site.register(District, DistrictAdmin)
+admin.site.register(Lga, LgaAdmin)
