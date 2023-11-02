@@ -210,7 +210,7 @@ class District(DisplayNameableModel, UniqueNameableModel):
         return self.display_name
 
 
-class Lga(DisplayNameableModel, UniqueNameableModel):  # type: ignore
+class Lga(DisplayNameableModel, UniqueNameableModel):
     district = models.ForeignKey(
         District, on_delete=models.CASCADE, null=False, blank=False
     )
