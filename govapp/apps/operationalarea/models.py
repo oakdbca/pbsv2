@@ -32,6 +32,9 @@ class LegalApproval(DisplayNameableModel):
         ("approval", "Approval"),
         ("endorsement", "Endorsement"),
     )
+    approval_type = models.CharField(
+        max_length=255, choices=APPROVAL_TYPE, null=True, blank=True
+    )
     approver: models.CharField = models.CharField(
         max_length=255, null=True, blank=True
     )  # Corporate Executive, Shire, Other Lands, Owner
@@ -39,7 +42,7 @@ class LegalApproval(DisplayNameableModel):
         Lga, on_delete=models.PROTECT, null=True, blank=True
     )  # Shire
 
-    can_provide_evidence: models.BooleanField = models.BooleanField(
+    has_additional_permissions: models.BooleanField = models.BooleanField(
         default=False
     )  # Whether the user can attach files, texts, or remove the approval
     file_as_approval = ProtectedFileField(upload_to=file_upload_location)
@@ -56,6 +59,10 @@ class LegalApproval(DisplayNameableModel):
         if self.lga:
             return f"{self.approver} {self.APPROVAL_TYPE} {self.lga}"
         return f"{self.approver} {self.APPROVAL_TYPE}"
+
+    @property
+    def can_remove_approval(self):
+        return self.has_additional_permissions and self.text_remove_justification
 
 
 class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
