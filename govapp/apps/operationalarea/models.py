@@ -28,21 +28,21 @@ class LegalApproval(DisplayNameableModel):
     operationalareaapprovals: "models.Manager[OperationalAreaApproval]"
 
     # TODO What is the difference between an approval and an endorsement?
-    APPROVAL_TYPE = Choices(
+    APPROVAL_TYPES = Choices(
         ("approval", "Approval"),
         ("endorsement", "Endorsement"),
     )
     approval_type = models.CharField(
-        max_length=255, choices=APPROVAL_TYPE, null=True, blank=True
+        max_length=255, choices=APPROVAL_TYPES, null=True, blank=True
     )
     # TODO There must be a better term than land_type?
-    LAND_TYPE = Choices(
+    LAND_TYPES = Choices(
         ("shire", "Shire"),
         ("owner", "Owner"),
         ("other", "Other Lands"),
     )
     land_type = models.CharField(
-        max_length=255, choices=LAND_TYPE, null=True, blank=True
+        max_length=255, choices=LAND_TYPES, null=True, blank=True
     )
 
     approver: models.CharField = models.CharField(

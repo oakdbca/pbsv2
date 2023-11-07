@@ -14,10 +14,10 @@ from .models import (
 
 class LegalApprovalAdminForm(forms.ModelForm):
     approval_type = forms.ChoiceField(
-        choices=LegalApproval.APPROVAL_TYPE, required=True
+        choices=LegalApproval.APPROVAL_TYPES, required=True
     )  # This hides the null/empty option
     land_type = forms.ChoiceField(
-        choices=Choices(("", "N/A")) + LegalApproval.LAND_TYPE, required=False
+        choices=Choices(("", "N/A")) + LegalApproval.LAND_TYPES, required=False
     )  # This adds a null/empty option
 
     class Meta:
