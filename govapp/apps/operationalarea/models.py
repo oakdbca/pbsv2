@@ -43,7 +43,7 @@ class LegalApproval(DisplayNameableModel):
     )
     land_type = models.CharField(
         max_length=255, choices=LAND_TYPES, null=True, blank=True
-    )
+    )  # To be added by the system after intersection
 
     approver: models.CharField = models.CharField(
         max_length=255, null=True, blank=True
@@ -59,6 +59,10 @@ class LegalApproval(DisplayNameableModel):
 
     def __str__(self):
         return f"{self.approver} {self.get_approval_type_display()}"
+
+    @property
+    def is_shire_approval(self):
+        return self.land_type == "shire"
 
     @property
     def can_remove_approval(self):
@@ -149,6 +153,7 @@ class OperationalAreaApproval(TimeStampedModel):
         on_delete=models.PROTECT,
         null=True,
         blank=True,
+        verbose_name="Shire/LGA",
         related_name="operationalareaapprovals",
     )  # Shire
     file_as_approval = ProtectedFileField(

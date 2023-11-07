@@ -88,6 +88,7 @@ class OperationalAreaApprovalChoiceField(forms.ModelChoiceField):
         return {
             "label": super().label_from_instance(obj),
             "data-has-additional-permissions": str(obj.has_additional_permissions),
+            "data-is-shire-approval": str(obj.is_shire_approval),
         }
 
 
@@ -123,6 +124,9 @@ class OperationalAreaApprovalInline(admin.StackedInline):
             "admin/class_media/js/toggle_functions.js",
             "admin/class_media/js/operational_area_approval_admin.js",
         )
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
 
     class Meta:
         pass
@@ -140,11 +144,25 @@ class OperationalAreaApprovalInline(admin.StackedInline):
             "Legal/Approval",
             {
                 "fields": (("legal_approval",)),
-                "classes": ("legal-approval",),
+                "classes": (
+                    "legal-approval",
+                    "less-dominant-style",
+                ),
             },
         ),
         (
-            "Additional information",
+            "Land type",
+            {
+                "fields": (("lga",),),
+                "classes": (
+                    "additional-information-lga",
+                    "less-dominant-style",
+                    "hidden",
+                ),
+            },
+        ),
+        (
+            "Documentation",
             {
                 "fields": (
                     (
@@ -153,7 +171,11 @@ class OperationalAreaApprovalInline(admin.StackedInline):
                         "text_remove_justification",
                     )
                 ),
-                "classes": ("additional-information", "hidden"),
+                "classes": (
+                    "additional-information-docs",
+                    "less-dominant-style",
+                    "hidden",
+                ),
             },
         ),
     )

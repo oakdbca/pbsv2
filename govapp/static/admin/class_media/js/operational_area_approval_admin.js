@@ -5,13 +5,19 @@
  */
 
 (function ($) {
+  // Run after document loaded
   $(function () {
-    // Run after document loaded
-    toggle_additional_information_on_select_change(
+    toggle_fieldset_on_select_change(
       $, // jQuery
       ".field-legal_approval", // Fieldsets parent div element class name
       "has-additional-permissions", // Custom choice field, see: OperationalAreaApprovalChoiceField
-      "additional-information", // Class name of the fieldset to toggle on/off
+      "additional-information-docs", // Class name of the fieldset to toggle on/off
+    );
+    toggle_fieldset_on_select_change(
+      $, // jQuery
+      ".field-legal_approval", // Fieldsets parent div element class name
+      "is-shire-approval", // Custom choice field, see: OperationalAreaApprovalChoiceField
+      "additional-information-lga", // Class name of the fieldset to toggle on/off
     );
   });
 })(django.jQuery);

@@ -7,13 +7,13 @@
  * @param {Object} $ jQuery object
  * @param {String} parent_class_name A parent DOM element class name for admin fieldsets, e.g. `.field-legal_approval`
  * @param {String} data_attribute_name A model field to check against for whether to toggle on or off, e.g. `has-additional-permissions`
- * @param {String} fieldset_class_name A fieldset DOM element class name to toggle on/off, e.g. `.additional-information` (default)
+ * @param {String} fieldset_class_name A fieldset DOM element class name to toggle on/off, e.g. `.additional-information-docs` (default)
  */
-function toggle_additional_information_on_select_change(
+function toggle_fieldset_on_select_change(
   $,
   parent_class_name,
   data_attribute_name,
-  fieldset_class_name = "additional-information",
+  fieldset_class_name,
 ) {
   var toggle_additional_information = (ctx) => {
     // Toggles the the additional information fieldset section on/off
@@ -21,17 +21,18 @@ function toggle_additional_information_on_select_change(
       ctx.find("option:selected").data(data_attribute_name) === "True"
         ? true
         : false;
-    const fieldset_additional_information = $(ctx.parents("fieldset")[0]).next(
+    // Get the next sibling fieldsets matched against `fieldset_class_name`
+    const fieldsets_matched = $(ctx.parents("fieldset")).nextAll(
       `fieldset.${fieldset_class_name}`,
     );
 
     if (show) {
-      fieldset_additional_information.removeClass("hidden");
+      fieldsets_matched.removeClass("hidden");
     } else if (!show) {
-      fieldset_additional_information.addClass("hidden");
+      fieldsets_matched.addClass("hidden");
     } else {
       console.error(
-        `Error: can not get status of ${data_attribute_name} givdata attribute`,
+        `Error: can not get status of ${data_attribute_name} data attribute`,
       );
     }
   };
