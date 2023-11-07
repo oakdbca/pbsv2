@@ -112,7 +112,7 @@ class OperationalAreaApprovalInline(admin.StackedInline):
     class Media:
         js = (
             "admin/js/jquery.init.js",
-            "admin/class_media/js/document_load.js",
+            "admin/class_media/js/toggle_functions.js",
             "admin/class_media/js/operational_area_approval_admin.js",
         )
 
