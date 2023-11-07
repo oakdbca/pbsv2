@@ -45,11 +45,6 @@ class LegalApproval(DisplayNameableModel):
     has_additional_permissions: models.BooleanField = models.BooleanField(
         default=False
     )  # Whether the user can attach files, texts, or remove the approval
-    file_as_approval = ProtectedFileField(upload_to=file_upload_location)
-    text_as_approval: models.TextField = models.TextField(null=True, blank=True)
-    text_remove_justification: models.TextField = models.TextField(
-        null=True, blank=True
-    )
 
     class Meta:
         verbose_name = "Operational Area Legal/Approval"
@@ -58,7 +53,7 @@ class LegalApproval(DisplayNameableModel):
     def __str__(self):
         if self.lga:
             return f"{self.approver} {self.APPROVAL_TYPE} {self.lga}"
-        return f"{self.approver} {self.APPROVAL_TYPE}"
+        return f"{self.approver} {self.get_approval_type_display()}"
 
     @property
     def can_remove_approval(self):
@@ -141,6 +136,14 @@ class OperationalAreaApproval(TimeStampedModel):
         related_name="operationalareaapprovals",
     )
 
+    file_as_approval = ProtectedFileField(
+        upload_to=file_upload_location, null=True, blank=True
+    )
+    text_as_approval: models.TextField = models.TextField(null=True, blank=True)
+    text_remove_justification: models.TextField = models.TextField(
+        null=True, blank=True
+    )
+
     class Meta:
         verbose_name_plural = "Operational Area Legal/Approvals"
         unique_together = ("operational_area", "legal_approval")
@@ -150,6 +153,10 @@ class OperationalAreaApproval(TimeStampedModel):
             f"Operational Area: {self.operational_area} "
             f"has legal/approval: {self.legal_approval}"
         )
+
+    @property
+    def has_additional_permissions(self):
+        return self.legal_approval.has_additional_permissions
 
 
 class OperationalAreaRiskFactor(models.Model):

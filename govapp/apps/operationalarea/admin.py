@@ -26,19 +26,11 @@ class LegalApprovalAdmin(admin.ModelAdmin):
     model = LegalApproval
     form = LegalApprovalAdminForm
 
-    class Media:
-        js = (
-            "admin/js/jquery.init.js",
-            "admin/class_media/js/legal_approval_admin.js",
-        )
-
     list_display = (
         "approver",
         "approval_type",
         "lga",
         "has_additional_permissions",
-        "text_as_approval",
-        "text_remove_justification",
     )
 
     fieldsets = (
@@ -55,6 +47,94 @@ class LegalApprovalAdmin(admin.ModelAdmin):
                 ),
             },
         ),
+    )
+
+
+class OperationalAreaRiskFactorInline(admin.TabularInline):
+    model = OperationalAreaRiskFactor
+    extra = 0
+
+
+class SelectWithOptionAttribute(forms.Select):
+    def create_option(
+        self, name, value, label, selected, index, subindex=None, attrs=None
+    ):
+        # This allows using strings labels as usual
+        if isinstance(label, dict):
+            opt_attrs = label.copy()
+            label = opt_attrs.pop("label")
+        else:
+            opt_attrs = {}
+        option_dict = super().create_option(
+            name, value, label, selected, index, subindex=subindex, attrs=attrs
+        )
+        for key, val in opt_attrs.items():
+            option_dict["attrs"][key] = val
+        return option_dict
+
+
+class OperationalAreaApprovalChoiceField(forms.ModelChoiceField):
+    widget = SelectWithOptionAttribute
+
+    def label_from_instance(self, obj):
+        return {
+            "label": super().label_from_instance(obj),
+            "data-has-additional-permissions": str(obj.has_additional_permissions),
+        }
+
+
+class OperationalAreaApprovalAdminForm(forms.ModelForm):
+    legal_approval = OperationalAreaApprovalChoiceField(
+        queryset=LegalApproval.objects.all()
+    )
+
+    class Meta:
+        model = OperationalAreaApproval
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        return cleaned_data
+
+
+class OperationalAreaApprovalInline(admin.StackedInline):
+    model = OperationalAreaApproval
+    extra = 0
+    verbose_name = "Operational Area Approval"
+    verbose_name_plural = "Operational Area Approvals"
+
+    form = OperationalAreaApprovalAdminForm
+
+    class Media:
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/document_load.js",
+            "admin/class_media/js/operational_area_approval_admin.js",
+        )
+
+    class Meta:
+        pass
+
+    list_display = (
+        "legal_approval",
+        "file_as_approval",
+        "has_additional_permissions",
+        "text_as_approval",
+        "text_remove_justification",
+    )
+
+    fieldsets = (
+        (
+            "Legal/Approval",
+            {
+                "fields": (("legal_approval",)),
+                "classes": ("legal-approval",),
+            },
+        ),
         (
             "Additional information",
             {
@@ -65,25 +145,18 @@ class LegalApprovalAdmin(admin.ModelAdmin):
                         "text_remove_justification",
                     )
                 ),
-                "classes": ("additional-information",),
+                "classes": ("additional-information", "hidden"),
             },
         ),
     )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-class OperationalAreaRiskFactorInline(admin.TabularInline):
-    model = OperationalAreaRiskFactor
-    extra = 0
+    def get_formset(self, request, obj=None, **kwargs):
+        form = super().get_formset(request, obj, **kwargs)
 
-
-class OperationalAreaApprovalInline(admin.TabularInline):
-    model = OperationalAreaApproval
-    extra = 1
-    verbose_name = "Operational Area Approval"
-    verbose_name_plural = "Operational Area Approvals"
-
-    class Meta:
-        pass
+        return form
 
 
 @admin.register(OperationalArea)
