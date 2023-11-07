@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from model_utils import Choices
 
 from govapp.apps.main.admin import DeleteRestrictedAdmin
 
@@ -12,6 +13,13 @@ from .models import (
 
 
 class LegalApprovalAdminForm(forms.ModelForm):
+    approval_type = forms.ChoiceField(
+        choices=LegalApproval.APPROVAL_TYPE, required=True
+    )  # This hides the null/empty option
+    land_type = forms.ChoiceField(
+        choices=Choices(("", "N/A")) + LegalApproval.LAND_TYPE, required=False
+    )  # This adds a null/empty option
+
     class Meta:
         model = LegalApproval
         fields = "__all__"
@@ -29,7 +37,7 @@ class LegalApprovalAdmin(admin.ModelAdmin):
     list_display = (
         "approver",
         "approval_type",
-        "lga",
+        "land_type",
         "has_additional_permissions",
     )
 
@@ -41,7 +49,7 @@ class LegalApprovalAdmin(admin.ModelAdmin):
                     (
                         "approver",
                         "approval_type",
-                        "lga",
+                        "land_type",
                         "has_additional_permissions",
                     )
                 ),

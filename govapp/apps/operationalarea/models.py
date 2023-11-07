@@ -35,12 +35,19 @@ class LegalApproval(DisplayNameableModel):
     approval_type = models.CharField(
         max_length=255, choices=APPROVAL_TYPE, null=True, blank=True
     )
+    # TODO There must be a better term than land_type?
+    LAND_TYPE = Choices(
+        ("shire", "Shire"),
+        ("owner", "Owner"),
+        ("other", "Other Lands"),
+    )
+    land_type = models.CharField(
+        max_length=255, choices=LAND_TYPE, null=True, blank=True
+    )
+
     approver: models.CharField = models.CharField(
         max_length=255, null=True, blank=True
     )  # Corporate Executive, Shire, Other Lands, Owner
-    lga: models.ForeignKey = models.ForeignKey(
-        Lga, on_delete=models.PROTECT, null=True, blank=True
-    )  # Shire
 
     has_additional_permissions: models.BooleanField = models.BooleanField(
         default=False
@@ -51,8 +58,6 @@ class LegalApproval(DisplayNameableModel):
         verbose_name_plural = "Operational Area Legal/Approvals"
 
     def __str__(self):
-        if self.lga:
-            return f"{self.approver} {self.APPROVAL_TYPE} {self.lga}"
         return f"{self.approver} {self.get_approval_type_display()}"
 
     @property
@@ -136,6 +141,13 @@ class OperationalAreaApproval(TimeStampedModel):
         related_name="operationalareaapprovals",
     )
 
+    lga: models.ForeignKey = models.ForeignKey(
+        Lga,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="operationalareaapprovals",
+    )  # Shire
     file_as_approval = ProtectedFileField(
         upload_to=file_upload_location, null=True, blank=True
     )
@@ -153,6 +165,10 @@ class OperationalAreaApproval(TimeStampedModel):
             f"Operational Area: {self.operational_area} "
             f"has legal/approval: {self.legal_approval}"
         )
+
+    @property
+    def has_lga(self):
+        return self.legal_approval.has_lga
 
     @property
     def has_additional_permissions(self):

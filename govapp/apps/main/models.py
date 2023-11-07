@@ -215,7 +215,7 @@ class Lga(DisplayNameableModel, UniqueNameableModel):
         District, on_delete=models.CASCADE, null=False, blank=False
     )
 
-    # operational_areas: models.Manager
+    operationalareaapprovals: ReverseManyToOneDescriptor
 
     class Meta:
         ordering = ["district", "name"]
