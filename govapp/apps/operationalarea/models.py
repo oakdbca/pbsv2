@@ -80,9 +80,12 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         related_name="operational_areas",
     )
 
-    MITIGATION_PURPOSE = Choices(
+    MITIGATION_PURPOSES = Choices(
         ("burning", "Burning"),
         ("mechanical", "Stand-alone Mechanical"),
+    )
+    mitigation_purpose = models.CharField(
+        max_length=255, choices=MITIGATION_PURPOSES, null=True, blank=True
     )
 
     # GIS data
