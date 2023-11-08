@@ -89,7 +89,11 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         ("mechanical", "Stand-alone Mechanical"),
     )
     mitigation_purpose = models.CharField(
-        max_length=255, choices=MITIGATION_PURPOSES, null=True, blank=True
+        max_length=255,
+        choices=MITIGATION_PURPOSES,
+        null=False,
+        blank=False,
+        default="burning",
     )
 
     # GIS data
@@ -134,6 +138,11 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
             # TODO How to get the selected program?
             return self.burn_plan_unit.programs.first().program
         return None
+
+    def copy(self):
+        self.pk = None
+        self.save()
+        return self
 
 
 class OperationalAreaApproval(TimeStampedModel):
