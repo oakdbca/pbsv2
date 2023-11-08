@@ -87,6 +87,10 @@ class BurnPlanUnit(
             return None
         return self.area.sq_m / 10000
 
+    @property
+    def operational_areas(self):
+        return self.operationalareas.all()
+
 
 class BurnPlanUnitDistrict(TimeStampedModel):
     """A model to store the relationship between a burn plan unit and a district"""
