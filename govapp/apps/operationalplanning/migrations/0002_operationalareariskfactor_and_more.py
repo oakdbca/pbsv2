@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
     dependencies = [
         ("risk", "0004_remove_riskfactor_contributing_factor_and_more"),
-        ("operationalarea", "0001_initial"),
+        ("operationalplanning", "0001_initial"),
     ]
 
     operations = [
@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(
                 blank=True,
                 related_name="operational_areas",
-                to="operationalarea.operationalareariskfactor",
+                to="operationalplanning.operationalareariskfactor",
             ),
         ),
     ]

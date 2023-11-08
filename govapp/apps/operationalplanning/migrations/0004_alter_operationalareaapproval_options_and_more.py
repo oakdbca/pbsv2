@@ -9,7 +9,7 @@ import protected_media.models
 class Migration(migrations.Migration):
     dependencies = [
         ("main", "0010_lga"),
-        ("operationalarea", "0003_alter_operationalareaapproval_options_and_more"),
+        ("operationalplanning", "0003_alter_operationalareaapproval_options_and_more"),
     ]
 
     operations = [
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 default=None,
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="operationalareaapprovals",
-                to="operationalarea.operationalarea",
+                to="operationalplanning.operationalarea",
             ),
             preserve_default=False,
         ),
@@ -80,8 +80,8 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(
                 editable=False,
                 related_name="operational_areas",
-                through="operationalarea.OperationalAreaApproval",
-                to="operationalarea.legalapproval",
+                through="operationalplanning.OperationalAreaApproval",
+                to="operationalplanning.legalapproval",
             ),
         ),
         migrations.AddField(
@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
                 default=None,
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="operationalareaapprovals",
-                to="operationalarea.legalapproval",
+                to="operationalplanning.legalapproval",
             ),
             preserve_default=False,
         ),

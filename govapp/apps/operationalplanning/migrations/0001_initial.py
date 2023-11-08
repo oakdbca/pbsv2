@@ -135,7 +135,7 @@ class Migration(migrations.Migration):
                     models.ManyToManyField(
                         blank=True,
                         related_name="operational_areas",
-                        to="operationalarea.operationalareaapproval",
+                        to="operationalplanning.operationalareaapproval",
                     ),
                 ),
                 (

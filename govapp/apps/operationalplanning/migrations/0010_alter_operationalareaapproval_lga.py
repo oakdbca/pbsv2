@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
     dependencies = [
         ("main", "0011_auto_load_lgas"),
-        ("operationalarea", "0009_operationalarea_mitigation_purpose"),
+        ("operationalplanning", "0009_operationalarea_mitigation_purpose"),
     ]
 
     operations = [

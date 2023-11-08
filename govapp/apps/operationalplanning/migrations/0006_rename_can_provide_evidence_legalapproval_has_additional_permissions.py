@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("operationalarea", "0005_legalapproval_approval_type"),
+        ("operationalplanning", "0005_legalapproval_approval_type"),
     ]
 
     operations = [

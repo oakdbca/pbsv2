@@ -9,7 +9,7 @@ import model_utils.fields
 class Migration(migrations.Migration):
     dependencies = [
         ("burnplanning", "0011_alter_burnplanunitdistrict_burn_plan_unit_and_more"),
-        ("operationalarea", "0012_operationalarea_year"),
+        ("operationalplanning", "0012_operationalarea_year"),
     ]
 
     operations = [
@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="operationalareapurposes",
-                        to="operationalarea.operationalarea",
+                        to="operationalplanning.operationalarea",
                     ),
                 ),
                 (
@@ -95,7 +95,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="operationalareaprograms",
-                        to="operationalarea.operationalarea",
+                        to="operationalplanning.operationalarea",
                     ),
                 ),
                 (
@@ -117,7 +117,7 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(
                 editable=False,
                 related_name="operational_areas",
-                through="operationalarea.OperationalAreaProgram",
+                through="operationalplanning.OperationalAreaProgram",
                 to="burnplanning.program",
             ),
         ),
@@ -127,7 +127,7 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(
                 editable=False,
                 related_name="operational_areas",
-                through="operationalarea.OperationalAreaPurpose",
+                through="operationalplanning.OperationalAreaPurpose",
                 to="burnplanning.purpose",
             ),
         ),

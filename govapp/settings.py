@@ -81,7 +81,7 @@ INSTALLED_APPS = [
     "govapp.apps.accounts",
     "govapp.apps.aviation",
     "govapp.apps.burnplanning",
-    "govapp.apps.operationalarea",
+    "govapp.apps.operationalplanning",
     "govapp.apps.risk",
     "govapp.apps.swagger",
     "govapp.apps.main",

@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("operationalarea", "0004_alter_operationalareaapproval_options_and_more"),
+        ("operationalplanning", "0004_alter_operationalareaapproval_options_and_more"),
     ]
 
     operations = [

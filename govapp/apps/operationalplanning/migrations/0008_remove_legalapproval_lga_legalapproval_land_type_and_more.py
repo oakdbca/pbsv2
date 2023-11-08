@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
     dependencies = [
         ("main", "0011_auto_load_lgas"),
-        ("operationalarea", "0007_remove_legalapproval_file_as_approval_and_more"),
+        ("operationalplanning", "0007_remove_legalapproval_file_as_approval_and_more"),
     ]
 
     operations = [

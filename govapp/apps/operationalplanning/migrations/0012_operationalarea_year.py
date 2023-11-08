@@ -7,7 +7,7 @@ import govapp.apps.main.models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("operationalarea", "0011_alter_operationalarea_mitigation_purpose"),
+        ("operationalplanning", "0011_alter_operationalarea_mitigation_purpose"),
     ]
 
     operations = [

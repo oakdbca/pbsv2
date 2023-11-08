@@ -8,7 +8,7 @@ import protected_media.models
 class Migration(migrations.Migration):
     dependencies = [
         (
-            "operationalarea",
+            "operationalplanning",
             "0006_rename_can_provide_evidence_legalapproval_has_additional_permissions",
         ),
     ]
