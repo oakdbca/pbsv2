@@ -189,12 +189,82 @@ class OperationalAreaApprovalInline(admin.StackedInline):
         return form
 
 
+class OperationalAreaAdminForm(forms.ModelForm):
+    class Meta:
+        model = OperationalArea
+        fields = "__all__"
+        help_texts = {
+            "operational_area_different_from_bpu_rationale": "Rationale when operational area is different "
+            "from burn planning unit."
+        }
+
+
 @admin.register(OperationalArea)
 class OperationalAreaAdmin(DeleteRestrictedAdmin):
     model = OperationalArea
+    form = OperationalAreaAdminForm
+
+    class Media:
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/toggle_functions.js",
+            "admin/class_media/js/operational_area_admin.js",
+        )
+
     list_display = (
-        # "name",
+        "name",
+        "burn_plan_unit",
+        "mitigation_purpose",
+        "year",
         "operation_name",
+        "burn_priority",
+        "operational_area_different_from_bpu_rationale",
     )
+
+    fieldsets = (
+        (
+            "General",
+            {
+                "fields": (
+                    "name",
+                    (
+                        "reference_number",
+                        "created",
+                        "modified",
+                    ),
+                    "burn_plan_unit",
+                    "mitigation_purpose",
+                    "year",
+                    "operation_name",
+                    "burn_priority",
+                    "operational_area_different_from_bpu_rationale",
+                    "contentious_burn",
+                ),
+            },
+        ),
+        (
+            "Contentious burn",
+            {
+                "fields": (("contentious_rationale",),),
+                "classes": (
+                    "admin-contentious-burn",
+                    "less-dominant-style",
+                ),
+            },
+        ),
+        (
+            "Spatial",
+            {
+                "fields": (
+                    (
+                        "polygon",
+                        "linestring",
+                    ),
+                ),
+            },
+        ),
+    )
+
+    readonly_fields = ("reference_number", "created", "modified")
 
     inlines = [OperationalAreaApprovalInline, OperationalAreaRiskFactorInline]
