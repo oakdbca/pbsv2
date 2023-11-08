@@ -12,6 +12,7 @@ from govapp.apps.main.models import (
     Lga,
     ReferenceableModel,
     UniqueNameableModel,
+    YearField,
     file_upload_location,
 )
 from govapp.apps.risk.models import ContributingFactor, RiskFactor
@@ -101,6 +102,9 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     linestring = MultiLineStringField(blank=True, null=True)
 
     # Details
+    year = YearField(
+        null=True, blank=True
+    )  # Year in which the operational area is active/valid
     operation_name = models.CharField(
         max_length=255, null=True, blank=True
     )  # To be pre-filled with the name of the burn plan unit
