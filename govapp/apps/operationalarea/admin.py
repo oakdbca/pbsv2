@@ -8,8 +8,20 @@ from .models import (
     LegalApproval,
     OperationalArea,
     OperationalAreaApproval,
+    OperationalAreaProgram,
+    OperationalAreaPurpose,
     OperationalAreaRiskFactor,
 )
+
+
+class OperationalAreaPurposeInline(admin.TabularInline):
+    model = OperationalAreaPurpose
+    extra = 0
+
+
+class OperationalAreaProgramInline(admin.TabularInline):
+    model = OperationalAreaProgram
+    extra = 0
 
 
 class LegalApprovalAdminForm(forms.ModelForm):
@@ -267,4 +279,9 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
 
     readonly_fields = ("reference_number", "created", "modified")
 
-    inlines = [OperationalAreaApprovalInline, OperationalAreaRiskFactorInline]
+    inlines = [
+        OperationalAreaPurposeInline,
+        OperationalAreaProgramInline,
+        OperationalAreaApprovalInline,
+        OperationalAreaRiskFactorInline,
+    ]

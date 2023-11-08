@@ -76,6 +76,8 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     objects = models.Manager()
 
     operationalareaapprovals: "models.Manager[OperationalAreaApproval]"
+    operationalareapurposes: "models.Manager[OperationalAreaPurpose]"
+    operationalareaprograms: "models.Manager[OperationalAreaProgram]"
 
     burn_plan_unit: models.ForeignKey = models.ForeignKey(
         BurnPlanUnit,
@@ -109,6 +111,13 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         max_length=255, null=True, blank=True
     )  # To be pre-filled with the name of the burn plan unit
     # Purpose and Program come from the BPU?
+    purpose: models.ManyToManyField = models.ManyToManyField(
+        "burnplanning.Purpose",
+        related_name="operational_areas",
+        through="OperationalAreaPurpose",
+        through_fields=("operational_area", "purpose"),
+        editable=False,
+    )
     burn_priority = models.IntegerField(null=True, blank=True)
     contentious_burn = models.BooleanField(default=False)
     contentious_rationale = models.TextField(null=True, blank=True)
@@ -130,13 +139,6 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         return f"{self.reference_number} ({self.name})"
 
     @property
-    def purpose(self):
-        if self.burn_plan_unit and self.burn_plan_unit.purposes.exists():
-            # TODO How to get the selected purpose?
-            return self.burn_plan_unit.purposes.first().purpose
-        return None
-
-    @property
     def program(self):
         if self.burn_plan_unit and self.burn_plan_unit.programs.exists():
             # TODO How to get the selected program?
@@ -147,6 +149,32 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         self.pk = None
         self.save()
         return self
+
+
+class OperationalAreaPurpose(TimeStampedModel):
+    operational_area = models.ForeignKey(
+        OperationalArea,
+        on_delete=models.CASCADE,
+        related_name="operationalareapurposes",
+    )
+    purpose = models.ForeignKey(
+        "burnplanning.Purpose",
+        on_delete=models.CASCADE,
+        related_name="operationalareapurposes",
+    )
+
+
+class OperationalAreaProgram(TimeStampedModel):
+    operational_area = models.ForeignKey(
+        OperationalArea,
+        on_delete=models.CASCADE,
+        related_name="operationalareaprograms",
+    )
+    program = models.ForeignKey(
+        "burnplanning.Program",
+        on_delete=models.CASCADE,
+        related_name="operationalareaprograms",
+    )
 
 
 class OperationalAreaApproval(TimeStampedModel):
