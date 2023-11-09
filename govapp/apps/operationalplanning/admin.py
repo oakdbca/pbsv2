@@ -295,6 +295,10 @@ class OperationalPlanAdmin(DeleteRestrictedAdmin):
         "operational_intent",
         "burn_priority",
         "window_of_opportunity",
+        "context_description_of_burn",
+        "context_risk_of_not_completing_burn",
+        "context_operational_aspects",
+        "context_map",
     )
 
     fieldsets = (
@@ -321,6 +325,17 @@ class OperationalPlanAdmin(DeleteRestrictedAdmin):
                 "fields": (
                     "burn_priority",
                     "window_of_opportunity",
+                ),
+            },
+        ),
+        (
+            "Context",
+            {
+                "fields": (
+                    "context_description_of_burn",
+                    "context_risk_of_not_completing_burn",
+                    "context_operational_aspects",
+                    "context_map",
                 ),
             },
         ),

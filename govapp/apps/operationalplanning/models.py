@@ -211,6 +211,20 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         blank=True,
     )  # Chance of completing burn if postponed
 
+    # Context
+    context_description_of_burn = models.TextField(
+        null=True, blank=True, verbose_name="Description of burn"
+    )
+    context_risk_of_not_completing_burn = models.TextField(
+        null=True, blank=True, verbose_name="Risk of not completing burn"
+    )
+    context_operational_aspects = models.TextField(
+        null=True, blank=True, verbose_name="Operational aspects (PESTLE)"
+    )
+    context_map = ProtectedFileField(
+        upload_to=file_upload_location, null=True, blank=True
+    )
+
     # Legal / Approvals
     legal_approvals: models.ManyToManyField = models.ManyToManyField(
         LegalApproval,
