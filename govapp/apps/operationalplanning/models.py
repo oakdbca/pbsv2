@@ -83,32 +83,50 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         related_name="operational_areas",
     )
 
-    MITIGATION_PURPOSES = Choices(
-        ("burning", "Burning"),
-        ("mechanical", "Stand-alone Mechanical"),
-    )
-    mitigation_purpose = models.CharField(
-        max_length=255,
-        choices=MITIGATION_PURPOSES,
-        null=False,
-        blank=False,
-        default="burning",
-    )
-
     # GIS data
     polygon = MultiPolygonField(blank=True, null=True)
     linestring = MultiLineStringField(blank=True, null=True)
+    district = models.ForeignKey(
+        "main.District",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="operational_areas",
+    )
 
-    # Details
+    # Overview
     year = YearField(
         null=True, blank=True
     )  # Year in which the operational area is active/valid?
     operational_area_different_from_bpu_rationale = models.TextField(
         null=True, blank=True
     )
+    # Contentious burn is coming from BPE Details section for operational area (not sure it belongs here or in BPE)
+    contentious_burn = models.BooleanField(default=False)
+    contentious_rationale = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.reference_number} ({self.name})"
+
+    @property
+    def region(self):
+        if self.region:
+            return self.district.region
+        return None
+
+    @property
+    def area_sqm(self):
+        if not self.area:
+            logger.warn(f"OperationalArea: {self.id} has no area")
+            return None
+        return self.area.sq_m
+
+    @property
+    def area_ha(self):
+        if not self.area:
+            logger.warn(f"OperationalArea: {self.id} has no area")
+            return None
+        return self.area.sq_m / 10000
 
     def copy(self):
         self.pk = None
@@ -143,26 +161,40 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         on_delete=models.CASCADE,
         related_name="operational_plans",
     )
+
+    # Overview
     operation_name = models.CharField(
         max_length=255, null=True, blank=True
-    )  # To be pre-filled with the name of the burn plan unit
+    )  # To be copied from Details section for operational area in BPE
     purpose: models.ManyToManyField = models.ManyToManyField(
         "burnplanning.Purpose",
         related_name="operational_plans",
         through="OperationalPlanPurpose",
         through_fields=("operational_plan", "purpose"),
         editable=False,
-    )
+    )  # Copied from BPE, but editable (multi-select)
     program: models.ManyToManyField = models.ManyToManyField(
         "burnplanning.Program",
         related_name="operational_plans",
         through="OperationalPlanProgram",
         through_fields=("operational_plan", "program"),
         editable=False,
+    )  # Copied from BPE, but editable (multi-select)
+
+    OPERATIONS = Choices(
+        ("burning", "Burning"),
+        ("mechanical", "Stand-alone Mechanical"),
     )
+    operation = models.CharField(
+        max_length=255,
+        choices=OPERATIONS,
+        null=False,
+        blank=False,
+        default="burning",
+    )
+    operational_intent = models.TextField(null=True, blank=True)
+
     burn_priority = models.IntegerField(null=True, blank=True)
-    contentious_burn = models.BooleanField(default=False)
-    contentious_rationale = models.TextField(null=True, blank=True)
 
     # Legal / Approvals
     legal_approvals: models.ManyToManyField = models.ManyToManyField(
@@ -173,6 +205,16 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         editable=False,
     )
     # Risk Factors: OperationalAreaRiskFactor
+
+    @property
+    def risk_highest_level(self):
+        # Highest risk level from Risk section
+        raise NotImplementedError("TODO")
+
+    @property
+    def priority_calculated(self):
+        # Calculated priority from Priority section
+        raise NotImplementedError("TODO")
 
 
 class OperationalPlanApproval(TimeStampedModel):

@@ -218,24 +218,43 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
 
     form = OperationalAreaAdminForm
 
+    class Media:
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/toggle_functions.js",
+            "admin/class_media/js/operational_area_admin.js",
+        )
+
     list_display = (
         "name",
         "burn_plan_element",
-        "mitigation_purpose",
         "year",
         "operational_area_different_from_bpu_rationale",
+        "district",
+        "contentious_burn",
+        "contentious_rationale",
     )
 
     fieldsets = (
         (
-            "General",
+            "Details",
             {
                 "fields": (
                     "name",
                     "burn_plan_element",
-                    "mitigation_purpose",
                     "year",
                     "operational_area_different_from_bpu_rationale",
+                    "contentious_burn",
+                ),
+            },
+        ),
+        (
+            "Contentious burn",
+            {
+                "fields": (("contentious_rationale",),),
+                "classes": (
+                    "admin-contentious-burn",
+                    "less-dominant-style",
                 ),
             },
         ),
@@ -243,11 +262,10 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
             "Spatial",
             {
                 "fields": (
+                    "district",
                     (
-                        (
-                            "polygon",
-                            "linestring",
-                        )
+                        "polygon",
+                        "linestring",
                     ),
                 ),
             },
@@ -262,22 +280,18 @@ class OperationalPlanAdmin(DeleteRestrictedAdmin):
     model = OperationalPlan
     # form = OperationalAreaAdminForm
 
-    class Media:
-        js = (
-            "admin/js/jquery.init.js",
-            "admin/class_media/js/toggle_functions.js",
-            "admin/class_media/js/operational_area_admin.js",
-        )
-
     list_display = (
         "name",
+        "operational_area",
         "operation_name",
+        "operation",
+        "operational_intent",
         "burn_priority",
     )
 
     fieldsets = (
         (
-            "General",
+            "Overview",
             {
                 "fields": (
                     "name",
@@ -286,19 +300,11 @@ class OperationalPlanAdmin(DeleteRestrictedAdmin):
                         "created",
                         "modified",
                     ),
+                    "operational_area",
                     "operation_name",
+                    "operation",
+                    "operational_intent",
                     "burn_priority",
-                    "contentious_burn",
-                ),
-            },
-        ),
-        (
-            "Contentious burn",
-            {
-                "fields": (("contentious_rationale",),),
-                "classes": (
-                    "admin-contentious-burn",
-                    "less-dominant-style",
                 ),
             },
         ),
