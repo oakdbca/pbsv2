@@ -22,6 +22,33 @@ class YearField(models.IntegerField):
         super().__init__(*args, **kwargs)
 
 
+class IntervalIntegerField(models.IntegerField):
+    """An integer field that can have a min and max value (including both endpoints `[min,max]`-notation)"""
+
+    def __init__(
+        self,
+        *args,
+        min_value=None,
+        max_value=None,
+        **kwargs: Any,
+    ) -> None:
+        if min_value is not None:
+            kwargs["validators"] = kwargs.get("validators", []) + [
+                MinValueValidator(min_value)
+            ]
+        if max_value is not None:
+            kwargs["validators"] = kwargs.get("validators", []) + [
+                MaxValueValidator(max_value)
+            ]
+        self.min_value, self.max_value = min_value, max_value
+        super().__init__(*args, **kwargs)
+
+    def formfield(self, **kwargs):
+        defaults = {"min_value": self.min_value, "max_value": self.max_value}
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
+
+
 class UniqueNameableModel(models.Model):
     name = models.CharField(max_length=255, unique=True, null=False, blank=False)
 
@@ -215,7 +242,7 @@ class Lga(DisplayNameableModel, UniqueNameableModel):
         District, on_delete=models.CASCADE, null=False, blank=False
     )
 
-    operationalareaapprovals: ReverseManyToOneDescriptor
+    operationalplanapprovals: ReverseManyToOneDescriptor
 
     class Meta:
         ordering = ["district", "name"]

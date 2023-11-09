@@ -9,6 +9,7 @@ from protected_media.models import ProtectedFileField
 from govapp.apps.burnplanning.models import BurnPlanElement
 from govapp.apps.main.models import (
     DisplayNameableModel,
+    IntervalIntegerField,
     Lga,
     ReferenceableModel,
     UniqueNameableModel,
@@ -194,7 +195,10 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     )
     operational_intent = models.TextField(null=True, blank=True)
 
-    burn_priority = models.IntegerField(null=True, blank=True)
+    # Priority
+    burn_priority = IntervalIntegerField(
+        min_value=1, max_value=10, null=True, blank=True
+    )
 
     # Legal / Approvals
     legal_approvals: models.ManyToManyField = models.ManyToManyField(
