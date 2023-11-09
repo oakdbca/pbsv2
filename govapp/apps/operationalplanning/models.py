@@ -103,6 +103,9 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     year = YearField(
         null=True, blank=True
     )  # Year in which the operational area is active/valid?
+    operational_area_different_from_bpu_rationale = models.TextField(
+        null=True, blank=True
+    )
 
     def __str__(self):
         return f"{self.reference_number} ({self.name})"
@@ -160,9 +163,6 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     burn_priority = models.IntegerField(null=True, blank=True)
     contentious_burn = models.BooleanField(default=False)
     contentious_rationale = models.TextField(null=True, blank=True)
-    operational_area_different_from_bpu_rationale = models.TextField(
-        null=True, blank=True
-    )
 
     # Legal / Approvals
     legal_approvals: models.ManyToManyField = models.ManyToManyField(

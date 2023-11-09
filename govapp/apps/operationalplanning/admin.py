@@ -216,11 +216,14 @@ class OperationalAreaAdminForm(forms.ModelForm):
 class OperationalAreaAdmin(DeleteRestrictedAdmin):
     model = OperationalArea
 
+    form = OperationalAreaAdminForm
+
     list_display = (
         "name",
         "burn_plan_element",
         "mitigation_purpose",
         "year",
+        "operational_area_different_from_bpu_rationale",
     )
 
     fieldsets = (
@@ -232,6 +235,7 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
                     "burn_plan_element",
                     "mitigation_purpose",
                     "year",
+                    "operational_area_different_from_bpu_rationale",
                 ),
             },
         ),
@@ -269,7 +273,6 @@ class OperationalPlanAdmin(DeleteRestrictedAdmin):
         "name",
         "operation_name",
         "burn_priority",
-        "operational_area_different_from_bpu_rationale",
     )
 
     fieldsets = (
@@ -285,7 +288,6 @@ class OperationalPlanAdmin(DeleteRestrictedAdmin):
                     ),
                     "operation_name",
                     "burn_priority",
-                    "operational_area_different_from_bpu_rationale",
                     "contentious_burn",
                 ),
             },
