@@ -199,6 +199,17 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     burn_priority = IntervalIntegerField(
         min_value=1, max_value=10, null=True, blank=True
     )
+    WINDOW_OF_OPPORTUNITY_VALUES = Choices(
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High"),
+    )
+    window_of_opportunity = models.CharField(
+        max_length=255,
+        choices=WINDOW_OF_OPPORTUNITY_VALUES,
+        null=True,
+        blank=True,
+    )  # Chance of completing burn if postponed
 
     # Legal / Approvals
     legal_approvals: models.ManyToManyField = models.ManyToManyField(

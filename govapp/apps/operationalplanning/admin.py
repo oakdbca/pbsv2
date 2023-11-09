@@ -275,10 +275,17 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
     inlines = [OperationalAreaRiskFactorInline]
 
 
+class OperationalPlanAdminForm(forms.ModelForm):
+    class Meta:
+        model = OperationalPlan
+        fields = "__all__"
+        help_texts = {"window_of_opportunity": "Chance of completing burn if postponed"}
+
+
 @admin.register(OperationalPlan)
 class OperationalPlanAdmin(DeleteRestrictedAdmin):
     model = OperationalPlan
-    # form = OperationalAreaAdminForm
+    form = OperationalPlanAdminForm
 
     list_display = (
         "name",
@@ -287,6 +294,7 @@ class OperationalPlanAdmin(DeleteRestrictedAdmin):
         "operation",
         "operational_intent",
         "burn_priority",
+        "window_of_opportunity",
     )
 
     fieldsets = (
@@ -304,7 +312,15 @@ class OperationalPlanAdmin(DeleteRestrictedAdmin):
                     "operation_name",
                     "operation",
                     "operational_intent",
+                ),
+            },
+        ),
+        (
+            "Priority",
+            {
+                "fields": (
                     "burn_priority",
+                    "window_of_opportunity",
                 ),
             },
         ),
