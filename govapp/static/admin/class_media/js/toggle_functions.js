@@ -72,7 +72,6 @@ function toggle_fieldset_on_checked_change(
   };
   toggle_fieldset_section(boolean_checked_field.is(":checked"));
   boolean_checked_field.change(function () {
-    console.log("change", $(this).is(":checked"));
     toggle_fieldset_section($(this).is(":checked"));
   });
 }
