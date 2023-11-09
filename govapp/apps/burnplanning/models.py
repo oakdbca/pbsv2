@@ -124,11 +124,11 @@ class Justification(UniqueNameableModel, ArchivableModel, TimeStampedModel):
 
 
 class Purpose(UniqueNameableModel, ArchivableModel, TimeStampedModel):
-    operationalareapurposes: ReverseManyToOneDescriptor
+    operationalplanpurposes: ReverseManyToOneDescriptor
 
 
 class Program(UniqueNameableModel, ArchivableModel, TimeStampedModel):
-    operationalareaprograms: ReverseManyToOneDescriptor
+    operationalplanprograms: ReverseManyToOneDescriptor
 
 
 class OutputLeaderType(UniqueNameableModel, ArchivableModel, TimeStampedModel):
