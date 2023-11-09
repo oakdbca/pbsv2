@@ -6,7 +6,7 @@ from model_utils import Choices
 from model_utils.models import TimeStampedModel
 from protected_media.models import ProtectedFileField
 
-from govapp.apps.burnplanning.models import BurnPlanUnit
+from govapp.apps.burnplanning.models import BurnPlanElement
 from govapp.apps.main.models import (
     DisplayNameableModel,
     Lga,
@@ -22,11 +22,11 @@ logger = getLogger(__name__)
 
 # Let's call the class LegalApproval to not confuse with an Approval model
 class LegalApproval(DisplayNameableModel):
-    """Burn Program and Operational Area approvals"""
+    """Burn Program and Operational Plan approvals"""
 
     objects = models.Manager()
 
-    operationalareaapprovals: "models.Manager[OperationalAreaApproval]"
+    operationalplanapprovals: "models.Manager[OperationalPlanApproval]"
 
     # TODO What is the difference between an approval and an endorsement?
     APPROVAL_TYPES = Choices(
@@ -55,8 +55,8 @@ class LegalApproval(DisplayNameableModel):
     )  # Whether the user can attach files, texts, or remove the approval
 
     class Meta:
-        verbose_name = "Operational Area Legal/Approval"
-        verbose_name_plural = "Operational Area Legal/Approvals"
+        verbose_name = "Operational Plan Legal/Approval"
+        verbose_name_plural = "Operational Plan Legal/Approvals"
 
     def __str__(self):
         return f"{self.approver} {self.get_approval_type_display()}"
@@ -71,16 +71,12 @@ class LegalApproval(DisplayNameableModel):
 
 
 class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
-    MODEL_PREFIX = "OP"
+    MODEL_PREFIX = "OA"
 
     objects = models.Manager()
 
-    operationalareaapprovals: "models.Manager[OperationalAreaApproval]"
-    operationalareapurposes: "models.Manager[OperationalAreaPurpose]"
-    operationalareaprograms: "models.Manager[OperationalAreaProgram]"
-
-    burn_plan_unit: models.ForeignKey = models.ForeignKey(
-        BurnPlanUnit,
+    burn_plan_element: models.ForeignKey = models.ForeignKey(
+        BurnPlanElement,
         null=True,
         blank=True,
         on_delete=models.PROTECT,
@@ -106,40 +102,7 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     # Details
     year = YearField(
         null=True, blank=True
-    )  # Year in which the operational area is active/valid
-    operation_name = models.CharField(
-        max_length=255, null=True, blank=True
-    )  # To be pre-filled with the name of the burn plan unit
-    purpose: models.ManyToManyField = models.ManyToManyField(
-        "burnplanning.Purpose",
-        related_name="operational_areas",
-        through="OperationalAreaPurpose",
-        through_fields=("operational_area", "purpose"),
-        editable=False,
-    )
-    program: models.ManyToManyField = models.ManyToManyField(
-        "burnplanning.Program",
-        related_name="operational_areas",
-        through="OperationalAreaProgram",
-        through_fields=("operational_area", "program"),
-        editable=False,
-    )
-    burn_priority = models.IntegerField(null=True, blank=True)
-    contentious_burn = models.BooleanField(default=False)
-    contentious_rationale = models.TextField(null=True, blank=True)
-    operational_area_different_from_bpu_rationale = models.TextField(
-        null=True, blank=True
-    )
-
-    # Legal / Approvals
-    legal_approvals: models.ManyToManyField = models.ManyToManyField(
-        LegalApproval,
-        related_name="operational_areas",
-        through="OperationalAreaApproval",
-        through_fields=("operational_area", "legal_approval"),
-        editable=False,
-    )
-    # Risk Factors: OperationalAreaRiskFactor
+    )  # Year in which the operational area is active/valid?
 
     def __str__(self):
         return f"{self.reference_number} ({self.name})"
@@ -148,79 +111,6 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         self.pk = None
         self.save()
         return self
-
-
-class OperationalAreaPurpose(TimeStampedModel):
-    operational_area = models.ForeignKey(
-        OperationalArea,
-        on_delete=models.CASCADE,
-        related_name="operationalareapurposes",
-    )
-    purpose = models.ForeignKey(
-        "burnplanning.Purpose",
-        on_delete=models.CASCADE,
-        related_name="operationalareapurposes",
-    )
-
-
-class OperationalAreaProgram(TimeStampedModel):
-    operational_area = models.ForeignKey(
-        OperationalArea,
-        on_delete=models.CASCADE,
-        related_name="operationalareaprograms",
-    )
-    program = models.ForeignKey(
-        "burnplanning.Program",
-        on_delete=models.CASCADE,
-        related_name="operationalareaprograms",
-    )
-
-
-class OperationalAreaApproval(TimeStampedModel):
-    operational_area = models.ForeignKey(
-        OperationalArea,
-        on_delete=models.CASCADE,
-        related_name="operationalareaapprovals",
-    )
-    legal_approval = models.ForeignKey(
-        LegalApproval,
-        on_delete=models.CASCADE,
-        related_name="operationalareaapprovals",
-    )
-
-    lga: models.ForeignKey = models.ForeignKey(
-        Lga,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        verbose_name="Shire/LGA",
-        related_name="operationalareaapprovals",
-    )  # Shire
-    file_as_approval = ProtectedFileField(
-        upload_to=file_upload_location, null=True, blank=True
-    )
-    text_as_approval: models.TextField = models.TextField(null=True, blank=True)
-    text_remove_justification: models.TextField = models.TextField(
-        null=True, blank=True
-    )
-
-    class Meta:
-        verbose_name_plural = "Operational Area Legal/Approvals"
-        unique_together = ("operational_area", "legal_approval")
-
-    def __str__(self):
-        return (
-            f"Operational Area: {self.operational_area} "
-            f"has legal/approval: {self.legal_approval}"
-        )
-
-    @property
-    def has_lga(self):
-        return self.legal_approval.has_lga
-
-    @property
-    def has_additional_permissions(self):
-        return self.legal_approval.has_additional_permissions
 
 
 class OperationalAreaRiskFactor(models.Model):
@@ -236,3 +126,123 @@ class OperationalAreaRiskFactor(models.Model):
         related_name="risk_factors",
     )
     values_affected = models.TextField(null=True, blank=True)
+
+
+class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
+    MODEL_PREFIX = "OP"
+
+    operationalplanapprovals: "models.Manager[OperationalPlanApproval]"
+    operationalplanpurposes: "models.Manager[OperationalPlanPurpose]"
+    operationalplanprograms: "models.Manager[OperationalPlanProgram]"
+
+    operational_area = models.ForeignKey(
+        OperationalArea,
+        on_delete=models.CASCADE,
+        related_name="operational_plans",
+    )
+    operation_name = models.CharField(
+        max_length=255, null=True, blank=True
+    )  # To be pre-filled with the name of the burn plan unit
+    purpose: models.ManyToManyField = models.ManyToManyField(
+        "burnplanning.Purpose",
+        related_name="operational_plans",
+        through="OperationalPlanPurpose",
+        through_fields=("operational_plan", "purpose"),
+        editable=False,
+    )
+    program: models.ManyToManyField = models.ManyToManyField(
+        "burnplanning.Program",
+        related_name="operational_plans",
+        through="OperationalPlanProgram",
+        through_fields=("operational_plan", "program"),
+        editable=False,
+    )
+    burn_priority = models.IntegerField(null=True, blank=True)
+    contentious_burn = models.BooleanField(default=False)
+    contentious_rationale = models.TextField(null=True, blank=True)
+    operational_area_different_from_bpu_rationale = models.TextField(
+        null=True, blank=True
+    )
+
+    # Legal / Approvals
+    legal_approvals: models.ManyToManyField = models.ManyToManyField(
+        LegalApproval,
+        related_name="operational_plans",
+        through="OperationalPlanApproval",
+        through_fields=("operational_plan", "legal_approval"),
+        editable=False,
+    )
+    # Risk Factors: OperationalAreaRiskFactor
+
+
+class OperationalPlanApproval(TimeStampedModel):
+    operational_plan = models.ForeignKey(
+        OperationalPlan,
+        on_delete=models.CASCADE,
+        related_name="operationalplanapprovals",
+    )
+    legal_approval = models.ForeignKey(
+        LegalApproval,
+        on_delete=models.CASCADE,
+        related_name="operationalplanapprovals",
+    )
+
+    lga: models.ForeignKey = models.ForeignKey(
+        Lga,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        verbose_name="Shire/LGA",
+        related_name="operationalplanapprovals",
+    )  # Shire
+    file_as_approval = ProtectedFileField(
+        upload_to=file_upload_location, null=True, blank=True
+    )
+    text_as_approval: models.TextField = models.TextField(null=True, blank=True)
+    text_remove_justification: models.TextField = models.TextField(
+        null=True, blank=True
+    )
+
+    class Meta:
+        verbose_name_plural = "Operational Plan Legal/Approvals"
+        unique_together = ("operational_plan", "legal_approval")
+
+    def __str__(self):
+        return (
+            f"Operational Area: {self.operational_plan} "
+            f"has legal/approval: {self.legal_approval}"
+        )
+
+    @property
+    def has_lga(self):
+        return self.legal_approval.has_lga
+
+    @property
+    def has_additional_permissions(self):
+        return self.legal_approval.has_additional_permissions
+
+
+class OperationalPlanPurpose(TimeStampedModel):
+    operational_plan = models.ForeignKey(
+        OperationalPlan,
+        on_delete=models.CASCADE,
+        related_name="operationalplanpurposes",
+    )
+    purpose = models.ForeignKey(
+        "burnplanning.Purpose",
+        on_delete=models.CASCADE,
+        related_name="operationalplanpurposes",
+    )
+
+
+class OperationalPlanProgram(TimeStampedModel):
+    operational_plan = models.ForeignKey(
+        OperationalPlan,
+        on_delete=models.CASCADE,
+        related_name="operationalplanprograms",
+    )
+    program = models.ForeignKey(
+        "burnplanning.Program",
+        on_delete=models.CASCADE,
+        related_name="operationalplanprograms",
+    )

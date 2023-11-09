@@ -7,20 +7,21 @@ from govapp.apps.main.admin import DeleteRestrictedAdmin
 from .models import (
     LegalApproval,
     OperationalArea,
-    OperationalAreaApproval,
-    OperationalAreaProgram,
-    OperationalAreaPurpose,
     OperationalAreaRiskFactor,
+    OperationalPlan,
+    OperationalPlanApproval,
+    OperationalPlanProgram,
+    OperationalPlanPurpose,
 )
 
 
 class OperationalAreaPurposeInline(admin.TabularInline):
-    model = OperationalAreaPurpose
+    model = OperationalPlanPurpose
     extra = 0
 
 
 class OperationalAreaProgramInline(admin.TabularInline):
-    model = OperationalAreaProgram
+    model = OperationalPlanProgram
     extra = 0
 
 
@@ -110,7 +111,7 @@ class OperationalAreaApprovalAdminForm(forms.ModelForm):
     )
 
     class Meta:
-        model = OperationalAreaApproval
+        model = OperationalPlanApproval
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):
@@ -123,7 +124,7 @@ class OperationalAreaApprovalAdminForm(forms.ModelForm):
 
 
 class OperationalAreaApprovalInline(admin.StackedInline):
-    model = OperationalAreaApproval
+    model = OperationalPlanApproval
     extra = 0
     verbose_name = "Operational Area Approval"
     verbose_name_plural = "Operational Area Approvals"
@@ -214,7 +215,48 @@ class OperationalAreaAdminForm(forms.ModelForm):
 @admin.register(OperationalArea)
 class OperationalAreaAdmin(DeleteRestrictedAdmin):
     model = OperationalArea
-    form = OperationalAreaAdminForm
+
+    list_display = (
+        "name",
+        "burn_plan_element",
+        "mitigation_purpose",
+        "year",
+    )
+
+    fieldsets = (
+        (
+            "General",
+            {
+                "fields": (
+                    "name",
+                    "burn_plan_element",
+                    "mitigation_purpose",
+                    "year",
+                ),
+            },
+        ),
+        (
+            "Spatial",
+            {
+                "fields": (
+                    (
+                        (
+                            "polygon",
+                            "linestring",
+                        )
+                    ),
+                ),
+            },
+        ),
+    )
+
+    inlines = [OperationalAreaRiskFactorInline]
+
+
+@admin.register(OperationalPlan)
+class OperationalPlanAdmin(DeleteRestrictedAdmin):
+    model = OperationalPlan
+    # form = OperationalAreaAdminForm
 
     class Media:
         js = (
@@ -225,9 +267,6 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
 
     list_display = (
         "name",
-        "burn_plan_unit",
-        "mitigation_purpose",
-        "year",
         "operation_name",
         "burn_priority",
         "operational_area_different_from_bpu_rationale",
@@ -244,9 +283,6 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
                         "created",
                         "modified",
                     ),
-                    "burn_plan_unit",
-                    "mitigation_purpose",
-                    "year",
                     "operation_name",
                     "burn_priority",
                     "operational_area_different_from_bpu_rationale",
@@ -264,17 +300,6 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
                 ),
             },
         ),
-        (
-            "Spatial",
-            {
-                "fields": (
-                    (
-                        "polygon",
-                        "linestring",
-                    ),
-                ),
-            },
-        ),
     )
 
     readonly_fields = ("reference_number", "created", "modified")
@@ -283,5 +308,4 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
         OperationalAreaPurposeInline,
         OperationalAreaProgramInline,
         OperationalAreaApprovalInline,
-        OperationalAreaRiskFactorInline,
     ]
