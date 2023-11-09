@@ -6,13 +6,30 @@ from govapp.apps.main.admin import DeleteRestrictedAdmin
 
 from .models import (
     LegalApproval,
+    Objective,
+    ObjectiveAndSuccessCriteria,
     OperationalArea,
     OperationalAreaRiskFactor,
     OperationalPlan,
     OperationalPlanApproval,
     OperationalPlanProgram,
     OperationalPlanPurpose,
+    SuccessCriteria,
+    SuccessCriteriaComparisonOperator,
+    SuccessCriteriaLeftValue,
 )
+
+
+class ObjectiveAndSuccessCriteriaInline(admin.TabularInline):
+    model = ObjectiveAndSuccessCriteria
+    extra = 1
+
+    class Meta:
+        pass
+
+    list_display = ("objective", "details", "applicable_to_whole_operational_area")
+
+    fields = ("objective", "details", "applicable_to_whole_operational_area")
 
 
 class OperationalAreaPurposeInline(admin.TabularInline):
@@ -23,6 +40,67 @@ class OperationalAreaPurposeInline(admin.TabularInline):
 class OperationalAreaProgramInline(admin.TabularInline):
     model = OperationalPlanProgram
     extra = 0
+
+
+class SuccessCriteriaInline(admin.TabularInline):
+    model = SuccessCriteria
+    extra = 0
+
+
+@admin.register(SuccessCriteriaLeftValue)
+class SuccessCriteriaLeftValueAdmin(admin.ModelAdmin):
+    model = SuccessCriteriaLeftValue
+
+    list_display = (
+        "name",
+        "display_name",
+    )
+
+
+@admin.register(SuccessCriteriaComparisonOperator)
+class SuccessCriteriaComparisonOperatorAdmin(admin.ModelAdmin):
+    model = SuccessCriteriaComparisonOperator
+
+    list_display = (
+        "name",
+        "display_name",
+    )
+
+
+@admin.register(SuccessCriteria)
+class SuccessCriteriaAdmin(admin.ModelAdmin):
+    model = SuccessCriteria
+
+    list_display = (
+        "name",
+        "display_name",
+        "left_value",
+        "comparison_operator",
+        "right_value_or_free_text",
+    )
+
+
+@admin.register(Objective)
+class ObjectiveAdmin(admin.ModelAdmin):
+    model = Objective
+
+    list_display = (
+        "name",
+        "display_name",
+    )
+
+
+@admin.register(ObjectiveAndSuccessCriteria)
+class ObjectiveAndSuccessCriteriaAdmin(admin.ModelAdmin):
+    model = ObjectiveAndSuccessCriteria
+
+    list_display = (
+        "objective",
+        "details",
+        "applicable_to_whole_operational_area",
+    )
+
+    inlines = [SuccessCriteriaInline]
 
 
 class LegalApprovalAdminForm(forms.ModelForm):
@@ -123,7 +201,7 @@ class OperationalAreaApprovalAdminForm(forms.ModelForm):
         return cleaned_data
 
 
-class OperationalAreaApprovalInline(admin.StackedInline):
+class OperationalPlanApprovalInline(admin.StackedInline):
     model = OperationalPlanApproval
     extra = 0
     verbose_name = "Operational Area Approval"
@@ -344,7 +422,8 @@ class OperationalPlanAdmin(DeleteRestrictedAdmin):
     readonly_fields = ("reference_number", "created", "modified")
 
     inlines = [
+        ObjectiveAndSuccessCriteriaInline,
         OperationalAreaPurposeInline,
         OperationalAreaProgramInline,
-        OperationalAreaApprovalInline,
+        OperationalPlanApprovalInline,
     ]

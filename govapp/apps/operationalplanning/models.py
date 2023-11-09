@@ -156,6 +156,7 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     operationalplanapprovals: "models.Manager[OperationalPlanApproval]"
     operationalplanpurposes: "models.Manager[OperationalPlanPurpose]"
     operationalplanprograms: "models.Manager[OperationalPlanProgram]"
+    objectiveandsuccesscriteria: "models.Manager[ObjectiveAndSuccessCriteria]"
 
     operational_area = models.ForeignKey(
         OperationalArea,
@@ -224,6 +225,8 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     context_map = ProtectedFileField(
         upload_to=file_upload_location, null=True, blank=True
     )
+
+    # Objectives and Success Criteria: ObjectiveAndSuccessCriteria
 
     # Legal / Approvals
     legal_approvals: models.ManyToManyField = models.ManyToManyField(
@@ -317,3 +320,57 @@ class OperationalPlanProgram(TimeStampedModel):
         on_delete=models.CASCADE,
         related_name="operationalplanprograms",
     )
+
+
+class SuccessCriteriaLeftValue(UniqueNameableModel, DisplayNameableModel):
+    pass
+
+
+class SuccessCriteriaComparisonOperator(UniqueNameableModel, DisplayNameableModel):
+    pass
+
+
+class SuccessCriteria(UniqueNameableModel, DisplayNameableModel):
+    objectiveandsuccesscriteria: "models.Manager[ObjectiveAndSuccessCriteria]"
+
+    left_value = models.ForeignKey(
+        SuccessCriteriaLeftValue,
+        on_delete=models.CASCADE,
+        related_name="successcriteria",
+        null=True,
+        blank=True,
+    )
+    comparison_operator = models.ForeignKey(
+        SuccessCriteriaComparisonOperator,
+        on_delete=models.CASCADE,
+        related_name="successcriteria",
+        null=True,
+        blank=True,
+    )
+    right_value_or_free_text = models.TextField(null=True, blank=True)
+    objective_and_success_criteria = models.ForeignKey(
+        "ObjectiveAndSuccessCriteria",
+        on_delete=models.CASCADE,
+        related_name="success_criterias",
+        null=True,
+        blank=True,
+    )
+
+
+class Objective(UniqueNameableModel, DisplayNameableModel):
+    objectiveandsuccesscriteria: "models.Manager[ObjectiveAndSuccessCriteria]"
+
+
+class ObjectiveAndSuccessCriteria(TimeStampedModel):
+    operational_plan = models.ForeignKey(
+        OperationalPlan,
+        on_delete=models.CASCADE,
+        related_name="objectiveandsuccesscriteria",
+    )
+    objective = models.ForeignKey(
+        Objective,
+        on_delete=models.CASCADE,
+        related_name="objectiveandsuccesscriteria",
+    )
+    details = models.TextField(null=True, blank=True)
+    applicable_to_whole_operational_area = models.BooleanField(default=False)
