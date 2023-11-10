@@ -1,8 +1,9 @@
+import nested_admin
 from django import forms
 from django.contrib import admin
 from model_utils import Choices
 
-from govapp.apps.main.admin import DeleteRestrictedAdmin
+from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
 
 from .models import (
     LegalApproval,
@@ -20,7 +21,59 @@ from .models import (
 )
 
 
-class ObjectiveAndSuccessCriteriaInline(admin.TabularInline):
+class OperationalAreaPurposeInline(nested_admin.NestedTabularInline):
+    model = OperationalPlanPurpose
+    extra = 0
+
+
+class OperationalAreaProgramInline(nested_admin.NestedTabularInline):
+    model = OperationalPlanProgram
+    extra = 0
+
+
+class SuccessCriteriaInlineForm(forms.ModelForm):
+    class Meta:
+        model = SuccessCriteria
+        fields = "__all__"
+        help_texts = {
+            "right_value_or_free_text": "If Objective 'Other' is selected, "
+            "only a free-text success criteria will be shown."
+        }
+
+
+class SuccessCriteriaInline(nested_admin.NestedStackedInline):
+    model = SuccessCriteria
+    extra = 1
+    form = SuccessCriteriaInlineForm
+    verbose_name = "Success criterion"
+    verbose_name_plural = "Success criteria"
+
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    fieldsets = (
+        (
+            "Success criterion",
+            {
+                "fields": (
+                    "name",
+                    "display_name",
+                    "left_value",
+                    "comparison_operator",
+                    "right_value_or_free_text",
+                ),
+                "classes": (
+                    "collapse",
+                    "less-dominant-style",
+                ),
+            },
+        ),
+    )
+
+
+class ObjectiveAndSuccessCriteriaInline(nested_admin.NestedTabularInline):
     model = ObjectiveAndSuccessCriteria
     extra = 1
 
@@ -31,20 +84,7 @@ class ObjectiveAndSuccessCriteriaInline(admin.TabularInline):
 
     fields = ("objective", "details", "applicable_to_whole_operational_area")
 
-
-class OperationalAreaPurposeInline(admin.TabularInline):
-    model = OperationalPlanPurpose
-    extra = 0
-
-
-class OperationalAreaProgramInline(admin.TabularInline):
-    model = OperationalPlanProgram
-    extra = 0
-
-
-class SuccessCriteriaInline(admin.TabularInline):
-    model = SuccessCriteria
-    extra = 0
+    inlines = [SuccessCriteriaInline]
 
 
 @admin.register(SuccessCriteriaLeftValue)
@@ -91,7 +131,7 @@ class ObjectiveAdmin(admin.ModelAdmin):
 
 
 @admin.register(ObjectiveAndSuccessCriteria)
-class ObjectiveAndSuccessCriteriaAdmin(admin.ModelAdmin):
+class ObjectiveAndSuccessCriteriaAdmin(nested_admin.NestedModelAdmin):
     model = ObjectiveAndSuccessCriteria
 
     list_display = (
@@ -201,7 +241,7 @@ class OperationalAreaApprovalAdminForm(forms.ModelForm):
         return cleaned_data
 
 
-class OperationalPlanApprovalInline(admin.StackedInline):
+class OperationalPlanApprovalInline(nested_admin.NestedStackedInline):
     model = OperationalPlanApproval
     extra = 0
     verbose_name = "Operational Area Approval"
@@ -361,7 +401,7 @@ class OperationalPlanAdminForm(forms.ModelForm):
 
 
 @admin.register(OperationalPlan)
-class OperationalPlanAdmin(DeleteRestrictedAdmin):
+class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
     model = OperationalPlan
     form = OperationalPlanAdminForm
 

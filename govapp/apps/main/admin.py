@@ -1,5 +1,6 @@
 from typing import Any
 
+import nested_admin
 from django.contrib import admin
 from django.http.request import HttpRequest
 
@@ -7,6 +8,11 @@ from .models import District, Lga, ModelFile, Region
 
 
 class DeleteRestrictedAdmin(admin.ModelAdmin):
+    def has_delete_permission(self, request: HttpRequest, obj=None):
+        return request.user.is_superuser
+
+
+class NestedDeleteRestrictedAdmin(nested_admin.NestedModelAdmin):
     def has_delete_permission(self, request: HttpRequest, obj=None):
         return request.user.is_superuser
 

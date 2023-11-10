@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "coverage",
     "protected_media.apps.ProtectedMediaConfig",
+    "nested_admin",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
