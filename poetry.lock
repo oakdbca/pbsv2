@@ -729,6 +729,24 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-nested-admin"
+version = "4.0.2"
+description = "Django admin classes that allow for nested inlines"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "django-nested-admin-4.0.2.tar.gz", hash = "sha256:79a5ce80b81c41a0f48f778fb556a3721029df48580bfce60a5962ffa2ef2d47"},
+    {file = "django_nested_admin-4.0.2-py3-none-any.whl", hash = "sha256:74d8fc0d0f17862ffcece66d39b8814cb649878b3b6ba8438076145a688ea473"},
+]
+
+[package.dependencies]
+python-monkey-business = ">=1.0.0"
+
+[package.extras]
+dev = ["Pillow", "black", "dj-database-url", "django-selenosis", "flake8", "pytest", "pytest-cov", "pytest-django", "pytest-xdist", "selenium"]
+test = ["Pillow", "dj-database-url", "django-selenosis", "pytest", "pytest-cov", "pytest-django", "pytest-xdist", "selenium"]
+
+[[package]]
 name = "django-protected-media"
 version = "1.0.2"
 description = "A simple Django app to serve protected media"
@@ -1983,6 +2001,20 @@ files = [
 ]
 
 [[package]]
+name = "python-monkey-business"
+version = "1.0.0"
+description = "Utility functions for monkey-patching python code"
+optional = false
+python-versions = "*"
+files = [
+    {file = "python-monkey-business-1.0.0.tar.gz", hash = "sha256:9976522989766f00b2aaa24ec96eacb91a6de7b7001d1452079323b071988e0e"},
+    {file = "python_monkey_business-1.0.0-py2.py3-none-any.whl", hash = "sha256:6d4cf47f011945db838ccf04643acd49b82f7ad6ab7ecba4c8165385687a828a"},
+]
+
+[package.dependencies]
+six = ">=1.7.0"
+
+[[package]]
 name = "pytz"
 version = "2023.3.post1"
 description = "World timezone definitions, modern and historical"
@@ -2710,4 +2742,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "dfcc0cbfe24a7cb52e6e5c349f922b0e77d7277ec2f537fc9a69e30afaab32bd"
+content-hash = "01c6065896e78dffa5d47cf08cba67040cdbaca9b4c2cd545caee6c9ff4d0f0e"
