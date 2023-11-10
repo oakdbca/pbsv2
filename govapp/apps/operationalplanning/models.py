@@ -324,26 +324,26 @@ class OperationalPlanProgram(TimeStampedModel):
 
 class SuccessCriteriaLeftValue(UniqueNameableModel, DisplayNameableModel):
     class Meta:
-        verbose_name = "Objective and Success Criteria - Success Criteria Left Value"
+        verbose_name = "Objective and Success Criteria - Success Criterion Left Value"
         verbose_name_plural = (
-            "Objective and Success Criteria - Success Criteria Left Values"
+            "Objective and Success Criteria - Success Criterion Left Values"
         )
 
 
 class SuccessCriteriaComparisonOperator(UniqueNameableModel, DisplayNameableModel):
     class Meta:
         verbose_name = (
-            "Objective and Success Criteria - Success Criteria Comparison Operator"
+            "Objective and Success Criteria - Success Criterion Comparison Operator"
         )
         verbose_name_plural = (
-            "Objective and Success Criteria - Success Criteria Comparison Operators"
+            "Objective and Success Criteria - Success Criterion Comparison Operators"
         )
 
 
 class SuccessCriteria(UniqueNameableModel, DisplayNameableModel):
     class Meta:
-        verbose_name = "Objective and Success Criteria - Success Criteria"
-        verbose_name_plural = "Objective and Success Criteria - Success Criterias"
+        verbose_name = "Objective and Success Criteria - Success Criterion"
+        verbose_name_plural = "Objective and Success Criteria - Success Criteria"
 
     objectiveandsuccesscriteria: "models.Manager[ObjectiveAndSuccessCriteria]"
 
@@ -365,7 +365,7 @@ class SuccessCriteria(UniqueNameableModel, DisplayNameableModel):
     objective_and_success_criteria = models.ForeignKey(
         "ObjectiveAndSuccessCriteria",
         on_delete=models.CASCADE,
-        related_name="success_criterias",
+        related_name="success_criteria",
         null=True,
         blank=True,
     )
@@ -381,8 +381,8 @@ class Objective(UniqueNameableModel, DisplayNameableModel):
 
 class ObjectiveAndSuccessCriteria(TimeStampedModel):
     class Meta:
-        verbose_name = "Objective and Success Criteria"
-        verbose_name_plural = "Objective and Success Criterias"
+        verbose_name = "Objective and Success Criterion"
+        verbose_name_plural = "Objective and Success Criteria"
 
     operational_plan = models.ForeignKey(
         OperationalPlan,
