@@ -68,6 +68,7 @@ module.exports = {
             });
     },
     transpileDependencies: [/ckeditor5-[^/\\]+[/\\]src[/\\].+\.js$/],
+    stats: { children: true },
     configureWebpack: {
         devtool: webpack_devtool,
         plugins: [
