@@ -323,14 +323,28 @@ class OperationalPlanProgram(TimeStampedModel):
 
 
 class SuccessCriteriaLeftValue(UniqueNameableModel, DisplayNameableModel):
-    pass
+    class Meta:
+        verbose_name = "Objective and Success Criteria - Success Criteria Left Value"
+        verbose_name_plural = (
+            "Objective and Success Criteria - Success Criteria Left Values"
+        )
 
 
 class SuccessCriteriaComparisonOperator(UniqueNameableModel, DisplayNameableModel):
-    pass
+    class Meta:
+        verbose_name = (
+            "Objective and Success Criteria - Success Criteria Comparison Operator"
+        )
+        verbose_name_plural = (
+            "Objective and Success Criteria - Success Criteria Comparison Operators"
+        )
 
 
 class SuccessCriteria(UniqueNameableModel, DisplayNameableModel):
+    class Meta:
+        verbose_name = "Objective and Success Criteria - Success Criteria"
+        verbose_name_plural = "Objective and Success Criteria - Success Criterias"
+
     objectiveandsuccesscriteria: "models.Manager[ObjectiveAndSuccessCriteria]"
 
     left_value = models.ForeignKey(
@@ -358,10 +372,18 @@ class SuccessCriteria(UniqueNameableModel, DisplayNameableModel):
 
 
 class Objective(UniqueNameableModel, DisplayNameableModel):
+    class Meta:
+        verbose_name = "Objective and Success Criteria - Objective"
+        verbose_name_plural = "Objective and Success Criteria - Objectives"
+
     objectiveandsuccesscriteria: "models.Manager[ObjectiveAndSuccessCriteria]"
 
 
 class ObjectiveAndSuccessCriteria(TimeStampedModel):
+    class Meta:
+        verbose_name = "Objective and Success Criteria"
+        verbose_name_plural = "Objective and Success Criterias"
+
     operational_plan = models.ForeignKey(
         OperationalPlan,
         on_delete=models.CASCADE,
