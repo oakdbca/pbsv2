@@ -29,10 +29,11 @@ class LegalApproval(DisplayNameableModel):
 
     operationalplanapprovals: "models.Manager[OperationalPlanApproval]"
 
-    # TODO What is the difference between an approval and an endorsement?
+    # TODO Not sure on this one, but requirement item #72 mentions these three separately
     APPROVAL_TYPES = Choices(
-        ("approval", "Approval"),
         ("endorsement", "Endorsement"),
+        ("approval", "Approval"),
+        ("endorsement_or_approval", "Endorsement/Approval"),
     )
     approval_type = models.CharField(
         max_length=255, choices=APPROVAL_TYPES, null=True, blank=True
