@@ -9,6 +9,7 @@ from protected_media.models import ProtectedFileField
 from govapp.apps.burnplanning.models import BurnPlanElement
 from govapp.apps.main.models import (
     DisplayNameableModel,
+    IntervalFloatField,
     IntervalIntegerField,
     Lga,
     ReferenceableModel,
@@ -341,6 +342,38 @@ class SuccessCriteriaComparisonOperator(UniqueNameableModel, DisplayNameableMode
         )
 
 
+class SuccessCriteriaReport(UniqueNameableModel, DisplayNameableModel):
+    class Meta:
+        verbose_name = "Objective and Success Criteria - Success Criterion Report"
+        verbose_name_plural = (
+            "Objective and Success Criteria - Success Criterion Reports"
+        )
+
+    success_criteria = models.ForeignKey(
+        "SuccessCriteria",
+        on_delete=models.CASCADE,
+        related_name="successcriteriareports",
+        null=True,
+        blank=True,
+    )
+
+    RESULTS = Choices(
+        ("achieved", "Achieved"),
+        ("not_achieved", "Not Achieved"),
+        ("not_ started", "Not Started"),
+    )
+    result = models.CharField(
+        max_length=255,
+        choices=RESULTS,
+        null=True,
+        blank=True,
+    )
+    # Allow for recording a percentage if the result is achieved or not achieved. Modeling this as a ratio [0,1]
+    result_achieved_ratio = IntervalFloatField(
+        min_value=0.0, max_value=1.0, null=True, blank=True
+    )
+
+
 class SuccessCriteria(UniqueNameableModel, DisplayNameableModel):
     class Meta:
         verbose_name = "Objective and Success Criteria - Success Criterion"
@@ -370,6 +403,13 @@ class SuccessCriteria(UniqueNameableModel, DisplayNameableModel):
         null=True,
         blank=True,
     )
+    # report = models.ForeignKey(
+    #     SuccessCriteriaReport,
+    #     on_delete=models.CASCADE,
+    #     related_name="successcriteria",
+    #     null=True,
+    #     blank=True,
+    # )
 
 
 class Objective(UniqueNameableModel, DisplayNameableModel):

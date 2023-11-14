@@ -18,6 +18,7 @@ from .models import (
     SuccessCriteria,
     SuccessCriteriaComparisonOperator,
     SuccessCriteriaLeftValue,
+    SuccessCriteriaReport,
 )
 
 
@@ -29,6 +30,30 @@ class OperationalAreaPurposeInline(nested_admin.NestedTabularInline):
 class OperationalAreaProgramInline(nested_admin.NestedTabularInline):
     model = OperationalPlanProgram
     extra = 0
+
+
+class SuccessCriteriaReportInline(nested_admin.NestedTabularInline):
+    model = SuccessCriteriaReport
+    extra = 0
+    verbose_name = "Success criterion report"
+    verbose_name_plural = "Success criterion reports"
+
+    class Meta:
+        pass
+
+    list_display = (
+        "name",
+        "display_name",
+        "result",
+        "result_achieved_ratio",
+    )
+
+    fields = (
+        "name",
+        "display_name",
+        "result",
+        "result_achieved_ratio",
+    )
 
 
 class SuccessCriteriaInlineForm(forms.ModelForm):
@@ -47,6 +72,14 @@ class SuccessCriteriaInline(nested_admin.NestedStackedInline):
     form = SuccessCriteriaInlineForm
     verbose_name = "Success criterion"
     verbose_name_plural = "Success criteria"
+
+    list_display = (
+        "name",
+        "display_name",
+        "left_value",
+        "comparison_operator",
+        "right_value_or_free_text",
+    )
 
     class Media:
         css = {
@@ -71,6 +104,8 @@ class SuccessCriteriaInline(nested_admin.NestedStackedInline):
             },
         ),
     )
+
+    inlines = [SuccessCriteriaReportInline]
 
 
 class ObjectiveAndSuccessCriteriaInline(nested_admin.NestedTabularInline):

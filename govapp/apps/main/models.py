@@ -62,6 +62,11 @@ class IntervalIntegerField(
         return models.IntegerField
 
 
+class IntervalFloatField(models.FloatField, GenericIntervalField[models.FloatField]):
+    def field_class(self):
+        return models.FloatField
+
+
 class UniqueNameableModel(models.Model):
     name = models.CharField(max_length=255, unique=True, null=False, blank=False)
 
