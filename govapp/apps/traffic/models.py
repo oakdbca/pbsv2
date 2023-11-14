@@ -30,6 +30,15 @@ class TrafficGuidanceScheme(UniqueNameableModel, DisplayNameableModel):
         return self.display_name
 
 
+class RoadOwner(UniqueNameableModel):
+    class Meta:
+        verbose_name_plural = "Road Owners"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
 class Road(UniqueNameableModel, DisplayNameableModel):
     class Meta:
         verbose_name_plural = "Roads"
@@ -38,7 +47,13 @@ class Road(UniqueNameableModel, DisplayNameableModel):
     traffic = models.ForeignKey(
         "Traffic", on_delete=models.PROTECT, null=True, blank=True
     )
-    owner = models.CharField(max_length=255, null=True, blank=True)
+    owner = models.ForeignKey(
+        "RoadOwner",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="roads",
+    )
     speed = IntervalIntegerField(
         min_value=0, max_value=130, null=True, blank=True
     )  # km/h

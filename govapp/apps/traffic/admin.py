@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from govapp.apps.traffic.models import Road, TrafficGuidanceScheme
+from govapp.apps.traffic.models import Road, RoadOwner, TrafficGuidanceScheme
 
 
 @admin.register(TrafficGuidanceScheme)
@@ -23,6 +23,13 @@ class TrafficGuidanceSchemeAdmin(admin.ModelAdmin):
         "active_to",
         "hyperlink",
     )
+    ordering = ("name",)
+
+
+@admin.register(RoadOwner)
+class RoadOwnerAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    search_fields = ("name",)
     ordering = ("name",)
 
 
