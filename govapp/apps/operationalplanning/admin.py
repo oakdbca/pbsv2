@@ -32,14 +32,16 @@ class OperationalAreaProgramInline(nested_admin.NestedTabularInline):
     extra = 0
 
 
-class SuccessCriteriaReportInline(nested_admin.NestedTabularInline):
+class SuccessCriteriaReportInline(nested_admin.NestedStackedInline):
     model = SuccessCriteriaReport
     extra = 0
     verbose_name = "Success criterion report"
     verbose_name_plural = "Success criterion reports"
 
-    class Meta:
-        pass
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
 
     list_display = (
         "name",
@@ -48,11 +50,27 @@ class SuccessCriteriaReportInline(nested_admin.NestedTabularInline):
         "result_achieved_ratio",
     )
 
-    fields = (
-        "name",
-        "display_name",
-        "result",
-        "result_achieved_ratio",
+    fieldsets = (
+        (
+            "Success criterion report",
+            {
+                "fields": (
+                    (
+                        "name",
+                        "display_name",
+                    ),
+                    (
+                        "result",
+                        "result_achieved_ratio",
+                    ),
+                ),
+                "classes": (
+                    "collapse",
+                    "less-dominant-style",
+                    "nested-inline-flex-container",
+                ),
+            },
+        ),
     )
 
 
@@ -91,15 +109,20 @@ class SuccessCriteriaInline(nested_admin.NestedStackedInline):
             "Success criterion",
             {
                 "fields": (
-                    "name",
-                    "display_name",
-                    "left_value",
-                    "comparison_operator",
-                    "right_value_or_free_text",
+                    (
+                        "name",
+                        "display_name",
+                    ),
+                    (
+                        "left_value",
+                        "comparison_operator",
+                        "right_value_or_free_text",
+                    ),
                 ),
                 "classes": (
                     "collapse",
                     "less-dominant-style",
+                    "nested-inline-flex-container",
                 ),
             },
         ),

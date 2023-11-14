@@ -11,3 +11,9 @@
   text-transform: unset;
   font-weight: normal;
 }
+
+/* Fix to nested stacked inlines not correctly displaying grouped fieldset fields in a row */
+.nested-inline-flex-container div.form-row {
+  display: flex;
+  flex-wrap: wrap;
+}

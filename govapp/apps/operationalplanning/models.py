@@ -403,13 +403,6 @@ class SuccessCriteria(UniqueNameableModel, DisplayNameableModel):
         null=True,
         blank=True,
     )
-    # report = models.ForeignKey(
-    #     SuccessCriteriaReport,
-    #     on_delete=models.CASCADE,
-    #     related_name="successcriteria",
-    #     null=True,
-    #     blank=True,
-    # )
 
 
 class Objective(UniqueNameableModel, DisplayNameableModel):
