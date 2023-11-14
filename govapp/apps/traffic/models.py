@@ -10,6 +10,26 @@ from govapp.apps.main.models import (
 )
 
 
+class TrafficGuidanceScheme(UniqueNameableModel, DisplayNameableModel):
+    class Meta:
+        verbose_name_plural = "Traffic Guidance Schemes"
+        ordering = ["name"]
+
+    road = models.ForeignKey(
+        "Road",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="trafficguidanceschemes",
+    )
+    active_from = models.DateField(null=True, blank=True)
+    active_to = models.DateField(null=True, blank=True)
+    hyperlink = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return self.display_name
+
+
 class Road(UniqueNameableModel, DisplayNameableModel):
     class Meta:
         verbose_name_plural = "Roads"
@@ -26,10 +46,10 @@ class Road(UniqueNameableModel, DisplayNameableModel):
     # traffic_guidance_scheme
 
     def __str__(self):
-        return self.name  # Road name
+        return self.display_name  # Road name
 
 
-class Traffic(UniqueNameableModel, TimeStampedModel):
+class Traffic(UniqueNameableModel, DisplayNameableModel, TimeStampedModel):
     class Meta:
         verbose_name_plural = "Traffic"
         ordering = ["name"]
@@ -39,4 +59,4 @@ class Traffic(UniqueNameableModel, TimeStampedModel):
     )  # Attached file will be copied to Traffic section in Implementation Plan
 
     def __str__(self):
-        return self.name
+        return self.display_name
