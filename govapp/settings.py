@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     "govapp.apps.operationalplanning",
     "govapp.apps.risk",
     "govapp.apps.swagger",
+    "govapp.apps.traffic",
     "govapp.apps.main",
     "rest_framework",
     "drf_spectacular",
