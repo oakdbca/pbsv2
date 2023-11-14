@@ -1,5 +1,5 @@
-from abc import ABCMeta, abstractmethod
-from typing import Any
+from abc import ABC, ABCMeta, abstractmethod
+from typing import Any, Generic, TypeVar
 
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -10,6 +10,7 @@ from django.db.models.fields.related_descriptors import ReverseManyToOneDescript
 from protected_media.models import ProtectedFileField
 
 model_type: Any = type(models.Model)
+T = TypeVar("T")
 
 
 class AbstractModelMeta(ABCMeta, model_type):
@@ -22,8 +23,8 @@ class YearField(models.IntegerField):
         super().__init__(*args, **kwargs)
 
 
-class IntervalIntegerField(models.IntegerField):
-    """An integer field that can have a min and max value (including both endpoints `[min,max]`-notation)"""
+class GenericIntervalField(ABC, models.Field, Generic[T]):
+    """A generic field class that accepts a min and max value (including both endpoints: `[min,max]`-notation)"""
 
     def __init__(
         self,
@@ -41,12 +42,24 @@ class IntervalIntegerField(models.IntegerField):
                 MaxValueValidator(max_value)
             ]
         self.min_value, self.max_value = min_value, max_value
-        super().__init__(*args, **kwargs)
+
+        self.field_class().__init__(self, *args, **kwargs)
 
     def formfield(self, **kwargs):
         defaults = {"min_value": self.min_value, "max_value": self.max_value}
         defaults.update(kwargs)
         return super().formfield(**defaults)
+
+    @abstractmethod
+    def field_class(self) -> type[T]:
+        raise NotImplementedError("Must implement method field_class")
+
+
+class IntervalIntegerField(
+    models.IntegerField, GenericIntervalField[models.IntegerField]
+):
+    def field_class(self):
+        return models.IntegerField
 
 
 class UniqueNameableModel(models.Model):
