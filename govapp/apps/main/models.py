@@ -256,14 +256,10 @@ class District(DisplayNameableModel, UniqueNameableModel):
 
 
 class Lga(DisplayNameableModel, UniqueNameableModel):
-    district = models.ForeignKey(
-        District, on_delete=models.CASCADE, null=False, blank=False
-    )
-
     operationalplanapprovals: ReverseManyToOneDescriptor
 
     class Meta:
-        ordering = ["district", "name"]
+        ordering = ["name"]
 
     def __str__(self):
         if not self.display_name:

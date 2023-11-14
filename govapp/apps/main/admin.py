@@ -40,7 +40,7 @@ class DistrictAdmin(DeleteRestrictedAdmin):
 
 
 class LgaAdmin(DeleteRestrictedAdmin):
-    list_display = ("id", "district", "name", "display_name")
+    list_display = ("id", "name", "display_name")
 
     def has_change_permission(
         self, request: HttpRequest, obj: Any | None = ...
