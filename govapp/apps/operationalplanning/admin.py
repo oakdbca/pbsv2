@@ -15,6 +15,7 @@ from .models import (
     OperationalPlanProgram,
     OperationalPlanPurpose,
     OperationalPlanRiskCategory,
+    OperationalPlanRiskCategoryContributingFactor,
     SuccessCriteria,
     SuccessCriteriaComparisonOperator,
     SuccessCriteriaLeftValue,
@@ -66,6 +67,34 @@ class SuccessCriteriaReportInline(nested_admin.NestedStackedInline):
                 ),
                 "classes": (
                     "collapse",
+                    "less-dominant-style",
+                    "nested-inline-flex-container",
+                ),
+            },
+        ),
+    )
+
+
+class OperationalPlanRiskCategoryContributingFactorInline(
+    nested_admin.NestedStackedInline
+):
+    model = OperationalPlanRiskCategoryContributingFactor
+    extra = 1
+    verbose_name = "Contributing factor"
+    verbose_name_plural = "Contributing factors"
+
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    fieldsets = (
+        (
+            "Contributing factor",
+            {
+                "fields": (("contributing_factor", "values_affected"),),
+                "classes": (
+                    "collapse in",
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),
@@ -252,6 +281,27 @@ class OperationalPlanRiskCategoryInline(nested_admin.NestedStackedInline):
     extra = 0
     verbose_name = "Risk category"
     verbose_name_plural = "Risk categories"
+
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    fieldsets = (
+        (
+            "Risk category",
+            {
+                "fields": (("risk_category",),),
+                "classes": (
+                    "collapse",
+                    "less-dominant-style",
+                    "nested-inline-flex-container",
+                ),
+            },
+        ),
+    )
+
+    inlines = [OperationalPlanRiskCategoryContributingFactorInline]
 
 
 class SelectWithOptionAttribute(forms.Select):

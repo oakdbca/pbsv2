@@ -147,8 +147,18 @@ class OperationalPlanRiskCategory(models.Model):
         ContributingFactor,
         related_name="risk_categories",
         editable=False,
-        # through=
+        through="OperationalPlanRiskCategoryContributingFactor",
+        through_fields=("operational_plan_risk_category", "contributing_factor"),
     )  # For each risk category one or more contributing factors can be selected
+
+
+class OperationalPlanRiskCategoryContributingFactor(models.Model):
+    operational_plan_risk_category = models.ForeignKey(
+        OperationalPlanRiskCategory, on_delete=models.CASCADE
+    )
+    contributing_factor = models.ForeignKey(
+        ContributingFactor, on_delete=models.CASCADE
+    )
     values_affected = models.TextField(null=True, blank=True)
 
 
