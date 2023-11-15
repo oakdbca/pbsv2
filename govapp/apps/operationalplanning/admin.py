@@ -250,6 +250,8 @@ class LegalApprovalAdmin(admin.ModelAdmin):
 class OperationalPlanRiskFactorInline(nested_admin.NestedStackedInline):
     model = OperationalPlanRiskFactor
     extra = 0
+    verbose_name = "Risk factor"
+    verbose_name_plural = "Risk factors"
 
 
 class SelectWithOptionAttribute(forms.Select):
@@ -527,6 +529,6 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         ObjectiveAndSuccessCriteriaInline,
         OperationalAreaPurposeInline,
         OperationalAreaProgramInline,
-        OperationalPlanApprovalInline,
         OperationalPlanRiskFactorInline,
+        OperationalPlanApprovalInline,
     ]
