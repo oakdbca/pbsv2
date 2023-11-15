@@ -16,5 +16,5 @@ class ContributingFactor(UniqueNameableModel, TimeStampedModel):
     factors = DecimalRangeField(default_bounds="[)", blank=True, null=True)  # type: ignore
 
 
-class RiskFactor(UniqueNameableModel, TimeStampedModel):
+class RiskCategory(UniqueNameableModel, TimeStampedModel):
     pass

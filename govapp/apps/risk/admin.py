@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from govapp.apps.main.admin import DeleteRestrictedAdmin
 
-from .models import ContributingFactor, RiskFactor
+from .models import ContributingFactor, RiskCategory
 
 
 @admin.register(ContributingFactor)
@@ -14,7 +14,7 @@ class ContributingFactorAdmin(DeleteRestrictedAdmin):
     )
 
 
-@admin.register(RiskFactor)
-class RiskFactorAdmin(DeleteRestrictedAdmin):
-    model = RiskFactor
+@admin.register(RiskCategory)
+class RiskCategoryAdmin(DeleteRestrictedAdmin):
+    model = RiskCategory
     list_display = ("name",)

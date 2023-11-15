@@ -17,7 +17,7 @@ from govapp.apps.main.models import (
     YearField,
     file_upload_location,
 )
-from govapp.apps.risk.models import ContributingFactor, RiskFactor
+from govapp.apps.risk.models import ContributingFactor, RiskCategory
 from govapp.apps.traffic.models import Traffic
 
 logger = getLogger(__name__)
@@ -138,18 +138,17 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         return self
 
 
-class OperationalPlanRiskFactor(models.Model):
+class OperationalPlanRiskCategory(models.Model):
     operational_plan = models.ForeignKey(
         "OperationalPlan", null=True, blank=True, on_delete=models.CASCADE
     )
-    risk_factor = models.ForeignKey(RiskFactor, on_delete=models.CASCADE)
-    contributing_factor = models.ForeignKey(
+    risk_category = models.ForeignKey(RiskCategory, on_delete=models.CASCADE)
+    contributing_factor: models.ManyToManyField = models.ManyToManyField(
         ContributingFactor,
-        null=True,
-        blank=True,
-        on_delete=models.PROTECT,
-        related_name="risk_factors",
-    )
+        related_name="risk_categories",
+        editable=False,
+        # through=
+    )  # For each risk category one or more contributing factors can be selected
     values_affected = models.TextField(null=True, blank=True)
 
 
@@ -251,7 +250,7 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         through_fields=("operational_plan", "legal_approval"),
         editable=False,
     )
-    # Risk Factors: OperationalAreaRiskFactor
+    # Risk Categories: OperationalPlanRiskCategory
 
     @property
     def risk_highest_level(self):

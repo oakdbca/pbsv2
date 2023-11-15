@@ -14,7 +14,7 @@ from .models import (
     OperationalPlanApproval,
     OperationalPlanProgram,
     OperationalPlanPurpose,
-    OperationalPlanRiskFactor,
+    OperationalPlanRiskCategory,
     SuccessCriteria,
     SuccessCriteriaComparisonOperator,
     SuccessCriteriaLeftValue,
@@ -247,11 +247,11 @@ class LegalApprovalAdmin(admin.ModelAdmin):
     )
 
 
-class OperationalPlanRiskFactorInline(nested_admin.NestedStackedInline):
-    model = OperationalPlanRiskFactor
+class OperationalPlanRiskCategoryInline(nested_admin.NestedStackedInline):
+    model = OperationalPlanRiskCategory
     extra = 0
-    verbose_name = "Risk factor"
-    verbose_name_plural = "Risk factors"
+    verbose_name = "Risk category"
+    verbose_name_plural = "Risk categories"
 
 
 class SelectWithOptionAttribute(forms.Select):
@@ -529,6 +529,6 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         ObjectiveAndSuccessCriteriaInline,
         OperationalAreaPurposeInline,
         OperationalAreaProgramInline,
-        OperationalPlanRiskFactorInline,
+        OperationalPlanRiskCategoryInline,
         OperationalPlanApprovalInline,
     ]
