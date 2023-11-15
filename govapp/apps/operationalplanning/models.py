@@ -240,6 +240,9 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         related_name="operational_plans",
     )
 
+    # Burn Values List
+    # TODO Sections, Questions, Actions
+
     # Legal / Approvals
     legal_approvals: models.ManyToManyField = models.ManyToManyField(
         LegalApproval,
