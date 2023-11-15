@@ -12,16 +12,14 @@ class TrafficGuidanceSchemeAdmin(admin.ModelAdmin):
         "id",
         "name",
         "display_name",
-        "road",
         "active_from",
         "active_to",
         "hyperlink",
     )
-    list_filter = ("road",)
+
     search_fields = (
         "name",
         "display_name",
-        "road",
         "active_from",
         "active_to",
         "hyperlink",
@@ -38,49 +36,6 @@ class TrafficGuidanceSchemeForm(forms.ModelForm):
             "active_to": "Assigned from the active-period of the linked document",
             "hyperlink": "The Traffic Guidance Scheme PDF document",
         }
-
-
-class TrafficGuidanceSchemeInline(nested_admin.NestedStackedInline):
-    model = TrafficGuidanceScheme
-    extra = 0
-    form = TrafficGuidanceSchemeForm
-
-    class Media:
-        css = {
-            "all": ["admin/class_media/css/inline_fieldsets.css"],
-        }
-
-    list_display = (
-        "id",
-        "name",
-        "display_name",
-        "active_from",
-        "active_to",
-        "hyperlink",
-    )
-
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    (
-                        "name",
-                        "display_name",
-                    ),
-                    (
-                        "active_from",
-                        "active_to",
-                    ),
-                    "hyperlink",
-                ),
-                "classes": (
-                    "less-dominant-style",
-                    "nested-inline-flex-container",
-                ),
-            },
-        ),
-    )
 
 
 @admin.register(RoadOwner)
@@ -131,8 +86,6 @@ class RoadInline(nested_admin.NestedStackedInline):
         ),
     )
 
-    inlines = [TrafficGuidanceSchemeInline]
-
 
 @admin.register(Road)
 class RoadAdmin(NestedDeleteRestrictedAdmin):
@@ -152,8 +105,6 @@ class RoadAdmin(NestedDeleteRestrictedAdmin):
         "shoulder_width",
     )
     ordering = ("name",)
-
-    inlines = [TrafficGuidanceSchemeInline]
 
 
 @admin.register(Traffic)

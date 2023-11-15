@@ -15,13 +15,6 @@ class TrafficGuidanceScheme(UniqueNameableModel, DisplayNameableModel):
         verbose_name_plural = "Traffic Guidance Schemes"
         ordering = ["name"]
 
-    road = models.ForeignKey(
-        "Road",
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        related_name="trafficguidanceschemes",
-    )
     active_from = models.DateField(null=True, blank=True)
     active_to = models.DateField(null=True, blank=True)
     hyperlink = models.URLField(null=True, blank=True)
@@ -50,12 +43,18 @@ class Road(UniqueNameableModel, DisplayNameableModel):
         null=True,
         blank=True,
         related_name="roads",
-    )
+    )  # Single-select dropdown
     speed = IntervalIntegerField(
         min_value=0, max_value=130, null=True, blank=True
     )  # km/h
     shoulder_width = models.FloatField(null=True, blank=True)
-    # traffic_guidance_scheme
+    traffic_guidance_scheme = models.ForeignKey(
+        "TrafficGuidanceScheme",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="roads",
+    )  # Single-select dropdown
 
     def __str__(self):
         return self.display_name  # Road name
