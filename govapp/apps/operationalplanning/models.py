@@ -138,9 +138,9 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         return self
 
 
-class OperationalAreaRiskFactor(models.Model):
-    operational_area = models.ForeignKey(
-        OperationalArea, null=True, blank=True, on_delete=models.CASCADE
+class OperationalPlanRiskFactor(models.Model):
+    operational_plan = models.ForeignKey(
+        "OperationalPlan", null=True, blank=True, on_delete=models.CASCADE
     )
     risk_factor = models.ForeignKey(RiskFactor, on_delete=models.CASCADE)
     contributing_factor = models.ForeignKey(

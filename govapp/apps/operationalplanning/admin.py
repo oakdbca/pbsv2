@@ -10,11 +10,11 @@ from .models import (
     Objective,
     ObjectiveAndSuccessCriteria,
     OperationalArea,
-    OperationalAreaRiskFactor,
     OperationalPlan,
     OperationalPlanApproval,
     OperationalPlanProgram,
     OperationalPlanPurpose,
+    OperationalPlanRiskFactor,
     SuccessCriteria,
     SuccessCriteriaComparisonOperator,
     SuccessCriteriaLeftValue,
@@ -247,8 +247,8 @@ class LegalApprovalAdmin(admin.ModelAdmin):
     )
 
 
-class OperationalAreaRiskFactorInline(admin.TabularInline):
-    model = OperationalAreaRiskFactor
+class OperationalPlanRiskFactorInline(nested_admin.NestedStackedInline):
+    model = OperationalPlanRiskFactor
     extra = 0
 
 
@@ -448,8 +448,6 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
         ),
     )
 
-    inlines = [OperationalAreaRiskFactorInline]
-
 
 class OperationalPlanAdminForm(forms.ModelForm):
     class Meta:
@@ -530,4 +528,5 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         OperationalAreaPurposeInline,
         OperationalAreaProgramInline,
         OperationalPlanApprovalInline,
+        OperationalPlanRiskFactorInline,
     ]
