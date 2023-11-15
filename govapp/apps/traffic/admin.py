@@ -3,7 +3,13 @@ from django import forms
 from django.contrib import admin
 
 from govapp.apps.main.admin import NestedDeleteRestrictedAdmin
-from govapp.apps.traffic.models import Road, RoadOwner, Traffic, TrafficGuidanceScheme
+from govapp.apps.traffic.models import (
+    Road,
+    RoadOwner,
+    Traffic,
+    TrafficGuidanceScheme,
+    TrafficRequiredArrangement,
+)
 
 
 @admin.register(TrafficGuidanceScheme)
@@ -87,6 +93,65 @@ class RoadInline(nested_admin.NestedStackedInline):
     )
 
 
+@admin.register(TrafficRequiredArrangement)
+class TrafficRequiredArrangementAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "traffic_guidance_scheme",
+        "date_of_installation",
+    )
+    search_fields = ("display_name",)
+
+    ordering = ("date_of_installation",)
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "traffic_guidance_scheme",
+                    "map_pin",
+                    "date_of_installation",
+                    "traffic",
+                ),
+            },
+        ),
+    )
+
+    readonly_fields = ("traffic",)
+
+
+class TrafficRequiredArrangementInline(nested_admin.NestedStackedInline):
+    model = TrafficRequiredArrangement
+    extra = 0
+
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    list_display = (
+        "id",
+        "traffic_guidance_scheme",
+        "date_of_installation",
+    )
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "traffic_guidance_scheme",
+                    "map_pin",
+                    "date_of_installation",
+                    "traffic",
+                ),
+            },
+        ),
+    )
+
+    readonly_fields = ("traffic",)
+
+
 @admin.register(Road)
 class RoadAdmin(NestedDeleteRestrictedAdmin):
     list_display = (
@@ -145,3 +210,5 @@ class TrafficAdmin(NestedDeleteRestrictedAdmin):
             },
         ),
     )
+
+    inlines = [TrafficRequiredArrangementInline]
