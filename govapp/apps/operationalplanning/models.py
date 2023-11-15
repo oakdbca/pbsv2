@@ -370,7 +370,7 @@ class SuccessCriteriaReport(UniqueNameableModel, DisplayNameableModel):
     RESULTS = Choices(
         ("achieved", "Achieved"),
         ("not_achieved", "Not Achieved"),
-        ("not_ started", "Not Started"),
+        ("not_started", "Not Started"),
     )
     result = models.CharField(
         max_length=255,
