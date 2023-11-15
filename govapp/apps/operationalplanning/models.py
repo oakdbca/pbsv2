@@ -18,6 +18,7 @@ from govapp.apps.main.models import (
     file_upload_location,
 )
 from govapp.apps.risk.models import ContributingFactor, RiskFactor
+from govapp.apps.traffic.models import Traffic
 
 logger = getLogger(__name__)
 
@@ -229,6 +230,15 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     )
 
     # Objectives and Success Criteria: ObjectiveAndSuccessCriteria
+
+    # Traffic
+    traffic = models.ForeignKey(
+        Traffic,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="operational_plans",
+    )
 
     # Legal / Approvals
     legal_approvals: models.ManyToManyField = models.ManyToManyField(

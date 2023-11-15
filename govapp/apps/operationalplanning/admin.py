@@ -515,6 +515,12 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
                 ),
             },
         ),
+        (
+            "Traffic",
+            {
+                "fields": ("traffic",),
+            },
+        ),
     )
 
     readonly_fields = ("reference_number", "created", "modified")
