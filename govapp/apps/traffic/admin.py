@@ -103,7 +103,6 @@ class RoadInline(nested_admin.NestedStackedInline):
         "id",
         "name",
         "display_name",
-        "traffic",
         "owner",
         "speed",
         "shoulder_width",
@@ -118,10 +117,7 @@ class RoadInline(nested_admin.NestedStackedInline):
                         "name",
                         "display_name",
                     ),
-                    (
-                        "traffic",
-                        "owner",
-                    ),
+                    ("owner",),
                     (
                         "speed",
                         "shoulder_width",
@@ -144,16 +140,13 @@ class RoadAdmin(NestedDeleteRestrictedAdmin):
         "id",
         "name",
         "display_name",
-        "traffic",
         "owner",
         "speed",
         "shoulder_width",
     )
-    list_filter = ("traffic",)
     search_fields = (
         "name",
         "display_name",
-        "traffic",
         "owner",
         "speed",
         "shoulder_width",
@@ -165,8 +158,39 @@ class RoadAdmin(NestedDeleteRestrictedAdmin):
 
 @admin.register(Traffic)
 class TrafficAdmin(NestedDeleteRestrictedAdmin):
-    list_display = ("id", "name", "display_name")
-    search_fields = ("name", "display_name", "indicative_traffic_management_scheme")
+    list_display = (
+        "id",
+        "name",
+        "display_name",
+        "indicative_traffic_management_scheme",
+    )
+    search_fields = (
+        "name",
+        "display_name",
+    )
     ordering = ("name",)
 
-    inlines = [RoadInline]
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    (
+                        "name",
+                        "display_name",
+                    ),
+                    ("indicative_traffic_management_scheme",),
+                    "roads",
+                ),
+                "classes": (
+                    "less-dominant-style",
+                    "nested-inline-flex-container",
+                ),
+            },
+        ),
+    )

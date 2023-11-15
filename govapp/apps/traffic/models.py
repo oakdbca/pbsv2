@@ -44,9 +44,6 @@ class Road(UniqueNameableModel, DisplayNameableModel):
         verbose_name_plural = "Roads"
         ordering = ["name"]
 
-    traffic = models.ForeignKey(
-        "Traffic", on_delete=models.PROTECT, null=True, blank=True
-    )
     owner = models.ForeignKey(
         "RoadOwner",
         on_delete=models.PROTECT,
@@ -72,6 +69,9 @@ class Traffic(UniqueNameableModel, DisplayNameableModel, TimeStampedModel):
     indicative_traffic_management_scheme = ProtectedFileField(
         upload_to=file_upload_location, null=True, blank=True
     )  # Attached file will be copied to Traffic section in Implementation Plan
+    roads: models.ManyToManyField = models.ManyToManyField(
+        "Road", blank=True, related_name="traffics"
+    )
 
     def __str__(self):
         return self.display_name
