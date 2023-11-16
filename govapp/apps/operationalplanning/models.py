@@ -2,6 +2,7 @@ from logging import getLogger
 
 from django.contrib.gis.db.models import MultiLineStringField, MultiPolygonField
 from django.db import models
+from django.forms import ValidationError
 from model_utils import Choices
 from model_utils.models import TimeStampedModel
 from protected_media.models import ProtectedFileField
@@ -171,6 +172,19 @@ class OperationalPlanRiskCategoryContributingFactorControlOverwrite(models.Model
         on_delete=models.CASCADE,
         related_name="operational_plan_risk_category_contributing_factor_control_overwrites",
     )
+
+    def clean(self):
+        standard_controls = (
+            self.operational_plan_risk_category_contributing_factor.contributing_factor.standard_controls.all()
+        )
+        if standard_controls.exists() is False:
+            raise ValidationError(
+                "Contributing factor has no standard controls to overwrite"
+            )
+        if standard_controls.contains(self.overwrite_control.standard_control) is False:
+            raise ValidationError(
+                "Overwrite control must be of the same types as contributing factor's standard controls"
+            )
 
 
 class OperationalPlanRiskCategoryContributingFactor(models.Model):
