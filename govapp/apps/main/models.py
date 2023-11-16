@@ -107,6 +107,19 @@ class DisplayNameableModel(models.Model):
         return self.display_name
 
 
+class OrdinalScaleModel(NameableModel):
+    """A model that allows to associate a scalable value with a qualitative name"""
+
+    ordinal_scale = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+        unique_together = ("name", "ordinal_scale")
+
+    def __str__(self):
+        return f"{self.name} ({self.ordinal_scale})"
+
+
 class ReferenceableModel(models.Model):
     reference_number = models.CharField(
         max_length=9, null=True, blank=True, editable=False

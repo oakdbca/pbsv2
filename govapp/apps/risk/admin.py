@@ -5,10 +5,14 @@ from django.contrib import admin
 from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
 
 from .models import (
+    Consequence,
     ContributingFactor,
     ContributingFactorStandardControl,
+    Likelihood,
+    LikelihoodOfConsequence,
     OverwriteControl,
     RiskCategory,
+    RiskLevel,
     StandardControl,
 )
 
@@ -60,3 +64,27 @@ class ContributingFactorAdmin(NestedDeleteRestrictedAdmin):
 class RiskCategoryAdmin(DeleteRestrictedAdmin):
     model = RiskCategory
     list_display = ("name",)
+
+
+@admin.register(Consequence)
+class ConsequenceAdmin(DeleteRestrictedAdmin):
+    model = Consequence
+    list_display = ("name",)
+
+
+@admin.register(Likelihood)
+class LikelihoodAdmin(DeleteRestrictedAdmin):
+    model = Likelihood
+    list_display = ("name", "ordinal_scale")
+
+
+@admin.register(RiskLevel)
+class RiskLevelAdmin(DeleteRestrictedAdmin):
+    model = RiskLevel
+    list_display = ("name", "ordinal_scale", "requires_additional_controls")
+
+
+@admin.register(LikelihoodOfConsequence)
+class LikelihoodOfConsequenceAdmin(DeleteRestrictedAdmin):
+    model = LikelihoodOfConsequence
+    list_display = ("consequence", "likelihood", "risk_level")

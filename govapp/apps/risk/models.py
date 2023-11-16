@@ -4,7 +4,7 @@ from django.contrib.postgres.fields import DecimalRangeField
 from django.db import models
 from model_utils.models import TimeStampedModel
 
-from govapp.apps.main.models import UniqueNameableModel
+from govapp.apps.main.models import OrdinalScaleModel, UniqueNameableModel
 
 logger = getLogger(__name__)
 
@@ -72,3 +72,41 @@ class ContributingFactor(UniqueNameableModel, TimeStampedModel):
 
 class RiskCategory(UniqueNameableModel, TimeStampedModel):
     pass
+
+
+class Consequence(UniqueNameableModel):
+    pass
+
+
+class Likelihood(OrdinalScaleModel):
+    # lower_bound = IntervalFloatField(
+    #     min_value=0.0, max_value=1.0, null=True, blank=True
+    # )
+    # upper_bound = IntervalFloatField(
+    #     min_value=0.0, max_value=1.0, null=True, blank=True
+    # )
+
+    def __str__(self):
+        return f"{self.name} ({self.ordinal_scale})"
+
+
+class RiskLevel(OrdinalScaleModel):
+    requires_additional_controls = models.BooleanField(default=False)
+
+
+class LikelihoodOfConsequence(models.Model):
+    consequence = models.ForeignKey(
+        "Consequence",
+        on_delete=models.PROTECT,
+        related_name="likelihood_of_consequence",
+    )
+    likelihood = models.ForeignKey(
+        "Likelihood",
+        on_delete=models.PROTECT,
+        related_name="likelihood_of_consequence",
+    )
+    risk_level = models.ForeignKey(
+        "RiskLevel",
+        on_delete=models.PROTECT,
+        related_name="likelihood_of_consequence",
+    )
