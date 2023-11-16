@@ -1,7 +1,8 @@
+import nested_admin
 from django import forms
 from django.contrib import admin
 
-from govapp.apps.main.admin import DeleteRestrictedAdmin
+from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
 
 from .models import (
     ContributingFactor,
@@ -17,7 +18,7 @@ class StandardControlAdmin(DeleteRestrictedAdmin):
     list_display = ("name",)
 
 
-class ContributingFactorStandardControlInline(admin.TabularInline):
+class ContributingFactorStandardControlInline(nested_admin.NestedTabularInline):
     model = ContributingFactorStandardControl
     extra = 0
 
@@ -34,7 +35,7 @@ class ContributingFactorForm(forms.ModelForm):
 
 
 @admin.register(ContributingFactor)
-class ContributingFactorAdmin(DeleteRestrictedAdmin):
+class ContributingFactorAdmin(NestedDeleteRestrictedAdmin):
     model = ContributingFactor
     form = ContributingFactorForm
 

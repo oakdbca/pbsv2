@@ -14,6 +14,11 @@ class StandardControl(UniqueNameableModel, TimeStampedModel):
 
 
 class ContributingFactorStandardControl(models.Model):
+    class Meta:
+        unique_together = ("contributing_factor", "standard_control")
+        verbose_name = "Standard Control Default Value"
+        verbose_name_plural = "Standard Control Default Values"
+
     contributing_factor = models.ForeignKey(
         "ContributingFactor",
         on_delete=models.PROTECT,
@@ -24,7 +29,9 @@ class ContributingFactorStandardControl(models.Model):
         on_delete=models.PROTECT,
         related_name="contributing_factor_standard_controls",
     )
-    revisit_in_implementation_plan = models.BooleanField(default=False)
+    revisit_in_implementation_plan = models.BooleanField(
+        default=False
+    )  # Whether control can be revisited in Implementation Plan
 
 
 class ContributingFactor(UniqueNameableModel, TimeStampedModel):

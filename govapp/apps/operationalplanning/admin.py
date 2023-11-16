@@ -4,6 +4,7 @@ from django.contrib import admin
 from model_utils import Choices
 
 from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
+from govapp.apps.risk.models import ContributingFactorStandardControl
 
 from .models import (
     LegalApproval,
@@ -88,19 +89,41 @@ class OperationalPlanRiskCategoryContributingFactorInline(
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
 
+    list_display = ("contributing_factor", "values_affected", "standard_controls")
+
+    readonly_fields = ("standard_controls",)
     fieldsets = (
         (
             "Contributing factor",
             {
-                "fields": (("contributing_factor", "values_affected"),),
+                "fields": (
+                    (
+                        "contributing_factor",
+                        "values_affected",
+                    ),
+                    ("standard_controls",),
+                ),
                 "classes": (
-                    "collapse in",
+                    "collapse",
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),
             },
         ),
     )
+
+    def standard_controls(self, obj):
+        """Return a list of standard controls for the contributing factor for purpose of display."""
+        if not obj.contributing_factor_id:
+            return ""
+        return "\n".join(
+            [
+                f"{cs.standard_control.name}, can revisit in IP: {cs.revisit_in_implementation_plan}"
+                for cs in ContributingFactorStandardControl.objects.filter(
+                    contributing_factor_id=obj.contributing_factor_id
+                ).all()
+            ]
+        )
 
 
 class SuccessCriteriaInlineForm(forms.ModelForm):
