@@ -35,6 +35,9 @@ class OverwriteControl(Control):
         related_name="overwrite_controls",
     )
 
+    def __str__(self):
+        return f"{self.name} (overwrites {self.standard_control.name})"
+
 
 class ContributingFactorStandardControl(models.Model):
     class Meta:

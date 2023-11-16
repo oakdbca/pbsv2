@@ -17,7 +17,7 @@ from govapp.apps.main.models import (
     YearField,
     file_upload_location,
 )
-from govapp.apps.risk.models import ContributingFactor, RiskCategory
+from govapp.apps.risk.models import ContributingFactor, OverwriteControl, RiskCategory
 from govapp.apps.traffic.models import Traffic
 
 logger = getLogger(__name__)
@@ -152,6 +152,27 @@ class OperationalPlanRiskCategory(models.Model):
     )  # For each risk category one or more contributing factors can be selected
 
 
+class OperationalPlanRiskCategoryContributingFactorControlOverwrite(models.Model):
+    class Meta:
+        verbose_name = "Standard Control Overwrite"
+        verbose_name_plural = "Standard Control Overwrites"
+        unique_together = (
+            "operational_plan_risk_category_contributing_factor",
+            "overwrite_control",
+        )
+
+    operational_plan_risk_category_contributing_factor = models.ForeignKey(
+        "OperationalPlanRiskCategoryContributingFactor",
+        on_delete=models.CASCADE,
+        related_name="operational_plan_risk_category_contributing_factor_control_overwrites",
+    )
+    overwrite_control = models.ForeignKey(
+        OverwriteControl,
+        on_delete=models.CASCADE,
+        related_name="operational_plan_risk_category_contributing_factor_control_overwrites",
+    )
+
+
 class OperationalPlanRiskCategoryContributingFactor(models.Model):
     operational_plan_risk_category = models.ForeignKey(
         OperationalPlanRiskCategory, on_delete=models.CASCADE
@@ -160,6 +181,16 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         ContributingFactor, on_delete=models.CASCADE
     )
     values_affected = models.TextField(null=True, blank=True)
+    contributing_factor_control_overwrites: models.ManyToManyField = models.ManyToManyField(
+        OverwriteControl,
+        related_name="operational_plan_risk_category_contributing_factors",
+        editable=False,
+        through="OperationalPlanRiskCategoryContributingFactorControlOverwrite",
+        through_fields=(
+            "operational_plan_risk_category_contributing_factor",
+            "overwrite_control",
+        ),
+    )  # In IP the standard control contributing factors can be overwritten if revisit_in_implementation_plan is set
 
 
 class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
