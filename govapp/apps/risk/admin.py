@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 
 from govapp.apps.main.admin import DeleteRestrictedAdmin
@@ -21,9 +22,22 @@ class ContributingFactorStandardControlInline(admin.TabularInline):
     extra = 0
 
 
+class ContributingFactorForm(forms.ModelForm):
+    class Meta:
+        model = ContributingFactor
+        fields = "__all__"
+        help_texts = {
+            "factors": "The interval this contributing factor covers, "
+            "including the lower and excluding the upper bound. "
+            "Empty values means no bound.",
+        }
+
+
 @admin.register(ContributingFactor)
 class ContributingFactorAdmin(DeleteRestrictedAdmin):
     model = ContributingFactor
+    form = ContributingFactorForm
+
     list_display = (
         "name",
         "factors",
