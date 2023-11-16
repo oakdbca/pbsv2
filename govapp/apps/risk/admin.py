@@ -7,6 +7,7 @@ from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestricted
 from .models import (
     ContributingFactor,
     ContributingFactorStandardControl,
+    OverwriteControl,
     RiskCategory,
     StandardControl,
 )
@@ -16,6 +17,12 @@ from .models import (
 class StandardControlAdmin(DeleteRestrictedAdmin):
     model = StandardControl
     list_display = ("name",)
+
+
+@admin.register(OverwriteControl)
+class OverwriteControlAdmin(DeleteRestrictedAdmin):
+    model = OverwriteControl
+    list_display = ("name", "standard_control")
 
 
 class ContributingFactorStandardControlInline(nested_admin.NestedTabularInline):

@@ -9,8 +9,31 @@ from govapp.apps.main.models import UniqueNameableModel
 logger = getLogger(__name__)
 
 
-class StandardControl(UniqueNameableModel, TimeStampedModel):
-    pass
+class Control(UniqueNameableModel, TimeStampedModel):
+    class Meta:
+        abstract = True
+
+
+class StandardControl(Control):
+    """Control that can be configured in the admin panel"""
+
+    class Meta:
+        verbose_name = "Control (Standard)"
+        verbose_name_plural = "Controls (Standard)"
+
+
+class OverwriteControl(Control):
+    """Control to overwrite the default value of a standard control"""
+
+    class Meta:
+        verbose_name = "Control (Overwrite)"
+        verbose_name_plural = "Controls (Overwrite)"
+
+    standard_control = models.ForeignKey(
+        "StandardControl",
+        on_delete=models.PROTECT,
+        related_name="overwrite_controls",
+    )
 
 
 class ContributingFactorStandardControl(models.Model):
