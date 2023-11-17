@@ -18,6 +18,7 @@ from .models import (
     OperationalPlanRiskCategory,
     OperationalPlanRiskCategoryContributingFactor,
     OperationalPlanRiskCategoryContributingFactorControlOverwrite,
+    OperationalPlanRiskCategoryContributingFactorRiskRating,
     SuccessCriteria,
     SuccessCriteriaComparisonOperator,
     SuccessCriteriaLeftValue,
@@ -84,6 +85,13 @@ class OperationalPlanRiskCategoryContributingFactorControlOverwriteInline(
     extra = 0
 
 
+class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
+    nested_admin.NestedStackedInline
+):
+    model = OperationalPlanRiskCategoryContributingFactorRiskRating
+    extra = 0
+
+
 class OperationalPlanRiskCategoryContributingFactorInline(
     nested_admin.NestedStackedInline
 ):
@@ -120,7 +128,10 @@ class OperationalPlanRiskCategoryContributingFactorInline(
         ),
     )
 
-    inlines = [OperationalPlanRiskCategoryContributingFactorControlOverwriteInline]
+    inlines = [
+        OperationalPlanRiskCategoryContributingFactorControlOverwriteInline,
+        OperationalPlanRiskCategoryContributingFactorRiskRatingInline,
+    ]
 
     def standard_controls(self, obj):
         """Return a list of standard controls for the contributing factor for purpose of display."""

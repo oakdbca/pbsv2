@@ -139,3 +139,6 @@ class RiskRating(models.Model):
         return LikelihoodOfConsequence.objects.get(
             consequence=self.consequence, likelihood=self.likelihood
         ).risk_level
+
+    def __str__(self):
+        return f"{self.consequence.name} - Occurrence: {self.likelihood.name} (Risk level: {self.risk_level})"

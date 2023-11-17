@@ -13,6 +13,7 @@ from .models import (
     OverwriteControl,
     RiskCategory,
     RiskLevel,
+    RiskRating,
     StandardControl,
 )
 
@@ -88,3 +89,12 @@ class RiskLevelAdmin(DeleteRestrictedAdmin):
 class LikelihoodOfConsequenceAdmin(DeleteRestrictedAdmin):
     model = LikelihoodOfConsequence
     list_display = ("consequence", "likelihood", "risk_level")
+
+
+@admin.register(RiskRating)
+class RiskRatingAdmin(DeleteRestrictedAdmin):
+    model = RiskRating
+    list_display = ("consequence", "likelihood", "risk_level")
+
+    fields = ("consequence", "likelihood", "risk_level")
+    readonly_fields = ("risk_level",)
