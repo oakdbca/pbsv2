@@ -6,7 +6,7 @@ from model_utils import Choices
 from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
 from govapp.apps.risk.models import ContributingFactorStandardControl
 
-from .models import (  # OperationalPlanRiskCategoryContributingFactorRiskRating,
+from .models import (
     LegalApproval,
     Objective,
     ObjectiveAndSuccessCriteria,
@@ -94,13 +94,28 @@ class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
     list_display = (
         "operational_plan_risk_category_contributing_factor",
         "risk_rating",
+        "control_type",
         "requires_additional_controls",
     )
 
-    fields = (
-        "operational_plan_risk_category_contributing_factor",
-        "risk_rating",
-        "requires_additional_controls",
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    (
+                        "operational_plan_risk_category_contributing_factor",
+                        "risk_rating",
+                        "control_type",
+                        "requires_additional_controls",
+                    ),
+                ),
+                "classes": (
+                    "less-dominant-style",
+                    "nested-inline-flex-container",
+                ),
+            },
+        ),
     )
 
     readonly_fields = ("requires_additional_controls",)
@@ -124,9 +139,14 @@ class OperationalPlanRiskCategoryContributingFactorInline(
         "values_affected",
         "standard_controls",
         "requires_additional_controls",
+        "risk_rating_standard",
+        "standard_control_risk_level_requires_additional_controls",
     )
 
-    readonly_fields = ("standard_controls",)
+    readonly_fields = (
+        "standard_controls",
+        "standard_control_risk_level_requires_additional_controls",
+    )
     fieldsets = (
         (
             "Contributing factor",
@@ -136,10 +156,25 @@ class OperationalPlanRiskCategoryContributingFactorInline(
                         "contributing_factor",
                         "values_affected",
                     ),
-                    ("standard_controls",),
                 ),
                 "classes": (
                     "collapse",
+                    "less-dominant-style",
+                    "nested-inline-flex-container",
+                ),
+            },
+        ),
+        (
+            "Standard controls",
+            {
+                "fields": (
+                    ("standard_controls",),
+                    (
+                        "risk_rating_standard",
+                        "standard_control_risk_level_requires_additional_controls",
+                    ),
+                ),
+                "classes": (
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),

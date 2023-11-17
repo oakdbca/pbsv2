@@ -210,6 +210,14 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
             "overwrite_control",
         ),
     )  # In IP the standard control contributing factors can be overwritten if revisit_in_implementation_plan is set
+    risk_rating_standard = models.ForeignKey(
+        RiskRating,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="operational_plan_risk_category_contributing_factors_for_standard_controls",
+    )  # Risk rating after application of standard controls
+
     risk_ratings: models.ManyToManyField = models.ManyToManyField(
         RiskRating,
         related_name="operational_plan_risk_category_contributing_factors",
@@ -224,8 +232,12 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
     # additional controls
 
     @property
-    def standard_controls(self):
+    def standard_control_risk_ratings(self):
         return self.contributing_factor.standard_controls.all()
+
+    @property
+    def standard_control_risk_level_requires_additional_controls(self):
+        return self.risk_rating_standard.risk_level.requires_additional_controls
 
 
 class OperationalPlanRiskCategoryContributingFactorRiskRating(models.Model):
@@ -233,10 +245,17 @@ class OperationalPlanRiskCategoryContributingFactorRiskRating(models.Model):
         verbose_name = "Risk Rating"
         verbose_name_plural = "Risk Ratings"
 
-    # CONTROL_TYPES = Choices(
-    #     ("standard", "Standard"),
-    #     ("additional", "Additional"),
-    # )
+    CONTROL_TYPES = Choices(
+        ("standard", "Standard Control"),
+        ("additional", "Additional Control"),
+    )
+    control_type = models.CharField(
+        max_length=255,
+        choices=CONTROL_TYPES,
+        null=False,
+        blank=False,
+        default="standard",
+    )
     operational_plan_risk_category_contributing_factor = models.ForeignKey(
         OperationalPlanRiskCategoryContributingFactor,
         on_delete=models.CASCADE,
@@ -250,11 +269,12 @@ class OperationalPlanRiskCategoryContributingFactorRiskRating(models.Model):
         related_name="operational_plan_risk_category_contributing_factor_risk_ratings",
     )
 
+    def __str__(self):
+        return f"{self.control_type} {self.risk_rating}"
+
     @property
     def requires_additional_controls(self):
-        # self.risk_rating_after_standard_controls.requires_additional_control
-        self.operational_plan_risk_category_contributing_factor.contributing_factor
-        return True
+        return self.risk_rating.risk_level.requires_additional_controls
 
 
 class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
