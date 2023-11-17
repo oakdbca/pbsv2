@@ -18,14 +18,7 @@ from govapp.apps.main.models import (
     YearField,
     file_upload_location,
 )
-from govapp.apps.risk.models import (
-    Consequence,
-    ContributingFactor,
-    Likelihood,
-    LikelihoodOfConsequence,
-    OverwriteControl,
-    RiskCategory,
-)
+from govapp.apps.risk.models import ContributingFactor, OverwriteControl, RiskCategory
 from govapp.apps.traffic.models import Traffic
 
 logger = getLogger(__name__)
@@ -215,18 +208,7 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
 
 
 class OperationalPlanRiskRating(models.Model):
-    consequence = models.ForeignKey(
-        Consequence, on_delete=models.CASCADE, null=True, blank=True
-    )
-    likelihood = models.ForeignKey(
-        Likelihood, on_delete=models.CASCADE, null=True, blank=True
-    )
-
-    @property
-    def risk_level(self):
-        return LikelihoodOfConsequence.objects.get(
-            consequence=self.consequence, likelihood=self.likelihood
-        ).risk_level
+    pass
 
 
 class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel):

@@ -110,3 +110,18 @@ class LikelihoodOfConsequence(models.Model):
         on_delete=models.PROTECT,
         related_name="likelihood_of_consequence",
     )
+
+
+class RiskRating(models.Model):
+    consequence = models.ForeignKey(
+        Consequence, on_delete=models.CASCADE, null=True, blank=True
+    )
+    likelihood = models.ForeignKey(
+        Likelihood, on_delete=models.CASCADE, null=True, blank=True
+    )
+
+    @property
+    def risk_level(self):
+        return LikelihoodOfConsequence.objects.get(
+            consequence=self.consequence, likelihood=self.likelihood
+        ).risk_level
