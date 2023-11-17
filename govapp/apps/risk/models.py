@@ -39,6 +39,20 @@ class OverwriteControl(Control):
         return f"{self.name} (overwrites {self.standard_control.name})"
 
 
+class AdditionalControl(Control):
+    """Control that is only available when the resulting risk level of a risk assessment
+    is configured as 'additional controls required'"""
+
+    text = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Control (Additional)"
+        verbose_name_plural = "Controls (Additional)"
+
+    def __str__(self):
+        return self.text
+
+
 class ContributingFactorStandardControl(models.Model):
     class Meta:
         unique_together = ("contributing_factor", "standard_control")
