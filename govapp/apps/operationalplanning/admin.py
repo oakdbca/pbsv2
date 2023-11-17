@@ -94,7 +94,6 @@ class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
     list_display = (
         "operational_plan_risk_category_contributing_factor",
         "risk_rating",
-        "control_type",
         "requires_additional_controls",
     )
 
@@ -106,7 +105,6 @@ class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
                     (
                         "operational_plan_risk_category_contributing_factor",
                         "risk_rating",
-                        "control_type",
                         "requires_additional_controls",
                     ),
                 ),

@@ -218,7 +218,7 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         related_name="operational_plan_risk_category_contributing_factors_for_standard_controls",
     )  # Risk rating after application of standard controls
 
-    risk_ratings: models.ManyToManyField = models.ManyToManyField(
+    risk_ratings_additional: models.ManyToManyField = models.ManyToManyField(
         RiskRating,
         related_name="operational_plan_risk_category_contributing_factors",
         through="OperationalPlanRiskCategoryContributingFactorRiskRating",
@@ -245,17 +245,6 @@ class OperationalPlanRiskCategoryContributingFactorRiskRating(models.Model):
         verbose_name = "Risk Rating"
         verbose_name_plural = "Risk Ratings"
 
-    CONTROL_TYPES = Choices(
-        ("standard", "Standard Control"),
-        ("additional", "Additional Control"),
-    )
-    control_type = models.CharField(
-        max_length=255,
-        choices=CONTROL_TYPES,
-        null=False,
-        blank=False,
-        default="standard",
-    )
     operational_plan_risk_category_contributing_factor = models.ForeignKey(
         OperationalPlanRiskCategoryContributingFactor,
         on_delete=models.CASCADE,
