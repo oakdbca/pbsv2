@@ -18,7 +18,14 @@ from govapp.apps.main.models import (
     YearField,
     file_upload_location,
 )
-from govapp.apps.risk.models import ContributingFactor, OverwriteControl, RiskCategory
+from govapp.apps.risk.models import (
+    Consequence,
+    ContributingFactor,
+    Likelihood,
+    LikelihoodOfConsequence,
+    OverwriteControl,
+    RiskCategory,
+)
 from govapp.apps.traffic.models import Traffic
 
 logger = getLogger(__name__)
@@ -207,6 +214,21 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
     )  # In IP the standard control contributing factors can be overwritten if revisit_in_implementation_plan is set
 
 
+class OperationalPlanRiskRating(models.Model):
+    consequence = models.ForeignKey(
+        Consequence, on_delete=models.CASCADE, null=True, blank=True
+    )
+    likelihood = models.ForeignKey(
+        Likelihood, on_delete=models.CASCADE, null=True, blank=True
+    )
+
+    @property
+    def risk_level(self):
+        return LikelihoodOfConsequence.objects.get(
+            consequence=self.consequence, likelihood=self.likelihood
+        ).risk_level
+
+
 class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
     MODEL_PREFIX = "OP"
 
@@ -297,6 +319,9 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     # Burn Values List
     # TODO Sections, Questions, Actions
 
+    # Risk Categories: OperationalPlanRiskCategory
+    # risk_ratings
+
     # Legal / Approvals
     legal_approvals: models.ManyToManyField = models.ManyToManyField(
         LegalApproval,
@@ -305,7 +330,6 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         through_fields=("operational_plan", "legal_approval"),
         editable=False,
     )
-    # Risk Categories: OperationalPlanRiskCategory
 
     @property
     def risk_highest_level(self):
