@@ -93,13 +93,6 @@ class Consequence(UniqueNameableModel):
 
 
 class Likelihood(OrdinalScaleModel):
-    # lower_bound = IntervalFloatField(
-    #     min_value=0.0, max_value=1.0, null=True, blank=True
-    # )
-    # upper_bound = IntervalFloatField(
-    #     min_value=0.0, max_value=1.0, null=True, blank=True
-    # )
-
     def __str__(self):
         return f"{self.name} ({self.ordinal_scale})"
 
@@ -133,6 +126,9 @@ class RiskRating(models.Model):
     likelihood = models.ForeignKey(
         Likelihood, on_delete=models.CASCADE, null=True, blank=True
     )
+
+    class Meta:
+        unique_together = ("consequence", "likelihood")
 
     @property
     def risk_level(self):

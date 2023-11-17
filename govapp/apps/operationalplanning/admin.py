@@ -89,7 +89,21 @@ class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
     nested_admin.NestedStackedInline
 ):
     model = OperationalPlanRiskCategoryContributingFactorRiskRating
-    extra = 0
+    extra = 1
+
+    list_display = (
+        "contributing_factor",
+        "risk_rating",
+        "requires_additional_controls",
+    )
+
+    fields = (
+        "contributing_factor",
+        "risk_rating",
+        "requires_additional_controls",
+    )
+
+    readonly_fields = ("requires_additional_controls",)
 
 
 class OperationalPlanRiskCategoryContributingFactorInline(
@@ -105,7 +119,12 @@ class OperationalPlanRiskCategoryContributingFactorInline(
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
 
-    list_display = ("contributing_factor", "values_affected", "standard_controls")
+    list_display = (
+        "contributing_factor",
+        "values_affected",
+        "standard_controls",
+        "requires_additional_controls",
+    )
 
     readonly_fields = ("standard_controls",)
     fieldsets = (

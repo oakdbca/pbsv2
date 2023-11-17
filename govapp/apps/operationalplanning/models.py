@@ -224,11 +224,6 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
     def standard_controls(self):
         return self.contributing_factor.standard_controls.all()
 
-    @property
-    def requires_additional_control(self):
-        # self.risk_rating_after_standard_controls.requires_additional_control
-        return True
-
 
 class OperationalPlanRiskCategoryContributingFactorRiskRating(models.Model):
     class Meta:
@@ -239,12 +234,25 @@ class OperationalPlanRiskCategoryContributingFactorRiskRating(models.Model):
     #     ("standard", "Standard"),
     #     ("additional", "Additional"),
     # )
+    # operational_plan_risk_category_contributing_factor = models.ForeignKey(
     contributing_factor = models.ForeignKey(
-        OperationalPlanRiskCategoryContributingFactor, on_delete=models.CASCADE
+        OperationalPlanRiskCategoryContributingFactor,
+        on_delete=models.CASCADE,
+        related_name="operational_plan_risk_category_contributing_factor_risk_ratings",
     )
     risk_rating = models.ForeignKey(
-        RiskRating, null=True, blank=True, on_delete=models.CASCADE
+        RiskRating,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="operational_plan_risk_category_contributing_factor_risk_ratings",
     )
+
+    @property
+    def requires_additional_controls(self):
+        # self.risk_rating_after_standard_controls.requires_additional_control
+        self.operational_plan_risk_category_contributing_factor.contributing_factor
+        return True
 
 
 class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
