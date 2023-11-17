@@ -18,12 +18,7 @@ from govapp.apps.main.models import (
     YearField,
     file_upload_location,
 )
-from govapp.apps.risk.models import (
-    ContributingFactor,
-    OverwriteControl,
-    RiskCategory,
-    RiskRating,
-)
+from govapp.apps.risk.models import ContributingFactor, OverwriteControl, RiskCategory
 from govapp.apps.traffic.models import Traffic
 
 logger = getLogger(__name__)
@@ -210,13 +205,13 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
             "overwrite_control",
         ),
     )  # In IP the standard control contributing factors can be overwritten if revisit_in_implementation_plan is set
-    risk_ratings: models.ManyToManyField = models.ManyToManyField(
-        RiskRating,
-        related_name="operational_plan_risk_category_contributing_factors",
-        through="OperationalPlanRiskCategoryContributingFactorRiskRating",
-        through_fields=("contributing_factor", "risk_rating"),
-        editable=False,
-    )
+    # risk_ratings: models.ManyToManyField = models.ManyToManyField(
+    #     RiskRating,
+    #     related_name="operational_plan_risk_category_contributing_factors",
+    #     through="OperationalPlanRiskCategoryContributingFactorRiskRating",
+    #     through_fields=("contributing_factor", "risk_rating"),
+    #     editable=False,
+    # )
 
     # additional controls
 
@@ -225,34 +220,34 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         return self.contributing_factor.standard_controls.all()
 
 
-class OperationalPlanRiskCategoryContributingFactorRiskRating(models.Model):
-    class Meta:
-        verbose_name = "Risk Rating"
-        verbose_name_plural = "Risk Ratings"
+# class OperationalPlanRiskCategoryContributingFactorRiskRating(models.Model):
+#     class Meta:
+#         verbose_name = "Risk Rating"
+#         verbose_name_plural = "Risk Ratings"
 
-    # CONTROL_TYPES = Choices(
-    #     ("standard", "Standard"),
-    #     ("additional", "Additional"),
-    # )
-    # operational_plan_risk_category_contributing_factor = models.ForeignKey(
-    contributing_factor = models.ForeignKey(
-        OperationalPlanRiskCategoryContributingFactor,
-        on_delete=models.CASCADE,
-        related_name="operational_plan_risk_category_contributing_factor_risk_ratings",
-    )
-    risk_rating = models.ForeignKey(
-        RiskRating,
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE,
-        related_name="operational_plan_risk_category_contributing_factor_risk_ratings",
-    )
+#     # CONTROL_TYPES = Choices(
+#     #     ("standard", "Standard"),
+#     #     ("additional", "Additional"),
+#     # )
+#     # operational_plan_risk_category_contributing_factor = models.ForeignKey(
+#     contributing_factor = models.ForeignKey(
+#         OperationalPlanRiskCategoryContributingFactor,
+#         on_delete=models.CASCADE,
+#         related_name="operational_plan_risk_category_contributing_factor_risk_ratings",
+#     )
+#     risk_rating = models.ForeignKey(
+#         RiskRating,
+#         null=True,
+#         blank=True,
+#         on_delete=models.CASCADE,
+#         related_name="operational_plan_risk_category_contributing_factor_risk_ratings",
+#     )
 
-    @property
-    def requires_additional_controls(self):
-        # self.risk_rating_after_standard_controls.requires_additional_control
-        self.operational_plan_risk_category_contributing_factor.contributing_factor
-        return True
+#     @property
+#     def requires_additional_controls(self):
+#         # self.risk_rating_after_standard_controls.requires_additional_control
+#         self.operational_plan_risk_category_contributing_factor.contributing_factor
+#         return True
 
 
 class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel):

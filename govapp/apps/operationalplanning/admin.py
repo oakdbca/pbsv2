@@ -6,7 +6,7 @@ from model_utils import Choices
 from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
 from govapp.apps.risk.models import ContributingFactorStandardControl
 
-from .models import (
+from .models import (  # OperationalPlanRiskCategoryContributingFactorRiskRating,
     LegalApproval,
     Objective,
     ObjectiveAndSuccessCriteria,
@@ -18,7 +18,6 @@ from .models import (
     OperationalPlanRiskCategory,
     OperationalPlanRiskCategoryContributingFactor,
     OperationalPlanRiskCategoryContributingFactorControlOverwrite,
-    OperationalPlanRiskCategoryContributingFactorRiskRating,
     SuccessCriteria,
     SuccessCriteriaComparisonOperator,
     SuccessCriteriaLeftValue,
@@ -85,25 +84,25 @@ class OperationalPlanRiskCategoryContributingFactorControlOverwriteInline(
     extra = 0
 
 
-class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
-    nested_admin.NestedStackedInline
-):
-    model = OperationalPlanRiskCategoryContributingFactorRiskRating
-    extra = 1
+# class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
+#     nested_admin.NestedStackedInline
+# ):
+#     model = OperationalPlanRiskCategoryContributingFactorRiskRating
+#     extra = 1
 
-    list_display = (
-        "contributing_factor",
-        "risk_rating",
-        "requires_additional_controls",
-    )
+#     list_display = (
+#         "contributing_factor",
+#         "risk_rating",
+#         "requires_additional_controls",
+#     )
 
-    fields = (
-        "contributing_factor",
-        "risk_rating",
-        "requires_additional_controls",
-    )
+#     fields = (
+#         "contributing_factor",
+#         "risk_rating",
+#         "requires_additional_controls",
+#     )
 
-    readonly_fields = ("requires_additional_controls",)
+#     readonly_fields = ("requires_additional_controls",)
 
 
 class OperationalPlanRiskCategoryContributingFactorInline(
@@ -149,7 +148,7 @@ class OperationalPlanRiskCategoryContributingFactorInline(
 
     inlines = [
         OperationalPlanRiskCategoryContributingFactorControlOverwriteInline,
-        OperationalPlanRiskCategoryContributingFactorRiskRatingInline,
+        # OperationalPlanRiskCategoryContributingFactorRiskRatingInline,
     ]
 
     def standard_controls(self, obj):
