@@ -18,12 +18,7 @@ from govapp.apps.main.models import (
     YearField,
     file_upload_location,
 )
-from govapp.apps.risk.models import (
-    ContributingFactor,
-    OverwriteControl,
-    RiskCategory,
-    RiskRating,
-)
+from govapp.apps.risk.models import ContributingFactor, OverwriteControl, RiskCategory
 from govapp.apps.traffic.models import Traffic
 
 logger = getLogger(__name__)
@@ -210,24 +205,29 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
             "overwrite_control",
         ),
     )  # In IP the standard control contributing factors can be overwritten if revisit_in_implementation_plan is set
-
-
-class OperationalPlanRiskRating(models.Model):
-    # CONTROL_TYPES = Choices(
-    #     ("standard", "Standard"),
-    #     ("additional", "Additional"),
-    # )
-    operational_plan = models.ForeignKey(
-        "OperationalPlan", null=True, blank=True, on_delete=models.CASCADE
-    )
-    risk_rating = models.ForeignKey(
-        RiskRating, null=True, blank=True, on_delete=models.CASCADE
-    )
+    # operational_plan_risk_rating
 
     @property
-    def requires_adsditional_control(self):
-        # self.risk_rating.requires_additional_control
-        return True
+    def standard_controls(self):
+        return self.contributing_factor.standard_controls.all()
+
+
+# class OperationalPlanRiskRating(models.Model):
+#     # CONTROL_TYPES = Choices(
+#     #     ("standard", "Standard"),
+#     #     ("additional", "Additional"),
+#     # )
+#     operational_plan = models.ForeignKey(
+#         "OperationalPlan", null=True, blank=True, on_delete=models.CASCADE
+#     )
+#     risk_rating = models.ForeignKey(
+#         RiskRating, null=True, blank=True, on_delete=models.CASCADE
+#     )
+
+#     @property
+#     def requires_additional_control(self):
+#         # self.risk_rating.requires_additional_control
+#         return True
 
 
 class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
