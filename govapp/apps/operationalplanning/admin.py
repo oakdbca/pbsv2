@@ -18,6 +18,7 @@ from .models import (  # OperationalPlanRiskCategoryContributingFactorRiskRating
     OperationalPlanRiskCategory,
     OperationalPlanRiskCategoryContributingFactor,
     OperationalPlanRiskCategoryContributingFactorControlOverwrite,
+    OperationalPlanRiskCategoryContributingFactorRiskRating,
     SuccessCriteria,
     SuccessCriteriaComparisonOperator,
     SuccessCriteriaLeftValue,
@@ -84,25 +85,25 @@ class OperationalPlanRiskCategoryContributingFactorControlOverwriteInline(
     extra = 0
 
 
-# class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
-#     nested_admin.NestedStackedInline
-# ):
-#     model = OperationalPlanRiskCategoryContributingFactorRiskRating
-#     extra = 1
+class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
+    nested_admin.NestedStackedInline
+):
+    model = OperationalPlanRiskCategoryContributingFactorRiskRating
+    extra = 1
 
-#     list_display = (
-#         "contributing_factor",
-#         "risk_rating",
-#         "requires_additional_controls",
-#     )
+    list_display = (
+        "operational_plan_risk_category_contributing_factor",
+        "risk_rating",
+        "requires_additional_controls",
+    )
 
-#     fields = (
-#         "contributing_factor",
-#         "risk_rating",
-#         "requires_additional_controls",
-#     )
+    fields = (
+        "operational_plan_risk_category_contributing_factor",
+        "risk_rating",
+        "requires_additional_controls",
+    )
 
-#     readonly_fields = ("requires_additional_controls",)
+    readonly_fields = ("requires_additional_controls",)
 
 
 class OperationalPlanRiskCategoryContributingFactorInline(
@@ -148,7 +149,7 @@ class OperationalPlanRiskCategoryContributingFactorInline(
 
     inlines = [
         OperationalPlanRiskCategoryContributingFactorControlOverwriteInline,
-        # OperationalPlanRiskCategoryContributingFactorRiskRatingInline,
+        OperationalPlanRiskCategoryContributingFactorRiskRatingInline,
     ]
 
     def standard_controls(self, obj):

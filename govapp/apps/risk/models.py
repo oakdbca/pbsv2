@@ -93,8 +93,7 @@ class Consequence(UniqueNameableModel):
 
 
 class Likelihood(OrdinalScaleModel):
-    def __str__(self):
-        return f"{self.name} ({self.ordinal_scale})"
+    pass
 
 
 class RiskLevel(OrdinalScaleModel):
