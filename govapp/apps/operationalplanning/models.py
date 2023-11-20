@@ -160,7 +160,7 @@ class OperationalPlanRiskCategory(models.Model):
 
 
 # TODO maybe change this class to end in overwrite control OverwriteControl
-class OperationalPlanRiskCategoryContributingFactorControlOverwrite(models.Model):
+class OperationalPlanRiskCategoryContributingFactorOverwriteControl(models.Model):
     class Meta:
         verbose_name = "Standard Control Overwrite"
         verbose_name_plural = "Standard Control Overwrites"
@@ -228,7 +228,7 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         OverwriteControl,
         related_name="operational_plan_risk_category_contributing_factors",
         editable=False,
-        through="OperationalPlanRiskCategoryContributingFactorControlOverwrite",
+        through="OperationalPlanRiskCategoryContributingFactorOverwriteControl",
         through_fields=(
             "operational_plan_risk_category_contributing_factor",
             "overwrite_control",
@@ -240,6 +240,7 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         blank=True,
         on_delete=models.CASCADE,
         related_name="operational_plan_risk_category_contributing_factors_for_standard_controls",
+        verbose_name="Risk rating (after application of standard controls)",
     )  # Risk rating after application of standard controls
 
     risk_ratings_additional: models.ManyToManyField = models.ManyToManyField(
