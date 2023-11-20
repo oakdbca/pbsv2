@@ -19,6 +19,7 @@ from govapp.apps.main.models import (
     file_upload_location,
 )
 from govapp.apps.risk.models import (
+    AdditionalControl,
     ContributingFactor,
     OverwriteControl,
     RiskCategory,
@@ -158,6 +159,7 @@ class OperationalPlanRiskCategory(models.Model):
     )  # For each risk category one or more contributing factors can be selected
 
 
+# TODO maybe change this class to end in overwrite control OverwriteControl
 class OperationalPlanRiskCategoryContributingFactorControlOverwrite(models.Model):
     class Meta:
         verbose_name = "Standard Control Overwrite"
@@ -190,6 +192,28 @@ class OperationalPlanRiskCategoryContributingFactorControlOverwrite(models.Model
             raise ValidationError(
                 "Overwrite control must be of the same types as contributing factor's standard controls"
             )
+
+
+# TODO add additional controls to the contributing factor
+class OperationalPlanRiskCategoryContributingFactorAdditionalControl(models.Model):
+    class Meta:
+        verbose_name = "Additional Control"
+        verbose_name_plural = "Additional Controls"
+        unique_together = (
+            "operational_plan_risk_category_contributing_factor",
+            "additional_control",
+        )
+
+    operational_plan_risk_category_contributing_factor = models.ForeignKey(
+        "OperationalPlanRiskCategoryContributingFactor",
+        on_delete=models.CASCADE,
+        related_name="operational_plan_risk_category_contributing_factor_additional_control",
+    )
+    additional_control = models.ForeignKey(
+        AdditionalControl,
+        on_delete=models.CASCADE,
+        related_name="operational_plan_risk_category_contributing_factor_additional_control",
+    )
 
 
 class OperationalPlanRiskCategoryContributingFactor(models.Model):
