@@ -17,8 +17,8 @@ from .models import (
     OperationalPlanPurpose,
     OperationalPlanRiskCategory,
     OperationalPlanRiskCategoryContributingFactor,
+    OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating,
     OperationalPlanRiskCategoryContributingFactorOverwriteControl,
-    OperationalPlanRiskCategoryContributingFactorRiskRating,
     SuccessCriteria,
     SuccessCriteriaComparisonOperator,
     SuccessCriteriaLeftValue,
@@ -88,7 +88,7 @@ class OperationalPlanRiskCategoryContributingFactorControlOverwriteInline(
 class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
     nested_admin.NestedStackedInline
 ):
-    model = OperationalPlanRiskCategoryContributingFactorRiskRating
+    model = OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating
     extra = 1
 
     list_display = (

@@ -243,10 +243,11 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         verbose_name="Risk rating (after application of standard controls)",
     )  # Risk rating after application of standard controls
 
+    # TODO This need to go into the additional controls through model?
     risk_ratings_additional: models.ManyToManyField = models.ManyToManyField(
         RiskRating,
         related_name="operational_plan_risk_category_contributing_factors",
-        through="OperationalPlanRiskCategoryContributingFactorRiskRating",
+        through="OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating",
         through_fields=(
             "operational_plan_risk_category_contributing_factor",
             "risk_rating",
@@ -254,7 +255,16 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         editable=False,
     )
 
-    # additional controls
+    additional_controls: models.ManyToManyField = models.ManyToManyField(
+        AdditionalControl,
+        related_name="operational_plan_risk_category_contributing_factors",
+        through="OperationalPlanRiskCategoryContributingFactorAdditionalControl",
+        through_fields=(
+            "operational_plan_risk_category_contributing_factor",
+            "additional_control",
+        ),
+        editable=False,
+    )
 
     @property
     def standard_control_risk_ratings(self):
@@ -265,10 +275,12 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         return self.risk_rating_standard.risk_level.requires_additional_controls
 
 
-class OperationalPlanRiskCategoryContributingFactorRiskRating(models.Model):
+class OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating(
+    models.Model
+):
     class Meta:
-        verbose_name = "Risk Rating"
-        verbose_name_plural = "Risk Ratings"
+        verbose_name = "Risk Rating (after application of additional controls)"
+        verbose_name_plural = "Risk Ratings (after application of additional controls)"
 
     operational_plan_risk_category_contributing_factor = models.ForeignKey(
         OperationalPlanRiskCategoryContributingFactor,
