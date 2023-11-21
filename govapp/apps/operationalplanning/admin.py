@@ -225,7 +225,7 @@ class OperationalPlanRiskCategoryContributingFactorInline(
             return ""
         return "\n".join(
             [
-                f"{cs.standard_control.name}, can revisit in IP: {cs.revisit_in_implementation_plan}"
+                f"{cs.standard_control.name}, can revisit in Implementation Plan: {cs.revisit_in_implementation_plan}"
                 for cs in ContributingFactorStandardControl.objects.filter(
                     contributing_factor_id=obj.contributing_factor_id
                 ).all()

@@ -48,8 +48,9 @@ class LegalApproval(DisplayNameableModel):
         max_length=255, choices=APPROVAL_TYPES, null=True, blank=True
     )
     # TODO There must be a better term than land_type?
+    LAND_TYPE_SHIRE = "shire"
     LAND_TYPES = Choices(
-        ("shire", "Shire"),
+        (LAND_TYPE_SHIRE, "Shire"),
         ("owner", "Owner"),
         ("other", "Other Lands"),
     )
@@ -74,7 +75,7 @@ class LegalApproval(DisplayNameableModel):
 
     @property
     def is_shire_approval(self):
-        return self.land_type == "shire"
+        return self.land_type == self.LAND_TYPE_SHIRE
 
     @property
     def can_remove_approval(self):
@@ -242,18 +243,6 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         verbose_name="Risk rating (after application of standard controls)",
     )  # Risk rating after application of standard controls
 
-    # TODO This need to go into the additional controls through model? Add respective admin model to respective inline
-    risk_ratings_additional: models.ManyToManyField = models.ManyToManyField(
-        RiskRating,
-        related_name="operational_plan_risk_category_contributing_factors",
-        through="OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating",
-        through_fields=(
-            "operational_plan_risk_category_contributing_factor",
-            "risk_rating",
-        ),
-        editable=False,
-    )
-
     additional_controls: models.ManyToManyField = models.ManyToManyField(
         AdditionalControl,
         related_name="operational_plan_risk_category_contributing_factors",
@@ -263,15 +252,25 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
             "additional_control",
         ),
         editable=False,
-    )
+    )  # Only applies if risk level of risk rating requires additional controls
 
-    @property
-    def standard_control_risk_ratings(self):
-        return self.contributing_factor.standard_controls.all()
+    risk_ratings_additional: models.ManyToManyField = models.ManyToManyField(
+        RiskRating,
+        related_name="operational_plan_risk_category_contributing_factors",
+        through="OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating",
+        through_fields=(
+            "operational_plan_risk_category_contributing_factor",
+            "risk_rating",
+        ),
+        editable=False,
+    )  # Risk rating after application of additional controls
 
     @property
     def standard_control_risk_level_requires_additional_controls(self):
         return self.risk_rating_standard.risk_level.requires_additional_controls
+
+    def clean(self) -> None:
+        return super().clean()
 
 
 class OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating(
