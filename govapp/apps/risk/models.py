@@ -2,7 +2,6 @@ from logging import getLogger
 
 from django.contrib.postgres.fields import DecimalRangeField
 from django.db import models
-from django.forms import ValidationError
 from model_utils.models import TimeStampedModel
 
 from govapp.apps.main.models import OrdinalScaleModel, UniqueNameableModel
@@ -113,50 +112,42 @@ class RiskLevel(OrdinalScaleModel):
 
 class LikelihoodOfConsequence(models.Model):
     consequence = models.ForeignKey(
-        "Consequence",
+        Consequence,
         on_delete=models.PROTECT,
         related_name="likelihood_of_consequence",
     )
     likelihood = models.ForeignKey(
-        "Likelihood",
+        Likelihood,
         on_delete=models.PROTECT,
         related_name="likelihood_of_consequence",
     )
     risk_level = models.ForeignKey(
-        "RiskLevel",
+        RiskLevel,
         on_delete=models.PROTECT,
         related_name="likelihood_of_consequence",
-    )
-
-
-class RiskRating(models.Model):
-    consequence = models.ForeignKey(
-        Consequence, on_delete=models.CASCADE, null=True, blank=True
-    )
-    likelihood = models.ForeignKey(
-        Likelihood, on_delete=models.CASCADE, null=True, blank=True
     )
 
     class Meta:
         unique_together = ("consequence", "likelihood")
 
-    def save(self, *args, **kwargs):
-        try:
-            LikelihoodOfConsequence.objects.get(
-                consequence=self.consequence, likelihood=self.likelihood
-            )
-        except LikelihoodOfConsequence.DoesNotExist:
-            raise ValidationError(
-                f"LikelihoodOfConsequence for '{self.consequence}' and '{self.likelihood}' does not exist"
-            )
-        else:
-            super().save(*args, **kwargs)
+    def __str__(self):
+        return f"'{self.consequence.name} ({self.likelihood.name})' risk: {self.risk_level})"
+
+
+class RiskRating(models.Model):
+    likelihood_of_consequence = models.ForeignKey(
+        LikelihoodOfConsequence,
+        on_delete=models.PROTECT,
+        related_name="risk_rating",
+        null=True,
+        blank=True,
+    )
 
     @property
     def risk_level(self):
-        return LikelihoodOfConsequence.objects.get(
-            consequence=self.consequence, likelihood=self.likelihood
-        ).risk_level
+        if not self.likelihood_of_consequence:
+            return None
+        return self.likelihood_of_consequence.risk_level
 
     def __str__(self):
-        return f"{self.consequence.name} - Occurrence: {self.likelihood.name} (Risk level: {self.risk_level})"
+        return self.likelihood_of_consequence

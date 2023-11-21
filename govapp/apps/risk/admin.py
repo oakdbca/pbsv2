@@ -101,7 +101,10 @@ class LikelihoodOfConsequenceAdmin(DeleteRestrictedAdmin):
 @admin.register(RiskRating)
 class RiskRatingAdmin(DeleteRestrictedAdmin):
     model = RiskRating
-    list_display = ("consequence", "likelihood", "risk_level")
+    list_display = (
+        "likelihood_of_consequence",
+        "risk_level",
+    )
 
-    fields = ("consequence", "likelihood", "risk_level")
+    fields = (("likelihood_of_consequence", "risk_level"),)
     readonly_fields = ("risk_level",)
