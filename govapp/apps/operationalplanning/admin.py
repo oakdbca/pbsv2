@@ -17,6 +17,7 @@ from .models import (
     OperationalPlanPurpose,
     OperationalPlanRiskCategory,
     OperationalPlanRiskCategoryContributingFactor,
+    OperationalPlanRiskCategoryContributingFactorAdditionalControl,
     OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating,
     OperationalPlanRiskCategoryContributingFactorOverwriteControl,
     SuccessCriteria,
@@ -85,7 +86,7 @@ class OperationalPlanRiskCategoryContributingFactorControlOverwriteInline(
     extra = 0
 
 
-class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
+class OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRatingInline(
     nested_admin.NestedStackedInline
 ):
     model = OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating
@@ -106,6 +107,38 @@ class OperationalPlanRiskCategoryContributingFactorRiskRatingInline(
                         "operational_plan_risk_category_contributing_factor",
                         "risk_rating",
                         "requires_additional_controls",
+                    ),
+                ),
+                "classes": (
+                    "less-dominant-style",
+                    "nested-inline-flex-container",
+                ),
+            },
+        ),
+    )
+
+    readonly_fields = ("requires_additional_controls",)
+
+
+class OperationalPlanRiskCategoryContributingFactorAdditionalControlInline(
+    nested_admin.NestedStackedInline
+):
+    model = OperationalPlanRiskCategoryContributingFactorAdditionalControl
+    extra = 1
+
+    list_display = (
+        "operational_plan_risk_category_contributing_factor",
+        "additional_control",
+    )
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    (
+                        "operational_plan_risk_category_contributing_factor",
+                        "additional_control",
                     ),
                 ),
                 "classes": (
@@ -182,7 +215,8 @@ class OperationalPlanRiskCategoryContributingFactorInline(
 
     inlines = [
         OperationalPlanRiskCategoryContributingFactorControlOverwriteInline,
-        OperationalPlanRiskCategoryContributingFactorRiskRatingInline,
+        OperationalPlanRiskCategoryContributingFactorAdditionalControlInline,
+        OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRatingInline,
     ]
 
     def standard_controls(self, obj):

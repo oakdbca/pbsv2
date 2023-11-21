@@ -82,7 +82,6 @@ class ContributingFactor(UniqueNameableModel, TimeStampedModel):
         through="ContributingFactorStandardControl",
         through_fields=("contributing_factor", "standard_control"),
     )
-    # additional_controls
 
 
 class RiskCategory(UniqueNameableModel, TimeStampedModel):

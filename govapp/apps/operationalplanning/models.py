@@ -194,7 +194,6 @@ class OperationalPlanRiskCategoryContributingFactorOverwriteControl(models.Model
             )
 
 
-# TODO add additional controls to the contributing factor
 class OperationalPlanRiskCategoryContributingFactorAdditionalControl(models.Model):
     class Meta:
         verbose_name = "Additional Control"
@@ -243,7 +242,7 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         verbose_name="Risk rating (after application of standard controls)",
     )  # Risk rating after application of standard controls
 
-    # TODO This need to go into the additional controls through model?
+    # TODO This need to go into the additional controls through model? Add respective admin model to respective inline
     risk_ratings_additional: models.ManyToManyField = models.ManyToManyField(
         RiskRating,
         related_name="operational_plan_risk_category_contributing_factors",

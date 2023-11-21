@@ -5,6 +5,7 @@ from django.contrib import admin
 from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
 
 from .models import (
+    AdditionalControl,
     Consequence,
     ContributingFactor,
     ContributingFactorStandardControl,
@@ -28,6 +29,12 @@ class StandardControlAdmin(DeleteRestrictedAdmin):
 class OverwriteControlAdmin(DeleteRestrictedAdmin):
     model = OverwriteControl
     list_display = ("name", "standard_control")
+
+
+@admin.register(AdditionalControl)
+class AdditionalControlAdmin(DeleteRestrictedAdmin):
+    model = AdditionalControl
+    list_display = ("name", "text")
 
 
 class ContributingFactorStandardControlInline(nested_admin.NestedTabularInline):
