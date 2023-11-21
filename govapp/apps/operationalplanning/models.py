@@ -70,7 +70,7 @@ class LegalApproval(DisplayNameableModel):
         verbose_name = "Operational Plan Legal/Approval"
         verbose_name_plural = "Operational Plan Legal/Approvals"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.approver} {self.get_approval_type_display()}"
 
     @property
@@ -117,7 +117,7 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     contentious_burn = models.BooleanField(default=False)
     contentious_rationale = models.TextField(null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.reference_number} ({self.name})"
 
     @property
@@ -159,6 +159,9 @@ class OperationalPlanRiskCategory(models.Model):
         through_fields=("operational_plan_risk_category", "contributing_factor"),
     )  # For each risk category one or more contributing factors can be selected
 
+    def __str__(self) -> str:
+        return f"{self.operational_plan} - {self.risk_category}"
+
 
 # TODO maybe change this class to end in overwrite control OverwriteControl
 class OperationalPlanRiskCategoryContributingFactorOverwriteControl(models.Model):
@@ -193,6 +196,7 @@ class OperationalPlanRiskCategoryContributingFactorOverwriteControl(models.Model
             raise ValidationError(
                 "Overwrite control must be of the same types as contributing factor's standard controls"
             )
+        return super().clean()
 
 
 class OperationalPlanRiskCategoryContributingFactorAdditionalControl(models.Model):
@@ -214,6 +218,26 @@ class OperationalPlanRiskCategoryContributingFactorAdditionalControl(models.Mode
         on_delete=models.CASCADE,
         related_name="operational_plan_risk_category_contributing_factor_additional_control",
     )
+
+    def __str__(self) -> str:
+        return f"{self.operational_plan_risk_category_contributing_factor} - {self.additional_control}"
+
+    def clean(self):
+        contributing_factor = self.operational_plan_risk_category_contributing_factor
+        if (
+            not contributing_factor.standard_control_risk_level_requires_additional_controls
+        ):
+            risk_rating = (
+                self.operational_plan_risk_category_contributing_factor.risk_rating_standard
+            )
+            raise ValidationError(
+                f"Additional controls are not required for this standard control risk rating ({risk_rating})"
+            )
+        return super().clean()
+
+    @property
+    def revisit_in_implementation_plan(self):
+        return self.additional_control.revisit_in_implementation_plan
 
 
 class OperationalPlanRiskCategoryContributingFactor(models.Model):
@@ -265,11 +289,20 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         editable=False,
     )  # Risk rating after application of additional controls
 
+    def __str__(self) -> str:
+        return f"{self.operational_plan_risk_category} - {self.contributing_factor}"
+
     @property
     def standard_control_risk_level_requires_additional_controls(self):
+        if not self.risk_rating_standard:
+            return False
         return self.risk_rating_standard.risk_level.requires_additional_controls
 
     def clean(self) -> None:
+        self.standard_control_risk_level_requires_additional_controls
+
+        # self.additional_controls
+
         return super().clean()
 
 
@@ -293,8 +326,21 @@ class OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating(
         related_name="operational_plan_risk_category_contributing_factor_risk_ratings",
     )
 
-    def __str__(self):
-        return f"{self.control_type} {self.risk_rating}"
+    def __str__(self) -> str:
+        return f"{self.operational_plan_risk_category_contributing_factor} {self.risk_rating}"
+
+    def clean(self):
+        contributing_factor = self.operational_plan_risk_category_contributing_factor
+        if (
+            not contributing_factor.standard_control_risk_level_requires_additional_controls
+        ):
+            risk_rating = (
+                self.operational_plan_risk_category_contributing_factor.risk_rating_standard
+            )
+            raise ValidationError(
+                f"Additional risk ratings are not required for this standard control risk rating ({risk_rating})"
+            )
+        return super().clean()
 
     @property
     def requires_additional_controls(self):
@@ -446,7 +492,7 @@ class OperationalPlanApproval(TimeStampedModel):
         verbose_name_plural = "Operational Plan Legal/Approvals"
         unique_together = ("operational_plan", "legal_approval")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"Operational Area: {self.operational_plan} "
             f"has legal/approval: {self.legal_approval}"

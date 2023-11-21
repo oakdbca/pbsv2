@@ -129,6 +129,7 @@ class OperationalPlanRiskCategoryContributingFactorAdditionalControlInline(
     list_display = (
         "operational_plan_risk_category_contributing_factor",
         "additional_control",
+        "revisit_in_implementation_plan",
     )
 
     fieldsets = (
@@ -139,6 +140,7 @@ class OperationalPlanRiskCategoryContributingFactorAdditionalControlInline(
                     (
                         "operational_plan_risk_category_contributing_factor",
                         "additional_control",
+                        "revisit_in_implementation_plan",
                     ),
                 ),
                 "classes": (
@@ -149,7 +151,7 @@ class OperationalPlanRiskCategoryContributingFactorAdditionalControlInline(
         ),
     )
 
-    readonly_fields = ("requires_additional_controls",)
+    readonly_fields = ("requires_additional_controls", "revisit_in_implementation_plan")
 
 
 class OperationalPlanRiskCategoryContributingFactorInline(
