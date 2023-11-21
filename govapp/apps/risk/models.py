@@ -14,8 +14,19 @@ class Control(UniqueNameableModel, TimeStampedModel):
         abstract = True
 
 
+class RevisitInImplementationPlan(TimeStampedModel):
+    class Meta:
+        abstract = True
+
+    revisit_in_implementation_plan = models.BooleanField(
+        default=False
+    )  # Whether control can be revisited in Implementation Plan
+
+
 class StandardControl(Control):
     """Control that can be configured in the admin panel"""
+
+    contributing_factor_standard_controls: "models.Manager[ContributingFactorStandardControl]"
 
     class Meta:
         verbose_name = "Control (Standard)"
@@ -53,7 +64,7 @@ class AdditionalControl(Control):
         return self.text
 
 
-class ContributingFactorStandardControl(models.Model):
+class ContributingFactorStandardControl(RevisitInImplementationPlan):
     class Meta:
         unique_together = ("contributing_factor", "standard_control")
         verbose_name = "Standard Control Default Value"
@@ -69,12 +80,11 @@ class ContributingFactorStandardControl(models.Model):
         on_delete=models.PROTECT,
         related_name="contributing_factor_standard_controls",
     )
-    revisit_in_implementation_plan = models.BooleanField(
-        default=False
-    )  # Whether control can be revisited in Implementation Plan
 
 
 class ContributingFactor(UniqueNameableModel, TimeStampedModel):
+    contributing_factor_standard_controls: "models.Manager[ContributingFactorStandardControl]"
+
     factors = DecimalRangeField(default_bounds="[)", blank=True, null=True)  # type: ignore
     standard_controls: models.ManyToManyField = models.ManyToManyField(
         StandardControl,
