@@ -50,11 +50,11 @@ class OverwriteControl(Control):
         return f"{self.name} (overwrites {self.standard_control.name})"
 
 
-class AdditionalControl(Control):
+class AdditionalControl(Control, RevisitInImplementationPlan):
     """Control that is only available when the resulting risk level of a risk assessment
     is configured as 'additional controls required'"""
 
-    text = models.TextField(blank=True, null=True)
+    text = models.TextField(blank=True, null=True)  # Free text
 
     class Meta:
         verbose_name = "Control (Additional)"
