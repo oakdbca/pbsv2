@@ -150,4 +150,4 @@ class RiskRating(models.Model):
         return self.likelihood_of_consequence.risk_level
 
     def __str__(self):
-        return self.likelihood_of_consequence
+        return self.likelihood_of_consequence.__str__()
