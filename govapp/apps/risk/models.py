@@ -2,6 +2,7 @@ from logging import getLogger
 
 from django.contrib.postgres.fields import DecimalRangeField
 from django.db import models
+from django.forms import ValidationError
 from model_utils.models import TimeStampedModel
 
 from govapp.apps.main.models import OrdinalScaleModel, UniqueNameableModel
@@ -138,6 +139,18 @@ class RiskRating(models.Model):
 
     class Meta:
         unique_together = ("consequence", "likelihood")
+
+    def save(self, *args, **kwargs):
+        try:
+            LikelihoodOfConsequence.objects.get(
+                consequence=self.consequence, likelihood=self.likelihood
+            )
+        except LikelihoodOfConsequence.DoesNotExist:
+            raise ValidationError(
+                f"LikelihoodOfConsequence for '{self.consequence}' and '{self.likelihood}' does not exist"
+            )
+        else:
+            super().save(*args, **kwargs)
 
     @property
     def risk_level(self):
