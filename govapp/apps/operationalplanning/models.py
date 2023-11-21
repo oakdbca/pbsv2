@@ -298,13 +298,6 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
             return False
         return self.risk_rating_standard.risk_level.requires_additional_controls
 
-    def clean(self) -> None:
-        self.standard_control_risk_level_requires_additional_controls
-
-        # self.additional_controls
-
-        return super().clean()
-
 
 class OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating(
     models.Model
