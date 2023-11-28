@@ -3,7 +3,6 @@ from logging import getLogger
 import nested_admin
 from django import forms
 from django.contrib import admin
-from django.template.loader import get_template
 from model_utils import Choices
 
 from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
@@ -194,7 +193,6 @@ class OperationalPlanRiskCategoryContributingFactorInline(
         "contributing_factor",
         "values_affected",
         "standard_controls",
-        "standard_control_overwrites_inline",
         "requires_additional_controls",
         "risk_rating_standard",
         "standard_control_risk_level_requires_additional_controls",
@@ -202,7 +200,6 @@ class OperationalPlanRiskCategoryContributingFactorInline(
 
     readonly_fields = (
         "standard_controls",
-        "standard_control_overwrites_inline",
         "standard_control_risk_level_requires_additional_controls",
     )
     fieldsets = (
@@ -227,7 +224,6 @@ class OperationalPlanRiskCategoryContributingFactorInline(
             {
                 "fields": (
                     ("standard_controls",),
-                    "standard_control_overwrites_inline",
                     (
                         "risk_rating_standard",
                         "standard_control_risk_level_requires_additional_controls",
@@ -260,53 +256,6 @@ class OperationalPlanRiskCategoryContributingFactorInline(
                 ).all()
             ]
         )
-
-    def standard_control_overwrites_inline(self, obj=None):
-        context = getattr(self.response, "context_data", None) or {}
-
-        cls = OperationalPlanRiskCategoryContributingFactorOverwriteControlInline
-        idx = self.inlines.index(cls)
-        inline = self.get_inline_instances(self.request)[idx]
-
-        _formset = inline.get_formset(self.request)()
-
-        kwargs = {}
-        kwargs = {
-            "prepopulated_fields": kwargs.get("prepopulated_fields", {}),
-            "readonly_fields": kwargs.get("readonly_fields", ()),
-            "model_admin": kwargs.get("model_admin", context["adminform"].model_admin),
-            "has_add_permission": inline.has_add_permission(self.request, None) or True,
-            "has_change_permission": inline.has_change_permission(self.request, None)
-            or True,
-            "has_delete_permission": inline.has_delete_permission(self.request, None)
-            or True,
-            "has_view_permission": inline.has_view_permission(self.request, None)
-            or True,
-        }
-        formset = nested_admin.NestedInlineAdminFormset(
-            inline, _formset, inline.fieldsets or {}, **kwargs
-        )
-
-        current = context | {
-            "inline_admin_formset": formset,
-        }
-
-        self.request.GET.copy()
-
-        return get_template(inline.template).render(current, request=self.request)
-
-    def get_formset(self, request, obj=None, **kwargs):
-        form = super().get_formset(request, obj, **kwargs)
-
-        return form
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs
-
-    def get_inline_instances(self, *args, **kwargs):
-        inline_instances = super().get_inline_instances(*args, **kwargs)
-        return inline_instances
 
 
 class SuccessCriteriaInlineForm(forms.ModelForm):
@@ -788,27 +737,3 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         OperationalPlanRiskCategoryInline,
         OperationalPlanApprovalInline,
     ]
-
-    def changeform_view(self, request, *args, **kwargs):
-        self.request = request
-        return super().changeform_view(request, *args, **kwargs)
-
-    def render_change_form(self, request, *args, **kwargs):
-        self.response = super().render_change_form(request, *args, **kwargs)
-
-        return self.response
-
-    def get_inline_instances(self, *args, **kwargs):
-        inline_instances = super().get_inline_instances(*args, **kwargs)
-
-        self.inline_add_modeladmin(inline_instances)
-
-        logger.debug("Done")
-        return inline_instances
-
-    def inline_add_modeladmin(self, inline_instances):
-        if len(inline_instances) > 0:
-            for inl in inline_instances:
-                logger.debug(f"Adding modeladmin object to inline {inl}")
-                self.inline_add_modeladmin(inl.get_inline_instances(self.request))
-                inl.modeladmin = self
