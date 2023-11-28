@@ -4,7 +4,7 @@ import nested_admin
 from django.contrib import admin
 from django.http.request import HttpRequest
 
-from .models import District, Lga, ModelFile, Region
+from .models import District, Lga, ModelFile, Neighbour, NeighbourRole, Region
 
 
 class DeleteRestrictedAdmin(admin.ModelAdmin):
@@ -48,7 +48,27 @@ class LgaAdmin(DeleteRestrictedAdmin):
         return request.user.is_superuser
 
 
+class NeighbourRoleAdmin(DeleteRestrictedAdmin):
+    list_display = ("id", "name")
+
+    def has_change_permission(
+        self, request: HttpRequest, obj: Any | None = ...
+    ) -> bool:
+        return request.user.is_superuser
+
+
+class NeighbourAdmin(DeleteRestrictedAdmin):
+    list_display = ("id", "name", "phone", "role", "location")
+
+    def has_change_permission(
+        self, request: HttpRequest, obj: Any | None = ...
+    ) -> bool:
+        return request.user.is_superuser
+
+
 admin.site.register(ModelFile, ModelFileAdmin)
 admin.site.register(Region, RegionAdmin)
 admin.site.register(District, DistrictAdmin)
 admin.site.register(Lga, LgaAdmin)
+admin.site.register(NeighbourRole, NeighbourRoleAdmin)
+admin.site.register(Neighbour, NeighbourAdmin)

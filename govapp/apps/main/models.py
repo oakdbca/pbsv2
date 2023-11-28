@@ -278,3 +278,28 @@ class Lga(DisplayNameableModel, UniqueNameableModel):
         if not self.display_name:
             return self.name
         return self.display_name
+
+
+class NeighbourRole(UniqueNameableModel):
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+class Neighbour(DisplayNameableModel, NameableModel):
+    phone = models.CharField(max_length=255, null=True, blank=True)
+    # Assuming the Interest field from the screenshot is equivalent to the Role field mentioned in the reqs
+    role = models.ForeignKey(
+        NeighbourRole, on_delete=models.PROTECT, null=True, blank=True
+    )
+    location = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        if not self.display_name:
+            return self.name
+        return f"{self.name} ({self.display_name})"
