@@ -25,6 +25,7 @@ from .models import (
     OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating,
     OperationalPlanRiskCategoryContributingFactorOverwriteControl,
     Prescription,
+    PrescriptionFuelType,
     SuccessCriteria,
     SuccessCriteriaComparisonOperator,
     SuccessCriteriaLeftValue,
@@ -822,6 +823,31 @@ class ContingencyAdmin(NestedDeleteRestrictedAdmin):
     inlines = [ContingencyNeighbourInline]
 
 
+class PrescriptionFuelTypeInline(nested_admin.NestedStackedInline):
+    model = PrescriptionFuelType
+    extra = 0
+
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    list_display = ("fuel_type",)
+
+    fieldsets = (
+        (
+            "Fuel type",
+            {
+                "fields": (("fuel_type",),),
+                "classes": (
+                    "less-dominant-style",
+                    "nested-inline-flex-container",
+                ),
+            },
+        ),
+    )
+
+
 @admin.register(Prescription)
 class PrescriptionAdmin(NestedDeleteRestrictedAdmin):
     model = Prescription
@@ -835,3 +861,5 @@ class PrescriptionAdmin(NestedDeleteRestrictedAdmin):
         "operational_overview",
         "ignition_sequence",
     )
+
+    inlines = [PrescriptionFuelTypeInline]

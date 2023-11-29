@@ -18,6 +18,7 @@ from govapp.apps.main.models import (
     YearField,
     file_upload_location,
 )
+from govapp.apps.prescriptiondetails.models import FuelType
 from govapp.apps.risk.models import (
     AdditionalControl,
     ContributingFactor,
@@ -685,6 +686,27 @@ class Contingency(UniqueNameableModel, DisplayNameableModel):
         return self.operational_plan.context_map
 
 
+class PrescriptionFuelType(models.Model):
+    class Meta:
+        verbose_name = "Burning Prescription Fuel Type"
+        verbose_name_plural = "Burning Prescription Fuel Types"
+        unique_together = ("prescription", "fuel_type")
+
+    prescription = models.ForeignKey(
+        "Prescription",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+    )
+    fuel_type = models.ForeignKey(
+        FuelType,
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+    )
+
+    def __str__(self) -> str:
+        return f"{self.prescription} - {self.fuel_type}"
+
+
 class Prescription(models.Model):
     class Meta:
         verbose_name = "Prescription"
@@ -692,6 +714,13 @@ class Prescription(models.Model):
 
     operational_overview = models.TextField(null=True, blank=True)
     ignition_sequence = models.TextField(null=True, blank=True)
+    fuel_types: models.ManyToManyField = models.ManyToManyField(
+        FuelType,
+        related_name="prescriptions",
+        verbose_name="Fuel Types",
+        through="PrescriptionFuelType",
+        through_fields=("prescription", "fuel_type"),
+    )
 
     def __str__(self) -> str:
         truncate_length = 40
