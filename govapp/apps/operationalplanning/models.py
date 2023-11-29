@@ -702,6 +702,113 @@ class PrescriptionFuelType(models.Model):
         on_delete=models.CASCADE,
         related_name="prescription_fuel_types",
     )
+    cell_name = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name="Cell"
+    )
+    scorch_height = models.ForeignKey(
+        "prescriptiondetails.ScorchHeight",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Scorch Height",
+    )
+    burn_area = models.ForeignKey(
+        "prescriptiondetails.BurnArea",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Area to be burnt",
+    )
+    ros_range = models.ForeignKey(
+        "prescriptiondetails.RosRange",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Rate of Spread (ROS)",
+    )
+    ffdi_range = models.ForeignKey(
+        "prescriptiondetails.FfdiRange",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Forest Fire Danger Index (FFDI)",
+    )
+    glc_range = models.ForeignKey(
+        "prescriptiondetails.GlcRange",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Ground Level Concentration??? (GLC)",
+    )
+    gfdi_range = models.ForeignKey(
+        "prescriptiondetails.GfdiRange",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Grass Fire Danger Index (GFDI)",
+    )
+    temperature_range = models.ForeignKey(
+        "prescriptiondetails.TemperatureRange",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Temperature",
+    )
+    rh_range = models.ForeignKey(
+        "prescriptiondetails.RhRange",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Relative Humidity (RH)",
+    )
+    sdi = models.ForeignKey(
+        "prescriptiondetails.Sdi",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Soil Dryness Index (SDI)",
+    )
+    smc_range = models.ForeignKey(
+        "prescriptiondetails.SmcRange",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Soil Moisture Content (SMC)",
+    )
+    pmc_range = models.ForeignKey(
+        "prescriptiondetails.PmcRange",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Profile Moisture Content (PMC)",
+    )
+    wind_speed_range = models.ForeignKey(
+        "prescriptiondetails.WindSpeedRange",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Wind Speed",
+    )
+    wind_direction = models.ForeignKey(
+        "prescriptiondetails.WindDirection",
+        on_delete=models.CASCADE,
+        related_name="prescription_fuel_types",
+        null=True,
+        blank=True,
+        verbose_name="Wind Direction",
+    )
 
     def __str__(self) -> str:
         return f"{self.prescription} - {self.fuel_type}"

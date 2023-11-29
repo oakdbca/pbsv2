@@ -832,13 +832,47 @@ class PrescriptionFuelTypeInline(nested_admin.NestedStackedInline):
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
 
-    list_display = ("fuel_type",)
+    list_display = (
+        "fuel_type",
+        "cell_name",
+        "scorch_height",
+        "burn_area",
+        "ros_range",
+        "ffdi_range",
+        "glc_range",
+        "gfdi_range",
+        "temperature_range",
+        "rh_range",
+        "sdi",
+        "smc_range",
+        "pmc_range",
+        "wind_speed_range",
+        "wind_direction",
+    )
 
     fieldsets = (
         (
             "Fuel type",
             {
-                "fields": (("fuel_type",),),
+                "fields": (
+                    ("fuel_type",),
+                    (
+                        "cell_name",
+                        "scorch_height",
+                        "burn_area",
+                        "ros_range",
+                        "ffdi_range",
+                        "glc_range",
+                        "gfdi_range",
+                        "temperature_range",
+                        "rh_range",
+                        "sdi",
+                        "smc_range",
+                        "pmc_range",
+                        "wind_speed_range",
+                        "wind_direction",
+                    ),
+                ),
                 "classes": (
                     "less-dominant-style",
                     "nested-inline-flex-container",
