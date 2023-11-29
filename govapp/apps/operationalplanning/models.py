@@ -433,6 +433,17 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     # Risk Categories: OperationalPlanRiskCategory
     # risk_ratings
 
+    # Contingencies
+    # contingencies
+
+    prescription = models.ForeignKey(
+        "Prescription",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="operational_plans",
+    )
+
     # Legal / Approvals
     legal_approvals: models.ManyToManyField = models.ManyToManyField(
         LegalApproval,
@@ -683,9 +694,6 @@ class Prescription(models.Model):
     ignition_sequence = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
-        truncate_length = 20
-        return (
-            str(self.operational_overview)[:truncate_length] + ".."
-            if len(str(self.operational_overview)) > truncate_length
-            else str(self.operational_overview)
-        )
+        truncate_length = 40
+        text = str(self.operational_overview)
+        return text[:truncate_length] + ".." if len(text) > truncate_length else text

@@ -722,6 +722,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         "context_risk_of_not_completing_burn",
         "context_operational_aspects",
         "context_map",
+        "prescription",
     )
 
     fieldsets = (
@@ -766,6 +767,12 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
             "Traffic",
             {
                 "fields": ("traffic",),
+            },
+        ),
+        (
+            "Prescription",
+            {
+                "fields": ("prescription",),
             },
         ),
     )
