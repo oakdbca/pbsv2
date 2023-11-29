@@ -661,8 +661,8 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
 class ContingencyNeighbourInline(nested_admin.NestedStackedInline):
     model = ContingencyNeighbour
     extra = 0
-    # verbose_name = "Neighbouring Operational Plan"
-    # verbose_name_plural = "Neighbouring Operational Plans"
+    verbose_name = "Neighbouring landowner or significant stakeholder"
+    verbose_name_plural = "Neighbouring landowners and significant stakeholders"
 
     class Media:
         css = {
