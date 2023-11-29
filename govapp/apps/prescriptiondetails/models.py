@@ -1,3 +1,5 @@
+from django.db import models
+
 from govapp.apps.main.models import UniqueNameableModel
 
 
@@ -5,6 +7,10 @@ class FuelType(UniqueNameableModel):
     class Meta:
         verbose_name = "Fuel Type"
         verbose_name_plural = "Fuel Types"
+
+    # The system is to intersect the operational area with the Fuel Type layer in CDDP
+    # to prefill the fuel types in the Prescription section (Reqs Id 56)
+    fuel_type_layer = models.CharField(max_length=255, blank=True, null=True)
 
 
 class ScorchHeight(UniqueNameableModel):
