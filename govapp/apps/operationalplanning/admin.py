@@ -24,6 +24,7 @@ from .models import (
     OperationalPlanRiskCategoryContributingFactorAdditionalControl,
     OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating,
     OperationalPlanRiskCategoryContributingFactorOverwriteControl,
+    Prescription,
     SuccessCriteria,
     SuccessCriteriaComparisonOperator,
     SuccessCriteriaLeftValue,
@@ -812,3 +813,18 @@ class ContingencyAdmin(NestedDeleteRestrictedAdmin):
     readonly_fields = ("context_map",)
 
     inlines = [ContingencyNeighbourInline]
+
+
+@admin.register(Prescription)
+class PrescriptionAdmin(NestedDeleteRestrictedAdmin):
+    model = Prescription
+
+    list_display = (
+        "operational_overview",
+        "ignition_sequence",
+    )
+
+    fields = (
+        "operational_overview",
+        "ignition_sequence",
+    )

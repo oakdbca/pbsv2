@@ -672,3 +672,20 @@ class Contingency(UniqueNameableModel, DisplayNameableModel):
     @property
     def context_map(self):
         return self.operational_plan.context_map
+
+
+class Prescription(models.Model):
+    class Meta:
+        verbose_name = "Prescription"
+        verbose_name_plural = "Prescriptions"
+
+    operational_overview = models.TextField(null=True, blank=True)
+    ignition_sequence = models.TextField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        truncate_length = 20
+        return (
+            str(self.operational_overview)[:truncate_length] + ".."
+            if len(str(self.operational_overview)) > truncate_length
+            else str(self.operational_overview)
+        )
