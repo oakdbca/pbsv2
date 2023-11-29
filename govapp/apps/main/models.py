@@ -302,4 +302,4 @@ class Neighbour(DisplayNameableModel, NameableModel):
     def __str__(self):
         if not self.display_name:
             return self.name
-        return f"{self.name} ({self.display_name})"
+        return f"{self.name} ({self.location})"
