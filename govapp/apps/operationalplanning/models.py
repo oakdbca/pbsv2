@@ -632,3 +632,43 @@ class ObjectiveAndSuccessCriteria(TimeStampedModel):
     )
     details = models.TextField(null=True, blank=True)
     applicable_to_whole_operational_area = models.BooleanField(default=False)
+
+
+class ContingencyNeighbour(models.Model):
+    contingency = models.ForeignKey(
+        "Contingency",
+        on_delete=models.CASCADE,
+        related_name="contingency_neighbours",
+    )
+    neighbour = models.ForeignKey(
+        "main.Neighbour",
+        on_delete=models.CASCADE,
+        related_name="contingency_neighbours",
+    )
+
+    def __str__(self) -> str:
+        return f"{self.contingency} - {self.neighbour}"
+
+
+class Contingency(UniqueNameableModel, DisplayNameableModel):
+    class Meta:
+        verbose_name = "Contingency"
+        verbose_name_plural = "Contingencies"
+
+    operational_plan = models.ForeignKey(
+        OperationalPlan,
+        on_delete=models.CASCADE,
+        related_name="contingencies",
+    )
+    suppression_constraints = models.TextField(null=True, blank=True)
+    neighbours: models.ManyToManyField = models.ManyToManyField(
+        "main.Neighbour",
+        related_name="contingencies",
+        verbose_name="Neighbouring landowners and significant stakeholders",
+        through="ContingencyNeighbour",
+        through_fields=("contingency", "neighbour"),
+    )
+
+    @property
+    def context_map(self):
+        return self.operational_plan.context_map

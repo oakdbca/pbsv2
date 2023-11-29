@@ -9,6 +9,8 @@ from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestricted
 from govapp.apps.risk.models import ContributingFactorStandardControl
 
 from .models import (
+    Contingency,
+    ContingencyNeighbour,
     LegalApproval,
     Objective,
     ObjectiveAndSuccessCriteria,
@@ -656,6 +658,45 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
     )
 
 
+class ContingencyNeighbourInline(nested_admin.NestedStackedInline):
+    model = ContingencyNeighbour
+    extra = 0
+    # verbose_name = "Neighbouring Operational Plan"
+    # verbose_name_plural = "Neighbouring Operational Plans"
+
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+
+class ContingencyInline(nested_admin.NestedStackedInline):
+    model = Contingency
+    extra = 0
+
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    fieldsets = (
+        (
+            "Contingency",
+            {
+                "fields": (("suppression_constraints",), "context_map"),
+                "classes": (
+                    "less-dominant-style",
+                    "nested-inline-flex-container",
+                ),
+            },
+        ),
+    )
+
+    readonly_fields = ("context_map",)
+
+    inlines = [ContingencyNeighbourInline]
+
+
 class OperationalPlanAdminForm(forms.ModelForm):
     class Meta:
         model = OperationalPlan
@@ -735,5 +776,39 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         OperationalAreaPurposeInline,
         OperationalAreaProgramInline,
         OperationalPlanRiskCategoryInline,
+        ContingencyInline,
         OperationalPlanApprovalInline,
     ]
+
+
+@admin.register(ContingencyNeighbour)
+class ContingencyNeighbourAdmin(NestedDeleteRestrictedAdmin):
+    model = ContingencyNeighbour
+
+    list_display = (
+        "contingency",
+        "neighbour",
+    )
+
+
+@admin.register(Contingency)
+class ContingencyAdmin(NestedDeleteRestrictedAdmin):
+    model = Contingency
+
+    list_display = (
+        "name",
+        "display_name",
+        "suppression_constraints",
+        "context_map",
+    )
+
+    fields = (
+        "name",
+        "display_name",
+        "suppression_constraints",
+        "context_map",
+    )
+
+    readonly_fields = ("context_map",)
+
+    inlines = [ContingencyNeighbourInline]
