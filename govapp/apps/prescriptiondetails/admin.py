@@ -3,6 +3,7 @@ from django.contrib import admin
 from govapp.apps.main.admin import NestedDeleteRestrictedAdmin
 
 from .models import (
+    ApplicableFuelTypePrescriptionDetail,
     BurnArea,
     FfdiRange,
     FuelType,
@@ -102,3 +103,9 @@ class WindSpeedRangeAdmin(NestedDeleteRestrictedAdmin):
 class WindDirectionAdmin(NestedDeleteRestrictedAdmin):
     model = WindDirection
     list_display = ("name",)
+
+
+@admin.register(ApplicableFuelTypePrescriptionDetail)
+class ApplicableFuelTypePrescriptionDetailAdmin(NestedDeleteRestrictedAdmin):
+    model = ApplicableFuelTypePrescriptionDetail
+    list_display = ("prescription_detail",)

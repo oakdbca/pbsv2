@@ -1,4 +1,5 @@
 from django.db import models
+from model_utils import Choices
 
 from govapp.apps.main.models import DetailMeta, UniqueNameableModel
 
@@ -150,10 +151,23 @@ class WindDirection(PrescriptionDetail):
     detail_key = "wind_direction"
 
 
-class ApplicableFuelTypeDetail(models.Model):
+class ApplicableFuelTypePrescriptionDetail(models.Model):
     class Meta:
-        verbose_name = "Applicable Fuel Type Detail"
-        verbose_name_plural = "Applicable Fuel Type Details"
+        verbose_name = "Applicable Fuel Type Prescription Detail"
+        verbose_name_plural = "Applicable Fuel Type Prescription Details"
+
+    prescription_detail = models.CharField(
+        choices=Choices(*PRESCRIPTION_DETAILS_CHOICES),
+        max_length=255,
+        blank=True,
+        null=True,
+        unique=True,
+    )
+
+    def __str__(self):
+        abbreviation = PRESCRIPTION_DETAILS[self.prescription_detail]["abbreviation"]
+        abbreviation = f" ({abbreviation})" if abbreviation else ""
+        return f"{self.get_prescription_detail_display()}{abbreviation}"
 
 
 class FuelType(UniqueNameableModel):
@@ -164,3 +178,6 @@ class FuelType(UniqueNameableModel):
     # The system is to intersect the operational area with the Fuel Type layer in CDDP
     # to prefill the fuel types in the Prescription section (Reqs Id 56)
     fuel_type_layer = models.CharField(max_length=255, blank=True, null=True)
+    applicable_fuel_type_prescription_details = models.ManyToManyField(
+        ApplicableFuelTypePrescriptionDetail, related_name="fuel_types"
+    )
