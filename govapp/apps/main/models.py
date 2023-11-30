@@ -9,12 +9,46 @@ from django.db import models
 from django.db.models.fields.related_descriptors import ReverseManyToOneDescriptor
 from protected_media.models import ProtectedFileField
 
-model_type: Any = type(models.Model)
+model_type = models.base.ModelBase
 T = TypeVar("T")
 
 
 class AbstractModelMeta(ABCMeta, model_type):
     pass
+
+
+class DetailMeta(AbstractModelMeta):
+    """A metaclass that allows to define a model's verbose name and plural name"""
+
+    def __new__(cls, name, bases, attrs, **kwargs):
+        result = super().__new__(cls, name, bases, attrs, **kwargs)
+        details = cls._DETAILS(result)
+
+        if "detail_key" in attrs:
+            if not attrs["detail_key"] in details:
+                raise NotImplementedError(
+                    "Model class must have a key that is in PRESCRIPTION_DETAILS"
+                )
+            verbose_name = details[attrs["detail_key"]].get("singular", None)
+            verbose_name_plural = details[attrs["detail_key"]].get("plural", None)
+            abbreviation = details[attrs["detail_key"]].get("abbreviation", None)
+            abbreviation = (
+                f" ({abbreviation})" if abbreviation or len(abbreviation) else ""
+            )
+            _meta = {
+                "verbose_name": f"{verbose_name}{abbreviation}",
+                "verbose_name_plural": f"{verbose_name_plural}{abbreviation}",
+            }
+            result._meta.__dict__.update(_meta)
+
+        return result
+
+    def _DETAILS(self):
+        if not hasattr(self, "DETAILS"):
+            raise NotImplementedError(
+                f"{self.__class__.__name__} model has no `DETAILS` attribute"
+            )
+        return self.DETAILS
 
 
 class YearField(models.IntegerField):
@@ -154,7 +188,7 @@ class ReferenceableModel(models.Model):
         return self._meta.model_name
 
 
-class AssignableModel(models.Model, metaclass=AbstractModelMeta):  # type: ignore
+class AssignableModel(models.Model, metaclass=AbstractModelMeta):
     assigned_to = models.ForeignKey(
         User, on_delete=models.PROTECT, null=True, blank=True
     )
