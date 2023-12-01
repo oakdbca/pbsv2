@@ -51,12 +51,6 @@ class DetailMeta(AbstractModelMeta):
         return self.DETAILS
 
 
-class YearField(models.IntegerField):
-    def __init__(self, *args, **kwargs):
-        kwargs["validators"] = [MinValueValidator(2023), MaxValueValidator(2100)]
-        super().__init__(*args, **kwargs)
-
-
 class GenericIntervalField(ABC, models.Field, Generic[T]):
     """A generic field class that accepts a min and max value (including both endpoints: `[min,max]`-notation)"""
 
@@ -94,6 +88,11 @@ class IntervalIntegerField(
 ):
     def field_class(self):
         return models.IntegerField
+
+
+class YearField(IntervalIntegerField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(min_value=2023, max_value=2100, *args, **kwargs)
 
 
 class IntervalFloatField(models.FloatField, GenericIntervalField[models.FloatField]):
