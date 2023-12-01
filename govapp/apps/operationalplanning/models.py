@@ -19,6 +19,7 @@ from govapp.apps.main.models import (
     file_upload_location,
 )
 from govapp.apps.prescriptiondetails.models import (
+    PRESCRIPTION_DETAILS,
     FuelType,
     format_prescription_detail_name,
 )
@@ -819,6 +820,21 @@ class PrescriptionFuelType(models.Model):
     @property
     def applicable_fuel_type_prescription_details(self):
         return self.fuel_type.applicable_fuel_type_prescription_details.all()
+
+    def clean(self):
+        attrs = PRESCRIPTION_DETAILS.keys()
+        applicable_details = self.applicable_fuel_type_prescription_details.values_list(
+            "prescription_detail", flat=True
+        )
+        set_details = [attr for attr in attrs if getattr(self, attr)]
+        if any(detail not in applicable_details for detail in set_details):
+            raise ValidationError("Invalid prescription detail for this fuel type")
+        return super().clean()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+
+        super().save(*args, **kwargs)
 
 
 class Prescription(models.Model):
