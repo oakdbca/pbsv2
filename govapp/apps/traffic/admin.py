@@ -3,6 +3,7 @@ from django import forms
 from django.contrib import admin
 
 from govapp.apps.main.admin import NestedDeleteRestrictedAdmin
+from govapp.apps.main.models import ModelFile
 from govapp.apps.traffic.models import (
     Road,
     RoadOwner,
@@ -120,6 +121,14 @@ class TrafficRequiredArrangementAdmin(admin.ModelAdmin):
     readonly_fields = ("traffic",)
 
 
+class IndicativeTrafficManagementSchemeModelFileInline(
+    nested_admin.NestedGenericStackedInline
+):
+    model = ModelFile
+    extra = 0
+    verbose_name_plural = "Indicative Traffic Management Scheme Model Files"
+
+
 class TrafficRequiredArrangementInline(nested_admin.NestedStackedInline):
     model = TrafficRequiredArrangement
     extra = 0
@@ -178,7 +187,6 @@ class TrafficAdmin(NestedDeleteRestrictedAdmin):
         "id",
         "name",
         "display_name",
-        "indicative_traffic_management_scheme",
     )
     search_fields = (
         "name",
@@ -200,7 +208,6 @@ class TrafficAdmin(NestedDeleteRestrictedAdmin):
                         "name",
                         "display_name",
                     ),
-                    ("indicative_traffic_management_scheme",),
                     "roads",
                 ),
                 "classes": (
@@ -211,4 +218,7 @@ class TrafficAdmin(NestedDeleteRestrictedAdmin):
         ),
     )
 
-    inlines = [TrafficRequiredArrangementInline]
+    inlines = [
+        IndicativeTrafficManagementSchemeModelFileInline,
+        TrafficRequiredArrangementInline,
+    ]

@@ -7,6 +7,7 @@ from django.utils.html import format_html, format_html_join
 from model_utils import Choices
 
 from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
+from govapp.apps.main.models import ModelFile
 from govapp.apps.risk.models import ContributingFactorStandardControl
 
 from .models import (
@@ -511,6 +512,12 @@ class OperationalAreaApprovalAdminForm(forms.ModelForm):
         return cleaned_data
 
 
+class FileAsApprovalModelFileInline(nested_admin.NestedGenericStackedInline):
+    model = ModelFile
+    extra = 0
+    verbose_name = "File as approval"
+
+
 class OperationalPlanApprovalInline(nested_admin.NestedStackedInline):
     model = OperationalPlanApproval
     extra = 0
@@ -534,7 +541,6 @@ class OperationalPlanApprovalInline(nested_admin.NestedStackedInline):
 
     list_display = (
         "legal_approval",
-        "file_as_approval",
         "has_additional_permissions",
         "text_as_approval",
         "text_remove_justification",
@@ -567,7 +573,6 @@ class OperationalPlanApprovalInline(nested_admin.NestedStackedInline):
             {
                 "fields": (
                     (
-                        "file_as_approval",
                         "text_as_approval",
                         "text_remove_justification",
                     )
@@ -580,6 +585,8 @@ class OperationalPlanApprovalInline(nested_admin.NestedStackedInline):
             },
         ),
     )
+
+    inlines = [FileAsApprovalModelFileInline]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -700,6 +707,12 @@ class ContingencyInline(nested_admin.NestedStackedInline):
     inlines = [ContingencyNeighbourInline]
 
 
+class ContextMapModelFileInline(nested_admin.NestedGenericStackedInline):
+    model = ModelFile
+    extra = 0
+    verbose_name = "Context map"
+
+
 class OperationalPlanAdminForm(forms.ModelForm):
     class Meta:
         model = OperationalPlan
@@ -723,7 +736,6 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         "context_description_of_burn",
         "context_risk_of_not_completing_burn",
         "context_operational_aspects",
-        "context_map",
         "prescription",
     )
 
@@ -761,7 +773,6 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
                     "context_description_of_burn",
                     "context_risk_of_not_completing_burn",
                     "context_operational_aspects",
-                    "context_map",
                 ),
             },
         ),
@@ -782,6 +793,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
     readonly_fields = ("reference_number", "created", "modified")
 
     inlines = [
+        ContextMapModelFileInline,
         ObjectiveAndSuccessCriteriaInline,
         OperationalAreaPurposeInline,
         OperationalAreaProgramInline,
