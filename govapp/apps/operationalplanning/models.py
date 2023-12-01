@@ -499,7 +499,7 @@ class OperationalPlanApproval(TimeStampedModel):
 
     def __str__(self) -> str:
         return (
-            f"Operational Area: {self.operational_plan} "
+            f"Operational Plan: {self.operational_plan} "
             f"has legal/approval: {self.legal_approval}"
         )
 

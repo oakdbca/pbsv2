@@ -521,8 +521,8 @@ class FileAsApprovalModelFileInline(nested_admin.NestedGenericStackedInline):
 class OperationalPlanApprovalInline(nested_admin.NestedStackedInline):
     model = OperationalPlanApproval
     extra = 0
-    verbose_name = "Operational Area Approval"
-    verbose_name_plural = "Operational Area Approvals"
+    verbose_name = "Operational Plan Approval"
+    verbose_name_plural = "Operational Plan Approvals"
 
     form = OperationalAreaApprovalAdminForm
 
