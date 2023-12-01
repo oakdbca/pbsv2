@@ -1,13 +1,13 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.gis.db.models import PointField
 from django.db import models
 from model_utils.models import TimeStampedModel
-from protected_media.models import ProtectedFileField
 
 from govapp.apps.main.models import (
     DisplayNameableModel,
     IntervalIntegerField,
+    ModelFile,
     UniqueNameableModel,
-    file_upload_location,
 )
 
 
@@ -103,9 +103,8 @@ class Traffic(UniqueNameableModel, DisplayNameableModel, TimeStampedModel):
 
     traffic_required_arrangements: "models.Manager[TrafficRequiredArrangement]"
 
-    indicative_traffic_management_scheme = ProtectedFileField(
-        upload_to=file_upload_location, null=True, blank=True
-    )  # Attached file will be copied to Traffic section in Implementation Plan
+    # Attached file will be copied to Traffic section in Implementation Plan
+    indicative_traffic_management_scheme = GenericRelation(ModelFile)
     roads: models.ManyToManyField = models.ManyToManyField(
         "Road", blank=True, related_name="traffics"
     )

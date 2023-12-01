@@ -1,11 +1,11 @@
 from logging import getLogger
 
+from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.gis.db.models import MultiLineStringField, MultiPolygonField
 from django.db import models
 from django.forms import ValidationError
 from model_utils import Choices
 from model_utils.models import TimeStampedModel
-from protected_media.models import ProtectedFileField
 
 from govapp.apps.burnplanning.models import BurnPlanElement
 from govapp.apps.main.models import (
@@ -13,10 +13,10 @@ from govapp.apps.main.models import (
     IntervalFloatField,
     IntervalIntegerField,
     Lga,
+    ModelFile,
     ReferenceableModel,
     UniqueNameableModel,
     YearField,
-    file_upload_location,
 )
 from govapp.apps.prescriptiondetails.models import (
     PRESCRIPTION_DETAILS,
@@ -417,9 +417,7 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     context_operational_aspects = models.TextField(
         null=True, blank=True, verbose_name="Operational aspects (PESTLE)"
     )
-    context_map = ProtectedFileField(
-        upload_to=file_upload_location, null=True, blank=True
-    )
+    context_map = GenericRelation(ModelFile)
 
     # Objectives and Success Criteria: ObjectiveAndSuccessCriteria
 
@@ -489,9 +487,7 @@ class OperationalPlanApproval(TimeStampedModel):
         verbose_name="Shire/LGA",
         related_name="operationalplanapprovals",
     )  # Shire
-    file_as_approval = ProtectedFileField(
-        upload_to=file_upload_location, null=True, blank=True
-    )
+    file_as_approval = GenericRelation(ModelFile)
     text_as_approval: models.TextField = models.TextField(null=True, blank=True)
     text_remove_justification: models.TextField = models.TextField(
         null=True, blank=True
