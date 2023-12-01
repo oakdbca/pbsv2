@@ -18,7 +18,10 @@ from govapp.apps.main.models import (
     YearField,
     file_upload_location,
 )
-from govapp.apps.prescriptiondetails.models import FuelType
+from govapp.apps.prescriptiondetails.models import (
+    FuelType,
+    format_prescription_detail_name,
+)
 from govapp.apps.risk.models import (
     AdditionalControl,
     ContributingFactor,
@@ -711,7 +714,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Scorch Height",
+        verbose_name=format_prescription_detail_name("scorch_height"),
     )
     burn_area = models.ForeignKey(
         "prescriptiondetails.BurnArea",
@@ -719,7 +722,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Area to be burnt",
+        verbose_name=format_prescription_detail_name("burn_area"),
     )
     ros_range = models.ForeignKey(
         "prescriptiondetails.RosRange",
@@ -727,7 +730,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Rate of Spread (ROS)",
+        verbose_name=format_prescription_detail_name("ros_range"),
     )
     ffdi_range = models.ForeignKey(
         "prescriptiondetails.FfdiRange",
@@ -735,7 +738,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Forest Fire Danger Index (FFDI)",
+        verbose_name=format_prescription_detail_name("ffdi_range"),
     )
     glc_range = models.ForeignKey(
         "prescriptiondetails.GlcRange",
@@ -743,7 +746,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Ground Level Concentration??? (GLC)",
+        verbose_name=format_prescription_detail_name("glc_range"),
     )
     gfdi_range = models.ForeignKey(
         "prescriptiondetails.GfdiRange",
@@ -751,7 +754,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Grass Fire Danger Index (GFDI)",
+        verbose_name=format_prescription_detail_name("gfdi_range"),
     )
     temperature_range = models.ForeignKey(
         "prescriptiondetails.TemperatureRange",
@@ -759,7 +762,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Temperature",
+        verbose_name=format_prescription_detail_name("temperature_range"),
     )
     rh_range = models.ForeignKey(
         "prescriptiondetails.RhRange",
@@ -767,7 +770,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Relative Humidity (RH)",
+        verbose_name=format_prescription_detail_name("rh_range"),
     )
     sdi = models.ForeignKey(
         "prescriptiondetails.Sdi",
@@ -775,7 +778,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Soil Dryness Index (SDI)",
+        verbose_name=format_prescription_detail_name("sdi"),
     )
     smc_range = models.ForeignKey(
         "prescriptiondetails.SmcRange",
@@ -783,7 +786,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Soil Moisture Content (SMC)",
+        verbose_name=format_prescription_detail_name("smc_range"),
     )
     pmc_range = models.ForeignKey(
         "prescriptiondetails.PmcRange",
@@ -791,7 +794,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Profile Moisture Content (PMC)",
+        verbose_name=format_prescription_detail_name("pmc_range"),
     )
     wind_speed_range = models.ForeignKey(
         "prescriptiondetails.WindSpeedRange",
@@ -799,7 +802,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Wind Speed",
+        verbose_name=format_prescription_detail_name("wind_speed_range"),
     )
     wind_direction = models.ForeignKey(
         "prescriptiondetails.WindDirection",
@@ -807,7 +810,7 @@ class PrescriptionFuelType(models.Model):
         related_name="prescription_fuel_types",
         null=True,
         blank=True,
-        verbose_name="Wind Direction",
+        verbose_name=format_prescription_detail_name("wind_direction"),
     )
 
     def __str__(self) -> str:

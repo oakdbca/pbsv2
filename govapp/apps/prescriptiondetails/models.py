@@ -3,6 +3,7 @@ from model_utils import Choices
 
 from govapp.apps.main.models import DetailMeta, UniqueNameableModel
 
+"""Might need to use a model instead of a dict for this"""
 PRESCRIPTION_DETAILS = {
     "scorch_height": {
         "singular": "Scorch Height",
@@ -88,6 +89,20 @@ PRESCRIPTION_DETAILS_CHOICES = (
 )
 
 
+def format_prescription_detail_name(key, plural=False):
+    """Format a prescription detail name based on the key and whether it is plural
+    Returns a string in the form of "Singular Name (Abbreviation)" or "Plural Name (Abbreviation)"
+    """
+
+    if key not in PRESCRIPTION_DETAILS:
+        raise ValueError(f"{key} is not a valid prescription detail key")
+    abbreviation = PRESCRIPTION_DETAILS[key]["abbreviation"]
+    abbreviation = f" ({abbreviation})" if abbreviation else ""
+    if plural:
+        return f"{PRESCRIPTION_DETAILS[key]['plural']}{abbreviation}"
+    return f"{PRESCRIPTION_DETAILS[key]['singular']}{abbreviation}"
+
+
 class PrescriptionDetailMeta(DetailMeta):
     DETAILS = PRESCRIPTION_DETAILS
 
@@ -165,9 +180,7 @@ class ApplicableFuelTypePrescriptionDetail(models.Model):
     )
 
     def __str__(self):
-        abbreviation = PRESCRIPTION_DETAILS[self.prescription_detail]["abbreviation"]
-        abbreviation = f" ({abbreviation})" if abbreviation else ""
-        return f"{self.get_prescription_detail_display()}{abbreviation}"
+        return format_prescription_detail_name(self.prescription_detail)
 
 
 class FuelType(UniqueNameableModel):
