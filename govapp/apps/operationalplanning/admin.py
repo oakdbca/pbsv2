@@ -243,6 +243,8 @@ class OperationalPlanRiskCategoryContributingFactorInline(
         ),
     )
 
+    classes = ("less-dominant-style", "nested-inline-flex-container")
+
     inlines = [
         OperationalPlanRiskCategoryContributingFactorOverwriteControlInline,
         OperationalPlanRiskCategoryContributingFactorAdditionalControlInline,
@@ -317,6 +319,7 @@ class SuccessCriteriaInline(nested_admin.NestedStackedInline):
             },
         ),
     )
+    classes = ("less-dominant-style", "nested-inline-flex-container")
 
     inlines = [SuccessCriteriaReportInline]
 
@@ -517,6 +520,13 @@ class FileAsApprovalModelFileInline(nested_admin.NestedGenericStackedInline):
     extra = 0
     verbose_name = "File as approval"
 
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    classes = ("less-dominant-style", "nested-inline-flex-container")
+
 
 class OperationalPlanApprovalInline(nested_admin.NestedStackedInline):
     model = OperationalPlanApproval
@@ -678,6 +688,8 @@ class ContingencyNeighbourInline(nested_admin.NestedStackedInline):
         css = {
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
+
+    classes = ("less-dominant-style", "nested-inline-flex-container")
 
 
 class ContingencyInline(nested_admin.NestedStackedInline):
@@ -841,11 +853,25 @@ class FireAssessmentSummaryModelFileInline(nested_admin.NestedGenericStackedInli
     extra = 0
     verbose_name = "Fire assessment summary"
 
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    classes = ("less-dominant-style", "nested-inline-flex-container")
+
 
 class FireBehaviourCalculationsModelFileInline(nested_admin.NestedGenericStackedInline):
     model = ModelFile
     extra = 0
     verbose_name = "Fire behaviour calculation"
+
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    classes = ("less-dominant-style", "nested-inline-flex-container")
 
 
 class PrescriptionFuelTypeInline(nested_admin.NestedStackedInline):
