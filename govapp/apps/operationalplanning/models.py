@@ -810,6 +810,9 @@ class PrescriptionFuelType(models.Model):
         verbose_name=format_prescription_detail_name("wind_direction"),
     )
 
+    fuel_assessment_summary = GenericRelation(ModelFile)
+    fire_behaviour_calculations = GenericRelation(ModelFile)
+
     def __str__(self) -> str:
         return f"{self.prescription} - {self.fuel_type}"
 

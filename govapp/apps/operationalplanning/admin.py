@@ -836,6 +836,18 @@ class ContingencyAdmin(NestedDeleteRestrictedAdmin):
     inlines = [ContingencyNeighbourInline]
 
 
+class FireAssessmentSummaryModelFileInline(nested_admin.NestedGenericStackedInline):
+    model = ModelFile
+    extra = 0
+    verbose_name = "Fire assessment summary"
+
+
+class FireBehaviourCalculationsModelFileInline(nested_admin.NestedGenericStackedInline):
+    model = ModelFile
+    extra = 0
+    verbose_name = "Fire behaviour calculation"
+
+
 class PrescriptionFuelTypeInline(nested_admin.NestedStackedInline):
     model = PrescriptionFuelType
     extra = 0
@@ -909,6 +921,11 @@ class PrescriptionFuelTypeInline(nested_admin.NestedStackedInline):
     )
 
     readonly_fields = ("applicable_fuel_type_prescription_details",)
+
+    inlines = [
+        FireAssessmentSummaryModelFileInline,
+        FireBehaviourCalculationsModelFileInline,
+    ]
 
     def applicable_fuel_type_prescription_details(self, obj=None):
         """Return a list of applicable fuel type prescription details for the fuel type for purpose of display."""
