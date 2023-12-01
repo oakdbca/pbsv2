@@ -860,6 +860,17 @@ class PrescriptionFuelTypeInline(nested_admin.NestedStackedInline):
                         "fuel_type",
                         "applicable_fuel_type_prescription_details",
                     ),
+                ),
+                "classes": (
+                    "less-dominant-style",
+                    "nested-inline-flex-container",
+                ),
+            },
+        ),
+        (
+            "Fuel type prescription details",
+            {
+                "fields": (
                     (
                         "cell_name",
                         "scorch_height",
