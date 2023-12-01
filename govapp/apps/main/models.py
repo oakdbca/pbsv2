@@ -304,6 +304,7 @@ class District(DisplayNameableModel, UniqueNameableModel):
 
 class Lga(DisplayNameableModel, UniqueNameableModel):
     operationalplanapprovals: ReverseManyToOneDescriptor
+    operationalareaapprovals: ReverseManyToOneDescriptor
 
     class Meta:
         ordering = ["name"]

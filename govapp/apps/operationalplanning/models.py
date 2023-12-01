@@ -42,6 +42,7 @@ class LegalApproval(DisplayNameableModel):
     objects = models.Manager()
 
     operationalplanapprovals: "models.Manager[OperationalPlanApproval]"
+    operationalareaapprovals: "models.Manager[OperationalAreaApproval]"
 
     # TODO Not sure on this one, but requirement item #72 mentions these three separately
     APPROVAL_TYPES = Choices(
@@ -70,6 +71,8 @@ class LegalApproval(DisplayNameableModel):
     has_additional_permissions: models.BooleanField = models.BooleanField(
         default=False
     )  # Whether the user can attach files, texts, or remove the approval
+    # is_required_for_operational_area = models.BooleanField(default=False)
+    # is_required_for_operational_plan = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Operational Plan Legal/Approval"
@@ -91,6 +94,7 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     MODEL_PREFIX = "OA"
 
     objects = models.Manager()
+    operationalareaapprovals: "models.Manager[OperationalAreaApproval]"
 
     burn_plan_element: models.ForeignKey = models.ForeignKey(
         BurnPlanElement,
@@ -467,7 +471,70 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         raise NotImplementedError("TODO")
 
 
-class OperationalPlanApproval(TimeStampedModel):
+class GenericModelLegalApprovalThroughModel(TimeStampedModel):
+    file_as_approval = GenericRelation(ModelFile)
+    text_as_approval: models.TextField = models.TextField(null=True, blank=True)
+    text_remove_justification: models.TextField = models.TextField(
+        null=True, blank=True
+    )
+
+    class Meta:
+        abstract = True
+
+    @property
+    def has_lga(self):
+        if not hasattr(self, "legal_approval"):
+            raise AttributeError(
+                "Model needs to implement a foreign key to LegalApproval to access `has_lga`"
+            )
+        return self.legal_approval.has_lga
+
+    @property
+    def has_additional_permissions(self):
+        if not hasattr(self, "legal_approval"):
+            raise AttributeError(
+                "Model needs to implement a foreign key to LegalApproval to access `has_additional_permissions`"
+            )
+        return self.legal_approval.has_additional_permissions
+
+
+class OperationalAreaApproval(GenericModelLegalApprovalThroughModel):
+    operational_area = models.ForeignKey(
+        OperationalArea,
+        on_delete=models.CASCADE,
+        related_name="operationalareaapprovals",
+    )
+    legal_approval = models.ForeignKey(
+        LegalApproval,
+        on_delete=models.CASCADE,
+        related_name="operationalareaapprovals",
+    )  # OP: endorsement and approval by district manager and regional manager
+
+    # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
+    # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
+    # + issue and expiry date of the issued lawful authorities
+
+    lga: models.ForeignKey = models.ForeignKey(
+        Lga,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        verbose_name="Shire/LGA",
+        related_name="operationalareaapprovals",
+    )  # Shire
+
+    class Meta:
+        verbose_name_plural = "Operational Area Legal/Approvals"
+        unique_together = ("operational_area", "legal_approval")
+
+    def __str__(self) -> str:
+        return (
+            f"Operational Area: {self.operational_area} "
+            f"has legal/approval: {self.legal_approval}"
+        )
+
+
+class OperationalPlanApproval(GenericModelLegalApprovalThroughModel):
     operational_plan = models.ForeignKey(
         OperationalPlan,
         on_delete=models.CASCADE,
@@ -477,7 +544,11 @@ class OperationalPlanApproval(TimeStampedModel):
         LegalApproval,
         on_delete=models.CASCADE,
         related_name="operationalplanapprovals",
-    )
+    )  # OP: endorsement and approval by district manager and regional manager
+
+    # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
+    # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
+    # + issue and expiry date of the issued lawful authorities
 
     lga: models.ForeignKey = models.ForeignKey(
         Lga,
@@ -487,11 +558,6 @@ class OperationalPlanApproval(TimeStampedModel):
         verbose_name="Shire/LGA",
         related_name="operationalplanapprovals",
     )  # Shire
-    file_as_approval = GenericRelation(ModelFile)
-    text_as_approval: models.TextField = models.TextField(null=True, blank=True)
-    text_remove_justification: models.TextField = models.TextField(
-        null=True, blank=True
-    )
 
     class Meta:
         verbose_name_plural = "Operational Plan Legal/Approvals"
@@ -502,14 +568,6 @@ class OperationalPlanApproval(TimeStampedModel):
             f"Operational Plan: {self.operational_plan} "
             f"has legal/approval: {self.legal_approval}"
         )
-
-    @property
-    def has_lga(self):
-        return self.legal_approval.has_lga
-
-    @property
-    def has_additional_permissions(self):
-        return self.legal_approval.has_additional_permissions
 
 
 class OperationalPlanPurpose(TimeStampedModel):
