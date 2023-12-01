@@ -3,6 +3,7 @@ from logging import getLogger
 import nested_admin
 from django import forms
 from django.contrib import admin
+from django.utils.html import format_html, format_html_join
 from model_utils import Choices
 
 from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
@@ -855,7 +856,10 @@ class PrescriptionFuelTypeInline(nested_admin.NestedStackedInline):
             "Fuel type",
             {
                 "fields": (
-                    ("fuel_type",),
+                    (
+                        "fuel_type",
+                        "applicable_fuel_type_prescription_details",
+                    ),
                     (
                         "cell_name",
                         "scorch_height",
@@ -880,6 +884,21 @@ class PrescriptionFuelTypeInline(nested_admin.NestedStackedInline):
             },
         ),
     )
+
+    readonly_fields = ("applicable_fuel_type_prescription_details",)
+
+    def applicable_fuel_type_prescription_details(self, obj=None):
+        """Return a list of applicable fuel type prescription details for the fuel type for purpose of display."""
+
+        if not obj.applicable_fuel_type_prescription_details:
+            return ""
+
+        lis = format_html_join(
+            "",
+            "<li>&#x2022; {0}</li>",
+            [(det.__str__(),) for det in obj.applicable_fuel_type_prescription_details],
+        )
+        return format_html("<ul style='margin-left:0px'>{}</ul>", lis)
 
 
 @admin.register(Prescription)

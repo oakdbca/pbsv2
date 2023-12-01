@@ -813,6 +813,10 @@ class PrescriptionFuelType(models.Model):
     def __str__(self) -> str:
         return f"{self.prescription} - {self.fuel_type}"
 
+    @property
+    def applicable_fuel_type_prescription_details(self):
+        return self.fuel_type.applicable_fuel_type_prescription_details.all()
+
 
 class Prescription(models.Model):
     class Meta:
