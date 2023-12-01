@@ -421,6 +421,8 @@ class LegalApprovalAdmin(admin.ModelAdmin):
         "approval_type",
         "land_type",
         "has_additional_permissions",
+        "is_required_for_operational_area",
+        "is_required_for_operational_plan",
     )
 
     fieldsets = (
@@ -433,6 +435,10 @@ class LegalApprovalAdmin(admin.ModelAdmin):
                         "approval_type",
                         "land_type",
                         "has_additional_permissions",
+                        (
+                            "is_required_for_operational_area",
+                            "is_required_for_operational_plan",
+                        ),
                     )
                 ),
             },
@@ -638,6 +644,9 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
         "district",
         "contentious_burn",
         "contentious_rationale",
+        "requires_other_land_approval",
+        "requires_owner_approvals",
+        "requires_shire_approvals",
     )
 
     fieldsets = (
@@ -671,6 +680,18 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
                     (
                         "polygon",
                         "linestring",
+                    ),
+                ),
+            },
+        ),
+        (
+            "Legal",
+            {
+                "fields": (
+                    (
+                        "requires_other_land_approval",
+                        "requires_owner_approvals",
+                        "requires_shire_approvals",
                     ),
                 ),
             },

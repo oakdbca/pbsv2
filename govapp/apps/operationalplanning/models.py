@@ -71,8 +71,8 @@ class LegalApproval(DisplayNameableModel):
     has_additional_permissions: models.BooleanField = models.BooleanField(
         default=False
     )  # Whether the user can attach files, texts, or remove the approval
-    # is_required_for_operational_area = models.BooleanField(default=False)
-    # is_required_for_operational_plan = models.BooleanField(default=False)
+    is_required_for_operational_area = models.BooleanField(default=False)
+    is_required_for_operational_plan = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Operational Plan Legal/Approval"
@@ -125,6 +125,15 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     # Contentious burn is coming from BPE Details section for operational area (not sure it belongs here or in BPE)
     contentious_burn = models.BooleanField(default=False)
     contentious_rationale = models.TextField(null=True, blank=True)
+
+    # Automatically create entries for other additional required approvals by intersecting with Tenure layer in CDDP
+    requires_other_land_approval = models.BooleanField(default=False)
+    requires_owner_approvals = models.BooleanField(
+        default=False
+    )  # One or more owner approvals
+    requires_shire_approvals = models.BooleanField(
+        default=False
+    )  # One or more shire approvals
 
     def __str__(self) -> str:
         return f"{self.reference_number} ({self.name})"
