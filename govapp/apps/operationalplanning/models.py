@@ -1,7 +1,6 @@
 from logging import getLogger
 
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.gis.db.models import MultiLineStringField, MultiPolygonField
 from django.db import models
 from django.forms import ValidationError
@@ -9,11 +8,11 @@ from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 from govapp.apps.burnplanning.models import BurnPlanElement
+from govapp.apps.legalapproval.models import ModelLegalApproval
 from govapp.apps.main.models import (
     DisplayNameableModel,
     IntervalFloatField,
     IntervalIntegerField,
-    Lga,
     ModelFile,
     ReferenceableModel,
     UniqueNameableModel,
@@ -36,58 +35,58 @@ from govapp.apps.traffic.models import Traffic
 logger = getLogger(__name__)
 
 
-# Let's call the class LegalApproval to not confuse with an Approval model
-class LegalApproval(DisplayNameableModel):
-    """Burn Program and Operational Plan approvals"""
+# # Let's call the class LegalApproval to not confuse with an Approval model
+# class LegalApproval(DisplayNameableModel):
+#     """Burn Program and Operational Plan approvals"""
 
-    objects = models.Manager()
+#     objects = models.Manager()
 
-    modellegalapprovals: "models.Manager[ModelLegalApproval]"
+#     modellegalapprovals: "models.Manager[ModelLegalApproval]"
 
-    # TODO Not sure on this one, but requirement item #72 mentions these three separately
-    APPROVAL_TYPES = Choices(
-        ("endorsement", "Endorsement"),
-        ("approval", "Approval"),
-        ("endorsement_or_approval", "Endorsement/Approval"),
-    )
-    approval_type = models.CharField(
-        max_length=255, choices=APPROVAL_TYPES, null=True, blank=True
-    )
-    # TODO There must be a better term than land_type?
-    LAND_TYPE_SHIRE = "shire"
-    LAND_TYPES = Choices(
-        (LAND_TYPE_SHIRE, "Shire"),
-        ("owner", "Owner"),
-        ("other", "Other Lands"),
-    )
-    land_type = models.CharField(
-        max_length=255, choices=LAND_TYPES, null=True, blank=True
-    )  # To be added by the system after intersection
+#     # TODO Not sure on this one, but requirement item #72 mentions these three separately
+#     APPROVAL_TYPES = Choices(
+#         ("endorsement", "Endorsement"),
+#         ("approval", "Approval"),
+#         ("endorsement_or_approval", "Endorsement/Approval"),
+#     )
+#     approval_type = models.CharField(
+#         max_length=255, choices=APPROVAL_TYPES, null=True, blank=True
+#     )
+#     # TODO There must be a better term than land_type?
+#     LAND_TYPE_SHIRE = "shire"
+#     LAND_TYPES = Choices(
+#         (LAND_TYPE_SHIRE, "Shire"),
+#         ("owner", "Owner"),
+#         ("other", "Other Lands"),
+#     )
+#     land_type = models.CharField(
+#         max_length=255, choices=LAND_TYPES, null=True, blank=True
+#     )  # To be added by the system after intersection
 
-    approver: models.CharField = models.CharField(
-        max_length=255, null=True, blank=True
-    )  # Corporate Executive, Shire, Other Lands, Owner
+#     approver: models.CharField = models.CharField(
+#         max_length=255, null=True, blank=True
+#     )  # Corporate Executive, Shire, Other Lands, Owner
 
-    has_additional_permissions: models.BooleanField = models.BooleanField(
-        default=False
-    )  # Whether the user can attach files, texts, or remove the approval
-    is_required_for_operational_area = models.BooleanField(default=False)
-    is_required_for_operational_plan = models.BooleanField(default=False)
+#     has_additional_permissions: models.BooleanField = models.BooleanField(
+#         default=False
+#     )  # Whether the user can attach files, texts, or remove the approval
+#     is_required_for_operational_area = models.BooleanField(default=False)
+#     is_required_for_operational_plan = models.BooleanField(default=False)
 
-    class Meta:
-        verbose_name = "Operational Plan Legal/Approval"
-        verbose_name_plural = "Operational Plan Legal/Approvals"
+#     class Meta:
+#         verbose_name = "Operational Plan Legal/Approval"
+#         verbose_name_plural = "Operational Plan Legal/Approvals"
 
-    def __str__(self) -> str:
-        return f"{self.approver} {self.get_approval_type_display()}"
+#     def __str__(self) -> str:
+#         return f"{self.approver} {self.get_approval_type_display()}"
 
-    @property
-    def is_shire_approval(self):
-        return self.land_type == self.LAND_TYPE_SHIRE
+#     @property
+#     def is_shire_approval(self):
+#         return self.land_type == self.LAND_TYPE_SHIRE
 
-    @property
-    def can_remove_approval(self):
-        return self.has_additional_permissions and self.text_remove_justification
+#     @property
+#     def can_remove_approval(self):
+#         return self.has_additional_permissions and self.text_remove_justification
 
 
 class OperationalPlanRiskCategory(models.Model):
@@ -284,65 +283,65 @@ class OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating(
         return self.risk_rating.risk_level.requires_additional_controls
 
 
-class ModelLegalApproval(TimeStampedModel):
-    file_as_approval = GenericRelation(ModelFile)
-    text_as_approval: models.TextField = models.TextField(null=True, blank=True)
-    text_remove_justification: models.TextField = models.TextField(
-        null=True, blank=True
-    )
+# class ModelLegalApproval(TimeStampedModel):
+#     file_as_approval = GenericRelation(ModelFile)
+#     text_as_approval: models.TextField = models.TextField(null=True, blank=True)
+#     text_remove_justification: models.TextField = models.TextField(
+#         null=True, blank=True
+#     )
 
-    legal_approval = models.ForeignKey(
-        LegalApproval,
-        on_delete=models.CASCADE,
-        related_name="modellegalapprovals",
-    )  # OP: endorsement and approval by district manager and regional manager
+#     legal_approval = models.ForeignKey(
+#         LegalApproval,
+#         on_delete=models.CASCADE,
+#         related_name="modellegalapprovals",
+#     )  # OP: endorsement and approval by district manager and regional manager
 
-    # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
-    # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
-    # + issue and expiry date of the issued lawful authorities
+#     # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
+#     # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
+#     # + issue and expiry date of the issued lawful authorities
 
-    lga: models.ForeignKey = models.ForeignKey(
-        Lga,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        verbose_name="Shire/LGA",
-        related_name="modellegalapprovals",
-    )  # Shire
+#     lga: models.ForeignKey = models.ForeignKey(
+#         Lga,
+#         on_delete=models.PROTECT,
+#         null=True,
+#         blank=True,
+#         verbose_name="Shire/LGA",
+#         related_name="modellegalapprovals",
+#     )  # Shire
 
-    content_type = models.ForeignKey(
-        ContentType, on_delete=models.CASCADE, related_name="content_type"
-    )
-    object_id = models.PositiveIntegerField()
-    en_word = GenericForeignKey("content_type", "object_id")
+#     content_type = models.ForeignKey(
+#         ContentType, on_delete=models.CASCADE, related_name="content_type"
+#     )
+#     object_id = models.PositiveIntegerField()
+#     en_word = GenericForeignKey("content_type", "object_id")
 
-    class Meta:
-        verbose_name_plural = "Legal/Approvals"
-        indexes = [
-            models.Index(fields=["content_type", "object_id"]),
-        ]
+#     class Meta:
+#         verbose_name_plural = "Legal/Approvals"
+#         indexes = [
+#             models.Index(fields=["content_type", "object_id"]),
+#         ]
 
-    def __str__(self) -> str:
-        return (
-            f"Model: {'self.operational_area'} "
-            f"has legal/approval: {self.legal_approval}"
-        )
+#     def __str__(self) -> str:
+#         return (
+#             f"Model: {'self.operational_area'} "
+#             f"has legal/approval: {self.legal_approval}"
+#         )
 
-    @property
-    def has_lga(self):
-        if not hasattr(self, "legal_approval"):
-            raise AttributeError(
-                "Model needs to implement a foreign key to LegalApproval to access `has_lga`"
-            )
-        return self.legal_approval.has_lga
+#     @property
+#     def has_lga(self):
+#         if not hasattr(self, "legal_approval"):
+#             raise AttributeError(
+#                 "Model needs to implement a foreign key to LegalApproval to access `has_lga`"
+#             )
+#         return self.legal_approval.has_lga
 
-    @property
-    def has_additional_permissions(self):
-        if not hasattr(self, "legal_approval"):
-            raise AttributeError(
-                "Model needs to implement a foreign key to LegalApproval to access `has_additional_permissions`"
-            )
-        return self.legal_approval.has_additional_permissions
+#     @property
+#     def has_additional_permissions(self):
+#         if not hasattr(self, "legal_approval"):
+#             raise AttributeError(
+#                 "Model needs to implement a foreign key to LegalApproval to access `has_additional_permissions`"
+#             )
+#         return self.legal_approval.has_additional_permissions
 
 
 class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
@@ -533,78 +532,6 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
     def priority_calculated(self):
         # Calculated priority from Priority section
         raise NotImplementedError("TODO")
-
-
-# class OperationalAreaApproval(GenericModelLegalApprovalThroughModel):
-#     operational_area = models.ForeignKey(
-#         OperationalArea,
-#         on_delete=models.CASCADE,
-#         related_name="operationalareaapprovals",
-#     )
-#     legal_approval = models.ForeignKey(
-#         LegalApproval,
-#         on_delete=models.CASCADE,
-#         related_name="operationalareaapprovals",
-#     )  # OP: endorsement and approval by district manager and regional manager
-
-#     # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
-#     # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
-#     # + issue and expiry date of the issued lawful authorities
-
-#     lga: models.ForeignKey = models.ForeignKey(
-#         Lga,
-#         on_delete=models.PROTECT,
-#         null=True,
-#         blank=True,
-#         verbose_name="Shire/LGA",
-#         related_name="operationalareaapprovals",
-#     )  # Shire
-
-#     class Meta:
-#         verbose_name_plural = "Operational Area Legal/Approvals"
-#         unique_together = ("operational_area", "legal_approval")
-
-#     def __str__(self) -> str:
-#         return (
-#             f"Operational Area: {self.operational_area} "
-#             f"has legal/approval: {self.legal_approval}"
-#         )
-
-
-# class OperationalPlanApproval(GenericModelLegalApprovalThroughModel):
-#     operational_plan = models.ForeignKey(
-#         OperationalPlan,
-#         on_delete=models.CASCADE,
-#         related_name="operationalplanapprovals",
-#     )
-#     legal_approval = models.ForeignKey(
-#         LegalApproval,
-#         on_delete=models.CASCADE,
-#         related_name="operationalplanapprovals",
-#     )  # OP: endorsement and approval by district manager and regional manager
-
-#     # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
-#     # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
-#     # + issue and expiry date of the issued lawful authorities
-
-#     lga: models.ForeignKey = models.ForeignKey(
-#         Lga,
-#         on_delete=models.PROTECT,
-#         null=True,
-#         blank=True,
-#         verbose_name="Shire/LGA",
-#         related_name="operationalplanapprovals",
-#     )  # Shire
-
-#     class Meta:
-#         verbose_name_plural = "Operational Plan Legal/Approvals"
-#         unique_together = ("operational_plan", "legal_approval")
-
-#     def __str__(self) -> str:
-#         return (
-#             f"Operational Plan: {self.operational_plan} "
-#             f"has legal/approval: {self.legal_approval}"
-#         )
 
 
 class OperationalPlanPurpose(TimeStampedModel):

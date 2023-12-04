@@ -4,8 +4,8 @@ import nested_admin
 from django import forms
 from django.contrib import admin
 from django.utils.html import format_html, format_html_join
-from model_utils import Choices
 
+from govapp.apps.legalapproval.models import LegalApproval, ModelLegalApproval
 from govapp.apps.main.admin import NestedDeleteRestrictedAdmin
 from govapp.apps.main.models import ModelFile
 from govapp.apps.risk.models import ContributingFactorStandardControl
@@ -13,8 +13,6 @@ from govapp.apps.risk.models import ContributingFactorStandardControl
 from .models import (
     Contingency,
     ContingencyNeighbour,
-    LegalApproval,
-    ModelLegalApproval,
     Objective,
     ObjectiveAndSuccessCriteria,
     OperationalArea,
@@ -392,58 +390,6 @@ class ObjectiveAndSuccessCriteriaAdmin(nested_admin.NestedModelAdmin):
     )
 
     inlines = [SuccessCriteriaInline]
-
-
-class LegalApprovalAdminForm(forms.ModelForm):
-    approval_type = forms.ChoiceField(
-        choices=LegalApproval.APPROVAL_TYPES, required=True
-    )  # This hides the null/empty option
-    land_type = forms.ChoiceField(
-        choices=Choices(("", "N/A")) + LegalApproval.LAND_TYPES, required=False
-    )  # This adds a null/empty option
-
-    class Meta:
-        model = LegalApproval
-        fields = "__all__"
-        help_texts = {
-            "has_additional_permissions": "Check to allow the user to attach a file as approval, "
-            "provide free text as approval, or remove the required approval."
-        }
-
-
-@admin.register(LegalApproval)
-class LegalApprovalAdmin(admin.ModelAdmin):
-    model = LegalApproval
-    form = LegalApprovalAdminForm
-
-    list_display = (
-        "approver",
-        "approval_type",
-        "land_type",
-        "has_additional_permissions",
-        "is_required_for_operational_area",
-        "is_required_for_operational_plan",
-    )
-
-    fieldsets = (
-        (
-            "General information",
-            {
-                "fields": (
-                    (
-                        "approver",
-                        "approval_type",
-                        "land_type",
-                        "has_additional_permissions",
-                        (
-                            "is_required_for_operational_area",
-                            "is_required_for_operational_plan",
-                        ),
-                    )
-                ),
-            },
-        ),
-    )
 
 
 class OperationalPlanRiskCategoryInline(nested_admin.NestedStackedInline):
