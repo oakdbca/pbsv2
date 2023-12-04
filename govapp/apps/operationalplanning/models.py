@@ -42,8 +42,6 @@ class LegalApproval(DisplayNameableModel):
 
     objects = models.Manager()
 
-    operationalplanapprovals: "models.Manager[OperationalPlanApproval]"
-    operationalareaapprovals: "models.Manager[OperationalAreaApproval]"
     modellegalapprovals: "models.Manager[ModelLegalApproval]"
 
     # TODO Not sure on this one, but requirement item #72 mentions these three separately
@@ -286,34 +284,13 @@ class OperationalPlanRiskCategoryContributingFactorAdditionalControlRiskRating(
         return self.risk_rating.risk_level.requires_additional_controls
 
 
-class GenericModelLegalApprovalThroughModel(TimeStampedModel):
+class ModelLegalApproval(TimeStampedModel):
     file_as_approval = GenericRelation(ModelFile)
     text_as_approval: models.TextField = models.TextField(null=True, blank=True)
     text_remove_justification: models.TextField = models.TextField(
         null=True, blank=True
     )
 
-    class Meta:
-        abstract = True
-
-    @property
-    def has_lga(self):
-        if not hasattr(self, "legal_approval"):
-            raise AttributeError(
-                "Model needs to implement a foreign key to LegalApproval to access `has_lga`"
-            )
-        return self.legal_approval.has_lga
-
-    @property
-    def has_additional_permissions(self):
-        if not hasattr(self, "legal_approval"):
-            raise AttributeError(
-                "Model needs to implement a foreign key to LegalApproval to access `has_additional_permissions`"
-            )
-        return self.legal_approval.has_additional_permissions
-
-
-class ModelLegalApproval(GenericModelLegalApprovalThroughModel):
     legal_approval = models.ForeignKey(
         LegalApproval,
         on_delete=models.CASCADE,
@@ -351,12 +328,27 @@ class ModelLegalApproval(GenericModelLegalApprovalThroughModel):
             f"has legal/approval: {self.legal_approval}"
         )
 
+    @property
+    def has_lga(self):
+        if not hasattr(self, "legal_approval"):
+            raise AttributeError(
+                "Model needs to implement a foreign key to LegalApproval to access `has_lga`"
+            )
+        return self.legal_approval.has_lga
+
+    @property
+    def has_additional_permissions(self):
+        if not hasattr(self, "legal_approval"):
+            raise AttributeError(
+                "Model needs to implement a foreign key to LegalApproval to access `has_additional_permissions`"
+            )
+        return self.legal_approval.has_additional_permissions
+
 
 class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
     MODEL_PREFIX = "OA"
 
     objects = models.Manager()
-    operationalareaapprovals: "models.Manager[OperationalAreaApproval]"
 
     burn_plan_element: models.ForeignKey = models.ForeignKey(
         BurnPlanElement,
@@ -431,7 +423,6 @@ class OperationalArea(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
 class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel):
     MODEL_PREFIX = "OP"
 
-    operationalplanapprovals: "models.Manager[OperationalPlanApproval]"
     operationalplanpurposes: "models.Manager[OperationalPlanPurpose]"
     operationalplanprograms: "models.Manager[OperationalPlanProgram]"
     objectiveandsuccesscriteria: "models.Manager[ObjectiveAndSuccessCriteria]"
@@ -544,76 +535,76 @@ class OperationalPlan(ReferenceableModel, UniqueNameableModel, TimeStampedModel)
         raise NotImplementedError("TODO")
 
 
-class OperationalAreaApproval(GenericModelLegalApprovalThroughModel):
-    operational_area = models.ForeignKey(
-        OperationalArea,
-        on_delete=models.CASCADE,
-        related_name="operationalareaapprovals",
-    )
-    legal_approval = models.ForeignKey(
-        LegalApproval,
-        on_delete=models.CASCADE,
-        related_name="operationalareaapprovals",
-    )  # OP: endorsement and approval by district manager and regional manager
+# class OperationalAreaApproval(GenericModelLegalApprovalThroughModel):
+#     operational_area = models.ForeignKey(
+#         OperationalArea,
+#         on_delete=models.CASCADE,
+#         related_name="operationalareaapprovals",
+#     )
+#     legal_approval = models.ForeignKey(
+#         LegalApproval,
+#         on_delete=models.CASCADE,
+#         related_name="operationalareaapprovals",
+#     )  # OP: endorsement and approval by district manager and regional manager
 
-    # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
-    # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
-    # + issue and expiry date of the issued lawful authorities
+#     # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
+#     # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
+#     # + issue and expiry date of the issued lawful authorities
 
-    lga: models.ForeignKey = models.ForeignKey(
-        Lga,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        verbose_name="Shire/LGA",
-        related_name="operationalareaapprovals",
-    )  # Shire
+#     lga: models.ForeignKey = models.ForeignKey(
+#         Lga,
+#         on_delete=models.PROTECT,
+#         null=True,
+#         blank=True,
+#         verbose_name="Shire/LGA",
+#         related_name="operationalareaapprovals",
+#     )  # Shire
 
-    class Meta:
-        verbose_name_plural = "Operational Area Legal/Approvals"
-        unique_together = ("operational_area", "legal_approval")
+#     class Meta:
+#         verbose_name_plural = "Operational Area Legal/Approvals"
+#         unique_together = ("operational_area", "legal_approval")
 
-    def __str__(self) -> str:
-        return (
-            f"Operational Area: {self.operational_area} "
-            f"has legal/approval: {self.legal_approval}"
-        )
+#     def __str__(self) -> str:
+#         return (
+#             f"Operational Area: {self.operational_area} "
+#             f"has legal/approval: {self.legal_approval}"
+#         )
 
 
-class OperationalPlanApproval(GenericModelLegalApprovalThroughModel):
-    operational_plan = models.ForeignKey(
-        OperationalPlan,
-        on_delete=models.CASCADE,
-        related_name="operationalplanapprovals",
-    )
-    legal_approval = models.ForeignKey(
-        LegalApproval,
-        on_delete=models.CASCADE,
-        related_name="operationalplanapprovals",
-    )  # OP: endorsement and approval by district manager and regional manager
+# class OperationalPlanApproval(GenericModelLegalApprovalThroughModel):
+#     operational_plan = models.ForeignKey(
+#         OperationalPlan,
+#         on_delete=models.CASCADE,
+#         related_name="operationalplanapprovals",
+#     )
+#     legal_approval = models.ForeignKey(
+#         LegalApproval,
+#         on_delete=models.CASCADE,
+#         related_name="operationalplanapprovals",
+#     )  # OP: endorsement and approval by district manager and regional manager
 
-    # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
-    # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
-    # + issue and expiry date of the issued lawful authorities
+#     # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
+#     # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
+#     # + issue and expiry date of the issued lawful authorities
 
-    lga: models.ForeignKey = models.ForeignKey(
-        Lga,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        verbose_name="Shire/LGA",
-        related_name="operationalplanapprovals",
-    )  # Shire
+#     lga: models.ForeignKey = models.ForeignKey(
+#         Lga,
+#         on_delete=models.PROTECT,
+#         null=True,
+#         blank=True,
+#         verbose_name="Shire/LGA",
+#         related_name="operationalplanapprovals",
+#     )  # Shire
 
-    class Meta:
-        verbose_name_plural = "Operational Plan Legal/Approvals"
-        unique_together = ("operational_plan", "legal_approval")
+#     class Meta:
+#         verbose_name_plural = "Operational Plan Legal/Approvals"
+#         unique_together = ("operational_plan", "legal_approval")
 
-    def __str__(self) -> str:
-        return (
-            f"Operational Plan: {self.operational_plan} "
-            f"has legal/approval: {self.legal_approval}"
-        )
+#     def __str__(self) -> str:
+#         return (
+#             f"Operational Plan: {self.operational_plan} "
+#             f"has legal/approval: {self.legal_approval}"
+#         )
 
 
 class OperationalPlanPurpose(TimeStampedModel):

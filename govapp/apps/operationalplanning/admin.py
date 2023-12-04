@@ -19,7 +19,6 @@ from .models import (
     ObjectiveAndSuccessCriteria,
     OperationalArea,
     OperationalPlan,
-    OperationalPlanApproval,
     OperationalPlanProgram,
     OperationalPlanPurpose,
     OperationalPlanRiskCategory,
@@ -508,7 +507,7 @@ class ModelLegalApprovalAdminForm(forms.ModelForm):
     legal_approval = ModelLegalApprovalChoiceField(queryset=LegalApproval.objects.all())
 
     class Meta:
-        model = OperationalPlanApproval
+        model = ModelLegalApproval
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):
