@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.utils.html import format_html, format_html_join
 from model_utils import Choices
 
-from govapp.apps.main.admin import DeleteRestrictedAdmin, NestedDeleteRestrictedAdmin
+from govapp.apps.main.admin import NestedDeleteRestrictedAdmin
 from govapp.apps.main.models import ModelFile
 from govapp.apps.risk.models import ContributingFactorStandardControl
 
@@ -14,6 +14,7 @@ from .models import (
     Contingency,
     ContingencyNeighbour,
     LegalApproval,
+    ModelLegalApproval,
     Objective,
     ObjectiveAndSuccessCriteria,
     OperationalArea,
@@ -492,7 +493,7 @@ class SelectWithOptionAttribute(forms.Select):
         return option_dict
 
 
-class OperationalAreaApprovalChoiceField(forms.ModelChoiceField):
+class ModelLegalApprovalChoiceField(forms.ModelChoiceField):
     widget = SelectWithOptionAttribute
 
     def label_from_instance(self, obj):
@@ -503,10 +504,8 @@ class OperationalAreaApprovalChoiceField(forms.ModelChoiceField):
         }
 
 
-class OperationalAreaApprovalAdminForm(forms.ModelForm):
-    legal_approval = OperationalAreaApprovalChoiceField(
-        queryset=LegalApproval.objects.all()
-    )
+class ModelLegalApprovalAdminForm(forms.ModelForm):
+    legal_approval = ModelLegalApprovalChoiceField(queryset=LegalApproval.objects.all())
 
     class Meta:
         model = OperationalPlanApproval
@@ -534,13 +533,13 @@ class FileAsApprovalModelFileInline(nested_admin.NestedGenericStackedInline):
     classes = ("less-dominant-style", "nested-inline-flex-container")
 
 
-class OperationalPlanApprovalInline(nested_admin.NestedStackedInline):
-    model = OperationalPlanApproval
+class ModelLegalApprovalInline(nested_admin.NestedGenericStackedInline):
+    model = ModelLegalApproval
     extra = 0
-    verbose_name = "Operational Plan Approval"
-    verbose_name_plural = "Operational Plan Approvals"
+    verbose_name = "Legal/Approval"
+    verbose_name_plural = "Legal/Approvals"
 
-    form = OperationalAreaApprovalAdminForm
+    form = ModelLegalApprovalAdminForm
 
     class Media:
         js = (
@@ -624,7 +623,7 @@ class OperationalAreaAdminForm(forms.ModelForm):
 
 
 @admin.register(OperationalArea)
-class OperationalAreaAdmin(DeleteRestrictedAdmin):
+class OperationalAreaAdmin(NestedDeleteRestrictedAdmin):
     model = OperationalArea
 
     form = OperationalAreaAdminForm
@@ -697,6 +696,10 @@ class OperationalAreaAdmin(DeleteRestrictedAdmin):
             },
         ),
     )
+
+    inlines = [
+        ModelLegalApprovalInline,
+    ]
 
 
 class ContingencyNeighbourInline(nested_admin.NestedStackedInline):
@@ -832,7 +835,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         OperationalAreaProgramInline,
         OperationalPlanRiskCategoryInline,
         ContingencyInline,
-        OperationalPlanApprovalInline,
+        ModelLegalApprovalInline,
     ]
 
 
