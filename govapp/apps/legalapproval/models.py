@@ -4,11 +4,16 @@ from django.db import models
 from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
-from govapp.apps.main.models import DisplayNameableModel, Lga, ModelFile
+from govapp.apps.main.models import (
+    DisplayNameableModel,
+    Lga,
+    ModelFile,
+    UniqueNameableModel,
+)
 
 
 # Let's call the class LegalApproval to not confuse with an Approval model
-class LegalApproval(DisplayNameableModel):
+class LegalApproval(UniqueNameableModel, DisplayNameableModel):
     """Burn Program and Operational Area/Operational Plan approvals"""
 
     objects = models.Manager()
@@ -148,3 +153,7 @@ class ApprovableModel(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+    @property
+    def required_approvals(self):
+        pass
