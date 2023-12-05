@@ -39,6 +39,12 @@ class LegalApprovalAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
+            None,
+            {
+                "fields": ("name",),
+            },
+        ),
+        (
             "General information",
             {
                 "fields": (
