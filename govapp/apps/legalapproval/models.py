@@ -91,7 +91,7 @@ class ModelLegalApproval(TimeStampedModel):
         ContentType, on_delete=models.CASCADE, related_name="content_type"
     )
     object_id = models.PositiveIntegerField()
-    en_word = GenericForeignKey("content_type", "object_id")
+    content_object = GenericForeignKey("content_type", "object_id")
 
     class Meta:
         verbose_name_plural = "Legal/Approvals"
@@ -101,8 +101,8 @@ class ModelLegalApproval(TimeStampedModel):
 
     def __str__(self) -> str:
         return (
-            f"Model: {'self.operational_area'} "
-            f"has legal/approval: {self.legal_approval}"
+            f"{self.legal_approval} entry for "
+            f"{self.content_object.__class__.__name__} {self.content_object.__str__()} "
         )
 
     @property
@@ -120,3 +120,31 @@ class ModelLegalApproval(TimeStampedModel):
                 "Model needs to implement a foreign key to LegalApproval to access `has_additional_permissions`"
             )
         return self.legal_approval.has_additional_permissions
+
+    def clean(self) -> None:
+        return super().clean()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+
+class ApprovableModel(models.Model):
+    legal_approvals = GenericRelation(ModelLegalApproval)
+
+    # Automatically create entries for other additional required approvals by intersecting with Tenure layer in CDDP
+    requires_other_land_approval = models.BooleanField(default=False)
+    requires_owner_approvals = models.BooleanField(
+        default=False
+    )  # One or more owner approvals
+    requires_shire_approvals = models.BooleanField(
+        default=False
+    )  # One or more shire approvals
+
+    class Meta:
+        abstract = True
+
+    def clean(self):
+        return super().clean()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)

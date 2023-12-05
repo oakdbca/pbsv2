@@ -3,6 +3,7 @@ from logging import getLogger
 import nested_admin
 from django import forms
 from django.contrib import admin
+from django.contrib.contenttypes.forms import BaseGenericInlineFormSet
 from django.utils.html import format_html, format_html_join
 
 from govapp.apps.legalapproval.models import LegalApproval, ModelLegalApproval
@@ -449,7 +450,7 @@ class ModelLegalApprovalChoiceField(forms.ModelChoiceField):
         }
 
 
-class ModelLegalApprovalAdminForm(forms.ModelForm):
+class ModelLegalApprovalInlineForm(forms.ModelForm):
     legal_approval = ModelLegalApprovalChoiceField(queryset=LegalApproval.objects.all())
 
     class Meta:
@@ -463,6 +464,29 @@ class ModelLegalApprovalAdminForm(forms.ModelForm):
         cleaned_data = super().clean()
 
         return cleaned_data
+
+
+class ModelLegalApprovalInlineFormSet(BaseGenericInlineFormSet):
+    def clean(self):
+        has_approval = {"shire": False, "owner": False, "other": False}
+        for form in self.forms:
+            if self.can_delete and self._should_delete_form(form):
+                continue
+            legal_approval = form.cleaned_data.get("legal_approval", None)
+            has_approval[legal_approval.land_type] = True
+
+        if self.instance.requires_shire_approvals and not has_approval["shire"]:
+            raise forms.ValidationError(
+                "This operational plan requires a shire approval but none have been added."
+            )
+        if self.instance.requires_owner_approvals and not has_approval["owner"]:
+            raise forms.ValidationError(
+                "This operational plan requires an owner approval but none have been added."
+            )
+        if self.instance.requires_other_land_approval and not has_approval["other"]:
+            raise forms.ValidationError(
+                "This operational plan requires an other land approval but none have been added."
+            )
 
 
 class FileAsApprovalModelFileInline(nested_admin.NestedGenericStackedInline):
@@ -484,7 +508,8 @@ class ModelLegalApprovalInline(nested_admin.NestedGenericStackedInline):
     verbose_name = "Legal/Approval"
     verbose_name_plural = "Legal/Approvals"
 
-    form = ModelLegalApprovalAdminForm
+    form = ModelLegalApprovalInlineForm
+    formset = ModelLegalApprovalInlineFormSet
 
     class Media:
         js = (
