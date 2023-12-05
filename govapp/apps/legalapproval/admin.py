@@ -18,7 +18,8 @@ class LegalApprovalAdminForm(forms.ModelForm):
         fields = "__all__"
         help_texts = {
             "has_additional_permissions": "Check to allow the user to attach a file as approval, "
-            "provide free text as approval, or remove the required approval."
+            "provide free text as approval, or remove the additional required approval if a "
+            "justification is provided.",
         }
 
 

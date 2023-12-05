@@ -563,7 +563,7 @@ class OperationalAreaAdminForm(forms.ModelForm):
         fields = "__all__"
         help_texts = {
             "operational_area_different_from_bpu_rationale": "Rationale when operational area is different "
-            "from burn planning unit."
+            "from burn planning unit.",
         }
 
 
@@ -638,6 +638,7 @@ class OperationalAreaAdmin(NestedDeleteRestrictedAdmin):
                         "requires_shire_approvals",
                     ),
                 ),
+                "description": "These have been automatically determined by the system by spatial intersection.",
             },
         ),
     )
