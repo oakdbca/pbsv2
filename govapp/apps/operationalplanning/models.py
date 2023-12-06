@@ -8,7 +8,7 @@ from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 from govapp.apps.burnplanning.models import BurnPlanElement
-from govapp.apps.legalapproval.models import ApprovableModel
+from govapp.apps.legalapproval.models import ApprovableModel, LegalApproval
 from govapp.apps.main.models import (
     DisplayNameableModel,
     IntervalFloatField,
@@ -285,6 +285,17 @@ class OperationalArea(
             logger.warn(f"OperationalArea: {self.id} has no area")
             return None
         return self.area.sq_m / 10000
+
+    def initial_required_approvals(self):
+        return LegalApproval.objects.filter(
+            is_required_for_operational_area=True
+        ).values_list("name", flat=True)
+
+    def initial_not_required_approvals(self):
+        # Automatically create entries for other additional required approvals by intersecting with Tenure layer
+        return LegalApproval.objects.filter(land_type__length__gt=0).values_list(
+            "name", flat=True
+        )
 
     def copy(self):
         self.pk = None

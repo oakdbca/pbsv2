@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -5,6 +7,7 @@ from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 from govapp.apps.main.models import (
+    AbstractModelMeta,
     DisplayNameableModel,
     Lga,
     ModelFile,
@@ -93,7 +96,9 @@ class ModelLegalApproval(TimeStampedModel):
     )  # Shire
 
     content_type = models.ForeignKey(
-        ContentType, on_delete=models.CASCADE, related_name="content_type"
+        ContentType,
+        on_delete=models.CASCADE,
+        related_name="content_type_legal_approval",
     )
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")
@@ -133,17 +138,50 @@ class ModelLegalApproval(TimeStampedModel):
         super().save(*args, **kwargs)
 
 
-class ApprovableModel(models.Model):
-    legal_approvals = GenericRelation(ModelLegalApproval)
+class ModelRequiredApproval(DisplayNameableModel):
+    legal_approval_name = models.CharField(max_length=255)
+    is_required = models.BooleanField(default=False)
 
-    # Automatically create entries for other additional required approvals by intersecting with Tenure layer
-    requires_other_land_approval = models.BooleanField(default=False)
-    requires_owner_approvals = models.BooleanField(
-        default=False
-    )  # One or more owner approvals
-    requires_shire_approvals = models.BooleanField(
-        default=False
-    )  # One or more shire approvals
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        related_name="content_type_required_approval",
+    )
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+
+    class Meta:
+        verbose_name_plural = "Required Approvals"
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not self.display_name:
+            try:
+                legal_approval = LegalApproval.objects.get(
+                    name=self.legal_approval_name
+                )
+            except LegalApproval.DoesNotExist:
+                raise ValueError(
+                    f"LegalApproval with name {self.legal_approval_name} does not exist"
+                )
+            else:
+                self.display_name = legal_approval.approver
+                self.save()
+
+    def __str__(self) -> str:
+        required = "required" if self.is_required else "not required"
+        return (
+            f"{self.display_name} Approval/Endorsement is {required} for "
+            f"{self.content_object.__class__.__name__} {self.content_object.__str__()}"
+        )
+
+
+class ApprovableModel(models.Model, metaclass=AbstractModelMeta):
+    required_approvals = GenericRelation(ModelRequiredApproval)
+    legal_approvals = GenericRelation(ModelLegalApproval)
 
     class Meta:
         abstract = True
@@ -152,8 +190,35 @@ class ApprovableModel(models.Model):
         return super().clean()
 
     def save(self, *args, **kwargs):
+        is_new_object = self.pk is None
         super().save(*args, **kwargs)
 
-    @property
-    def required_approvals(self):
-        pass
+        if is_new_object:
+            for name in self.initial_required_approvals():
+                ModelRequiredApproval.objects.create(
+                    content_object=self,
+                    legal_approval_name=name,
+                    is_required=True,
+                )
+            for name in self.initial_not_required_approvals():
+                ModelRequiredApproval.objects.create(
+                    content_object=self,
+                    legal_approval_name=name,
+                    is_required=False,
+                )
+
+    @abstractmethod
+    def initial_required_approvals(self):
+        """Needs to be implemented by the model to return a list of LegalApproval names
+        that are required
+        """
+
+        return LegalApproval.objects.none()
+
+    @abstractmethod
+    def initial_not_required_approvals(self):
+        """Needs to be implemented by the model to return a list of LegalApproval names
+        that are not required
+        """
+
+        return LegalApproval.objects.none()

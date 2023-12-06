@@ -6,7 +6,11 @@ from django.contrib import admin
 from django.contrib.contenttypes.forms import BaseGenericInlineFormSet
 from django.utils.html import format_html, format_html_join
 
-from govapp.apps.legalapproval.models import LegalApproval, ModelLegalApproval
+from govapp.apps.legalapproval.models import (
+    LegalApproval,
+    ModelLegalApproval,
+    ModelRequiredApproval,
+)
 from govapp.apps.main.admin import NestedDeleteRestrictedAdmin
 from govapp.apps.main.models import ModelFile
 from govapp.apps.risk.models import ContributingFactorStandardControl
@@ -475,18 +479,18 @@ class ModelLegalApprovalInlineFormSet(BaseGenericInlineFormSet):
             legal_approval = form.cleaned_data.get("legal_approval", None)
             has_approval[legal_approval.land_type] = True
 
-        if self.instance.requires_shire_approvals and not has_approval["shire"]:
-            raise forms.ValidationError(
-                "This operational plan requires a shire approval but none have been added."
-            )
-        if self.instance.requires_owner_approvals and not has_approval["owner"]:
-            raise forms.ValidationError(
-                "This operational plan requires an owner approval but none have been added."
-            )
-        if self.instance.requires_other_land_approval and not has_approval["other"]:
-            raise forms.ValidationError(
-                "This operational plan requires an other land approval but none have been added."
-            )
+        # if self.instance.requires_shire_approvals and not has_approval["shire"]:
+        #     raise forms.ValidationError(
+        #         "This operational plan requires a shire approval but none have been added."
+        #     )
+        # if self.instance.requires_owner_approvals and not has_approval["owner"]:
+        #     raise forms.ValidationError(
+        #         "This operational plan requires an owner approval but none have been added."
+        #     )
+        # if self.instance.requires_other_land_approval and not has_approval["other"]:
+        #     raise forms.ValidationError(
+        #         "This operational plan requires an other land approval but none have been added."
+        #     )
 
 
 class FileAsApprovalModelFileInline(nested_admin.NestedGenericStackedInline):
@@ -582,6 +586,27 @@ class ModelLegalApprovalInline(nested_admin.NestedGenericStackedInline):
         return form
 
 
+class ModelRequiredApprovalInline(nested_admin.NestedGenericTabularInline):
+    model = ModelRequiredApproval
+    extra = 0
+    verbose_name = "Required Legal/Approval"
+    verbose_name_plural = "Required Legal/Approvals"
+
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    list_display = (
+        "legal_approval_name",
+        "is_required",
+    )
+
+    fields = (("display_name", "is_required"),)
+
+    readonly_fields = ("display_name",)
+
+
 class OperationalAreaAdminForm(forms.ModelForm):
     class Meta:
         model = OperationalArea
@@ -613,9 +638,6 @@ class OperationalAreaAdmin(NestedDeleteRestrictedAdmin):
         "district",
         "contentious_burn",
         "contentious_rationale",
-        "requires_other_land_approval",
-        "requires_owner_approvals",
-        "requires_shire_approvals",
     )
 
     fieldsets = (
@@ -653,22 +675,10 @@ class OperationalAreaAdmin(NestedDeleteRestrictedAdmin):
                 ),
             },
         ),
-        (
-            "Legal",
-            {
-                "fields": (
-                    (
-                        "requires_other_land_approval",
-                        "requires_owner_approvals",
-                        "requires_shire_approvals",
-                    ),
-                ),
-                "description": "These have been automatically determined by the system by spatial intersection.",
-            },
-        ),
     )
 
     inlines = [
+        ModelRequiredApprovalInline,
         ModelLegalApprovalInline,
     ]
 
