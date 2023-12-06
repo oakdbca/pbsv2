@@ -188,7 +188,7 @@ class FuelType(UniqueNameableModel):
         verbose_name = "Fuel Type"
         verbose_name_plural = "Fuel Types"
 
-    # The system is to intersect the operational area with the Fuel Type layer in CDDP
+    # The system is to intersect the operational area with the Fuel Type layer
     # to prefill the fuel types in the Prescription section (Reqs Id 56)
     fuel_type_layer = models.CharField(max_length=255, blank=True, null=True)
     applicable_fuel_type_prescription_details = models.ManyToManyField(

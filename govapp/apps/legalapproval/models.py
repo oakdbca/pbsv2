@@ -136,7 +136,7 @@ class ModelLegalApproval(TimeStampedModel):
 class ApprovableModel(models.Model):
     legal_approvals = GenericRelation(ModelLegalApproval)
 
-    # Automatically create entries for other additional required approvals by intersecting with Tenure layer in CDDP
+    # Automatically create entries for other additional required approvals by intersecting with Tenure layer
     requires_other_land_approval = models.BooleanField(default=False)
     requires_owner_approvals = models.BooleanField(
         default=False
