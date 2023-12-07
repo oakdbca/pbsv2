@@ -472,25 +472,23 @@ class ModelLegalApprovalInlineForm(forms.ModelForm):
 
 class ModelLegalApprovalInlineFormSet(BaseGenericInlineFormSet):
     def clean(self):
-        has_approval = {"shire": False, "owner": False, "other": False}
+        required_approvals = list(
+            self.instance.required_approvals.filter(is_required=True).values_list(
+                "legal_approval_name", flat=True
+            )
+        )
+
         for form in self.forms:
             if self.can_delete and self._should_delete_form(form):
                 continue
             legal_approval = form.cleaned_data.get("legal_approval", None)
-            has_approval[legal_approval.land_type] = True
+            if legal_approval.name in required_approvals:
+                required_approvals.remove(legal_approval.name)
 
-        # if self.instance.requires_shire_approvals and not has_approval["shire"]:
-        #     raise forms.ValidationError(
-        #         "This operational plan requires a shire approval but none have been added."
-        #     )
-        # if self.instance.requires_owner_approvals and not has_approval["owner"]:
-        #     raise forms.ValidationError(
-        #         "This operational plan requires an owner approval but none have been added."
-        #     )
-        # if self.instance.requires_other_land_approval and not has_approval["other"]:
-        #     raise forms.ValidationError(
-        #         "This operational plan requires an other land approval but none have been added."
-        #     )
+        if len(required_approvals) > 0:
+            raise forms.ValidationError(
+                f"This operational plan requires approvals for {required_approvals}."
+            )
 
 
 class FileAsApprovalModelFileInline(nested_admin.NestedGenericStackedInline):
@@ -586,11 +584,43 @@ class ModelLegalApprovalInline(nested_admin.NestedGenericStackedInline):
         return form
 
 
+class ModelRequiredApprovalInlineForm(forms.ModelForm):
+    class Meta:
+        model = ModelRequiredApproval
+        fields = "__all__"
+        help_texts = {
+            "legal_approval_name": "Relates to the unique name of the LegalApproval"
+        }
+
+
+class ModelRequiredApprovalInlineFormSet(BaseGenericInlineFormSet):
+    def clean(self):
+        legal_approval_names = []
+        for form in self.forms:
+            if self.can_delete and self._should_delete_form(form):
+                continue
+            legal_approval_name = form.cleaned_data.get("legal_approval_name", None)
+            legal_approval_names += [legal_approval_name]
+
+        violate_unique_constraint = {
+            name: legal_approval_names.count(name)
+            for name in list(set(legal_approval_names))
+            if legal_approval_names.count(name) > 1
+        }
+        if len(violate_unique_constraint) > 0:
+            raise forms.ValidationError(
+                f"Required approvals must be unique. {list(violate_unique_constraint.keys())} are duplicated."
+            )
+
+
 class ModelRequiredApprovalInline(nested_admin.NestedGenericTabularInline):
     model = ModelRequiredApproval
     extra = 0
     verbose_name = "Required Legal/Approval"
     verbose_name_plural = "Required Legal/Approvals"
+
+    form = ModelRequiredApprovalInlineForm
+    formset = ModelRequiredApprovalInlineFormSet
 
     class Media:
         css = {
@@ -599,12 +629,14 @@ class ModelRequiredApprovalInline(nested_admin.NestedGenericTabularInline):
 
     list_display = (
         "legal_approval_name",
+        "display_name",
         "is_required",
     )
 
-    fields = (("display_name", "is_required"),)
+    fields = ("legal_approval_name", "display_name", "is_required")
 
-    readonly_fields = ("display_name",)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class OperationalAreaAdminForm(forms.ModelForm):
