@@ -151,6 +151,11 @@ class ModelRequiredApproval(DisplayNameableModel):
     content_object = GenericForeignKey("content_type", "object_id")
 
     class Meta:
+        unique_together = (
+            "legal_approval_name",
+            "content_type",
+            "object_id",
+        )  # object_id
         verbose_name_plural = "Required Approvals"
         indexes = [
             models.Index(fields=["content_type", "object_id"]),
@@ -174,7 +179,7 @@ class ModelRequiredApproval(DisplayNameableModel):
     def __str__(self) -> str:
         required = "required" if self.is_required else "not required"
         return (
-            f"{self.display_name} Approval/Endorsement is {required} for "
+            f"{self.display_name} Endorsement/Approval is {required} for "
             f"{self.content_object.__class__.__name__} {self.content_object.__str__()}"
         )
 
