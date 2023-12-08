@@ -778,6 +778,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
     list_display = (
         "name",
         "operational_area",
+        "status",
         "operation_name",
         "operation",
         "operational_intent",
@@ -803,6 +804,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
                         "modified",
                     ),
                     "operational_area",
+                    "status",
                     "operation_name",
                     "operation",
                     "operational_intent",

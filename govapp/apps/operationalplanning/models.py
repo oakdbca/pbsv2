@@ -5,7 +5,7 @@ from django.contrib.gis.db.models import MultiLineStringField, MultiPolygonField
 from django.db import models
 from django.forms import ValidationError
 from model_utils import Choices
-from model_utils.models import TimeStampedModel
+from model_utils.models import StatusModel, TimeStampedModel
 
 from govapp.apps.burnplanning.models import BurnPlanElement
 from govapp.apps.legalapproval.models import (
@@ -308,13 +308,42 @@ class OperationalArea(
 
 
 class OperationalPlan(
-    ReferenceableModel, UniqueNameableModel, TimeStampedModel, ApprovableModel
+    StatusModel,
+    ReferenceableModel,
+    UniqueNameableModel,
+    TimeStampedModel,
+    ApprovableModel,
 ):
     MODEL_PREFIX = "OP"
 
     operationalplanpurposes: "models.Manager[OperationalPlanPurpose]"
     operationalplanprograms: "models.Manager[OperationalPlanProgram]"
     objectiveandsuccesscriteria: "models.Manager[ObjectiveAndSuccessCriteria]"
+
+    # Define types for dynamically added managers to keep mypy happy
+    draft: models.Manager
+    with_district_officer: models.Manager
+    with_district_officer_referral: models.Manager
+    with_regional_leader_fire: models.Manager
+    with_regional_leader_fire_referral: models.Manager
+    with_fmsb_representative: models.Manager
+    with_district_manager: models.Manager
+    with_regional_manager: models.Manager
+    with_state_manager: models.Manager
+    approved: models.Manager
+
+    STATUS = Choices(
+        ("draft", "Draft"),
+        ("with_district_officer", "With District Officer"),
+        ("with_district_officer_referral", "With District Officer (Referral)"),
+        ("with_regional_leader_fire", "With Regional Leader Fire"),
+        ("with_regional_leader_fire_referral", "With Regional Leader Fire (Referral)"),
+        ("with_fmsb_representative", "With FMSB Representative"),
+        ("with_district_manager", "With District Manager"),
+        ("with_regional_manager", "With Regional Manager"),
+        ("with_state_manager", "With State Manager"),
+        ("approved", "Approved"),
+    )
 
     operational_area = models.ForeignKey(
         OperationalArea,
