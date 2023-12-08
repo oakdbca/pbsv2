@@ -756,10 +756,11 @@ class ContingencyInline(nested_admin.NestedStackedInline):
     inlines = [ContingencyNeighbourInline]
 
 
-class ContextMapModelFileInline(nested_admin.NestedGenericStackedInline):
+class DocumentsMapModelFileInline(nested_admin.NestedGenericStackedInline):
     model = ModelFile
     extra = 0
-    verbose_name = "Context map"
+    verbose_name = "Document"
+    verbose_name_plural = "Documents"
 
 
 class OperationalPlanAdminForm(forms.ModelForm):
@@ -824,6 +825,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
                     "context_description_of_burn",
                     "context_risk_of_not_completing_burn",
                     "context_operational_aspects",
+                    "context_map",
                 ),
             },
         ),
@@ -853,7 +855,6 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
     readonly_fields = ("reference_number", "created", "modified")
 
     inlines = [
-        ContextMapModelFileInline,
         ObjectiveAndSuccessCriteriaInline,
         OperationalAreaPurposeInline,
         OperationalAreaProgramInline,
@@ -861,6 +862,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         ContingencyInline,
         ModelRequiredApprovalInline,
         ModelLegalApprovalInline,
+        DocumentsMapModelFileInline,
     ]
 
 

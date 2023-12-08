@@ -380,7 +380,7 @@ class OperationalPlan(
     context_operational_aspects = models.TextField(
         null=True, blank=True, verbose_name="Operational aspects (PESTLE)"
     )
-    context_map = GenericRelation(ModelFile)
+    context_map = models.ForeignKey(ModelFile, on_delete=models.PROTECT, null=True)
 
     # Objectives and Success Criteria: ObjectiveAndSuccessCriteria
 
@@ -427,6 +427,11 @@ class OperationalPlan(
         verbose_name="Fauna Authority To Take",
         related_name="%(class)s_fauna_att",
     )  # Fauna authority to take
+
+    # Documents
+    documents = GenericRelation(
+        ModelFile, related_query_name="operationalplan_document"
+    )
 
     @property
     def risk_highest_level(self):
