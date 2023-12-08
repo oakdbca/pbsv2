@@ -4,7 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from model_utils import Choices
-from model_utils.models import StatusModel, TimeStampedModel
+from model_utils.models import TimeStampedModel
 
 from govapp.apps.main.models import (
     AbstractModelMeta,
@@ -70,28 +70,36 @@ class LegalApproval(UniqueNameableModel, DisplayNameableModel):
         return self.has_additional_permissions and self.text_remove_justification
 
 
-class Authority(
-    UniqueNameableModel,
-    DisplayNameableModel,
-    StatusModel,
-    TimeStampedModel,
+class OtherApproval(
     LodgementDateModel,
 ):
-    STATUS = Choices(
-        ("issued", "Issued"),
-        ("approved", "Approved"),
-        ("current", "Current"),
+    pass
+
+
+class DisturbanceApplication(models.Model):
+    proposal = models.ForeignKey(
+        OtherApproval,
+        on_delete=models.CASCADE,
+        related_name="disturbanceapplication_proposals",
+    )
+    approval = models.ForeignKey(
+        OtherApproval,
+        on_delete=models.CASCADE,
+        related_name="disturbanceapplication_approvals",
     )
 
-    class Meta:
-        abstract = True
 
-
-class LawfulAuthority(Authority):
-    # Define types for dynamically added managers to keep mypy happy
-    issued: models.Manager
-    approved: models.Manager
-    current: models.Manager
+class AuthorityToTake(models.Model):
+    application = models.ForeignKey(
+        OtherApproval,
+        on_delete=models.CASCADE,
+        related_name="authoritytotake_applications",
+    )
+    issuance = models.ForeignKey(
+        OtherApproval,
+        on_delete=models.CASCADE,
+        related_name="authoritytotake_issuances",
+    )
 
 
 class ModelLegalApproval(TimeStampedModel):

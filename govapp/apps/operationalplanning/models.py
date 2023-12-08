@@ -10,7 +10,7 @@ from model_utils.models import StatusModel, TimeStampedModel
 from govapp.apps.burnplanning.models import BurnPlanElement
 from govapp.apps.legalapproval.models import (
     ApprovableModel,
-    LawfulAuthority,
+    AuthorityToTake,
     LegalApproval,
 )
 from govapp.apps.main.models import (
@@ -441,7 +441,7 @@ class OperationalPlan(
 
     # Legal / Approvals
     flora_authority_to_take = models.ForeignKey(
-        LawfulAuthority,
+        AuthorityToTake,
         on_delete=models.PROTECT,
         null=True,
         blank=True,
@@ -449,7 +449,7 @@ class OperationalPlan(
         related_name="%(class)s_flora_att",
     )  # Flora authority to take
     fauna_authority_to_take = models.ForeignKey(
-        LawfulAuthority,
+        AuthorityToTake,
         on_delete=models.PROTECT,
         null=True,
         blank=True,

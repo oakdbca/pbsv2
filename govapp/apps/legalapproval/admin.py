@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from model_utils import Choices
 
-from .models import LegalApproval
+from .models import AuthorityToTake, LegalApproval
 
 
 class LegalApprovalAdminForm(forms.ModelForm):
@@ -21,6 +21,16 @@ class LegalApprovalAdminForm(forms.ModelForm):
             "provide free text as approval, or remove the additional required approval if a "
             "justification is provided.",
         }
+
+
+@admin.register(AuthorityToTake)
+class AuthorityToTakeAdmin(admin.ModelAdmin):
+    model = AuthorityToTake
+
+    list_display = (
+        "application",
+        "issuance",
+    )
 
 
 @admin.register(LegalApproval)
