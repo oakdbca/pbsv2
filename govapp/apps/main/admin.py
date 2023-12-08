@@ -4,7 +4,16 @@ import nested_admin
 from django.contrib import admin
 from django.http.request import HttpRequest
 
-from .models import District, Lga, ModelFile, Neighbour, NeighbourRole, Region
+from .models import (
+    District,
+    DocumentCategory,
+    DocumentDescriptor,
+    Lga,
+    ModelFile,
+    Neighbour,
+    NeighbourRole,
+    Region,
+)
 
 
 class DeleteRestrictedAdmin(admin.ModelAdmin):
@@ -17,8 +26,24 @@ class NestedDeleteRestrictedAdmin(nested_admin.NestedModelAdmin):
         return request.user.is_superuser
 
 
+class DocumentCategoryAdmin(DeleteRestrictedAdmin):
+    list_display = ("id", "name")
+
+
+class DocumentDescriptorAdmin(DeleteRestrictedAdmin):
+    list_display = ("id", "name")
+
+
 class ModelFileAdmin(DeleteRestrictedAdmin):
-    list_display = ("id", "file", "content_type", "object_id", "datetime_uploaded")
+    list_display = (
+        "id",
+        "category",
+        "descriptor",
+        "file",
+        "content_type",
+        "object_id",
+        "datetime_uploaded",
+    )
 
 
 class RegionAdmin(DeleteRestrictedAdmin):
@@ -66,6 +91,8 @@ class NeighbourAdmin(DeleteRestrictedAdmin):
         return request.user.is_superuser
 
 
+admin.site.register(DocumentDescriptor, DocumentDescriptorAdmin)
+admin.site.register(DocumentCategory, DocumentCategoryAdmin)
 admin.site.register(ModelFile, ModelFileAdmin)
 admin.site.register(Region, RegionAdmin)
 admin.site.register(District, DistrictAdmin)

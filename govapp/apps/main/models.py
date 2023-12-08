@@ -261,9 +261,23 @@ def file_upload_location(instance, filename):
     return f"uploads/{instance._meta.model_name}/{filename}"
 
 
+class DocumentCategory(UniqueNameableModel):
+    pass
+
+
+class DocumentDescriptor(UniqueNameableModel):
+    pass
+
+
 class ModelFile(models.Model):
     file = ProtectedFileField(upload_to=file_upload_location)
     name = models.CharField(max_length=255, null=False, blank=False)
+    category = models.ForeignKey(
+        DocumentCategory, on_delete=models.PROTECT, null=True, blank=True
+    )
+    descriptor = models.ForeignKey(
+        DocumentDescriptor, on_delete=models.PROTECT, null=True, blank=True
+    )
     description = models.TextField(null=True, blank=True)
     uploaded_by = models.ForeignKey(
         User, on_delete=models.PROTECT, null=True, blank=True
