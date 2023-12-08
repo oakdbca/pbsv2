@@ -4,12 +4,13 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from model_utils import Choices
-from model_utils.models import TimeStampedModel
+from model_utils.models import StatusModel, TimeStampedModel
 
 from govapp.apps.main.models import (
     AbstractModelMeta,
     DisplayNameableModel,
     Lga,
+    LodgementDateModel,
     ModelFile,
     UniqueNameableModel,
 )
@@ -67,6 +68,30 @@ class LegalApproval(UniqueNameableModel, DisplayNameableModel):
     @property
     def can_remove_approval(self):
         return self.has_additional_permissions and self.text_remove_justification
+
+
+class Authority(
+    UniqueNameableModel,
+    DisplayNameableModel,
+    StatusModel,
+    TimeStampedModel,
+    LodgementDateModel,
+):
+    STATUS = Choices(
+        ("issued", "Issued"),
+        ("approved", "Approved"),
+        ("current", "Current"),
+    )
+
+    class Meta:
+        abstract = True
+
+
+class LawfulAuthority(Authority):
+    # Define types for dynamically added managers to keep mypy happy
+    issued: models.Manager
+    approved: models.Manager
+    current: models.Manager
 
 
 class ModelLegalApproval(TimeStampedModel):
@@ -199,6 +224,7 @@ class ApprovableModel(models.Model, metaclass=AbstractModelMeta):
         super().save(*args, **kwargs)
 
         if is_new_object:
+            # Automatically create required approval entries for the model
             for name in self.initial_required_approvals():
                 ModelRequiredApproval.objects.create(
                     content_object=self,

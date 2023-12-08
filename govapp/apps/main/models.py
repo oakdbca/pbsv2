@@ -153,6 +153,16 @@ class OrdinalScaleModel(NameableModel):
         return f"{self.name} ({self.ordinal_scale})"
 
 
+class LodgementDateModel(models.Model):
+    lodgement_date = models.DateField(null=True, blank=True)
+    issue_date = models.DateField(null=True, blank=True)
+    approval_date = models.DateField(null=True, blank=True)
+    expiry_date = models.DateField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
 class ReferenceableModel(models.Model):
     reference_number = models.CharField(
         max_length=9, null=True, blank=True, editable=False

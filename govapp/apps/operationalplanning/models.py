@@ -8,7 +8,11 @@ from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 from govapp.apps.burnplanning.models import BurnPlanElement
-from govapp.apps.legalapproval.models import ApprovableModel, LegalApproval
+from govapp.apps.legalapproval.models import (
+    ApprovableModel,
+    LawfulAuthority,
+    LegalApproval,
+)
 from govapp.apps.main.models import (
     DisplayNameableModel,
     IntervalFloatField,
@@ -407,6 +411,22 @@ class OperationalPlan(
     )
 
     # Legal / Approvals
+    flora_authority_to_take = models.ForeignKey(
+        LawfulAuthority,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        verbose_name="Flora Authority To Take",
+        related_name="%(class)s_flora_att",
+    )  # Flora authority to take
+    fauna_authority_to_take = models.ForeignKey(
+        LawfulAuthority,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        verbose_name="Fauna Authority To Take",
+        related_name="%(class)s_fauna_att",
+    )  # Fauna authority to take
 
     @property
     def risk_highest_level(self):
@@ -417,6 +437,17 @@ class OperationalPlan(
     def priority_calculated(self):
         # Calculated priority from Priority section
         raise NotImplementedError("TODO")
+
+    def initial_required_approvals(self):
+        return LegalApproval.objects.filter(
+            is_required_for_operational_plan=True
+        ).values_list("name", flat=True)
+
+    def initial_not_required_approvals(self):
+        # Automatically create entries for other additional required approvals by intersecting with Tenure layer
+        return LegalApproval.objects.filter(land_type__length__gt=0).values_list(
+            "name", flat=True
+        )
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

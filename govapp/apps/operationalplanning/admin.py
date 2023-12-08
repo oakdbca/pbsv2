@@ -786,6 +786,8 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         "context_risk_of_not_completing_burn",
         "context_operational_aspects",
         "prescription",
+        "flora_authority_to_take",
+        "fauna_authority_to_take",
     )
 
     fieldsets = (
@@ -837,6 +839,15 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
                 "fields": ("prescription",),
             },
         ),
+        (
+            "Legal/Approval - Lawful authority",
+            {
+                "fields": (
+                    "flora_authority_to_take",
+                    "fauna_authority_to_take",
+                ),
+            },
+        ),
     )
 
     readonly_fields = ("reference_number", "created", "modified")
@@ -848,6 +859,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         OperationalAreaProgramInline,
         OperationalPlanRiskCategoryInline,
         ContingencyInline,
+        ModelRequiredApprovalInline,
         ModelLegalApprovalInline,
     ]
 
