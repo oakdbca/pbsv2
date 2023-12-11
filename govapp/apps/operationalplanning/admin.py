@@ -50,6 +50,13 @@ class OperationalAreaProgramInline(nested_admin.NestedTabularInline):
     extra = 0
 
 
+class DisturbanceApplicationInline(nested_admin.NestedTabularInline):
+    model = OperationalPlan.disturbance_application.through
+    extra = 0
+    verbose_name = "Legal/Approval - Disturbance application"
+    verbose_name_plural = "Legal/Approval - Disturbance applications"
+
+
 class SuccessCriteriaReportInline(nested_admin.NestedStackedInline):
     model = SuccessCriteriaReport
     extra = 0
@@ -573,7 +580,9 @@ class ModelLegalApprovalInline(nested_admin.NestedGenericStackedInline):
         ),
     )
 
-    inlines = [FileAsApprovalModelFileInline]
+    inlines = [
+        FileAsApprovalModelFileInline,
+    ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -864,6 +873,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         ContingencyInline,
         ModelRequiredApprovalInline,
         ModelLegalApprovalInline,
+        DisturbanceApplicationInline,
         DocumentsMapModelFileInline,
     ]
 

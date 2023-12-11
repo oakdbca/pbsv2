@@ -2,7 +2,12 @@ from django import forms
 from django.contrib import admin
 from model_utils import Choices
 
-from .models import AuthorityToTake, LegalApproval
+from .models import (
+    AuthorityToTake,
+    DisturbanceApplication,
+    LegalApproval,
+    OtherApproval,
+)
 
 
 class LegalApprovalAdminForm(forms.ModelForm):
@@ -23,6 +28,28 @@ class LegalApprovalAdminForm(forms.ModelForm):
         }
 
 
+@admin.register(OtherApproval)
+class OtherApprovalAdmin(admin.ModelAdmin):
+    model = OtherApproval
+
+    list_display = (
+        "lodgement_date",
+        "issue_date",
+        "approval_date",
+        "expiry_date",
+    )
+
+
+@admin.register(DisturbanceApplication)
+class DisturbanceApplicationAdmin(admin.ModelAdmin):
+    model = DisturbanceApplication
+
+    list_display = (
+        "proposal",
+        "approval",
+    )
+
+
 @admin.register(AuthorityToTake)
 class AuthorityToTakeAdmin(admin.ModelAdmin):
     model = AuthorityToTake
@@ -31,6 +58,10 @@ class AuthorityToTakeAdmin(admin.ModelAdmin):
         "application",
         "issuance",
     )
+
+    class Meta:
+        verbose_name = "Authority to take"
+        verbose_name_plural = "Authorities to take"
 
 
 @admin.register(LegalApproval)

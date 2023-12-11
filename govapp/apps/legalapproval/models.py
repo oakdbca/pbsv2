@@ -88,6 +88,10 @@ class DisturbanceApplication(models.Model):
         related_name="disturbanceapplication_approvals",
     )
 
+    class Meta:
+        verbose_name = "Disturbance Application"
+        verbose_name_plural = "Disturbance Applications"
+
 
 class AuthorityToTake(models.Model):
     application = models.ForeignKey(
@@ -114,10 +118,6 @@ class ModelLegalApproval(TimeStampedModel):
         on_delete=models.CASCADE,
         related_name="modellegalapprovals",
     )  # OP: endorsement and approval by district manager and regional manager
-
-    # OP: lodgement date of DAS proposal + approval and expiry date of the issued DAS approval
-    # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
-    # + issue and expiry date of the issued lawful authorities
 
     lga: models.ForeignKey = models.ForeignKey(
         Lga,
@@ -188,7 +188,7 @@ class ModelRequiredApproval(DisplayNameableModel):
             "legal_approval_name",
             "content_type",
             "object_id",
-        )  # object_id
+        )
         verbose_name_plural = "Required Approvals"
         indexes = [
             models.Index(fields=["content_type", "object_id"]),
@@ -220,6 +220,28 @@ class ModelRequiredApproval(DisplayNameableModel):
 class ApprovableModel(models.Model, metaclass=AbstractModelMeta):
     required_approvals = GenericRelation(ModelRequiredApproval)
     legal_approvals = GenericRelation(ModelLegalApproval)
+
+    # OP: lodgement dates of DAS proposal + approval and expiry date of the issued DAS approvals
+    disturbance_application: models.ManyToManyField = models.ManyToManyField(
+        DisturbanceApplication,
+        related_name="%(class)s_das_approvals",
+    )
+    # OP: lodgement date of the related Flora and Fauna 'Authority To Take' lawful authorities
+    # + issue and expiry date of the issued lawful authorities
+    flora_authority_to_take = models.ForeignKey(
+        AuthorityToTake,
+        on_delete=models.CASCADE,
+        related_name="%(class)s_flora_atts",
+        null=True,
+        blank=True,
+    )
+    fauna_authority_to_take = models.ForeignKey(
+        AuthorityToTake,
+        on_delete=models.CASCADE,
+        related_name="%(class)s_fauna_atts",
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         abstract = True
