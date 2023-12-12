@@ -102,8 +102,6 @@ importo.py
 uwsgi*.ini
 *.djcache
 
-npm locks
-
 # npm build files
 govapp/static/pbsv2_vue/
 
