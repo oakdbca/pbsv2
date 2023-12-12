@@ -1,27 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-</head>
-
-<body>
+  <body>
     {% block greetings %}
-    <p>
-        Dear {{ first_name }},
-    </p>
+    <p>Dear {{ first_name }},</p>
+    {% endblock %} {% block content %}
+    <p>This is example content.</p>
+    {% endblock %} {% block signature %}
+    <p>Regards, DBCA</p>
     {% endblock %}
-    {% block content %}
-    <p>
-        This is example content.
-    </p>
-    {% endblock %}
-    {% block signature %}
-    <p>
-        Regards,
-        DBCA
-    </p>
-    {% endblock %}
-</body>
-
+  </body>
 </html>

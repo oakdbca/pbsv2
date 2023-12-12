@@ -1,0 +1,1213 @@
+[
+  {
+    "model": "main.lga",
+    "pk": 1,
+    "fields": {
+      "name": "WILUNA, SHIRE OF",
+      "display_name": "Wiluna",
+      "district": 1
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 2,
+    "fields": {
+      "name": "MOUNT MAGNET, SHIRE OF",
+      "display_name": "Mount Magnet",
+      "district": 22
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 3,
+    "fields": {
+      "name": "SANDSTONE, SHIRE OF",
+      "display_name": "Sandstone",
+      "district": 1
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 4,
+    "fields": {
+      "name": "WICKEPIN, SHIRE OF",
+      "display_name": "Wickepin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 5,
+    "fields": {
+      "name": "CORRIGIN, SHIRE OF",
+      "display_name": "Corrigin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 6,
+    "fields": {
+      "name": "GNOWANGERUP, SHIRE OF",
+      "display_name": "Gnowangerup",
+      "district": 9
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 7,
+    "fields": {
+      "name": "BROOMEHILL-TAMBELLUP, SHIRE OF",
+      "display_name": "Broomehill-Tambellup",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 8,
+    "fields": {
+      "name": "COOROW, SHIRE OF",
+      "display_name": "Coorow",
+      "district": 20
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 9,
+    "fields": {
+      "name": "RAVENSTHORPE, SHIRE OF",
+      "display_name": "Ravensthorpe",
+      "district": 9
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 10,
+    "fields": {
+      "name": "KULIN, SHIRE OF",
+      "display_name": "Kulin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 11,
+    "fields": {
+      "name": "KONDININ, SHIRE OF",
+      "display_name": "Kondinin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 12,
+    "fields": {
+      "name": "CRANBROOK, SHIRE OF",
+      "display_name": "Cranbrook",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 13,
+    "fields": {
+      "name": "NGAANYATJARRAKU, SHIRE OF",
+      "display_name": "Ngaanyatjarraku",
+      "district": 1
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 14,
+    "fields": {
+      "name": "DUNDAS, SHIRE OF",
+      "display_name": "Dundas",
+      "district": 10
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 15,
+    "fields": {
+      "name": "SHARK BAY, SHIRE OF",
+      "display_name": "Shark Bay",
+      "district": 22
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 16,
+    "fields": {
+      "name": "NORTHAMPTON, SHIRE OF",
+      "display_name": "Northampton",
+      "district": 22
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 17,
+    "fields": {
+      "name": "JERRAMUNGUP, SHIRE OF",
+      "display_name": "Jerramungup",
+      "district": 9
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 18,
+    "fields": {
+      "name": "DENMARK, SHIRE OF",
+      "display_name": "Denmark",
+      "district": 16
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 19,
+    "fields": {
+      "name": "DANDARAGAN, SHIRE OF",
+      "display_name": "Dandaragan",
+      "district": 20
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 20,
+    "fields": {
+      "name": "KALGOORLIE-BOULDER, CITY OF",
+      "display_name": "Kalgoorlie-Boulder",
+      "district": 1
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 21,
+    "fields": {
+      "name": "COOLGARDIE, SHIRE OF",
+      "display_name": "Coolgardie",
+      "district": 1
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 22,
+    "fields": {
+      "name": "KOORDA, SHIRE OF",
+      "display_name": "Koorda",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 23,
+    "fields": {
+      "name": "KARRATHA, CITY OF",
+      "display_name": "Karratha",
+      "district": 8
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 24,
+    "fields": {
+      "name": "ESPERANCE, SHIRE OF",
+      "display_name": "Esperance",
+      "district": 10
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 25,
+    "fields": {
+      "name": "MOORA, SHIRE OF",
+      "display_name": "Moora",
+      "district": 20
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 26,
+    "fields": {
+      "name": "MENZIES, SHIRE OF",
+      "display_name": "Menzies",
+      "district": 1
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 27,
+    "fields": {
+      "name": "MUKINBUDIN, SHIRE OF",
+      "display_name": "Mukinbudin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 28,
+    "fields": {
+      "name": "NUNGARIN, SHIRE OF",
+      "display_name": "Nungarin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 29,
+    "fields": { "name": "CUE, SHIRE OF", "display_name": "Cue", "district": 22 }
+  },
+  {
+    "model": "main.lga",
+    "pk": 30,
+    "fields": {
+      "name": "MEEKATHARRA, SHIRE OF",
+      "display_name": "Meekatharra",
+      "district": 8
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 31,
+    "fields": {
+      "name": "CARNAMAH, SHIRE OF",
+      "display_name": "Carnamah",
+      "district": 20
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 32,
+    "fields": {
+      "name": "COLLIE, SHIRE OF",
+      "display_name": "Collie",
+      "district": 12
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 33,
+    "fields": {
+      "name": "TAMMIN, SHIRE OF",
+      "display_name": "Tammin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 34,
+    "fields": {
+      "name": "TRAYNING, SHIRE OF",
+      "display_name": "Trayning",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 35,
+    "fields": {
+      "name": "PINGELLY, SHIRE OF",
+      "display_name": "Pingelly",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 36,
+    "fields": {
+      "name": "MURCHISON, SHIRE OF",
+      "display_name": "Murchison",
+      "district": 22
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 37,
+    "fields": {
+      "name": "EAST FREMANTLE, TOWN OF",
+      "display_name": "East Fremantle",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 38,
+    "fields": {
+      "name": "CHITTERING, SHIRE OF",
+      "display_name": "Chittering",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 39,
+    "fields": {
+      "name": "MERREDIN, SHIRE OF",
+      "display_name": "Merredin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 40,
+    "fields": {
+      "name": "KATANNING, SHIRE OF",
+      "display_name": "Katanning",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 41,
+    "fields": {
+      "name": "WILLIAMS, SHIRE OF",
+      "display_name": "Williams",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 42,
+    "fields": {
+      "name": "NAREMBEEN, SHIRE OF",
+      "display_name": "Narembeen",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 43,
+    "fields": {
+      "name": "CAPEL, SHIRE OF",
+      "display_name": "Capel",
+      "district": 11
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 44,
+    "fields": {
+      "name": "NARROGIN, SHIRE OF",
+      "display_name": "Narrogin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 45,
+    "fields": {
+      "name": "CUBALLING, SHIRE OF",
+      "display_name": "Cuballing",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 46,
+    "fields": {
+      "name": "BROOKTON, SHIRE OF",
+      "display_name": "Brookton",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 47,
+    "fields": {
+      "name": "AUGUSTA MARGARET RIVER, SHIRE OF",
+      "display_name": "Augusta Margaret River",
+      "district": 11
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 48,
+    "fields": {
+      "name": "BUSSELTON, CITY OF",
+      "display_name": "Busselton",
+      "district": 11
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 49,
+    "fields": {
+      "name": "WANNEROO, CITY OF",
+      "display_name": "Wanneroo",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 50,
+    "fields": {
+      "name": "BROOME, SHIRE OF",
+      "display_name": "Broome",
+      "district": 3
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 51,
+    "fields": {
+      "name": "NANNUP, SHIRE OF",
+      "display_name": "Nannup",
+      "district": 11
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 52,
+    "fields": {
+      "name": "WESTONIA, SHIRE OF",
+      "display_name": "Westonia",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 53,
+    "fields": {
+      "name": "YILGARN, SHIRE OF",
+      "display_name": "Yilgarn",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 54,
+    "fields": {
+      "name": "CHAPMAN VALLEY, SHIRE OF",
+      "display_name": "Chapman Valley",
+      "district": 22
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 55,
+    "fields": {
+      "name": "DONNYBROOK-BALINGUP, SHIRE OF",
+      "display_name": "Donnybrook-Balingup",
+      "district": 11
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 56,
+    "fields": {
+      "name": "VICTORIA PLAINS, SHIRE OF",
+      "display_name": "Victoria Plains",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 57,
+    "fields": {
+      "name": "GINGIN, SHIRE OF",
+      "display_name": "Gingin",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 58,
+    "fields": {
+      "name": "DARDANUP, SHIRE OF",
+      "display_name": "Dardanup",
+      "district": 12
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 59,
+    "fields": {
+      "name": "ASHBURTON, SHIRE OF",
+      "display_name": "Ashburton",
+      "district": 8
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 60,
+    "fields": {
+      "name": "EXMOUTH, SHIRE OF",
+      "display_name": "Exmouth",
+      "district": 7
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 61,
+    "fields": {
+      "name": "SOUTH PERTH, CITY OF",
+      "display_name": "South Perth",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 62,
+    "fields": {
+      "name": "SERPENTINE-JARRAHDALE, SHIRE OF",
+      "display_name": "Serpentine-Jarrahdale",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 63,
+    "fields": {
+      "name": "BEVERLEY, SHIRE OF",
+      "display_name": "Beverley",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 64,
+    "fields": {
+      "name": "BODDINGTON, SHIRE OF",
+      "display_name": "Boddington",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 65,
+    "fields": {
+      "name": "QUAIRADING, SHIRE OF",
+      "display_name": "Quairading",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 66,
+    "fields": {
+      "name": "WANDERING, SHIRE OF",
+      "display_name": "Wandering",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 67,
+    "fields": {
+      "name": "WEST ARTHUR, SHIRE OF",
+      "display_name": "West Arthur",
+      "district": 12
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 68,
+    "fields": {
+      "name": "WYALKATCHEM, SHIRE OF",
+      "display_name": "Wyalkatchem",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 69,
+    "fields": {
+      "name": "KOJONUP, SHIRE OF",
+      "display_name": "Kojonup",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 70,
+    "fields": {
+      "name": "WOODANILLING, SHIRE OF",
+      "display_name": "Woodanilling",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 71,
+    "fields": {
+      "name": "PORT HEDLAND, TOWN OF",
+      "display_name": "Port Hedland",
+      "district": 8
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 72,
+    "fields": {
+      "name": "EAST PILBARA, SHIRE OF",
+      "display_name": "East Pilbara",
+      "district": 8
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 73,
+    "fields": {
+      "name": "DOWERIN, SHIRE OF",
+      "display_name": "Dowerin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 74,
+    "fields": {
+      "name": "PLANTAGENET, SHIRE OF",
+      "display_name": "Plantagenet",
+      "district": 16
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 75,
+    "fields": {
+      "name": "ALBANY, CITY OF",
+      "display_name": "Albany",
+      "district": 9
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 76,
+    "fields": {
+      "name": "MOSMAN PARK, TOWN OF",
+      "display_name": "Mosman Park",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 77,
+    "fields": {
+      "name": "COTTESLOE, TOWN OF",
+      "display_name": "Cottesloe",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 78,
+    "fields": {
+      "name": "HARVEY, SHIRE OF",
+      "display_name": "Harvey",
+      "district": 12
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 79,
+    "fields": {
+      "name": "WAROONA, SHIRE OF",
+      "display_name": "Waroona",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 80,
+    "fields": {
+      "name": "BUNBURY, CITY OF",
+      "display_name": "Bunbury",
+      "district": 12
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 81,
+    "fields": {
+      "name": "JOONDALUP, CITY OF",
+      "display_name": "Joondalup",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 82,
+    "fields": {
+      "name": "VICTORIA PARK, TOWN OF",
+      "display_name": "Victoria Park",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 83,
+    "fields": {
+      "name": "LEONORA, SHIRE OF",
+      "display_name": "Leonora",
+      "district": 1
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 84,
+    "fields": {
+      "name": "LAVERTON, SHIRE OF",
+      "display_name": "Laverton",
+      "district": 1
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 85,
+    "fields": {
+      "name": "MINGENEW, SHIRE OF",
+      "display_name": "Mingenew",
+      "district": 22
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 86,
+    "fields": {
+      "name": "PEPPERMINT GROVE, SHIRE OF",
+      "display_name": "Peppermint Grove",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 87,
+    "fields": {
+      "name": "CLAREMONT, TOWN OF",
+      "display_name": "Claremont",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 88,
+    "fields": {
+      "name": "CUNDERDIN, SHIRE OF",
+      "display_name": "Cunderdin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 89,
+    "fields": {
+      "name": "MURRAY, SHIRE OF",
+      "display_name": "Murray",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 90,
+    "fields": {
+      "name": "MANDURAH, CITY OF",
+      "display_name": "Mandurah",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 91,
+    "fields": {
+      "name": "IRWIN, SHIRE OF",
+      "display_name": "Irwin",
+      "district": 20
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 92,
+    "fields": {
+      "name": "MORAWA, SHIRE OF",
+      "display_name": "Morawa",
+      "district": 22
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 93,
+    "fields": {
+      "name": "STIRLING, CITY OF",
+      "display_name": "Stirling",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 94,
+    "fields": {
+      "name": "MOUNT MARSHALL, SHIRE OF",
+      "display_name": "Mount Marshall",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 95,
+    "fields": {
+      "name": "NEDLANDS, CITY OF",
+      "display_name": "Nedlands",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 96,
+    "fields": {
+      "name": "BOYUP BROOK, SHIRE OF",
+      "display_name": "Boyup Brook",
+      "district": 11
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 97,
+    "fields": {
+      "name": "KENT, SHIRE OF",
+      "display_name": "Kent",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 98,
+    "fields": {
+      "name": "LAKE GRACE, SHIRE OF",
+      "display_name": "Lake Grace",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 99,
+    "fields": {
+      "name": "SWAN, CITY OF",
+      "display_name": "Swan",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 100,
+    "fields": {
+      "name": "MUNDARING, SHIRE OF",
+      "display_name": "Mundaring",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 101,
+    "fields": {
+      "name": "SUBIACO, CITY OF",
+      "display_name": "Subiaco",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 102,
+    "fields": {
+      "name": "CAMBRIDGE, TOWN OF",
+      "display_name": "Cambridge",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 103,
+    "fields": {
+      "name": "BRIDGETOWN-GREENBUSHES, SHIRE OF",
+      "display_name": "Bridgetown-Greenbushes",
+      "district": 15
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 104,
+    "fields": {
+      "name": "KELLERBERRIN, SHIRE OF",
+      "display_name": "Kellerberrin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 105,
+    "fields": {
+      "name": "BRUCE ROCK, SHIRE OF",
+      "display_name": "Bruce Rock",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 106,
+    "fields": {
+      "name": "YORK, SHIRE OF",
+      "display_name": "York",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 107,
+    "fields": {
+      "name": "THREE SPRINGS, SHIRE OF",
+      "display_name": "Three Springs",
+      "district": 20
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 108,
+    "fields": {
+      "name": "HALLS CREEK, SHIRE OF",
+      "display_name": "Halls Creek",
+      "district": 2
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 109,
+    "fields": {
+      "name": "MANJIMUP, SHIRE OF",
+      "display_name": "Manjimup",
+      "district": 15
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 110,
+    "fields": {
+      "name": "BASSENDEAN, TOWN OF",
+      "display_name": "Bassendean",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 111,
+    "fields": {
+      "name": "BAYSWATER, CITY OF",
+      "display_name": "Bayswater",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 112,
+    "fields": {
+      "name": "WYNDHAM-EAST KIMBERLEY, SHIRE OF",
+      "display_name": "Wyndham-East Kimberley",
+      "district": 2
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 113,
+    "fields": {
+      "name": "MELVILLE, CITY OF",
+      "display_name": "Melville",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 114,
+    "fields": {
+      "name": "GOOMALLING, SHIRE OF",
+      "display_name": "Goomalling",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 115,
+    "fields": {
+      "name": "WONGAN-BALLIDU, SHIRE OF",
+      "display_name": "Wongan-Ballidu",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 116,
+    "fields": {
+      "name": "FREMANTLE, CITY OF",
+      "display_name": "Fremantle",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 117,
+    "fields": {
+      "name": "DERBY/WEST KIMBERLEY, SHIRE OF",
+      "display_name": "Derby/West Kimberley",
+      "district": 3
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 118,
+    "fields": {
+      "name": "GREATER GERALDTON, CITY OF",
+      "display_name": "Greater Geraldton",
+      "district": 22
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 119,
+    "fields": {
+      "name": "ROCKINGHAM, CITY OF",
+      "display_name": "Rockingham",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 120,
+    "fields": {
+      "name": "KWINANA, CITY OF",
+      "display_name": "Kwinana",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 121,
+    "fields": {
+      "name": "YALGOO, SHIRE OF",
+      "display_name": "Yalgoo",
+      "district": 22
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 122,
+    "fields": {
+      "name": "DALWALLINU, SHIRE OF",
+      "display_name": "Dalwallinu",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 123,
+    "fields": {
+      "name": "PERENJORI, SHIRE OF",
+      "display_name": "Perenjori",
+      "district": 22
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 124,
+    "fields": {
+      "name": "WAGIN, SHIRE OF",
+      "display_name": "Wagin",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 125,
+    "fields": {
+      "name": "DUMBLEYUNG, SHIRE OF",
+      "display_name": "Dumbleyung",
+      "district": 18
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 126,
+    "fields": {
+      "name": "BELMONT, CITY OF",
+      "display_name": "Belmont",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 127,
+    "fields": {
+      "name": "CANNING, CITY OF",
+      "display_name": "Canning",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 128,
+    "fields": {
+      "name": "KALAMUNDA, CITY OF",
+      "display_name": "Kalamunda",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 129,
+    "fields": {
+      "name": "VINCENT, CITY OF",
+      "display_name": "Vincent",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 130,
+    "fields": {
+      "name": "PERTH, CITY OF",
+      "display_name": "Perth",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 131,
+    "fields": {
+      "name": "COCKBURN, CITY OF",
+      "display_name": "Cockburn",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 132,
+    "fields": {
+      "name": "GOSNELLS, CITY OF",
+      "display_name": "Gosnells",
+      "district": 14
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 133,
+    "fields": {
+      "name": "ARMADALE, CITY OF",
+      "display_name": "Armadale",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 134,
+    "fields": {
+      "name": "TOODYAY, SHIRE OF",
+      "display_name": "Toodyay",
+      "district": 13
+    }
+  },
+  {
+    "model": "main.lga",
+    "pk": 135,
+    "fields": {
+      "name": "NORTHAM, SHIRE OF",
+      "display_name": "Northam",
+      "district": 18
+    }
+  }
+]

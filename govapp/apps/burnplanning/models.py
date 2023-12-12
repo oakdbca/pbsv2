@@ -6,6 +6,7 @@ from django.contrib.gis.db.models import PolygonField
 from django.contrib.gis.db.models.functions import Area
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models.fields.related_descriptors import ReverseManyToOneDescriptor
 from django.db.models.functions import Cast
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
@@ -32,7 +33,7 @@ class BurnPlanUnitManager(models.Manager):
         )
 
 
-class BurnPlanUnit(  # type: ignore
+class BurnPlanUnit(
     ReferenceableModel, UniqueNameableModel, StatusModel, TimeStampedModel
 ):
     """A burn plan unit is a model to contain geometry information for
@@ -54,6 +55,8 @@ class BurnPlanUnit(  # type: ignore
     current: models.Manager
     discarded: models.Manager
     retired: models.Manager
+
+    burnplanunitdistricts: ReverseManyToOneDescriptor
 
     districts: models.ManyToManyField = models.ManyToManyField(
         District,
@@ -84,12 +87,20 @@ class BurnPlanUnit(  # type: ignore
             return None
         return self.area.sq_m / 10000
 
+    @property
+    def operational_areas(self):
+        return self.operationalareas.all()
+
 
 class BurnPlanUnitDistrict(TimeStampedModel):
     """A model to store the relationship between a burn plan unit and a district"""
 
-    burn_plan_unit = models.ForeignKey(BurnPlanUnit, on_delete=models.CASCADE)
-    district = models.ForeignKey(District, on_delete=models.CASCADE)
+    burn_plan_unit = models.ForeignKey(
+        BurnPlanUnit, on_delete=models.CASCADE, related_name="burnplanunitdistricts"
+    )
+    district = models.ForeignKey(
+        District, on_delete=models.CASCADE, related_name="burnplanunitdistricts"
+    )
     # Todo: confirm business rules for primary district (largest land area? or other?)
     is_primary = models.BooleanField(default=False)
 
@@ -113,11 +124,11 @@ class Justification(UniqueNameableModel, ArchivableModel, TimeStampedModel):
 
 
 class Purpose(UniqueNameableModel, ArchivableModel, TimeStampedModel):
-    pass
+    operationalplanpurposes: ReverseManyToOneDescriptor
 
 
 class Program(UniqueNameableModel, ArchivableModel, TimeStampedModel):
-    pass
+    operationalplanprograms: ReverseManyToOneDescriptor
 
 
 class OutputLeaderType(UniqueNameableModel, ArchivableModel, TimeStampedModel):

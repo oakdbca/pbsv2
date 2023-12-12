@@ -76,13 +76,16 @@ td > a {
     text-transform: capitalize;
     letter-spacing: 0;
     will-change: box-shadow, transform;
-    -webkit-transition: -webkit-box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1),
+    -webkit-transition:
+        -webkit-box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1),
         background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
         color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    -o-transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1),
+    -o-transition:
+        box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1),
         background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
         color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1),
+    transition:
+        box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1),
         background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
         color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     outline: 0;

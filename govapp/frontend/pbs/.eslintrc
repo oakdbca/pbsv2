@@ -4,14 +4,12 @@
         "eslint:recommended",
         "plugin:vue/vue3-recommended",
         "@vue/typescript/recommended",
-        "prettier"
-    ],
-    "plugins": [
-        "vue",
         "prettier",
-        "@typescript-eslint"
+        "plugin:prettier/recommended"
     ],
+    "plugins": ["vue", "prettier", "@typescript-eslint"],
     "rules": {
+        "no-console": 1,
         "prettier/prettier": "error"
     },
     "parserOptions": {

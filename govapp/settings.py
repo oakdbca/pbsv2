@@ -81,7 +81,12 @@ INSTALLED_APPS = [
     "govapp.apps.accounts",
     "govapp.apps.aviation",
     "govapp.apps.burnplanning",
+    "govapp.apps.legalapproval",
+    "govapp.apps.operationalplanning",
+    "govapp.apps.prescriptiondetails",
+    "govapp.apps.risk",
     "govapp.apps.swagger",
+    "govapp.apps.traffic",
     "govapp.apps.main",
     "rest_framework",
     "drf_spectacular",
@@ -90,6 +95,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "coverage",
     "protected_media.apps.ProtectedMediaConfig",
+    "nested_admin",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

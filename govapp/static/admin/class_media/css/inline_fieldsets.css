@@ -1,0 +1,19 @@
+/* For some reason inline admin fieldset sections are h2-headings, making them very hard to distinguish from other sections (all in h2) */
+.less-dominant-style h2,
+.less-dominant-style.collapsed h2,
+.less-dominant-style h2 a.collapse-toggle {
+  text-transform: unset;
+  background-color: whitesmoke;
+  color: darkgrey;
+}
+
+.less-dominant-style label {
+  text-transform: unset;
+  font-weight: normal;
+}
+
+/* Fix to nested stacked inlines not correctly displaying grouped fieldset fields in a row */
+.nested-inline-flex-container div.form-row {
+  display: flex;
+  flex-wrap: wrap;
+}

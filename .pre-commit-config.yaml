@@ -20,7 +20,8 @@ repos:
     rev: "v3.0.3"
     hooks:
       - id: prettier
-        args: ["--tab-width", "2"]
+        args: ["--tab-width", "4"]
+        files: govapp/frontend/pbs
 
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.15.0
