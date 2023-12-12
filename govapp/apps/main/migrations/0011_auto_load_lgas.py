@@ -13,7 +13,7 @@ def load_lgas(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("main", "0010_lga"),
+        ("main", "0012_alter_lga_options_remove_lga_district"),
     ]
 
     operations = [

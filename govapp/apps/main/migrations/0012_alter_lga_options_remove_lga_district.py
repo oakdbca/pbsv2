@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("main", "0011_auto_load_lgas"),
+        ("main", "0010_lga"),
     ]
 
     operations = [

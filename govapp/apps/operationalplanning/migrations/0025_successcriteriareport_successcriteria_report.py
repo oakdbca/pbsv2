@@ -8,7 +8,7 @@ import govapp.apps.main.models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("operationalplanning", "0024_auto_load_legalapprovals"),
+        ("operationalplanning", "0023_alter_legalapproval_approval_type"),
     ]
 
     operations = [
