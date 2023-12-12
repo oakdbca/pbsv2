@@ -59,9 +59,6 @@ class Road(UniqueNameableModel, DisplayNameableModel):
         related_name="roads",
     )  # Single-select dropdown
 
-    def __str__(self):
-        return self.display_name  # Road name
-
 
 class TrafficRequiredArrangement(TimeStampedModel):
     """For recording of the Traffic required arrangements in the Traffic section of the Implementation Plan"""
@@ -108,6 +105,3 @@ class Traffic(UniqueNameableModel, DisplayNameableModel, TimeStampedModel):
     roads: models.ManyToManyField = models.ManyToManyField(
         "Road", blank=True, related_name="traffics"
     )
-
-    def __str__(self):
-        return self.display_name

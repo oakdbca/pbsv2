@@ -1,6 +1,7 @@
 from abc import ABC, ABCMeta, abstractmethod
 from typing import Any, Generic, TypeVar
 
+from django import forms
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -100,6 +101,20 @@ class IntervalFloatField(models.FloatField, GenericIntervalField[models.FloatFie
         return models.FloatField
 
 
+class RichTextEditorWidget(forms.Textarea):
+    """Overwrite Textarea form to not be so obnoxiously large, so it can be used in i.e. tabular inlines."""
+
+    def __init__(self, *args, **kwargs):
+        cols = kwargs.pop("cols", 40)
+        rows = kwargs.pop("rows", 10)
+
+        attrs = kwargs.setdefault("attrs", {})
+        attrs.setdefault("cols", cols)
+        attrs.setdefault("rows", rows)
+
+        super().__init__(*args, **kwargs)
+
+
 class UniqueNameableModel(models.Model):
     name = models.CharField(max_length=255, unique=True, null=False, blank=False)
 
@@ -137,6 +152,9 @@ class DisplayNameableModel(models.Model):
         abstract = True
 
     def __str__(self):
+        if not self.display_name:
+            # If the display name is not set, return something that is not None
+            return "Unknown"
         return self.display_name
 
 

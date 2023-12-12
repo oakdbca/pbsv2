@@ -4,6 +4,7 @@ import nested_admin
 from django import forms
 from django.contrib import admin
 from django.contrib.contenttypes.forms import BaseGenericInlineFormSet
+from django.db import models
 from django.utils.html import format_html, format_html_join
 
 from govapp.apps.legalapproval.models import (
@@ -12,7 +13,7 @@ from govapp.apps.legalapproval.models import (
     ModelRequiredApproval,
 )
 from govapp.apps.main.admin import NestedDeleteRestrictedAdmin
-from govapp.apps.main.models import ModelFile
+from govapp.apps.main.models import ModelFile, RichTextEditorWidget
 from govapp.apps.risk.models import ContributingFactorStandardControl
 
 from .models import (
@@ -305,6 +306,10 @@ class SuccessCriteriaInline(nested_admin.NestedStackedInline):
         css = {
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
+
+    formfield_overrides = {
+        models.TextField: {"widget": RichTextEditorWidget(rows=1, cols=10)},
+    }
 
     fieldsets = (
         (
@@ -738,7 +743,7 @@ class ContingencyNeighbourInline(nested_admin.NestedStackedInline):
     classes = ("less-dominant-style", "nested-inline-flex-container")
 
 
-class ContingencyInline(nested_admin.NestedStackedInline):
+class ContingencyInline(nested_admin.NestedTabularInline):
     model = Contingency
     extra = 0
 
@@ -751,7 +756,7 @@ class ContingencyInline(nested_admin.NestedStackedInline):
         (
             "Contingency",
             {
-                "fields": (("suppression_constraints",), "context_map"),
+                "fields": ("display_name", ("suppression_constraints",), "context_map"),
                 "classes": (
                     "less-dominant-style",
                     "nested-inline-flex-container",
@@ -762,14 +767,24 @@ class ContingencyInline(nested_admin.NestedStackedInline):
 
     readonly_fields = ("context_map",)
 
+    formfield_overrides = {
+        models.TextField: {"widget": RichTextEditorWidget(rows=4, cols=60)},
+    }
+
     inlines = [ContingencyNeighbourInline]
 
 
-class DocumentsMapModelFileInline(nested_admin.NestedGenericStackedInline):
+class DocumentsMapModelFileInline(nested_admin.NestedGenericTabularInline):
     model = ModelFile
     extra = 0
     verbose_name = "Document"
     verbose_name_plural = "Documents"
+
+    formfield_overrides = {
+        models.TextField: {"widget": RichTextEditorWidget(rows=3, cols=20)},
+    }
+
+    readonly_fields = ("datetime_uploaded",)
 
 
 class OperationalPlanAdminForm(forms.ModelForm):
@@ -893,14 +908,12 @@ class ContingencyAdmin(NestedDeleteRestrictedAdmin):
     model = Contingency
 
     list_display = (
-        "name",
         "display_name",
         "suppression_constraints",
         "context_map",
     )
 
     fields = (
-        "name",
         "display_name",
         "suppression_constraints",
         "context_map",
@@ -911,10 +924,10 @@ class ContingencyAdmin(NestedDeleteRestrictedAdmin):
     inlines = [ContingencyNeighbourInline]
 
 
-class FireAssessmentSummaryModelFileInline(nested_admin.NestedGenericStackedInline):
+class FuelAssessmentSummaryModelFileInline(nested_admin.NestedGenericTabularInline):
     model = ModelFile
     extra = 0
-    verbose_name = "Fire assessment summary"
+    verbose_name = "Fuel assessment summary"
 
     class Media:
         css = {
@@ -923,8 +936,12 @@ class FireAssessmentSummaryModelFileInline(nested_admin.NestedGenericStackedInli
 
     classes = ("less-dominant-style", "nested-inline-flex-container")
 
+    formfield_overrides = {
+        models.TextField: {"widget": RichTextEditorWidget(rows=2, cols=30)},
+    }
 
-class FireBehaviourCalculationsModelFileInline(nested_admin.NestedGenericStackedInline):
+
+class FireBehaviourCalculationsModelFileInline(nested_admin.NestedGenericTabularInline):
     model = ModelFile
     extra = 0
     verbose_name = "Fire behaviour calculation"
@@ -935,6 +952,10 @@ class FireBehaviourCalculationsModelFileInline(nested_admin.NestedGenericStacked
         }
 
     classes = ("less-dominant-style", "nested-inline-flex-container")
+
+    formfield_overrides = {
+        models.TextField: {"widget": RichTextEditorWidget(rows=2, cols=30)},
+    }
 
 
 class PrescriptionFuelTypeInline(nested_admin.NestedStackedInline):
@@ -1012,7 +1033,7 @@ class PrescriptionFuelTypeInline(nested_admin.NestedStackedInline):
     readonly_fields = ("applicable_fuel_type_prescription_details",)
 
     inlines = [
-        FireAssessmentSummaryModelFileInline,
+        FuelAssessmentSummaryModelFileInline,
         FireBehaviourCalculationsModelFileInline,
     ]
 

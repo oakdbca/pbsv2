@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.gis.db.models import MultiLineStringField, MultiPolygonField
 from django.db import models
 from django.forms import ValidationError
+from django.utils.safestring import mark_safe
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
 
@@ -593,6 +594,12 @@ class SuccessCriteria(UniqueNameableModel, DisplayNameableModel):
         blank=True,
     )
 
+    def __str__(self) -> str:
+        return (
+            f"{self.objective_and_success_criteria} - {self.left_value} "
+            f"{self.comparison_operator} {self.right_value_or_free_text}"
+        )
+
 
 class Objective(UniqueNameableModel, DisplayNameableModel):
     class Meta:
@@ -620,6 +627,12 @@ class ObjectiveAndSuccessCriteria(TimeStampedModel):
     details = models.TextField(null=True, blank=True)
     applicable_to_whole_operational_area = models.BooleanField(default=False)
 
+    # Success Criteria
+    # 1toMany - SuccessCriteria
+
+    def __str__(self) -> str:
+        return f"{self.operational_plan} - {self.objective}"
+
 
 class ContingencyNeighbour(models.Model):
     contingency = models.ForeignKey(
@@ -637,7 +650,7 @@ class ContingencyNeighbour(models.Model):
         return f"{self.contingency} - {self.neighbour}"
 
 
-class Contingency(UniqueNameableModel, DisplayNameableModel):
+class Contingency(DisplayNameableModel):
     class Meta:
         verbose_name = "Contingency"
         verbose_name_plural = "Contingencies"
@@ -658,7 +671,16 @@ class Contingency(UniqueNameableModel, DisplayNameableModel):
 
     @property
     def context_map(self):
-        return self.operational_plan.context_map
+        if not hasattr(self, "operational_plan") and not hasattr(
+            self.operational_plan, "context_map"
+        ):
+            return "Will be filled from Context section of the Operational Plan"
+        return mark_safe(
+            "<a href='{}' target='blank'>{}</a>".format(
+                self.operational_plan.context_map.file.url,
+                self.operational_plan.context_map,
+            )
+        )
 
 
 class PrescriptionFuelType(models.Model):

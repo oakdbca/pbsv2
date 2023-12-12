@@ -170,6 +170,7 @@ class RoadAdmin(NestedDeleteRestrictedAdmin):
         "owner",
         "speed",
         "shoulder_width",
+        "traffic_guidance_scheme",
     )
     search_fields = (
         "name",
@@ -177,6 +178,7 @@ class RoadAdmin(NestedDeleteRestrictedAdmin):
         "owner",
         "speed",
         "shoulder_width",
+        "traffic_guidance_scheme",
     )
     ordering = ("name",)
 
