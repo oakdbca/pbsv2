@@ -102,8 +102,9 @@ importo.py
 uwsgi*.ini
 *.djcache
 
-# npm build files
+#npm build files
 govapp/static/pbsv2_vue/
+govapp/static/pbsv2_vue*
 
 git_history_recent
 
