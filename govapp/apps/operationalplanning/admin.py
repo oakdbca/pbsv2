@@ -68,6 +68,10 @@ class SuccessCriteriaReportInline(nested_admin.NestedStackedInline):
         css = {
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/uncollapse_collapsed.js",
+        )
 
     list_display = (
         "name",
@@ -92,6 +96,7 @@ class SuccessCriteriaReportInline(nested_admin.NestedStackedInline):
                 ),
                 "classes": (
                     "collapse",
+                    "uncollapse-collapsed",
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),
@@ -205,6 +210,10 @@ class OperationalPlanRiskCategoryContributingFactorInline(
         css = {
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/uncollapse_collapsed.js",
+        )
 
     list_display = (
         "contributing_factor",
@@ -231,6 +240,7 @@ class OperationalPlanRiskCategoryContributingFactorInline(
                 ),
                 "classes": (
                     "collapse",
+                    "uncollapse-collapsed",
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),
@@ -306,6 +316,10 @@ class SuccessCriteriaInline(nested_admin.NestedStackedInline):
         css = {
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/uncollapse_collapsed.js",
+        )
 
     formfield_overrides = {
         models.TextField: {"widget": RichTextEditorWidget(rows=1, cols=10)},
@@ -328,6 +342,7 @@ class SuccessCriteriaInline(nested_admin.NestedStackedInline):
                 ),
                 "classes": (
                     "collapse",
+                    "uncollapse-collapsed",
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),
@@ -419,6 +434,10 @@ class OperationalPlanRiskCategoryInline(nested_admin.NestedStackedInline):
         css = {
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/uncollapse_collapsed.js",
+        )
 
     fieldsets = (
         (
@@ -427,6 +446,7 @@ class OperationalPlanRiskCategoryInline(nested_admin.NestedStackedInline):
                 "fields": (("risk_category",),),
                 "classes": (
                     "collapse",
+                    "uncollapse-collapsed",
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),
