@@ -776,7 +776,11 @@ class ContingencyInline(nested_admin.NestedTabularInline):
         (
             "Contingency",
             {
-                "fields": ("display_name", ("suppression_constraints",), "context_map"),
+                "fields": (
+                    "display_name",
+                    ("suppression_constraints",),
+                    "context_map",
+                ),
                 "classes": (
                     "less-dominant-style",
                     "nested-inline-flex-container",
@@ -929,12 +933,14 @@ class ContingencyAdmin(NestedDeleteRestrictedAdmin):
 
     list_display = (
         "display_name",
+        "operational_plan",
         "suppression_constraints",
         "context_map",
     )
 
     fields = (
         "display_name",
+        "operational_plan",
         "suppression_constraints",
         "context_map",
     )
