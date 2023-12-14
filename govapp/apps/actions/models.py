@@ -6,9 +6,13 @@ from django.db import models
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
 
-from govapp.apps.main.models import ModelFile
+from govapp.apps.main.models import ModelFile, UniqueNameableModel
 
 logger = getLogger(__name__)
+
+
+class ActionResponsibility(UniqueNameableModel):
+    actions: "models.Manager[Action]"
 
 
 class Action(StatusModel, TimeStampedModel):
@@ -25,10 +29,14 @@ class Action(StatusModel, TimeStampedModel):
     action: models.CharField = models.CharField(
         max_length=255, unique=True, null=False, blank=False
     )
-    # responsible = models.ForeignKey(
-    #     User, on_delete=models.PROTECT, null=True, blank=True
-    # )
-    # responsibility (duty officer, etc.)
+
+    responsibility: models.ForeignKey = models.ForeignKey(
+        ActionResponsibility,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="actions",
+    )
     document = GenericRelation(ModelFile)
 
     date_created: models.DateField = models.DateField(auto_now_add=True)
