@@ -7,6 +7,7 @@ from django.contrib.contenttypes.forms import BaseGenericInlineFormSet
 from django.db import models
 from django.utils.html import format_html, format_html_join
 
+from govapp.apps.actions.models import Action
 from govapp.apps.legalapproval.models import (
     LegalApproval,
     ModelLegalApproval,
@@ -523,6 +524,11 @@ class ModelLegalApprovalInlineFormSet(BaseGenericInlineFormSet):
             )
 
 
+class ActionInline(nested_admin.NestedGenericStackedInline):
+    model = Action
+    extra = 0
+
+
 class FileAsApprovalModelFileInline(nested_admin.NestedGenericStackedInline):
     model = ModelFile
     extra = 0
@@ -913,6 +919,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         ModelRequiredApprovalInline,
         ModelLegalApprovalInline,
         DisturbanceApplicationInline,
+        ActionInline,
         DocumentsMapModelFileInline,
     ]
 

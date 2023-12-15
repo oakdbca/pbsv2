@@ -1,7 +1,8 @@
 from logging import getLogger
 
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
@@ -47,3 +48,11 @@ class Action(StatusModel, TimeStampedModel):
     closed_details: models.TextField = models.TextField(null=True, blank=True)
 
     due_date_time: models.DateTimeField = models.DateTimeField(null=True, blank=True)
+
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        related_name="content_type_action",
+    )
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
