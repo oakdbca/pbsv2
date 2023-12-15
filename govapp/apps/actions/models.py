@@ -56,3 +56,6 @@ class Action(StatusModel, TimeStampedModel):
     )
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")
+
+    def __str__(self) -> str:
+        return f"{self.content_object}: {self.action} ({self.category}, Status: {self.status})"
