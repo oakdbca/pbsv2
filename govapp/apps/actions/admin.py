@@ -1,10 +1,25 @@
+import nested_admin
 from django.contrib import admin
 from django.db import models
 
 from govapp.apps.main.admin import NestedDeleteRestrictedAdmin
-from govapp.apps.main.models import RichTextEditorWidget
+from govapp.apps.main.models import ModelFile, RichTextEditorWidget
 
 from .models import Action, ActionResponsibility
+
+
+class ActionDocumentsModelFileInline(nested_admin.NestedGenericStackedInline):
+    model = ModelFile
+    extra = 0
+    verbose_name = "Document"
+    verbose_name_plural = "Documents"
+
+    class Media:
+        css = {
+            "all": ["admin/class_media/css/inline_fieldsets.css"],
+        }
+
+    classes = ("less-dominant-style", "nested-inline-flex-container")
 
 
 @admin.register(Action)
@@ -49,6 +64,10 @@ class ActionAdmin(NestedDeleteRestrictedAdmin):
         "content_type",
         "object_id",
     )
+
+    inlines = [
+        ActionDocumentsModelFileInline,
+    ]
 
     formfield_overrides = {
         models.TextField: {"widget": RichTextEditorWidget(rows=2, cols=30)},
