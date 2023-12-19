@@ -46,7 +46,7 @@ class BurnPlanUnit(
     STATUS = Choices(
         ("draft", "Draft"),
         ("current", "Current"),
-        ("discarded", "discarded"),
+        ("discarded", "Discarded"),
         ("retired", "Retired"),
     )
 
@@ -162,7 +162,7 @@ class BurnPlanElement(
     STATUS = Choices(
         ("draft", "Draft"),
         ("current", "Current"),
-        ("discarded", "discarded"),
+        ("discarded", "Discarded"),
         ("retired", "Retired"),
     )
 
