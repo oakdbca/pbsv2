@@ -142,7 +142,7 @@ class OutputLeader(NameableModel, ArchivableModel, TimeStampedModel):
     type = models.ForeignKey(
         OutputLeaderType, on_delete=models.PROTECT, null=True, blank=True
     )
-    indicative_treatement_year = YearField(null=True, blank=True)
+    indicative_treatment_year = YearField(null=True, blank=True)
     revised_indicative_treatment_year = YearField(null=True, blank=True)
     preferred_season = models.CharField(
         max_length=255, choices=settings.SEASON_CHOICES, null=True, blank=True
