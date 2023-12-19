@@ -142,12 +142,12 @@ class AuthorityToTake(models.Model):
         OtherApproval,
         on_delete=models.CASCADE,
         related_name="%(class)s_proposals",
-    )  # Calling the related name `proposals`` so this class can be inferred from OtherApproval
+    )  # Calling the related name `proposals` so this class can be inferred from OtherApproval
     issuance = models.ForeignKey(
         OtherApproval,
         on_delete=models.CASCADE,
         related_name="%(class)s_approvals",
-    )  # Calling the related name `approvals`` so this class can be inferred from OtherApproval
+    )  # Calling the related name `approvals` so this class can be inferred from OtherApproval
 
     class Meta:
         verbose_name = "Authority to Take"
