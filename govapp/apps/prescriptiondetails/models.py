@@ -168,8 +168,8 @@ class WindDirection(PrescriptionDetail):
 
 class ApplicableFuelTypePrescriptionDetail(models.Model):
     class Meta:
-        verbose_name = "Applicable Fuel Type Prescription Detail"
-        verbose_name_plural = "Applicable Fuel Type Prescription Details"
+        verbose_name = "Fuel Type - Applicable Prescription Detail"
+        verbose_name_plural = "Fuel Type - Applicable Prescription Details"
 
     prescription_detail = models.CharField(
         choices=Choices(*PRESCRIPTION_DETAILS_CHOICES),

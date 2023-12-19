@@ -73,37 +73,88 @@ class LegalApproval(UniqueNameableModel, DisplayNameableModel):
 class OtherApproval(
     LodgementDateModel,
 ):
-    pass
+    reference_number = models.CharField(
+        max_length=9, null=True, blank=True, editable=True
+    )  # The reference number of the other approval (DAS or ATT)
+
+    def __str__(self) -> str:
+        if not self.reference_number:
+            return f"Other Approval ({self.lodgement_date})"
+
+        self.related_issuance
+        return (
+            f"{self.related_issuance}: {self.reference_number} ({self.lodgement_date})"
+        )
+
+    @property
+    def related_issuance(self):
+        """Returns the related issuance type (DAS or ATT or possibly something new added in the future)"""
+
+        related_issuance_fields = [
+            attr
+            for attr in dir(self)
+            if attr.endswith("_proposals") or attr.endswith("_approvals")
+        ]
+        # Classnames could potentially contain an underscore, so we need to join all but the last part
+        related_classnames = list(
+            {"_".join(x.split("_")[:-1]) for x in related_issuance_fields}
+        )
+        qs = OtherApproval.objects.none()
+        for classname in related_classnames:
+            has_proposals = getattr(self, f"{classname}_proposals", qs).all().exists()
+            has_approvals = getattr(self, f"{classname}_approvals", qs).all().exists()
+            if not has_proposals and not has_approvals:
+                continue
+
+            qs = (
+                getattr(self, f"{classname}_proposals", qs)
+                if has_proposals
+                else getattr(self, f"{classname}_approvals", qs)
+            )
+            if qs.exists():
+                return qs.all().first().__class__.__name__
+
+        return "None"
 
 
 class DisturbanceApplication(models.Model):
     proposal = models.ForeignKey(
         OtherApproval,
         on_delete=models.CASCADE,
-        related_name="disturbanceapplication_proposals",
+        related_name="%(class)s_proposals",
     )
     approval = models.ForeignKey(
         OtherApproval,
         on_delete=models.CASCADE,
-        related_name="disturbanceapplication_approvals",
+        related_name="%(class)s_approvals",
     )
 
     class Meta:
         verbose_name = "Disturbance Application"
         verbose_name_plural = "Disturbance Applications"
 
+    def __str__(self) -> str:
+        return f"Proposal: {self.proposal} - Approval: {self.approval}"
+
 
 class AuthorityToTake(models.Model):
     application = models.ForeignKey(
         OtherApproval,
         on_delete=models.CASCADE,
-        related_name="authoritytotake_applications",
-    )
+        related_name="%(class)s_proposals",
+    )  # Calling the related name `proposals` so this class can be inferred from OtherApproval
     issuance = models.ForeignKey(
         OtherApproval,
         on_delete=models.CASCADE,
-        related_name="authoritytotake_issuances",
-    )
+        related_name="%(class)s_approvals",
+    )  # Calling the related name `approvals` so this class can be inferred from OtherApproval
+
+    class Meta:
+        verbose_name = "Authority to Take"
+        verbose_name_plural = "Authorities to Take"
+
+    def __str__(self) -> str:
+        return f"Application: {self.application} - Issuance: {self.issuance}"
 
 
 class ModelLegalApproval(TimeStampedModel):

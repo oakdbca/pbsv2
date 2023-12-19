@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     "webtemplate_dbca",
     "govapp",
     "govapp.apps.accounts",
+    "govapp.apps.actions",
     "govapp.apps.aviation",
     "govapp.apps.burnplanning",
     "govapp.apps.legalapproval",

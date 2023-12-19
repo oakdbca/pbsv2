@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
 
+from govapp.apps.actions.models import Action
 from govapp.apps.burnplanning.models import BurnPlanElement
 from govapp.apps.legalapproval.models import (
     ApprovableModel,
@@ -457,6 +458,9 @@ class OperationalPlan(
         verbose_name="Fauna Authority To Take",
         related_name="%(class)s_fauna_att",
     )  # Fauna authority to take
+
+    # Actions
+    actions = GenericRelation(Action)
 
     # Documents
     documents = GenericRelation(

@@ -7,6 +7,8 @@ from django.contrib.contenttypes.forms import BaseGenericInlineFormSet
 from django.db import models
 from django.utils.html import format_html, format_html_join
 
+from govapp.apps.actions.admin import ActionDocumentsModelFileInline
+from govapp.apps.actions.models import Action
 from govapp.apps.legalapproval.models import (
     LegalApproval,
     ModelLegalApproval,
@@ -68,6 +70,10 @@ class SuccessCriteriaReportInline(nested_admin.NestedStackedInline):
         css = {
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/uncollapse_collapsed.js",
+        )
 
     list_display = (
         "name",
@@ -92,6 +98,7 @@ class SuccessCriteriaReportInline(nested_admin.NestedStackedInline):
                 ),
                 "classes": (
                     "collapse",
+                    "uncollapse-collapsed",
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),
@@ -205,6 +212,10 @@ class OperationalPlanRiskCategoryContributingFactorInline(
         css = {
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/uncollapse_collapsed.js",
+        )
 
     list_display = (
         "contributing_factor",
@@ -231,6 +242,7 @@ class OperationalPlanRiskCategoryContributingFactorInline(
                 ),
                 "classes": (
                     "collapse",
+                    "uncollapse-collapsed",
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),
@@ -306,6 +318,10 @@ class SuccessCriteriaInline(nested_admin.NestedStackedInline):
         css = {
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/uncollapse_collapsed.js",
+        )
 
     formfield_overrides = {
         models.TextField: {"widget": RichTextEditorWidget(rows=1, cols=10)},
@@ -328,6 +344,7 @@ class SuccessCriteriaInline(nested_admin.NestedStackedInline):
                 ),
                 "classes": (
                     "collapse",
+                    "uncollapse-collapsed",
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),
@@ -419,6 +436,10 @@ class OperationalPlanRiskCategoryInline(nested_admin.NestedStackedInline):
         css = {
             "all": ["admin/class_media/css/inline_fieldsets.css"],
         }
+        js = (
+            "admin/js/jquery.init.js",
+            "admin/class_media/js/uncollapse_collapsed.js",
+        )
 
     fieldsets = (
         (
@@ -427,6 +448,7 @@ class OperationalPlanRiskCategoryInline(nested_admin.NestedStackedInline):
                 "fields": (("risk_category",),),
                 "classes": (
                     "collapse",
+                    "uncollapse-collapsed",
                     "less-dominant-style",
                     "nested-inline-flex-container",
                 ),
@@ -501,6 +523,13 @@ class ModelLegalApprovalInlineFormSet(BaseGenericInlineFormSet):
             raise forms.ValidationError(
                 f"This operational plan requires approvals for {required_approvals}."
             )
+
+
+class ActionInline(nested_admin.NestedGenericStackedInline):
+    model = Action
+    extra = 0
+
+    inlines = [ActionDocumentsModelFileInline]
 
 
 class FileAsApprovalModelFileInline(nested_admin.NestedGenericStackedInline):
@@ -756,7 +785,11 @@ class ContingencyInline(nested_admin.NestedTabularInline):
         (
             "Contingency",
             {
-                "fields": ("display_name", ("suppression_constraints",), "context_map"),
+                "fields": (
+                    "display_name",
+                    ("suppression_constraints",),
+                    "context_map",
+                ),
                 "classes": (
                     "less-dominant-style",
                     "nested-inline-flex-container",
@@ -889,6 +922,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
         ModelRequiredApprovalInline,
         ModelLegalApprovalInline,
         DisturbanceApplicationInline,
+        ActionInline,
         DocumentsMapModelFileInline,
     ]
 
@@ -909,12 +943,14 @@ class ContingencyAdmin(NestedDeleteRestrictedAdmin):
 
     list_display = (
         "display_name",
+        "operational_plan",
         "suppression_constraints",
         "context_map",
     )
 
     fields = (
         "display_name",
+        "operational_plan",
         "suppression_constraints",
         "context_map",
     )

@@ -33,6 +33,15 @@ class OtherApprovalAdmin(admin.ModelAdmin):
     model = OtherApproval
 
     list_display = (
+        "reference_number",
+        "lodgement_date",
+        "issue_date",
+        "approval_date",
+        "expiry_date",
+    )
+
+    fields = (
+        "reference_number",
         "lodgement_date",
         "issue_date",
         "approval_date",

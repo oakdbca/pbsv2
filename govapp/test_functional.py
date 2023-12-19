@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 logger = logging.getLogger(__name__)
@@ -15,6 +16,12 @@ class SeleniumTests(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        options = Options()
+        options.browser_version = 120
+        options.add_argument("--no-sandbox")
+        options.add_argument(
+            "--headless=new"
+        )  # https://www.selenium.dev/blog/2023/headless-is-going-away/
 
         cls.test_username = "testuser"
         cls.test_email = "testuser@email.com"
@@ -28,7 +35,8 @@ class SeleniumTests(StaticLiveServerTestCase):
         cls.test_admin_email = "testadminuser@email.com"
         cls.test_admin_password = "testadminpassword"
 
-        cls.selenium = webdriver.Chrome()
+        cls.selenium = webdriver.Chrome(options=options)
+
         cls.selenium.implicitly_wait(10)
 
     @classmethod
