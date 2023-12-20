@@ -47,6 +47,7 @@ urlpatterns = [
     urls.path("admin/", admin.site.urls),
     urls.path("sentry-debug/", trigger_error),
     # Include urls from other apps
+    urls.path("", urls.include("govapp.apps.burnplanning.urls")),
     urls.path("", urls.include("govapp.apps.swagger.urls")),
 ]
 
