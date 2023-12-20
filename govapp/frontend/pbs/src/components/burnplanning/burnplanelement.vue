@@ -2,33 +2,70 @@
     <div id="bpe" class="container">Burn Plan Element</div>
     <div class="card text-center">
         <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
+            <ul
+                id="burn-plan-element-tabs"
+                class="nav nav-tabs card-header-tabs"
+                role="tablist"
+            >
                 <li class="nav-item">
                     <a
                         class="nav-link active"
+                        href="#tab-plan"
+                        data-bs-toggle="pill"
+                        role="tab"
                         tabindex="1"
                         aria-current="true"
-                        href="#"
+                        aria-selected="true"
                         >Plan</a
                     >
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="2">Tab</a>
+                    <a
+                        class="nav-link"
+                        href="#tab-operational-areas"
+                        data-bs-toggle="pill"
+                        role="tab"
+                        tabindex="2"
+                        aria-selected="false"
+                        >Operational Area(s)</a
+                    >
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="3">Disabled tab</a>
+                    <a
+                        class="nav-link"
+                        href="#tab-related-items"
+                        data-bs-toggle="pill"
+                        role="tab"
+                        tabindex="3"
+                        aria-selected="false"
+                        >Related Items</a
+                    >
                 </li>
             </ul>
         </div>
+
         <div class="card-body">
-            <h4 class="card-title">Title</h4>
-            <p class="card-text">Body</p>
+            <div class="tab-content mt-3">
+                <div id="tab-plan" class="tab-pane active" role="tabpanel">
+                    <p class="card-text">Plan tab</p>
+                </div>
+                <div
+                    id="tab-operational-areas"
+                    class="tab-pane"
+                    role="tabpanel"
+                >
+                    <p class="card-text">TODO: Operational Areas</p>
+                </div>
+                <div id="tab-related-items" class="tab-pane" role="tabpanel">
+                    <p class="card-text">TODO: Related Items</p>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { utils, api_endpoints /**, helpers */ } from '@/utils/hooks';
+import { utils, api_endpoints } from '@/utils/hooks';
 
 export default {
     name: 'BurnPlanElement',
