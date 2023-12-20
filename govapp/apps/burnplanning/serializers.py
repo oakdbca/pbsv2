@@ -6,7 +6,4 @@ from .models import BurnPlanElement
 class BurnPlanElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = BurnPlanElement
-        fields = (
-            "id",
-            "name",
-        )
+        fields = "__all__"
