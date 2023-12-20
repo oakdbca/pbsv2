@@ -52,7 +52,32 @@
                         label="Details"
                         index="1"
                         :form-collapse="false"
-                    ></FormSection>
+                    >
+                        <div class="container">
+                            <div v-if="burnPlanElement">
+                                <div
+                                    v-for="(field, idx) in burnPlanElement"
+                                    :key="field"
+                                >
+                                    <div class="row p-1">
+                                        <div
+                                            class="col-4 text-start capitalize"
+                                        >
+                                            {{ replaceUnderscores(idx) }}
+                                        </div>
+                                        <div class="col-4 text-start">
+                                            <input
+                                                :id="`text-area-${idx}`"
+                                                v-model="burnPlanElement[idx]"
+                                                class="form-control"
+                                                :disabled="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </FormSection>
                     <FormSection
                         id="bpe-plan-output-leaders"
                         label="Output Leaders"
@@ -115,6 +140,16 @@ export default {
                 console.error(`BPE fetch failed with ${error}`);
             });
     },
-    methods: {},
+    methods: {
+        replaceUnderscores: (/** @type {string} */ str) => {
+            return str.replace(/_/g, ' ');
+        },
+    },
 };
 </script>
+
+<style lang="css">
+.capitalize {
+    text-transform: capitalize;
+}
+</style>
