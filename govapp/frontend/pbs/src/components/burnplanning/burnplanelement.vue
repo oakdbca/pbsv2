@@ -47,7 +47,24 @@
         <div class="card-body">
             <div class="tab-content mt-3">
                 <div id="tab-plan" class="tab-pane active" role="tabpanel">
-                    <p class="card-text">Plan tab</p>
+                    <FormSection
+                        id="bpe-plan-details"
+                        label="Details"
+                        index="1"
+                        :form-collapse="false"
+                    ></FormSection>
+                    <FormSection
+                        id="bpe-plan-output-leaders"
+                        label="Output Leaders"
+                        index="2"
+                        :form-collapse="true"
+                    ></FormSection>
+                    <FormSection
+                        id="bpe-plan-documents"
+                        label="Documents"
+                        index="3"
+                        :form-collapse="true"
+                    ></FormSection>
                 </div>
                 <div
                     id="tab-operational-areas"
@@ -66,10 +83,11 @@
 
 <script>
 import { utils, api_endpoints } from '@/utils/hooks';
+import FormSection from '@/components/forms/section_toggle.vue';
 
 export default {
     name: 'BurnPlanElement',
-    components: {},
+    components: { FormSection },
     props: {
         burnPlanElementId: {
             type: Number,
