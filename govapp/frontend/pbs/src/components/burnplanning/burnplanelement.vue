@@ -47,6 +47,7 @@
         <div class="card-body">
             <div class="tab-content mt-3">
                 <div id="tab-plan" class="tab-pane active" role="tabpanel">
+                    {{ burnPlanElement }}
                     <FormSection
                         id="bpe-plan-details"
                         label="Details"
@@ -63,17 +64,58 @@
                         comments -->
                         <div class="container">
                             <div v-if="Object.keys(burnPlanElement).length > 0">
-                                <div v-for="idx in readOnlyFields" :key="idx">
+                                <div v-for="name in readOnlyFields" :key="name">
                                     <RowInputForm
-                                        :key="`bpe-${burnPlanElement.reference_number}-${idx}`"
-                                        :idx="idx"
-                                        :field="burnPlanElement[idx]"
+                                        :key="`bpe-${burnPlanElement.reference_number}-${name}`"
+                                        :name="name"
+                                        :value="burnPlanElement[name]"
                                         :disabled="true"
-                                        @update:field="
-                                            burnPlanElement[idx] = $event
+                                        @update:value="
+                                            burnPlanElement[name] = $event
                                         "
                                     ></RowInputForm>
                                 </div>
+                                <RowInputForm
+                                    :key="`bpe-${burnPlanElement.reference_number}-revised_indicative_treatment_year`"
+                                    name="revised_indicative_treatment_year"
+                                    :value="
+                                        burnPlanElement[
+                                            'revised_indicative_treatment_year'
+                                        ]
+                                    "
+                                    :disabled="false"
+                                    :pattern="'[0-9]{4}'"
+                                    @update:value="
+                                        burnPlanElement[
+                                            'revised_indicative_treatment_year'
+                                        ] = $event
+                                    "
+                                ></RowInputForm>
+                                <RowInputForm
+                                    :key="`bpe-${burnPlanElement.reference_number}-return_interval`"
+                                    name="return_interval (years)"
+                                    :value="burnPlanElement['return_interval']"
+                                    :disabled="false"
+                                    :pattern="'[0-9]{2}'"
+                                    @update:value="
+                                        burnPlanElement['return_interval'] =
+                                            $event
+                                    "
+                                ></RowInputForm>
+
+                                <SelectForm
+                                    :key="`bpe-${burnPlanElement.reference_number}-preferred_season`"
+                                    name="preferred_season"
+                                    :selection="preferredSeasons"
+                                    :selected-value="
+                                        burnPlanElement['preferred_season']
+                                    "
+                                    :disabled="false"
+                                    @update:value="
+                                        burnPlanElement['preferred_season'] =
+                                            $event
+                                    "
+                                ></SelectForm>
                             </div>
                         </div>
                     </FormSection>
@@ -109,10 +151,11 @@
 import { utils, api_endpoints } from '@/utils/hooks';
 import FormSection from '@/components/forms/section_toggle.vue';
 import RowInputForm from '@/components/forms/row_input_form.vue';
+import SelectForm from '@/components/forms/select_form.vue';
 
 export default {
     name: 'BurnPlanElement',
-    components: { FormSection, RowInputForm },
+    components: { FormSection, RowInputForm, SelectForm },
     props: {
         burnPlanElementId: {
             type: Number,
@@ -133,6 +176,9 @@ export default {
                 'last_relevant_treatment_year',
                 'indicative_treatment_year',
             ];
+        },
+        preferredSeasons: () => {
+            return ['spring', 'summer', 'autumn', 'winter'];
         },
     },
     mounted: async function () {

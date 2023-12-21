@@ -4,19 +4,27 @@
             {{ replaceUnderscores(name) }}
         </div>
         <div class="col-4 text-start">
-            <input
-                :id="`text-input-${name}`"
-                :value="value"
-                class="form-control"
+            <select
+                :id="`select-${name}`"
+                class="form-select"
                 :disabled="disabled"
-                :pattern="pattern"
                 @change="
                     $emit(
                         'update:value',
                         /** @type {any} */ ($event.target).value
                     )
                 "
-            />
+            >
+                <option
+                    v-for="item in selection"
+                    :key="`select-${name}-${item}`"
+                    :value="item"
+                    :selected="selectedValue === item"
+                    class="capitalize"
+                >
+                    {{ item.charAt(0).toUpperCase() + item.slice(1) }}
+                </option>
+            </select>
         </div>
     </div>
 </template>
@@ -31,7 +39,11 @@ export default {
             type: String,
             required: true,
         },
-        value: {
+        selection: {
+            type: Array,
+            required: true,
+        },
+        selectedValue: {
             type: [String, Number],
             required: true,
         },
@@ -39,11 +51,6 @@ export default {
             type: Boolean,
             required: false,
             default: false,
-        },
-        pattern: {
-            type: String,
-            required: false,
-            default: '.*',
         },
     },
     emits: ['update:value'],
