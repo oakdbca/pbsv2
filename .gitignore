@@ -112,4 +112,4 @@ git_history_recent
 *.xls*
 
 #diagrams
-diagrams/erd/
+diagrams/erd/*.pdf
