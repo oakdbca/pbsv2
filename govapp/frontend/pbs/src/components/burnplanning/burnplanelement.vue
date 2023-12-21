@@ -53,27 +53,26 @@
                         index="1"
                         :form-collapse="false"
                     >
+                        <!-- revised_indicative_treatment_year
+                        return_interval
+                        preferred_season
+                        treatment
+                        justification
+                        purpose
+                        program
+                        comments -->
                         <div class="container">
-                            <div v-if="burnPlanElement">
-                                <div
-                                    v-for="(field, idx) in burnPlanElement"
-                                    :key="field"
-                                >
-                                    <div class="row p-1">
-                                        <div
-                                            class="col-4 text-start capitalize"
-                                        >
-                                            {{ replaceUnderscores(idx) }}
-                                        </div>
-                                        <div class="col-4 text-start">
-                                            <input
-                                                :id="`text-area-${idx}`"
-                                                v-model="burnPlanElement[idx]"
-                                                class="form-control"
-                                                :disabled="false"
-                                            />
-                                        </div>
-                                    </div>
+                            <div v-if="Object.keys(burnPlanElement).length > 0">
+                                <div v-for="idx in readOnlyFields" :key="idx">
+                                    <RowInputForm
+                                        :key="`bpe-${burnPlanElement.reference_number}-${idx}`"
+                                        :idx="idx"
+                                        :field="burnPlanElement[idx]"
+                                        :disabled="true"
+                                        @update:field="
+                                            burnPlanElement[idx] = $event
+                                        "
+                                    ></RowInputForm>
                                 </div>
                             </div>
                         </div>
@@ -109,10 +108,11 @@
 <script>
 import { utils, api_endpoints } from '@/utils/hooks';
 import FormSection from '@/components/forms/section_toggle.vue';
+import RowInputForm from '@/components/forms/row_input_form.vue';
 
 export default {
     name: 'BurnPlanElement',
-    components: { FormSection },
+    components: { FormSection, RowInputForm },
     props: {
         burnPlanElementId: {
             type: Number,
@@ -124,7 +124,17 @@ export default {
             burnPlanElement: {},
         };
     },
-    computed: {},
+    computed: {
+        readOnlyFields: () => {
+            return [
+                'name',
+                'year',
+                'reference_number',
+                'last_relevant_treatment_year',
+                'indicative_treatment_year',
+            ];
+        },
+    },
     mounted: async function () {
         console.log('BPE template loaded');
 
@@ -140,11 +150,7 @@ export default {
                 console.error(`BPE fetch failed with ${error}`);
             });
     },
-    methods: {
-        replaceUnderscores: (/** @type {string} */ str) => {
-            return str.replace(/_/g, ' ');
-        },
-    },
+    methods: {},
 };
 </script>
 
