@@ -64,7 +64,6 @@ else:
     CSRF_TRUSTED_ORIGINS = decouple.config("CSRF_TRUSTED_ORIGINS", default='[""]')
     ALLOWED_HOSTS = json.loads(ALLOWED_HOSTS_STRING)
 
-
 # Application definition
 INSTALLED_APPS = [
     "reversion",
@@ -287,6 +286,31 @@ if platform.machine() == "arm64":
 
 # Django Timezone
 TIME_ZONE = "Australia/Perth"
+
+GOV_APPS = [
+    app.replace("govapp.apps.", "")
+    for app in INSTALLED_APPS
+    if app.startswith("govapp.apps.")
+]
+GOV_APPS.remove("main")
+
+EXCLUDE_GRAPH_MODELS = [
+    "UniqueNameableModel",
+    "NameableModel",
+    "NullableNameableModel",
+    "DisplayNameableModel",
+    "OrdinalScaleModel",
+    "LodgementDateModel",
+    "ReferenceableModel",
+    "AssignableModel",
+    "ArchivableModel",
+    "DocumentCategory",
+    "DocumentDescriptor",
+    "ModelFile",
+    "TimeStampedModel",
+]
+
+GRAPH_MODELS = {"app_labels": GOV_APPS, "exclude_models": EXCLUDE_GRAPH_MODELS}
 
 # Protected Media
 PROTECTED_MEDIA_ROOT = "%s/protected/" % BASE_DIR
