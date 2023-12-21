@@ -52,6 +52,8 @@ mypy = "^1.6.1"
 django-stubs = "^4.2"
 django-stubs-ext = "^4.2"
 djangorestframework-stubs = "^3.14"
+pyparsing = "^3.1.1"
+pydot = "^1.4.2"
 
 [build-system]
 requires = ["poetry-core>=1.6.1"]

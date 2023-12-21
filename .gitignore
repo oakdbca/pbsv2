@@ -94,7 +94,7 @@ protected/
 *.db
 *.sqlite3
 
-#parkstay import ignores
+#import ignores
 import/
 importo.py
 
@@ -110,3 +110,6 @@ git_history_recent
 
 *.csv
 *.xls*
+
+#diagrams
+diagrams/erd/*.pdf
