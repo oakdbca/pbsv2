@@ -308,6 +308,7 @@ EXCLUDE_GRAPH_MODELS = [
     "DocumentDescriptor",
     "ModelFile",
     "TimeStampedModel",
+    "ContentType",
 ]
 
 GRAPH_MODELS = {"app_labels": GOV_APPS, "exclude_models": EXCLUDE_GRAPH_MODELS}
