@@ -54,14 +54,6 @@
                         index="1"
                         :form-collapse="false"
                     >
-                        <!-- revised_indicative_treatment_year
-                        return_interval
-                        preferred_season
-                        treatment
-                        justification
-                        purpose
-                        program
-                        comments -->
                         <div class="container">
                             <div v-if="Object.keys(burnPlanElement).length > 0">
                                 <!-- Non-editable fields -->
@@ -132,11 +124,17 @@
                                     name="treatment"
                                     :selection="treatments"
                                     :selected-value="
-                                        burnPlanElement['treatment']
+                                        burnPlanElement['treatment'] == null
+                                            ? noTreatment
+                                            : burnPlanElement['treatment']
                                     "
                                     :disabled="false"
                                     @update:value="
-                                        burnPlanElement['treatment'] = $event
+                                        $event === noTreatment
+                                            ? (burnPlanElement['treatment'] =
+                                                  null)
+                                            : (burnPlanElement['treatment'] =
+                                                  $event)
                                     "
                                 ></RowRadiosComponent>
 
