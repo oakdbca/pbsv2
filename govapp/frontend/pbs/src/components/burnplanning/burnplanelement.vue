@@ -149,6 +149,26 @@
                                             $event
                                     "
                                 ></RowSelectComponent>
+                                <RowSelectComponent
+                                    :key="keyRowComponent('purpose')"
+                                    name="purpose"
+                                    :selection="purposes"
+                                    :selected-value="burnPlanElement['purpose']"
+                                    :disabled="false"
+                                    @update:value="
+                                        burnPlanElement['purpose'] = $event
+                                    "
+                                ></RowSelectComponent>
+                                <RowSelectComponent
+                                    :key="keyRowComponent('program')"
+                                    name="program"
+                                    :selection="programs"
+                                    :selected-value="burnPlanElement['program']"
+                                    :disabled="false"
+                                    @update:value="
+                                        burnPlanElement['program'] = $event
+                                    "
+                                ></RowSelectComponent>
                             </div>
                         </div>
                     </FormSection>
@@ -223,6 +243,12 @@ export default {
             return ['burn', 'mechanical', 'both', 'no_treatment'];
         },
         justifications: () => {
+            return ['a', 'b', 'c', 'd'];
+        },
+        purposes: () => {
+            return ['a', 'b', 'c', 'd'];
+        },
+        programs: () => {
             return ['a', 'b', 'c', 'd'];
         },
     },

@@ -1,6 +1,6 @@
 <template>
     <div class="row p-1">
-        <div class="col-4 text-start capitalize">
+        <div class="col-4 text-start d-flex align-items-center capitalize">
             {{ replaceUnderscores(name) }}
         </div>
         <div class="col-4 text-start">
