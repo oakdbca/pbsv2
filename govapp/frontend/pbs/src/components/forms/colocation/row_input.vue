@@ -25,7 +25,7 @@
 import { helpers } from '@/utils/hooks';
 
 export default {
-    name: 'RowInputForm',
+    name: 'RowInputComponent',
     props: {
         name: {
             type: String,

@@ -64,19 +64,25 @@
                         comments -->
                         <div class="container">
                             <div v-if="Object.keys(burnPlanElement).length > 0">
+                                <!-- Non-editable fields -->
                                 <div v-for="name in readOnlyFields" :key="name">
-                                    <RowInputForm
-                                        :key="`bpe-${burnPlanElement.reference_number}-${name}`"
+                                    <RowInputComponent
+                                        :key="keyRowComponent(name)"
                                         :name="name"
                                         :value="burnPlanElement[name]"
                                         :disabled="true"
                                         @update:value="
                                             burnPlanElement[name] = $event
                                         "
-                                    ></RowInputForm>
+                                    ></RowInputComponent>
                                 </div>
-                                <RowInputForm
-                                    :key="`bpe-${burnPlanElement.reference_number}-revised_indicative_treatment_year`"
+                                <!-- Editable fields -->
+                                <RowInputComponent
+                                    :key="
+                                        keyRowComponent(
+                                            'revised_indicative_treatment_year'
+                                        )
+                                    "
                                     name="revised_indicative_treatment_year"
                                     :value="
                                         burnPlanElement[
@@ -90,9 +96,9 @@
                                             'revised_indicative_treatment_year'
                                         ] = $event
                                     "
-                                ></RowInputForm>
-                                <RowInputForm
-                                    :key="`bpe-${burnPlanElement.reference_number}-return_interval`"
+                                ></RowInputComponent>
+                                <RowInputComponent
+                                    :key="keyRowComponent('return_interval')"
                                     name="return_interval (years)"
                                     :value="burnPlanElement['return_interval']"
                                     :disabled="false"
@@ -101,10 +107,10 @@
                                         burnPlanElement['return_interval'] =
                                             $event
                                     "
-                                ></RowInputForm>
+                                ></RowInputComponent>
 
-                                <SelectForm
-                                    :key="`bpe-${burnPlanElement.reference_number}-preferred_season`"
+                                <RowSelectComponent
+                                    :key="keyRowComponent('preferred_season')"
                                     name="preferred_season"
                                     :selection="preferredSeasons"
                                     :selected-value="
@@ -115,7 +121,7 @@
                                         burnPlanElement['preferred_season'] =
                                             $event
                                     "
-                                ></SelectForm>
+                                ></RowSelectComponent>
                             </div>
                         </div>
                     </FormSection>
@@ -150,12 +156,12 @@
 <script>
 import { utils, api_endpoints } from '@/utils/hooks';
 import FormSection from '@/components/forms/section_toggle.vue';
-import RowInputForm from '@/components/forms/row_input_form.vue';
-import SelectForm from '@/components/forms/select_form.vue';
+import RowInputComponent from '@/components/forms/colocation/row_input.vue';
+import RowSelectComponent from '@/components/forms/colocation/row_select.vue';
 
 export default {
     name: 'BurnPlanElement',
-    components: { FormSection, RowInputForm, SelectForm },
+    components: { FormSection, RowInputComponent, RowSelectComponent },
     props: {
         burnPlanElementId: {
             type: Number,
@@ -196,7 +202,11 @@ export default {
                 console.error(`BPE fetch failed with ${error}`);
             });
     },
-    methods: {},
+    methods: {
+        keyRowComponent: function (/** @type {String} */ key) {
+            return `bpe-${this.burnPlanElement.reference_number}-${key}`;
+        },
+    },
 };
 </script>
 
