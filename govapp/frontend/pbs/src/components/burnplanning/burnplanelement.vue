@@ -47,7 +47,6 @@
         <div class="card-body">
             <div class="tab-content mt-3">
                 <div id="tab-plan" class="tab-pane active" role="tabpanel">
-                    {{ burnPlanElement }}
                     <FormSection
                         id="bpe-plan-details"
                         label="Details"
