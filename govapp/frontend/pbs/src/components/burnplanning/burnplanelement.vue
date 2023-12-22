@@ -122,6 +122,24 @@
                                             $event
                                     "
                                 ></RowSelectComponent>
+
+                                <RowRadiosComponent
+                                    :key="keyRowComponent('treatment')"
+                                    name="treatment"
+                                    :selection="[
+                                        'burn',
+                                        'mechanical',
+                                        'both',
+                                        'no_treatment',
+                                    ]"
+                                    :selected-value="
+                                        burnPlanElement['treatment']
+                                    "
+                                    :disabled="false"
+                                    @update:value="
+                                        burnPlanElement['treatment'] = $event
+                                    "
+                                ></RowRadiosComponent>
                             </div>
                         </div>
                     </FormSection>
@@ -158,10 +176,16 @@ import { utils, api_endpoints } from '@/utils/hooks';
 import FormSection from '@/components/forms/section_toggle.vue';
 import RowInputComponent from '@/components/forms/colocation/row_input.vue';
 import RowSelectComponent from '@/components/forms/colocation/row_select.vue';
+import RowRadiosComponent from '@/components/forms/colocation/row_radios.vue';
 
 export default {
     name: 'BurnPlanElement',
-    components: { FormSection, RowInputComponent, RowSelectComponent },
+    components: {
+        FormSection,
+        RowInputComponent,
+        RowSelectComponent,
+        RowRadiosComponent,
+    },
     props: {
         burnPlanElementId: {
             type: Number,
