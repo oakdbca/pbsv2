@@ -17,6 +17,7 @@
                         class="form-check-input"
                         type="radio"
                         :name="item"
+                        :required="required"
                         :disabled="disabled"
                         @change="
                             $emit(
@@ -54,6 +55,11 @@ export default {
             type: [String, Number],
             required: false,
             default: null,
+        },
+        required: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
         disabled: {
             type: Boolean,

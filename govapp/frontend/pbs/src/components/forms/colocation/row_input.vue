@@ -8,9 +8,9 @@
                 :id="`text-input-${name}`"
                 :value="value"
                 class="form-control"
-                :disabled="disabled"
                 :pattern="pattern"
                 :required="required"
+                :disabled="disabled"
                 @change="
                     $emit(
                         'update:value',
@@ -36,17 +36,17 @@ export default {
             type: [String, Number],
             required: true,
         },
-        disabled: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
         pattern: {
             type: String,
             required: false,
             default: '.*',
         },
         required: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        disabled: {
             type: Boolean,
             required: false,
             default: false,

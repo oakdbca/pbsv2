@@ -8,6 +8,7 @@
                 :id="`textarea-${name}`"
                 :value="value"
                 class="form-control"
+                :required="required"
                 :disabled="disabled"
                 @change="
                     $emit(
@@ -34,6 +35,11 @@ export default {
             type: [String, Number],
             required: false,
             default: '',
+        },
+        required: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
         disabled: {
             type: Boolean,
