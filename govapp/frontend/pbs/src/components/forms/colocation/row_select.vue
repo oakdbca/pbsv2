@@ -16,6 +16,13 @@
                 "
             >
                 <option
+                    :value="null"
+                    :disabled="true"
+                    :selected="selectedValue == null"
+                >
+                    {{ selectText }}
+                </option>
+                <option
                     v-for="item in selection"
                     :key="`select-${name}-${item}`"
                     :value="item"
@@ -45,7 +52,13 @@ export default {
         },
         selectedValue: {
             type: [String, Number],
-            required: true,
+            required: false,
+            default: null,
+        },
+        selectText: {
+            type: String,
+            required: false,
+            default: 'Select a value',
         },
         disabled: {
             type: Boolean,

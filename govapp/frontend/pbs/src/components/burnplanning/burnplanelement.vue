@@ -126,12 +126,7 @@
                                 <RowRadiosComponent
                                     :key="keyRowComponent('treatment')"
                                     name="treatment"
-                                    :selection="[
-                                        'burn',
-                                        'mechanical',
-                                        'both',
-                                        'no_treatment',
-                                    ]"
+                                    :selection="treatments"
                                     :selected-value="
                                         burnPlanElement['treatment']
                                     "
@@ -140,6 +135,20 @@
                                         burnPlanElement['treatment'] = $event
                                     "
                                 ></RowRadiosComponent>
+
+                                <RowSelectComponent
+                                    :key="keyRowComponent('justification')"
+                                    name="justification"
+                                    :selection="justifications"
+                                    :selected-value="
+                                        burnPlanElement['justification']
+                                    "
+                                    :disabled="false"
+                                    @update:value="
+                                        burnPlanElement['justification'] =
+                                            $event
+                                    "
+                                ></RowSelectComponent>
                             </div>
                         </div>
                     </FormSection>
@@ -209,6 +218,12 @@ export default {
         },
         preferredSeasons: () => {
             return ['spring', 'summer', 'autumn', 'winter'];
+        },
+        treatments: () => {
+            return ['burn', 'mechanical', 'both', 'no_treatment'];
+        },
+        justifications: () => {
+            return ['a', 'b', 'c', 'd'];
         },
     },
     mounted: async function () {
