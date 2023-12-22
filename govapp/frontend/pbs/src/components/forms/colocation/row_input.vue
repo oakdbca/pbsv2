@@ -1,32 +1,28 @@
 <template>
-    <div class="row p-1">
-        <div class="col-4 text-start d-flex align-items-center capitalize">
-            {{ replaceUnderscores(name) }}
-        </div>
-        <div class="col-4 text-start">
-            <input
-                :id="`text-input-${name}`"
-                :value="value"
-                class="form-control"
-                :pattern="pattern"
-                :required="required"
-                :disabled="disabled"
-                @change="
-                    $emit(
-                        'update:value',
-                        /** @type {any} */ ($event.target).value
-                    )
-                "
-            />
-        </div>
-    </div>
+    <RowSlotTemplate :name="name">
+        <input
+            :id="`text-input-${name}`"
+            :value="value"
+            class="form-control"
+            :pattern="pattern"
+            :required="required"
+            :disabled="disabled"
+            @change="
+                $emit('update:value', /** @type {any} */ ($event.target).value)
+            "
+        />
+    </RowSlotTemplate>
 </template>
 
 <script>
 import { helpers } from '@/utils/hooks';
+import RowSlotTemplate from '@/components/forms/colocation/row_slot_template.vue';
 
 export default {
     name: 'RowInputComponent',
+    components: {
+        RowSlotTemplate,
+    },
     props: {
         name: {
             type: String,

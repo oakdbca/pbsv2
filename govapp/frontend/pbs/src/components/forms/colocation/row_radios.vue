@@ -1,47 +1,44 @@
 <template>
-    <div class="row p-1">
-        <div class="col-4 text-start d-flex align-items-center capitalize">
-            {{ replaceUnderscores(name) }}
-        </div>
-        <div class="col-8 text-start">
-            <div class="row">
-                <div
-                    v-for="item in selection"
-                    :key="item"
-                    class="col-2 text-nowrap"
-                >
-                    <input
-                        :id="`radio-input-${item}`"
-                        :value="item"
-                        :checked="item === selectedValue"
-                        class="form-check-input"
-                        type="radio"
-                        :name="item"
-                        :required="required"
-                        :disabled="disabled"
-                        @change="
-                            $emit(
-                                'update:value',
-                                /** @type {any} */ ($event.target).value
-                            )
-                        "
-                    />
-                    <label
-                        :for="item"
-                        class="form-check-label capitalize ms-1"
-                        >{{ replaceUnderscores(item) }}</label
-                    >
-                </div>
+    <RowSlotTemplate :name="name" col-width="col-8">
+        <div class="row">
+            <div
+                v-for="item in selection"
+                :key="item"
+                class="col-2 text-nowrap"
+            >
+                <input
+                    :id="`radio-input-${item}`"
+                    :value="item"
+                    :checked="item === selectedValue"
+                    class="form-check-input"
+                    type="radio"
+                    :name="item"
+                    :required="required"
+                    :disabled="disabled"
+                    @change="
+                        $emit(
+                            'update:value',
+                            /** @type {any} */ ($event.target).value
+                        )
+                    "
+                />
+                <label :for="item" class="form-check-label capitalize ms-1">{{
+                    replaceUnderscores(item)
+                }}</label>
             </div>
         </div>
-    </div>
+    </RowSlotTemplate>
 </template>
 
 <script>
 import { helpers } from '@/utils/hooks';
+import RowSlotTemplate from '@/components/forms/colocation/row_slot_template.vue';
 
 export default {
     name: 'RowRadiosComponent',
+    components: {
+        RowSlotTemplate,
+    },
     props: {
         name: {
             type: String,
