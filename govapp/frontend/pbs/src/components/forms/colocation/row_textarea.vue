@@ -4,20 +4,18 @@
             {{ replaceUnderscores(name) }}
         </div>
         <div class="col-4 text-start">
-            <input
-                :id="`text-input-${name}`"
+            <textarea
+                :id="`textarea-${name}`"
                 :value="value"
                 class="form-control"
                 :disabled="disabled"
-                :pattern="pattern"
-                :required="required"
                 @change="
                     $emit(
                         'update:value',
                         /** @type {any} */ ($event.target).value
                     )
                 "
-            />
+            ></textarea>
         </div>
     </div>
 </template>
@@ -26,7 +24,7 @@
 import { helpers } from '@/utils/hooks';
 
 export default {
-    name: 'RowInputComponent',
+    name: 'RowTextComponent',
     props: {
         name: {
             type: String,
@@ -34,19 +32,10 @@ export default {
         },
         value: {
             type: [String, Number],
-            required: true,
+            required: false,
+            default: '',
         },
         disabled: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
-        pattern: {
-            type: String,
-            required: false,
-            default: '.*',
-        },
-        required: {
             type: Boolean,
             required: false,
             default: false,

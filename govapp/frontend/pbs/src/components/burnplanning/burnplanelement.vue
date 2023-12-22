@@ -78,6 +78,7 @@
                                 </div>
                                 <!-- Editable fields -->
                                 <RowInputComponent
+                                    v-if="showRevisedIndicativeTreatmentYear"
                                     :key="
                                         keyRowComponent(
                                             'revised_indicative_treatment_year'
@@ -91,6 +92,9 @@
                                     "
                                     :disabled="false"
                                     :pattern="'[0-9]{4}'"
+                                    :required="
+                                        showRevisedIndicativeTreatmentYear
+                                    "
                                     @update:value="
                                         burnPlanElement[
                                             'revised_indicative_treatment_year'
@@ -169,6 +173,15 @@
                                         burnPlanElement['program'] = $event
                                     "
                                 ></RowSelectComponent>
+
+                                <RowTextareaComponent
+                                    :key="keyRowComponent('comments')"
+                                    name="comments"
+                                    :value="burnPlanElement['comments']"
+                                    @update:value="
+                                        burnPlanElement['comments'] = $event
+                                    "
+                                ></RowTextareaComponent>
                             </div>
                         </div>
                     </FormSection>
@@ -206,6 +219,7 @@ import FormSection from '@/components/forms/section_toggle.vue';
 import RowInputComponent from '@/components/forms/colocation/row_input.vue';
 import RowSelectComponent from '@/components/forms/colocation/row_select.vue';
 import RowRadiosComponent from '@/components/forms/colocation/row_radios.vue';
+import RowTextareaComponent from '@/components/forms/colocation/row_textarea.vue';
 
 export default {
     name: 'BurnPlanElement',
@@ -214,6 +228,7 @@ export default {
         RowInputComponent,
         RowSelectComponent,
         RowRadiosComponent,
+        RowTextareaComponent,
     },
     props: {
         burnPlanElementId: {
@@ -224,6 +239,7 @@ export default {
     data: function () {
         return {
             burnPlanElement: {},
+            noTreatment: 'no_treatment',
         };
     },
     computed: {
@@ -236,11 +252,18 @@ export default {
                 'indicative_treatment_year',
             ];
         },
+        showRevisedIndicativeTreatmentYear: function () {
+            return (
+                this.burnPlanElement['year'] ==
+                    this.burnPlanElement['indicative_treatment_year'] &&
+                this.burnPlanElement['treatment'] === this.noTreatment
+            );
+        },
         preferredSeasons: () => {
             return ['spring', 'summer', 'autumn', 'winter'];
         },
-        treatments: () => {
-            return ['burn', 'mechanical', 'both', 'no_treatment'];
+        treatments: function () {
+            return ['burn', 'mechanical', 'both', this.noTreatment];
         },
         justifications: () => {
             return ['a', 'b', 'c', 'd'];
