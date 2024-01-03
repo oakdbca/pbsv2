@@ -153,4 +153,7 @@ export default {
     formatDateForAPI: function (date, format = 'DD/MM/YYYY') {
         return date ? moment(date).format(format) : '';
     },
+    replaceUnderscores: function (/** @type {string} */ str) {
+        return str.replace(/_/g, ' ');
+    },
 };

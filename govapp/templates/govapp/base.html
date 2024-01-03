@@ -87,8 +87,14 @@
             "kmi_server_url": "{{ KMI_SERVER_URL }}"
         }
 </script>
+
 <script type="text/javascript" src="{% static 'pbsv2_vue/js/chunk-vendors.js' %}?v={{build_tag}}"></script>
+{% if app_build_url %}
+<script type="module" type="text/javascript" src="{{ app_build_url }}"></script>
+{% else %}
 <script type="text/javascript" src="{% static 'pbsv2_vue/js/app.js' %}?v={{build_tag}}"></script>
+{% endif %}
+
 {% endblock %}
 
 {% block page_footer %}

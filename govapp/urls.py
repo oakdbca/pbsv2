@@ -41,12 +41,14 @@ urlpatterns = [
     # Home Page
     urls.path("", views.HomePage.as_view(), name="home"),
     urls.path("test", views.HomePage.as_view(), name="test"),
+    urls.path("burnplanning", views.HomePage.as_view(), name="burnplanning"),
     # Protected media
     urls.path("protected/", urls.include("protected_media.urls")),
     # Django Administration
     urls.path("admin/", admin.site.urls),
     urls.path("sentry-debug/", trigger_error),
     # Include urls from other apps
+    urls.path("", urls.include("govapp.apps.burnplanning.urls")),
     urls.path("", urls.include("govapp.apps.swagger.urls")),
 ]
 

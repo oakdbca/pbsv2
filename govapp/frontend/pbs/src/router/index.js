@@ -1,8 +1,9 @@
 import { RouterView } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 import Test from '@/components/test/test.vue';
+import BurnPlanning from '@/components/burnplanning/burnplanning.vue';
 
-var NotFoundComponent = null;
+const NotFoundComponent = null;
 const router = createRouter({
     history: createWebHistory(),
     strict: false,
@@ -20,6 +21,11 @@ const router = createRouter({
             path: '/test',
             name: 'test-page',
             component: Test,
+        },
+        {
+            path: '/burnplanning',
+            name: 'burnplanning',
+            component: BurnPlanning,
         },
     ],
 });
