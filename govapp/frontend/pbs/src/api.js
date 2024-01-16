@@ -10,4 +10,7 @@ export default {
     burn_plan_element: function (pk) {
         return `/api/burn-plan-element/${pk}/`;
     },
+    burn_plan_elements: function () {
+        return '/api/burn-plan-elements/';
+    },
 };

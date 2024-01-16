@@ -273,7 +273,7 @@ export default {
         },
     },
     mounted: async function () {
-        console.log('BPE template loaded');
+        console.log(`${this.$options?.name} template loaded`);
 
         utils
             .fetchUrl(api_endpoints.burn_plan_element(this.burnPlanElementId))
