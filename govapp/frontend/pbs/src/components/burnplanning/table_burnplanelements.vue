@@ -3,31 +3,16 @@
     <div class="card text-center">
         <TableSlotTemplate
             name="Burn Plan Elements"
-            :headers="[
-                'ID',
-                'Name',
-                'Indicative Treatment Year',
-                'Revised Treatment Year',
-                'Region',
-                'District',
-                'Treatment',
-                'Status',
-                'Action',
-            ]"
+            :queryset="queryset"
+            :properties="properties"
         >
-            <tbody>
-                <tr v-for="bpe in burnPlanElements" :key="bpe.id">
-                    <td>{{ bpe.id }}</td>
-                    <td>{{ bpe.name }}</td>
-                    <td>{{ bpe.indicative_treatment_year }}</td>
-                    <td>{{ bpe.revised_indicative_treatment_year }}</td>
-                    <td>{{ bpe.region }}</td>
-                    <td>{{ bpe.district }}</td>
-                    <td>{{ bpe.treatment }}</td>
-                    <td>{{ bpe.status }}</td>
-                    <td>View</td>
-                </tr>
-            </tbody>
+            <!-- Additional table columns -->
+            <template #table_headers>
+                <th>Action</th>
+            </template>
+            <template #table_rows>
+                <td>View</td>
+            </template>
         </TableSlotTemplate>
     </div>
 </template>
@@ -45,7 +30,23 @@ export default {
             burnPlanElements: [],
         };
     },
-    computed: {},
+    computed: {
+        queryset: function () {
+            return this.burnPlanElements;
+        },
+        properties: function () {
+            return [
+                'id',
+                'name',
+                'indicative_treatment_year',
+                'revised_indicative_treatment_year',
+                'region',
+                'district',
+                'treatment',
+                'status',
+            ];
+        },
+    },
     mounted: async function () {
         console.log(`${this.$options?.name} template loaded`);
 
