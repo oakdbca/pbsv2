@@ -15,4 +15,4 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
         pk = self.kwargs.get("pk", None)
         if pk:
             return BurnPlanElement.objects.filter(pk=pk)
-        return super().get_queryset()
+        return BurnPlanElement.objects.all()
