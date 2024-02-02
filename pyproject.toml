@@ -9,7 +9,6 @@ license = "Apache-2.0"
 python = "^3.10"
 Django = "^4.2"
 djangorestframework = "^3.14"
-python-decouple = "^3.8"
 dj-database-url = "^2.1"
 psycopg2 = "^2.9"
 gunicorn = "^21.2"
@@ -39,6 +38,8 @@ django-selenium = "^0.9"
 django-storages = "^1.14"
 sentry-sdk = {extras = ["django"], version = "^1.32"}
 django-nested-admin = "^4.0.2"
+appmonitor_client = {git = "https://github.com/dbca-wa/appmonitor_client.git", rev="main"}
+python-decouple = "^3.8"
 
 [tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.2"

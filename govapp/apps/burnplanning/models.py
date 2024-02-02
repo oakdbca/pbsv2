@@ -185,10 +185,10 @@ class BurnPlanElement(
     preferred_season = models.CharField(
         max_length=255, choices=settings.SEASON_CHOICES, null=True, blank=True
     )
-    treatment = models.OneToOneField(
+    treatment = models.ForeignKey(
         to=Treatment, on_delete=models.PROTECT, null=True, blank=True
     )
-    justification = models.OneToOneField(
+    justification = models.ForeignKey(
         to=Justification, on_delete=models.PROTECT, null=True, blank=True
     )
     purposes = models.ManyToManyField(Purpose)
@@ -202,11 +202,10 @@ class BurnPlanElement(
         return super().user_is_assignable(user)
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         for output_leader_types in OutputLeaderType.objects.all():
             output_leader, created = OutputLeader.objects.get_or_create(
                 type=output_leader_types, burn_plan_element=self
             )
             if created:
                 logger.info(f"Created output leader: {output_leader}")
-
-        return super().save(*args, **kwargs)

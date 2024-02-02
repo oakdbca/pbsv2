@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     "coverage",
     "protected_media.apps.ProtectedMediaConfig",
     "nested_admin",
+    "appmonitor_client",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -275,7 +276,9 @@ EMAIL_DELIVERY = decouple.config("EMAIL_DELIVERY", default="off")
 # https://django-cron.readthedocs.io/en/latest/configuration.html
 # CRON_SCANNER_CLASS = "govapp.apps.catalogue.cron.ScannerCronJob"
 CRON_SCANNER_PERIOD_MINS = 3  # Run every 5 minutes
-CRON_CLASSES: list[str] = []
+CRON_CLASSES: list[str] = [
+    "appmonitor_client.cron.CronJobAppMonitorClient",
+]
 
 
 # Temporary Fix for ARM Architecture

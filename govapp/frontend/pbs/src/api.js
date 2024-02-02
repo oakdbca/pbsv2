@@ -7,7 +7,10 @@ export default {
     temporary_document: function () {
         throw new NotImplementedError('temporary_document');
     },
-    burn_plan_element: function (pk) {
-        return `/api/burn-plan-element/${pk}/`;
+    burn_plan_elements: function (pk) {
+        if (pk) {
+            return `/api/burn-plan-elements/${pk}/`;
+        }
+        return '/api/burn-plan-elements/';
     },
 };

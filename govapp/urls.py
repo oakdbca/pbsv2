@@ -21,6 +21,7 @@ Examples:
 from django import conf, urls
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from rest_framework import routers
 
 # Local
 from govapp import views
@@ -36,6 +37,9 @@ def trigger_error(request):
     division_by_zero = 1 / 0  # noqa
 
 
+router = routers.DefaultRouter()
+router.registry.sort(key=lambda x: x[0])
+
 # Django URL Patterns
 urlpatterns = [
     # Home Page
@@ -50,6 +54,8 @@ urlpatterns = [
     # Include urls from other apps
     urls.path("", urls.include("govapp.apps.burnplanning.urls")),
     urls.path("", urls.include("govapp.apps.swagger.urls")),
+    # Include API routes
+    urls.path("api/", urls.include(router.urls)),
 ]
 
 # DBCA Template URLs
