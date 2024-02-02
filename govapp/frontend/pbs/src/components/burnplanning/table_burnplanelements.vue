@@ -6,12 +6,13 @@
             :queryset="queryset"
             :properties="properties"
         >
-            <!-- Additional table columns -->
+            <!-- Additional table headers -->
             <template #table_headers>
                 <th>Action</th>
             </template>
+            <!-- Additional table data cells -->
             <template #table_rows>
-                <td>View</td>
+                <td><a href="#" @click="clickFunction($event)">View</a></td>
             </template>
         </TableSlotTemplate>
     </div>
@@ -48,20 +49,25 @@ export default {
         },
     },
     mounted: async function () {
-        console.log(`${this.$options?.name} template loaded`);
+        console.info(`${this.$options?.name} template loaded`);
 
         utils
             .fetchUrl(api_endpoints.burn_plan_elements())
             .then((data) => {
                 this.burnPlanElements = Object.assign({}, data.results);
-                console.log(
-                    `BPE fetched ${JSON.stringify(this.burnPlanElements)}`
+                console.info(
+                    `BPEs fetched ${JSON.stringify(this.burnPlanElements)}`
                 );
             })
             .catch((error) => {
-                console.error(`BPE fetch failed with ${error}`);
+                console.error(`BPEs fetch failed with ${error}`);
             });
     },
-    methods: {},
+    methods: {
+        clickFunction: function (/** @type {any} */ event) {
+            const id = $(event.target).closest('tr')[0].children[0].textContent;
+            window.open(`burn-plan-elements/${id}`, '_blank');
+        },
+    },
 };
 </script>

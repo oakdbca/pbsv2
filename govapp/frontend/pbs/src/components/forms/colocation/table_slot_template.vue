@@ -1,4 +1,4 @@
-<!-- Slot in table header and body rows -->
+<!-- Slot in table headers and body data cells -->
 <template>
     <div class="row p-1">
         <div class="col-4 text-start d-flex align-items-center capitalize">
@@ -16,6 +16,7 @@
                         >
                             {{ replaceUnderscores(column) }}
                         </th>
+                        <!-- Note: Slotting in additional columns for actions can work, still overall might not be a good idea -->
                         <!-- Additional table headers to be slotted here -->
                         <slot name="table_headers"></slot>
                     </tr>
@@ -27,7 +28,8 @@
                                 {{ record[column] }}
                             </span>
                         </td>
-                        <!-- Additional table rows to be slotted here -->
+                        <!-- Note: Slotting in additional columns for actions can work, still overall might not be a good idea -->
+                        <!-- Additional table data cells to be slotted here -->
                         <slot name="table_rows"></slot>
                     </tr>
                 </tbody>

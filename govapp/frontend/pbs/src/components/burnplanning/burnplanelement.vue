@@ -268,7 +268,7 @@ export default {
         },
     },
     mounted: async function () {
-        console.log(`${this.$options?.name} template loaded`);
+        console.info(`${this.$options?.name} template loaded`);
 
         const id = this.$route.params.pk;
 
@@ -276,7 +276,7 @@ export default {
             .fetchUrl(api_endpoints.burn_plan_elements(id))
             .then((data) => {
                 this.burnPlanElement = Object.assign({}, data);
-                console.log(
+                console.info(
                     `BPE fetched ${JSON.stringify(this.burnPlanElement)}`
                 );
             })
