@@ -4,17 +4,9 @@
         <TableSlotTemplate
             name="Burn Plan Elements"
             :ajax-data-string="ajax"
-            :headers="headers"
+            :columns="columns"
             :key="`bpe-${ajax}`"
         >
-            <!-- Additional table headers -->
-            <!-- <template #table_headers>
-                <th>Action</th>
-            </template> -->
-            <!-- Additional table data cells -->
-            <!-- <template #table_rows>
-                <td><a href="#" @click="clickFunction($event)">View</a></td>
-            </template> -->
         </TableSlotTemplate>
     </div>
 </template>
@@ -37,6 +29,32 @@ export default {
         queryset: function () {
             return this.burnPlanElements;
         },
+        columns: function () {
+            return [
+                { data: 'id', title: 'ID' },
+                { data: 'name', title: 'Name' },
+                {
+                    data: 'indicative_treatment_year',
+                    title: 'Indicative Treatment Year',
+                },
+                {
+                    data: 'revised_indicative_treatment_year',
+                    title: 'Revise d Indicative Treatment Year',
+                },
+                { data: 'region', title: 'Region' },
+                { data: 'district', title: 'District' },
+                { data: 'treatment', title: 'Treatment' },
+                { data: 'status', title: 'Status' },
+                {
+                    data: null,
+                    title: 'Action',
+                    orderable: false,
+                    render: function (data, type, row) {
+                        return `<a href="burn-plan-elements/${data.id}" target="_blank">View</a>`;
+                    },
+                },
+            ];
+        },
         headers: function () {
             return [
                 'id',
@@ -56,11 +74,6 @@ export default {
             this.ajax = api_endpoints.burn_plan_elements();
         });
     },
-    methods: {
-        clickFunction: function (/** @type {any} */ event) {
-            const id = $(event.target).closest('tr')[0].children[0].textContent;
-            window.open(`burn-plan-elements/${id}`, '_blank');
-        },
-    },
+    methods: {},
 };
 </script>
