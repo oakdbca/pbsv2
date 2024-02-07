@@ -208,3 +208,11 @@ class BurnPlanElement(
             )
             if created:
                 logger.info(f"Created output leader: {output_leader}")
+
+    @property
+    def districts(self):
+        return "TBI"
+
+    @property
+    def regions(self):
+        return "TBI"
