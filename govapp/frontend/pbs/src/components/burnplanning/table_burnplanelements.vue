@@ -31,7 +31,7 @@ export default {
         },
         columns: function () {
             return [
-                { data: 'id', title: 'ID' },
+                { data: 'id', title: 'ID', visible: false },
                 { data: 'name', title: 'Name' },
                 {
                     data: 'indicative_treatment_year',
