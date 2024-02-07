@@ -5,51 +5,28 @@
             {{ name }}
         </div>
         <div class="text-start">
-            <table class="table text-small">
-                <thead>
-                    <tr>
-                        <th
-                            v-for="column in columns"
-                            :key="`table-${name}-${column}`"
-                            scope="col"
-                            class="capitalize"
-                        >
-                            {{ replaceUnderscores(column) }}
-                        </th>
-                        <!-- Note: Slotting in additional columns for actions can work, still overall might not be a good idea -->
-                        <!-- Additional table headers to be slotted here -->
-                        <slot name="table_headers"></slot>
-                    </tr>
-                </thead>
-                <tbody v-if="queryset_length">
-                    <tr v-for="record in queryset" :key="`record-${record.id}`">
-                        <td v-for="column in columns" :key="`column-${column}`">
-                            <span v-if="Object.hasOwn(record, column)">
-                                {{ record[column] }}
-                            </span>
-                        </td>
-                        <!-- Note: Slotting in additional columns for actions can work, still overall might not be a good idea -->
-                        <!-- Additional table data cells to be slotted here -->
-                        <slot name="table_rows"></slot>
-                    </tr>
-                </tbody>
-                <tbody v-else>
-                    <tr>
-                        <td>
-                            <slot name="table_rows"></slot>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <DataTable
+                :columns="table_columns"
+                :ajax="ajaxDataString"
+                class="display capitalize"
+            />
         </div>
     </div>
 </template>
 
 <script>
+import _ from 'lodash';
+
 import { helpers } from '@/utils/hooks';
+
+import DataTable from 'datatables.net-vue3';
+import DataTablesLib from 'datatables.net';
+
+DataTable.use(DataTablesLib);
 
 export default {
     name: 'TableSlotTemplate',
+    components: { DataTable },
     props: {
         /**
          * Name of the table
@@ -59,17 +36,27 @@ export default {
             required: true,
         },
         /**
-         * Model queryset to be displayed in the table
+         * The ajax endpoint string to fetch data from
          */
-        queryset: {
-            type: Object,
+        ajaxDataString: {
+            type: String,
             required: false,
-            default: () => Object(),
+            default: '',
         },
         /**
-         * List of properties of the model queryset to be displayed in the table
+         * A list of dictionaries in the form of [{data: 'column', title: 'Column Title'}, ...]
+         * Use either this or headers. Columns take precedence over headers
          */
-        properties: {
+        columns: {
+            type: Array,
+            required: false,
+            default: () => [],
+        },
+        /**
+         * A list of headers that correspond to column names in the queryset
+         * Use either this or columns. Columns take precedence over headers
+         */
+        headers: {
             type: Array,
             required: false,
             default: () => [],
@@ -77,24 +64,57 @@ export default {
     },
     computed: {
         /**
-         * Returns the list of columns to be displayed in the table
-         * If no `properties` prop is provided, columns are derived from all properties of the queryset
+         * Columns object for the DataTable component
          */
-        columns: function () {
-            if (this.properties.length > 0) {
-                return this.properties;
-            } else if (this.queryset_length > 0) {
-                return Object.keys(this.queryset[0]);
-            } else {
-                return [];
+        table_columns: function () {
+            // If columns are provided, use them
+            if (this.columns.length) {
+                return this.columns;
             }
-        },
-        queryset_length: function () {
-            return Object.keys(this.queryset).length;
+            // Otherwise, derive from headers headers
+            let columns = [];
+            _.forEach(this.headers, (value) => {
+                columns.push({
+                    data: value,
+                    title: this.replaceUnderscores(value),
+                });
+            });
+            if (columns.length) {
+                return columns;
+            }
+            // If no headers are provided, use id as the default
+            return [{ data: 'id', title: 'Id' }];
         },
     },
     methods: {
         replaceUnderscores: helpers.replaceUnderscores,
+        tableData: function (queryset, headers) {
+            const table_data = _.reduce(
+                queryset,
+                (result, value /**, key*/) => {
+                    // Initialize the table row with null values
+                    const row_full = {};
+                    _.forEach(headers, (v /**, k*/) => {
+                        row_full[v] = null;
+                    });
+                    // Pick queryset row values by headers
+                    const row_serialized = _.pickBy(value, (v, k) => {
+                        return headers.includes(k);
+                    });
+                    // Merge the two rows, overwriting null values where applicable
+                    const row_merged = { ...row_full, ...row_serialized };
+                    // Sort by headers order, create an array, and push to result
+                    const row = _.zip(
+                        ..._.chain(row_merged).toPairs().sortBy(headers).value()
+                    )[1];
+                    result.push(row);
+                    return result;
+                },
+                []
+            );
+
+            return table_data;
+        },
     },
 };
 </script>

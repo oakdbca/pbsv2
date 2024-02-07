@@ -3,23 +3,24 @@
     <div class="card text-center">
         <TableSlotTemplate
             name="Burn Plan Elements"
-            :queryset="queryset"
-            :properties="properties"
+            :ajax-data-string="ajax"
+            :headers="headers"
+            :key="`bpe-${ajax}`"
         >
             <!-- Additional table headers -->
-            <template #table_headers>
+            <!-- <template #table_headers>
                 <th>Action</th>
-            </template>
+            </template> -->
             <!-- Additional table data cells -->
-            <template #table_rows>
+            <!-- <template #table_rows>
                 <td><a href="#" @click="clickFunction($event)">View</a></td>
-            </template>
+            </template> -->
         </TableSlotTemplate>
     </div>
 </template>
 
 <script>
-import { utils, api_endpoints } from '@/utils/hooks';
+import { api_endpoints } from '@/utils/hooks';
 import TableSlotTemplate from '@/components/forms/colocation/table_slot_template.vue';
 
 export default {
@@ -29,13 +30,14 @@ export default {
     data: function () {
         return {
             burnPlanElements: [],
+            ajax: '',
         };
     },
     computed: {
         queryset: function () {
             return this.burnPlanElements;
         },
-        properties: function () {
+        headers: function () {
             return [
                 'id',
                 'name',
@@ -50,18 +52,9 @@ export default {
     },
     mounted: async function () {
         console.info(`${this.$options?.name} template loaded`);
-
-        utils
-            .fetchUrl(api_endpoints.burn_plan_elements())
-            .then((data) => {
-                this.burnPlanElements = Object.assign({}, data.results);
-                console.info(
-                    `BPEs fetched ${JSON.stringify(this.burnPlanElements)}`
-                );
-            })
-            .catch((error) => {
-                console.error(`BPEs fetch failed with ${error}`);
-            });
+        this.$nextTick(() => {
+            this.ajax = api_endpoints.burn_plan_elements();
+        });
     },
     methods: {
         clickFunction: function (/** @type {any} */ event) {
