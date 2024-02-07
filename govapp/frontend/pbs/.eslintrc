@@ -24,10 +24,10 @@
         "jquery": true
     },
     "globals": {
-        "moment": true,
-        "swal": true,
-        "bootstrap": true,
-        "env": true,
-        "_": true // Lodash
+        "moment": "readonly",
+        "swal": "readonly",
+        "bootstrap": "readonly",
+        "env": "readonly",
+        "_": "readonly" // Lodash
     }
 }
