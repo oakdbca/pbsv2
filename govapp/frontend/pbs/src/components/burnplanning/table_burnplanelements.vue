@@ -2,7 +2,7 @@
     <div id="bpe" class="container">Burn Plan Elements</div>
     <div class="card text-center">
         <DataTableTemplate
-            :key="`bpe-${ajax}`"
+            v-if="ajax"
             name="Burn Plan Elements"
             :ajax-data-string="ajax"
             :columns="columns"
