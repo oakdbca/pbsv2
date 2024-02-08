@@ -1,13 +1,13 @@
-<!-- Slot in table headers and body data cells -->
 <template>
     <div class="row p-1">
-        <div class="col-4 text-start d-flex align-items-center capitalize">
-            {{ name }}
-        </div>
+        <div
+            class="col-4 text-start d-flex align-items-center capitalize"
+        ></div>
         <div class="text-start">
             <DataTable
                 :columns="table_columns"
                 :ajax="ajaxDataString"
+                :options="table_options"
                 class="display capitalize"
             />
         </div>
@@ -20,12 +20,14 @@ import _ from 'lodash';
 import { helpers } from '@/utils/hooks';
 
 import DataTable from 'datatables.net-vue3';
-import DataTablesLib from 'datatables.net';
+import DataTablesCore from 'datatables.net-bs5';
+import 'datatables.net-responsive-bs5';
+import 'datatables.net-select-bs5';
 
-DataTable.use(DataTablesLib);
+DataTable.use(DataTablesCore);
 
 export default {
-    name: 'TableSlotTemplate',
+    name: 'DataTableTemplate',
     components: { DataTable },
     props: {
         /**
@@ -72,7 +74,7 @@ export default {
                 return this.columns;
             }
             // Otherwise, derive from headers headers
-            let columns = [];
+            const columns = [];
             _.forEach(this.headers, (value) => {
                 columns.push({
                     data: value,
@@ -84,6 +86,12 @@ export default {
             }
             // If no headers are provided, use id as the default
             return [{ data: 'id', title: 'Id' }];
+        },
+        table_options: function () {
+            return {
+                responsive: true,
+                select: true,
+            };
         },
     },
     methods: {
@@ -120,6 +128,9 @@ export default {
 </script>
 
 <style lang="css">
+@import '@/../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+
 .capitalize {
     text-transform: capitalize;
 }

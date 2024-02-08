@@ -2,10 +2,10 @@
     <div id="bpe" class="container">Burn Plan Elements</div>
     <div class="card text-center">
         <TableSlotTemplate
+            :key="`bpe-${ajax}`"
             name="Burn Plan Elements"
             :ajax-data-string="ajax"
             :columns="columns"
-            :key="`bpe-${ajax}`"
         >
         </TableSlotTemplate>
     </div>
@@ -39,7 +39,7 @@ export default {
                 },
                 {
                     data: 'revised_indicative_treatment_year',
-                    title: 'Revise d Indicative Treatment Year',
+                    title: 'Revised Indicative Treatment Year',
                 },
                 { data: 'region', title: 'Region' },
                 { data: 'district', title: 'District' },
@@ -49,6 +49,7 @@ export default {
                     data: null,
                     title: 'Action',
                     orderable: false,
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     render: function (data, type, row) {
                         return `<a href="burn-plan-elements/${data.id}" target="_blank">View</a>`;
                     },
