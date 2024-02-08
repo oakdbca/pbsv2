@@ -53,6 +53,7 @@
         "moment-locales-webpack-plugin": "^1.2",
         "moment-range": "^4.0",
         "ol": "^8.1",
+        "pdfmake": "^0.2.9",
         "postcss-loader": "^7.3",
         "raw-loader": "^4.0",
         "select2": "^4.0",
@@ -75,6 +76,7 @@
     "devDependencies": {
         "@types/bootstrap": "^5.2",
         "@types/jquery": "^3.5",
+        "@types/pdfmake": "^0.2.9",
         "@types/uuid": "^9.0",
         "@typescript-eslint/parser": "^6.7",
         "@vue/eslint-config-typescript": "^12.0",

@@ -23,7 +23,17 @@ import { helpers } from '@/utils/hooks';
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net-bs5';
 import 'datatables.net-responsive-bs5';
+import 'datatables.net-buttons-bs5';
+import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-select-bs5';
+
+import pdfMake from 'pdfmake';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 DataTable.use(DataTablesCore);
 
@@ -152,6 +162,7 @@ export default {
 <style lang="css">
 @import '@/../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+@import '@/../node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
 
 .capitalize {
     text-transform: capitalize;
