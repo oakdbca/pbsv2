@@ -1,6 +1,6 @@
 # from django.shortcuts import render
 from django.db.models.query import QuerySet
-from rest_framework import viewsets
+from rest_framework import response, viewsets
 
 from govapp.common.views import BaseView
 
@@ -18,6 +18,11 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
         if pk:
             return BurnPlanElement.objects.filter(pk=pk)
         return BurnPlanElement.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset, many=True)
+        return response.Response({"data": serializer.data})
 
 
 class BurnPlanElementView(BaseView):

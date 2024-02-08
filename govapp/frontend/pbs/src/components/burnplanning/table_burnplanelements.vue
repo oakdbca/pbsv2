@@ -1,41 +1,63 @@
 <template>
     <div id="bpe" class="container">Burn Plan Elements</div>
     <div class="card text-center">
-        <TableSlotTemplate
+        <DataTableTemplate
+            v-if="ajax"
             name="Burn Plan Elements"
-            :queryset="queryset"
-            :properties="properties"
+            :ajax-data-string="ajax"
+            :columns="columns"
         >
-            <!-- Additional table headers -->
-            <template #table_headers>
-                <th>Action</th>
-            </template>
-            <!-- Additional table data cells -->
-            <template #table_rows>
-                <td><a href="#" @click="clickFunction($event)">View</a></td>
-            </template>
-        </TableSlotTemplate>
+        </DataTableTemplate>
     </div>
 </template>
 
 <script>
-import { utils, api_endpoints } from '@/utils/hooks';
-import TableSlotTemplate from '@/components/forms/colocation/table_slot_template.vue';
+import { api_endpoints } from '@/utils/hooks';
+import DataTableTemplate from '@/components/forms/colocation/datatable_template.vue';
 
 export default {
     name: 'TableBurnPlanElements',
-    components: { TableSlotTemplate },
-    props: {},
+    components: { DataTableTemplate },
+    // props: {},
     data: function () {
         return {
             burnPlanElements: [],
+            ajax: '',
         };
     },
     computed: {
         queryset: function () {
             return this.burnPlanElements;
         },
-        properties: function () {
+        columns: function () {
+            return [
+                { data: 'id', title: 'ID', visible: false },
+                { data: 'name', title: 'Name' },
+                {
+                    data: 'indicative_treatment_year',
+                    title: 'Indicative Treatment Year',
+                },
+                {
+                    data: 'revised_indicative_treatment_year',
+                    title: 'Revised Indicative Treatment Year',
+                },
+                { data: 'region', title: 'Region' },
+                { data: 'district', title: 'District' },
+                { data: 'treatment', title: 'Treatment' },
+                { data: 'status', title: 'Status' },
+                {
+                    data: null,
+                    title: 'Action',
+                    orderable: false,
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    render: function (data, type, row) {
+                        return `<a href="burn-plan-elements/${data.id}" target="_blank">View</a></br>
+                                <a href="#" onclick="alert('Not yet implemented')">History</a>`;
+                    },
+                },
+            ];
+        },
+        headers: function () {
             return [
                 'id',
                 'name',
@@ -50,24 +72,10 @@ export default {
     },
     mounted: async function () {
         console.info(`${this.$options?.name} template loaded`);
-
-        utils
-            .fetchUrl(api_endpoints.burn_plan_elements())
-            .then((data) => {
-                this.burnPlanElements = Object.assign({}, data.results);
-                console.info(
-                    `BPEs fetched ${JSON.stringify(this.burnPlanElements)}`
-                );
-            })
-            .catch((error) => {
-                console.error(`BPEs fetch failed with ${error}`);
-            });
+        this.$nextTick(() => {
+            this.ajax = api_endpoints.burn_plan_elements();
+        });
     },
-    methods: {
-        clickFunction: function (/** @type {any} */ event) {
-            const id = $(event.target).closest('tr')[0].children[0].textContent;
-            window.open(`burn-plan-elements/${id}`, '_blank');
-        },
-    },
+    methods: {},
 };
 </script>
