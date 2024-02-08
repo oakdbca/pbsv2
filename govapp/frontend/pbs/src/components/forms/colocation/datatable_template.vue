@@ -7,8 +7,9 @@
             <DataTable
                 :columns="table_columns"
                 :ajax="ajaxDataString"
-                :options="table_options"
-                class="display capitalize"
+                :options="options"
+                class="capitalize"
+                :class="tableClass"
             />
         </div>
     </div>
@@ -55,6 +56,27 @@ export default {
             default: () => [],
         },
         /**
+         * Options for the DataTable component
+         */
+        options: {
+            type: Object,
+            required: false,
+            default: () => ({
+                responsive: true,
+                select: false,
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+            }),
+        },
+        /**
+         * A string of classes to apply to the table
+         */
+        tableClass: {
+            type: String,
+            required: false,
+            default: 'table table-hover table-striped',
+        },
+        /**
          * A list of headers that correspond to column names in the queryset
          * Use either this or columns. Columns take precedence over headers
          */
@@ -87,15 +109,15 @@ export default {
             // If no headers are provided, use id as the default
             return [{ data: 'id', title: 'Id' }];
         },
-        table_options: function () {
-            return {
-                responsive: true,
-                select: true,
-            };
-        },
     },
     methods: {
         replaceUnderscores: helpers.replaceUnderscores,
+        /**
+         * Converts a queryset and headers to a format that DataTables can understand
+         * @param {Array} queryset
+         * @param {Array} headers A list of column headers
+         * @returns {Array} A list of rows, each row is an array of values
+         */
         tableData: function (queryset, headers) {
             const table_data = _.reduce(
                 queryset,
