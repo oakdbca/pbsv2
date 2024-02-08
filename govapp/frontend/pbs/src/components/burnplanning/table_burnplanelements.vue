@@ -51,7 +51,8 @@ export default {
                     orderable: false,
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     render: function (data, type, row) {
-                        return `<a href="burn-plan-elements/${data.id}" target="_blank">View</a>`;
+                        return `<a href="burn-plan-elements/${data.id}" target="_blank">View</a></br>
+                                <a href="#" onclick="alert('Not yet implemented')">History</a>`;
                     },
                 },
             ];
