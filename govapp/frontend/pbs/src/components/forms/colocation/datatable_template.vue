@@ -75,7 +75,7 @@ export default {
             default: () => ({
                 responsive: true,
                 select: false,
-                dom: 'Bfrtip',
+                dom: '<"container-fluid"<"row"<"col"l><"col"f><"col"<"float-end"B>>>>rtip', // 'Blfprtip'
                 buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
             }),
         },

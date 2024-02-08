@@ -18,7 +18,7 @@ import DataTableTemplate from '@/components/forms/colocation/datatable_template.
 export default {
     name: 'TableBurnPlanElements',
     components: { DataTableTemplate },
-    props: {},
+    // props: {},
     data: function () {
         return {
             burnPlanElements: [],
