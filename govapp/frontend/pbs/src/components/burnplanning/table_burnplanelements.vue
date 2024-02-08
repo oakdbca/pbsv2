@@ -1,23 +1,23 @@
 <template>
     <div id="bpe" class="container">Burn Plan Elements</div>
     <div class="card text-center">
-        <TableSlotTemplate
+        <DataTableTemplate
             :key="`bpe-${ajax}`"
             name="Burn Plan Elements"
             :ajax-data-string="ajax"
             :columns="columns"
         >
-        </TableSlotTemplate>
+        </DataTableTemplate>
     </div>
 </template>
 
 <script>
 import { api_endpoints } from '@/utils/hooks';
-import TableSlotTemplate from '@/components/forms/colocation/table_slot_template.vue';
+import DataTableTemplate from '@/components/forms/colocation/datatable_template.vue';
 
 export default {
     name: 'TableBurnPlanElements',
-    components: { TableSlotTemplate },
+    components: { DataTableTemplate },
     props: {},
     data: function () {
         return {
