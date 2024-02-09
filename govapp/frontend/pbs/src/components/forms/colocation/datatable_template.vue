@@ -1,5 +1,8 @@
 <template>
     <div class="row p-1">
+        <slot name="filter"></slot>
+    </div>
+    <div class="row p-1">
         <div
             class="col-4 text-start d-flex align-items-center capitalize"
         ></div>
@@ -77,6 +80,49 @@ export default {
                 select: false,
                 dom: '<"container-fluid"<"row"<"col"l><"col"f><"col"<"float-end"B>>>>rtip', // 'lfBrtip'
                 buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                initComplete: function (settings, json) {
+                    console.log('Table initialized!');
+                    this.api()
+                        .columns()
+                        .every(function () {
+                            const columnOptions =
+                                this.context[0].aoColumns[this.index()];
+                            const filter = columnOptions.filter;
+
+                            if (filter == true) {
+                                const input = document.createElement('select');
+                                input.className = 'form-select form-select-sm';
+
+                                // [].push( columnOptions.filterItems)
+                                input.options[0] = new Option('All', 'all');
+                                columnOptions.filterOptions.forEach((item) => {
+                                    input.options[input.options.length] =
+                                        new Option(item.text, item.value);
+                                });
+                                // input.placeholder = title;
+
+                                let div = document.createElement('div');
+                                div.textContent = this.header().textContent;
+                                this.header().replaceChildren(div);
+
+                                div = document.createElement('div');
+                                div.appendChild(input);
+                                this.header().appendChild(div);
+
+                                $(div).on('click', function (e) {
+                                    e.stopPropagation();
+                                });
+                            }
+
+                            // Event listener for user input
+                            // input.addEventListener('keyup', () => {
+                            //     if (column.search() !== this.value) {
+                            //         column.search(input.value).draw();
+                            //     }
+                            // });
+                        });
+                },
             }),
         },
         /**
