@@ -6,6 +6,7 @@ from .models import BurnPlanElement
 class BurnPlanElementSerializer(serializers.ModelSerializer):
     region = serializers.SerializerMethodField()
     district = serializers.SerializerMethodField()
+    treatment = serializers.CharField(source="treatment.name", read_only=True)
 
     class Meta:
         model = BurnPlanElement
