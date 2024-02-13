@@ -113,13 +113,14 @@ export default {
     methods: {
         /**
          * Sets or unsets a tag and value in the ajaxDataOptions object
-         * @param {*} tag A tag
-         * @param {*} value The value to set the tag to
+         * @param {String=} tag A tag
+         * @param {String=} value The value to set the tag to
+         * @param {String=} valueAll The value to to use when unsetting the tag / filter all values
          */
-        setAjax: function (tag, value) {
+        setAjax: function (tag, value, valueAll = 'all') {
             const ajaxDataOptions = { ...this.ajaxDataOptions };
             if (tag && value) {
-                if (value == 'all') {
+                if (value == valueAll) {
                     delete ajaxDataOptions[tag];
                 } else {
                     ajaxDataOptions[tag] = value;
@@ -128,7 +129,7 @@ export default {
             }
         },
         selectionChanged(event) {
-            this.setAjax(event.id, event.value);
+            this.setAjax(event.id, event.value, event.valueAll);
         },
     },
 };

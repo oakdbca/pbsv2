@@ -4,13 +4,14 @@
             <div class="form-group">
                 <label for="select-filter">{{ title }}</label>
                 <select
-                    id="select-filter"
+                    :id="`select-filter-${id}`"
                     v-model="selectedFilterItem"
                     class="form-control"
                     @change="
                         $emit('selection-changed', {
                             id: id,
                             value: selectedFilterItem,
+                            valueAll: valueAll,
                         })
                     "
                 >
@@ -44,11 +45,15 @@ export default {
             type: Object,
             required: true,
         },
+        valueAll: {
+            type: String,
+            required: false,
+            default: 'all',
+        },
     },
     emits: ['selection-changed'],
     data: function () {
         return {
-            valueAll: 'all',
             selectedFilterItem: null,
         };
     },
