@@ -59,7 +59,7 @@ export default {
          * @param {DateStr} date_str
          */
         testDate: (date_str) => {
-            console.log(helpers.formatDateForAPI(new Date(date_str)));
+            console.log(new Date(date_str));
         },
     },
 };

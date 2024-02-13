@@ -24,7 +24,6 @@
         "jquery": true
     },
     "globals": {
-        "moment": true,
         "swal": true,
         "bootstrap": true,
         "env": true,

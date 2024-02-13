@@ -2,7 +2,6 @@ import { createApp } from 'vue';
 import router from './router';
 import App from './App.vue';
 import helpers from '@/utils/helpers';
-import { extendMoment } from 'moment-range';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import govVue3Components from '@dbca/gov-vue3-components';
 import 'datatables.net-bs5';
@@ -17,7 +16,6 @@ import 'datatables.net-buttons/js/buttons.html5.js';
 import 'select2';
 import 'currency.js';
 import 'jquery-validation';
-import moment from 'moment';
 
 import 'sweetalert2/dist/sweetalert2.css';
 import '@dbca/gov-vue3-components/dist/library.css';
@@ -27,8 +25,6 @@ import 'select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css';
 import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import '@/../node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import '@/../node_modules/vue-multiselect/dist/vue-multiselect.css';
-
-extendMoment(moment); // eslint-disable-line no-undef
 
 // Add CSRF Token to every request
 const customHeaders = new Headers({

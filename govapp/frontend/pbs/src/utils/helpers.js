@@ -1,5 +1,4 @@
 import * as bootstrap from 'bootstrap';
-import moment from 'moment'; // default import
 
 export default {
     /**
@@ -144,14 +143,6 @@ export default {
         }
 
         return classname.join(' ');
-    },
-    /**
-     *
-     * @param {Date} date
-     * @param {string=} format
-     */
-    formatDateForAPI: function (date, format = 'DD/MM/YYYY') {
-        return date ? moment(date).format(format) : '';
     },
     replaceUnderscores: function (/** @type {string} */ str) {
         return str.replace(/_/g, ' ');
