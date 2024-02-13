@@ -40,6 +40,8 @@ django-storages = "^1.14"
 sentry-sdk = {extras = ["django"], version = "^1.32"}
 django-nested-admin = "^4.0.2"
 drf-standardized-errors = "^0.12.6"
+djangorestframework-datatables = "^0.7.0"
+djangorestframework-gis = "^1.0"
 
 [tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.2"

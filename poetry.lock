@@ -865,6 +865,35 @@ django = ">=3.0"
 pytz = "*"
 
 [[package]]
+name = "djangorestframework-datatables"
+version = "0.7.0"
+description = "Seamless integration between Django REST framework and Datatables (https://datatables.net)"
+optional = false
+python-versions = "*"
+files = [
+    {file = "djangorestframework-datatables-0.7.0.tar.gz", hash = "sha256:64ccae255cbe03ae14793c55b900ce58894eb856816d6f9e16acea4a2197a6d9"},
+    {file = "djangorestframework_datatables-0.7.0-py2.py3-none-any.whl", hash = "sha256:1be615b811a5625546e93f4c331b868743925776b6c7ad6c77d22e1af6f49819"},
+]
+
+[package.dependencies]
+djangorestframework = ">=3.7.0"
+pytz = "*"
+
+[[package]]
+name = "djangorestframework-gis"
+version = "1.0"
+description = "Geographic add-ons for Django Rest Framework"
+optional = false
+python-versions = "*"
+files = [
+    {file = "djangorestframework-gis-1.0.tar.gz", hash = "sha256:921c5adbc9a7c0502c905957a6695b67f55d7bf6582e1ab837888b55a1fce5a6"},
+    {file = "djangorestframework_gis-1.0-py2.py3-none-any.whl", hash = "sha256:bb715f05a111c02b9acc4021b17566e40c0b90dd833c583bac3d67f92be9667d"},
+]
+
+[package.dependencies]
+djangorestframework = "*"
+
+[[package]]
 name = "djangorestframework-stubs"
 version = "3.14.5"
 description = "PEP-484 stubs for django-rest-framework"
@@ -2802,4 +2831,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d3c28272d923122b4382bb029d1ad777769d23fa96076e4cffe0d3ba02b8636b"
+content-hash = "00820f3c26184b5579a3d2824a7d6e768b0c16b8ffded3aef544dcbc407bb192"
