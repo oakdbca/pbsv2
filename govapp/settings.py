@@ -31,7 +31,7 @@ if DEBUG is True and ENVIRONMENT == "local":
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 project = tomli.load(open(os.path.join(BASE_DIR, "pyproject.toml"), "rb"))
 
-APPLICATION_VERSION_NO = project["tool"]["poetry"]["version"]
+APPLICATION_VERSION = project["tool"]["poetry"]["version"]
 
 # Sentry settings
 SENTRY_DSN = decouple.config("SENTRY_DSN", default=None)
@@ -50,7 +50,7 @@ if SENTRY_DSN and ENVIRONMENT:
         sample_rate=SENTRY_SAMPLE_RATE,
         traces_sample_rate=SENTRY_TRANSACTION_SAMPLE_RATE,
         environment=ENVIRONMENT,
-        release=APPLICATION_VERSION_NO,
+        release=APPLICATION_VERSION,
     )
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
