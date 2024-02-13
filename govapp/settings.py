@@ -9,6 +9,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import hashlib
 import json
 import os
 import pathlib
@@ -200,7 +201,6 @@ CACHES = {
 
 # DBCA Template Settings
 # https://github.com/dbca-wa/django-base-template/blob/main/govapp/settings.py
-DEV_APP_BUILD_URL = decouple.config("DEV_APP_BUILD_URL", default=None)
 ENABLE_DJANGO_LOGIN = decouple.config("ENABLE_DJANGO_LOGIN", default=False, cast=bool)
 LEDGER_TEMPLATE = "bootstrap5"
 GIT_COMMIT_HASH = os.popen(
@@ -294,6 +294,11 @@ if DEBUG is True:
 
 # Email
 DISABLE_EMAIL = decouple.config("DISABLE_EMAIL", default=False, cast=bool)
+
+BUILD_TAG = decouple.config(
+    "BUILD_TAG", hashlib.sha256(os.urandom(64)).hexdigest()
+)  # URL of the Dev app.js served by webpack & express
+
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_BACKEND = "wagov_utils.components.utils.email_backend.EmailBackend"
 EMAIL_HOST = decouple.config("EMAIL_HOST", default="smtp.lan.fyi")
@@ -304,11 +309,8 @@ NON_PROD_EMAIL = decouple.config("NON_PROD_EMAIL", default="")
 PRODUCTION_EMAIL = decouple.config("PRODUCTION_EMAIL", default=False, cast=bool)
 EMAIL_DELIVERY = decouple.config("EMAIL_DELIVERY", default="off")
 
-# Cron Jobs
-# https://django-cron.readthedocs.io/en/latest/installation.html
-# https://django-cron.readthedocs.io/en/latest/configuration.html
-# CRON_SCANNER_CLASS = "govapp.apps.catalogue.cron.ScannerCronJob"
-CRON_SCANNER_PERIOD_MINS = 3  # Run every 5 minutes
+# Django Cron
+CRON_SCANNER_PERIOD_MINS = 5  # Run every 5 minutes
 CRON_CLASSES: list[str] = []
 
 
