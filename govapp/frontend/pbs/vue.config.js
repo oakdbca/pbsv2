@@ -78,15 +78,6 @@ module.exports = {
                 _: 'lodash',
             }),
             new MomentLocalesPlugin(),
-            // new BundleAnalyzerPlugin(),
-            // CKEditor 5 needs its own plugin to be built using webpack.
-            new CKEditorTranslationsPlugin({
-                // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
-                language: 'en',
-
-                // Append translations to the file matching the `app` name.
-                translationsOutputFile: /app/,
-            }),
         ],
         devServer: {
             host: '0.0.0.0',
