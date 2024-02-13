@@ -37,10 +37,10 @@ APPLICATION_VERSION = project["tool"]["poetry"]["version"]
 # Sentry settings
 SENTRY_DSN = decouple.config("SENTRY_DSN", default=None)
 SENTRY_SAMPLE_RATE = decouple.config(
-    "SENTRY_SAMPLE_RATE", default=1.0
+    "SENTRY_SAMPLE_RATE", default=1.0, cast=float
 )  # Error sampling rate
 SENTRY_TRANSACTION_SAMPLE_RATE = decouple.config(
-    "SENTRY_TRANSACTION_SAMPLE_RATE", default=0.0
+    "SENTRY_TRANSACTION_SAMPLE_RATE", default=0.0, cast=float
 )  # Transaction sampling
 ENVIRONMENT = decouple.config("ENVIRONMENT", default=None)
 if SENTRY_DSN and ENVIRONMENT:
@@ -191,13 +191,20 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Caching settings
 # https://docs.djangoproject.com/en/3.2/ref/settings/#caches
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        "LOCATION": BASE_DIR / "govapp/cache",
-        "OPTIONS": {"MAX_ENTRIES": 10000},
+USE_DUMMY_CACHE = decouple.config("USE_DUMMY_CACHE", False, cast=bool)
+if USE_DUMMY_CACHE:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        },
     }
-}
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+            "LOCATION": os.path.join(BASE_DIR, "pbsv2", "cache"),
+        },
+    }
 
 # DBCA Template Settings
 # https://github.com/dbca-wa/django-base-template/blob/main/govapp/settings.py
@@ -294,7 +301,6 @@ if DEBUG is True:
 
 # Email
 DISABLE_EMAIL = decouple.config("DISABLE_EMAIL", default=False, cast=bool)
-
 BUILD_TAG = decouple.config(
     "BUILD_TAG", hashlib.sha256(os.urandom(64)).hexdigest()
 )  # URL of the Dev app.js served by webpack & express
@@ -313,6 +319,28 @@ EMAIL_DELIVERY = decouple.config("EMAIL_DELIVERY", default="off")
 CRON_SCANNER_PERIOD_MINS = 5  # Run every 5 minutes
 CRON_CLASSES: list[str] = []
 
+# Django debug toolbar
+SHOW_DEBUG_TOOLBAR = decouple.config("SHOW_DEBUG_TOOLBAR", default=False, cast=bool)
+if SHOW_DEBUG_TOOLBAR:
+
+    def show_toolbar(request):
+        if request:
+            return True
+
+    MIDDLEWARE += [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
+    INSTALLED_APPS += ("debug_toolbar",)
+    INTERNAL_IPS = ("127.0.0.1", "localhost", "internalhost", "externalhost")
+
+    # this dict removes check to dtermine if toolbar should display --> works for rks docker container
+    DEBUG_TOOLBAR_CONFIG = {
+        # "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+        "INTERCEPT_REDIRECTS": False,
+    }
+
+# Compress static files
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 # Temporary Fix for ARM Architecture
 if platform.machine() == "arm64":
@@ -371,6 +399,8 @@ SEASON_CHOICES = (
 
 # Groups
 
+DJANGO_ADMIN = "Django Admin"
+
 CORPORATE_EXECUTIVE = "Corporate Executive"
 DISTRICT_DUTY_OFFICER = "District Duty Officer"
 DISTRICT_FIRE_COORDINATOR = "District Fire Coordinator"
@@ -401,4 +431,45 @@ DJANGO_GROUPS = [
     STATE_AVIATION,
     STATE_DUTY_OFFICER,
     STATE_MANAGER,
+    DJANGO_ADMIN,
 ]
+
+# Configure CKEditor 5
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "full",
+        "height": 300,
+        "width": "100%",
+    },
+    "awesome_ckeditor": {
+        "toolbar": "Basic",
+    },
+    "toolbar_minimal": {
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            ["Bold", "Italic", "Underline"],
+            [
+                "BulletedList",
+                "NumberedList",
+                "-",
+                "Outdent",
+                "Indent",
+                "-",
+                "Image",
+                "Blockquote",
+                "Table",
+                "MediaEmbed",
+                "-",
+                "Undo",
+                "Redo",
+                "-",
+                "JustifyLeft",
+                "JustifyCenter",
+                "JustifyRight",
+                "JustifyBlock",
+            ],
+            ["Link", "Unlink"],
+            ["RemoveFormat", "Source"],
+        ],
+    },
+}
