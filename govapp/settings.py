@@ -17,8 +17,7 @@ from typing import Any
 
 import decouple
 import dj_database_url
-
-# import sentry_sdk
+import tomli
 
 DEBUG = decouple.config("DEBUG", default=False, cast=bool)
 ENVIRONMENT = decouple.config("ENVIRONMENT", default="dev")
@@ -28,20 +27,32 @@ if DEBUG is True and ENVIRONMENT == "local":
 
     django_stubs_ext.monkeypatch()
 
-# Self hosted sentry instance is being removed
-# (we are investigating using Sentry SaaS - Todo: Either update or remove this code when a decision has been made)
-# SENTRY_DSN = decouple.config("SENTRY_DSN", default=None)
-# if SENTRY_DSN and ENVIRONMENT != "local":
-#     sentry_sdk.init(
-#         dsn=f"{SENTRY_DSN}",
-#         # Set traces_sample_rate to 1.0 to capture 100%
-#         # of transactions for performance monitoring.
-#         traces_sample_rate=1.0,
-#         environment=ENVIRONMENT,
-#     )
-
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
+project = tomli.load(open(os.path.join(BASE_DIR, "pyproject.toml"), "rb"))
+
+APPLICATION_VERSION_NO = project["tool"]["poetry"]["version"]
+
+# Sentry settings
+SENTRY_DSN = decouple.config("SENTRY_DSN", default=None)
+SENTRY_SAMPLE_RATE = decouple.config(
+    "SENTRY_SAMPLE_RATE", default=1.0
+)  # Error sampling rate
+SENTRY_TRANSACTION_SAMPLE_RATE = decouple.config(
+    "SENTRY_TRANSACTION_SAMPLE_RATE", default=0.0
+)  # Transaction sampling
+ENVIRONMENT = decouple.config("ENVIRONMENT", default=None)
+if SENTRY_DSN and ENVIRONMENT:
+    import sentry_sdk
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        sample_rate=SENTRY_SAMPLE_RATE,
+        traces_sample_rate=SENTRY_TRANSACTION_SAMPLE_RATE,
+        environment=ENVIRONMENT,
+        release=APPLICATION_VERSION_NO,
+    )
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Project specific settings
@@ -92,6 +103,8 @@ INSTALLED_APPS = [
     "govapp.apps.traffic",
     "govapp.apps.main",
     "rest_framework",
+    "rest_framework_datatables",
+    "rest_framework_gis",
     "drf_spectacular",
     "django_filters",
     "django_cron",
@@ -199,16 +212,16 @@ GIT_COMMIT_DATE = os.popen(
 VERSION_NO = "2.00"
 
 if DEBUG:
-    rest_framework_renderer_classes = (
+    rest_framework_renderer_classes = [
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
         "rest_framework_datatables.renderers.DatatablesRenderer",
-    )
+    ]
 else:
-    rest_framework_renderer_classes = (
+    rest_framework_renderer_classes = [
         "rest_framework.renderers.JSONRenderer",
         "rest_framework_datatables.renderers.DatatablesRenderer",
-    )
+    ]
 
 # Django REST Framework Settings
 # https://www.django-rest-framework.org/api-guide/settings/
