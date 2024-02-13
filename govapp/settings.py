@@ -99,6 +99,7 @@ INSTALLED_APPS = [
     "coverage",
     "protected_media.apps.ProtectedMediaConfig",
     "nested_admin",
+    "drf_standardized_errors",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -197,16 +198,33 @@ GIT_COMMIT_DATE = os.popen(
 ).read()  # noqa: S605
 VERSION_NO = "2.00"
 
+if DEBUG:
+    rest_framework_renderer_classes = (
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+        "rest_framework_datatables.renderers.DatatablesRenderer",
+    )
+else:
+    rest_framework_renderer_classes = (
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework_datatables.renderers.DatatablesRenderer",
+    )
+
 # Django REST Framework Settings
 # https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_RENDERER_CLASSES": rest_framework_renderer_classes,
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 100,
+    "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
 }
 
 # DRF Spectacular Settings
