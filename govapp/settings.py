@@ -202,7 +202,7 @@ else:
     CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-            "LOCATION": os.path.join(BASE_DIR, "pbsv2", "cache"),
+            "LOCATION": os.path.join(BASE_DIR, "govapp", "cache"),
         },
     }
 
