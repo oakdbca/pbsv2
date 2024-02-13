@@ -68,3 +68,12 @@ if conf.settings.ENABLE_DJANGO_LOGIN:
     urlpatterns.append(
         urls.re_path(r"^ssologin/", auth_views.LoginView.as_view(), name="ssologin")
     )
+
+if conf.settings.DEBUG:  # Serve media locally in development.
+    if (
+        "debug_toolbar" in conf.settings.INSTALLED_APPS
+        and conf.settings.SHOW_DEBUG_TOOLBAR
+    ):
+        urlpatterns.append(
+            urls.path("__debug__/", urls.include("debug_toolbar.urls")),
+        )
