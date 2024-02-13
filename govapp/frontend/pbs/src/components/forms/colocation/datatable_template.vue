@@ -8,8 +8,9 @@
         ></div>
         <div class="text-start">
             <DataTable
+                ref="datatable"
                 :columns="table_columns"
-                :ajax="ajaxDataString"
+                :ajax="ajax"
                 :options="options"
                 class="capitalize"
                 :class="tableClass"
@@ -53,12 +54,11 @@ export default {
             required: true,
         },
         /**
-         * The ajax endpoint string to fetch data from
+         * The ajax endpoint string or object to fetch data from
          */
-        ajaxDataString: {
-            type: String,
-            required: false,
-            default: '',
+        ajax: {
+            type: [String, Object],
+            required: true,
         },
         /**
          * A list of dictionaries in the form of [{data: 'column', title: 'Column Title'}, ...]
@@ -91,36 +91,28 @@ export default {
                             const filter = columnOptions.filter;
 
                             if (filter == true) {
-                                const input = document.createElement('select');
-                                input.className = 'form-select form-select-sm';
+                                const select = document.createElement('select');
+                                select.className = 'form-select form-select-sm';
+                                select.id = `filter-select-${columnOptions.data}`;
 
-                                // [].push( columnOptions.filterItems)
-                                input.options[0] = new Option('All', 'all');
+                                select.options[0] = new Option('All', 'all');
                                 columnOptions.filterOptions.forEach((item) => {
-                                    input.options[input.options.length] =
+                                    select.options[select.options.length] =
                                         new Option(item.text, item.value);
                                 });
-                                // input.placeholder = title;
 
                                 let div = document.createElement('div');
                                 div.textContent = this.header().textContent;
                                 this.header().replaceChildren(div);
 
                                 div = document.createElement('div');
-                                div.appendChild(input);
+                                div.appendChild(select);
                                 this.header().appendChild(div);
 
                                 $(div).on('click', function (e) {
                                     e.stopPropagation();
                                 });
                             }
-
-                            // Event listener for user input
-                            // input.addEventListener('keyup', () => {
-                            //     if (column.search() !== this.value) {
-                            //         column.search(input.value).draw();
-                            //     }
-                            // });
                         });
                 },
             }),
@@ -165,6 +157,16 @@ export default {
             }
             // If no headers are provided, use id as the default
             return [{ data: 'id', title: 'Id' }];
+        },
+    },
+    watch: {
+        ajax: {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            handler: function (val) {
+                // Reload the table when the ajax prop changes
+                this.$refs.datatable.dt.ajax.reload();
+            },
+            deep: true,
         },
     },
     methods: {

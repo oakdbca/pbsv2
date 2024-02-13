@@ -14,7 +14,7 @@
                         })
                     "
                 >
-                    <option value="all">All</option>
+                    <option :value="valueAll">All</option>
                     <option
                         v-for="option in filterOptions"
                         :key="option.value"
@@ -48,9 +48,13 @@ export default {
     emits: ['selection-changed'],
     data: function () {
         return {
-            // TODO: Get from session storage
-            selectedFilterItem: 'all',
+            valueAll: 'all',
+            selectedFilterItem: null,
         };
+    },
+    mounted: function () {
+        // TODO: Get from session storage
+        this.selectedFilterItem = this.valueAll;
     },
 };
 </script>
