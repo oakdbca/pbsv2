@@ -351,6 +351,9 @@ if platform.machine() == "arm64":
 # Django Timezone
 TIME_ZONE = "Australia/Perth"
 
+# GIS Server
+GIS_SERVER_URL = decouple.config("GIS_SERVER_URL", default="https://kmi.dbca.wa.gov.au")
+
 GOV_APPS = [
     app.replace("govapp.apps.", "")
     for app in INSTALLED_APPS
