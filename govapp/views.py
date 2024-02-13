@@ -2,6 +2,7 @@ from typing import Any
 
 from django import http, shortcuts
 from django.contrib import auth
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import base
 
 UserModel = auth.get_user_model()
@@ -33,11 +34,16 @@ class HomePage(base.TemplateView):
         return shortcuts.render(request, self.template_name, context)
 
 
-class ManagementCommandsView(base.TemplateView):
+class ManagementCommandsView(
+    LoginRequiredMixin, UserPassesTestMixin, base.TemplateView
+):
     """Home page view."""
 
     # Template name
     template_name = "govapp/management_commands.html"
+
+    def test_func(self) -> bool | None:
+        return self.request.user.is_staff
 
     def get(
         self, request: http.HttpRequest, *args: Any, **kwargs: Any
