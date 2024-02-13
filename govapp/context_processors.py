@@ -52,7 +52,7 @@ def variables(request):  # (request: http.HttpRequest) -> dict[str, Any]:
     return {
         "template_group": "pbs",
         "template_title": "",
-        "app_build_url": conf.settings.DEV_APP_BUILD_URL,
+        "build_tag": conf.settings.BUILD_TAG,
         "GIT_COMMIT_HASH": conf.settings.GIT_COMMIT_HASH,
         "DJANGO_SETTINGS": conf.settings,
         "settings": conf.settings,
