@@ -318,7 +318,6 @@ EMAIL_INSTANCE = decouple.config("EMAIL_INSTANCE", default="PROD")
 NON_PROD_EMAIL = decouple.config("NON_PROD_EMAIL", default="")
 PRODUCTION_EMAIL = decouple.config("PRODUCTION_EMAIL", default=False, cast=bool)
 EMAIL_DELIVERY = decouple.config("EMAIL_DELIVERY", default="off")
-EMAIL_INSTANCE = decouple.config("EMAIL_INSTANCE", "DEV")
 
 # Django Cron
 CRON_SCANNER_PERIOD_MINS = 5  # Run every 5 minutes
