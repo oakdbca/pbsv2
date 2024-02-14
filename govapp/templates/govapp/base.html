@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block menubottom %}
-{%endblock %}
+{% endblock %}
 
 {% block menu_items_left_brand %}
 <div class="navbar-nav">
@@ -34,12 +34,11 @@
 {% endblock %}
 
 {% block menu_dropdown %}
-TEST
-    {% if request.user.is_superuser or is_django_admin %}
+    {% if user.is_superuser or is_django_admin %}
         {% include 'webtemplate_dbca/includes/staff_menu.html' %}
     {% endif %}
     {% block menu_extra_dropdown_staff_top %}
-        {% if request.user.is_superuser or is_admin %}
+        {% if user.is_superuser or is_admin %}
             {% include 'webtemplate_dbca/includes/staff_menu_extras.html' %}
         {% endif %}
     {% endblock %}
@@ -49,7 +48,7 @@ TEST
 
 
 {% block menu_items2_right %}
-{% if request.user.is_authenticated %}
+{% if user.is_authenticated %}
 
 {% else %}
 <a href="/ssologin" class="btn btn-primary btn-sm">Login</a>
