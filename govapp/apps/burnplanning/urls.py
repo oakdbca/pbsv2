@@ -8,6 +8,9 @@ router.register(
     r"burn-plan-elements", views.BurnPlanElementViewSet, basename="burn-plan-elements"
 )
 router.register(r"treatments", views.TreatmentViewSet, basename="treatments")
+router.register(r"purposes", views.PurposeViewSet, basename="purposes")
+router.register(r"programs", views.ProgramViewSet, basename="programs")
+
 
 urlpatterns = [
     urls.path("api/", urls.include(router.urls)),

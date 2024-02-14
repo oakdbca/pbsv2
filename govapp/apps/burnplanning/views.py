@@ -7,8 +7,13 @@ from govapp.apps.main.views import KeyValueListMixin
 from govapp.common.views import BaseView
 
 from .filters import BurnPlanElementFilter
-from .models import BurnPlanElement, Treatment
-from .serializers import BurnPlanElementSerializer, TreatmentSerializer
+from .models import BurnPlanElement, Program, Purpose, Treatment
+from .serializers import (
+    BurnPlanElementSerializer,
+    ProgramSerializer,
+    PurposeSerializer,
+    TreatmentSerializer,
+)
 
 
 class BurnPlanElementViewSet(viewsets.ModelViewSet):
@@ -42,3 +47,17 @@ class TreatmentViewSet(KeyValueListMixin, viewsets.GenericViewSet):
 
     queryset = Treatment.objects.all()
     serializer_class = TreatmentSerializer
+
+
+class PurposeViewSet(KeyValueListMixin, viewsets.GenericViewSet):
+    """Purpose viewset"""
+
+    queryset = Purpose.objects.all()
+    serializer_class = PurposeSerializer
+
+
+class ProgramViewSet(KeyValueListMixin, viewsets.GenericViewSet):
+    """Program viewset"""
+
+    queryset = Program.objects.all()
+    serializer_class = ProgramSerializer

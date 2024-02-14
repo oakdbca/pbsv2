@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import BurnPlanElement, Treatment
+from .models import BurnPlanElement, Program, Purpose, Treatment
 
 
 class BurnPlanElementSerializer(serializers.ModelSerializer):
@@ -22,4 +22,16 @@ class BurnPlanElementSerializer(serializers.ModelSerializer):
 class TreatmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Treatment
+        fields = "__all__"
+
+
+class PurposeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Purpose
+        fields = "__all__"
+
+
+class ProgramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Program
         fields = "__all__"

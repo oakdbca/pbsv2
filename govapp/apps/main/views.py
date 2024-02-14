@@ -1,5 +1,8 @@
+from rest_framework import response, viewsets
 from rest_framework.decorators import action
-from rest_framework.response import Response
+
+from .models import District, Region
+from .serializers import DistrictSerializer, RegionSerializer
 
 
 class KeyValueListMixin:
@@ -30,7 +33,7 @@ class KeyValueListMixin:
             )[:30]
         serializer_class = self.get_key_value_serializer_class()
         serializer = serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        return response.Response(serializer.data)
 
     def get_key_value_serializer_class(self):
         if hasattr(self, "key_value_serializer_class"):
@@ -48,12 +51,25 @@ class KeyValueListMixin:
                 fields = ["key", "value"]
 
             def get_value(self, obj):
-                return getattr(
-                    obj,
-                    "display_name",
-                    getattr(
+                display_name = getattr(obj, "display_name", None)
+                if not display_name:
+                    return getattr(
                         obj, "name", "No display_name or name field found on model"
-                    ),
-                )
+                    )
+                return display_name
 
         return NamedModelKeyValueSerializer
+
+
+class RegionViewSet(KeyValueListMixin, viewsets.GenericViewSet):
+    """Region viewset"""
+
+    queryset = Region.objects.all()
+    serializer_class = RegionSerializer
+
+
+class DistrictViewSet(KeyValueListMixin, viewsets.GenericViewSet):
+    """District viewset"""
+
+    queryset = District.objects.all()
+    serializer_class = DistrictSerializer

@@ -53,6 +53,7 @@ urlpatterns = [
     urls.path("sentry-debug/", trigger_error),
     # Include urls from other apps
     urls.path("", urls.include("govapp.apps.burnplanning.urls")),
+    urls.path("", urls.include("govapp.apps.main.urls")),
     urls.path("", urls.include("govapp.apps.swagger.urls")),
     # Include API routes
     urls.path("api/", urls.include(router.urls)),
