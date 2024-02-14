@@ -16,10 +16,10 @@
 </template>
 
 <script>
-import Editor from './ckeditor.js';
+import Editor from "./ckeditor.js";
 
 export default {
-    name: 'RichText',
+    name: "RichText",
     props: {
         id: {
             type: String,
@@ -48,19 +48,19 @@ export default {
         },
         placeholderText: {
             type: String,
-            default: '',
+            default: "",
         },
     },
-    emits: ['textChanged'],
+    emits: ["textChanged"],
     data() {
-        let remove_buttons = '';
+        let remove_buttons = "";
 
         if (!this.canViewRichtextSrc) {
             // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-            remove_buttons = 'Source,About';
+            remove_buttons = "Source,About";
         }
         return {
-            detailsText: '',
+            detailsText: "",
             editor: Editor,
         };
     },
@@ -71,20 +71,20 @@ export default {
                 // Only emit if the text was changed through input, not through the parent component
                 return;
             }
-            this.$emit('textChanged', this.detailsText);
+            this.$emit("textChanged", this.detailsText);
         },
     },
     created: function () {
         if (this.proposalData) {
             this.detailsText = this.proposalData;
         }
-        this.editor.defaultConfig['placeholder'] = this.placeholderText;
+        this.editor.defaultConfig["placeholder"] = this.placeholderText;
     },
     methods: {
         focus() {
-            console.log('focus rich text');
+            console.log("focus rich text");
             this.$nextTick(() => {
-                $('.ck-editor__editable').focus();
+                $(".ck-editor__editable").focus();
             });
         },
     },

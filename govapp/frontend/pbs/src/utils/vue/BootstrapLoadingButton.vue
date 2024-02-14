@@ -11,7 +11,7 @@
 
 <script>
 export default {
-    name: 'BootstrapLoadingButton',
+    name: "BootstrapLoadingButton",
     props: {
         text: {
             type: String,
@@ -22,10 +22,10 @@ export default {
             default: false,
         },
     },
-    emits: ['click'],
+    emits: ["click"],
     methods: {
         click() {
-            this.$emit('click');
+            this.$emit("click");
         },
     },
 };

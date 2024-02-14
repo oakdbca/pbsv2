@@ -8,17 +8,17 @@
 </template>
 
 <script>
-import BurnPlanElement from '@/components/burnplanning/burnplanelement.vue';
+import BurnPlanElement from "@/components/burnplanning/burnplanelement.vue";
 
 export default {
-    name: 'BurnPlanning',
+    name: "BurnPlanning",
     components: { BurnPlanElement },
     data: function () {
         return {};
     },
     computed: {},
     mounted: async function () {
-        console.log('BurnPlanning template loaded');
+        console.log("BurnPlanning template loaded");
     },
     methods: {},
 };

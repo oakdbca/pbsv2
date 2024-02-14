@@ -26,7 +26,9 @@ class RevisitInImplementationPlan(TimeStampedModel):
 class StandardControl(Control):
     """Control that can be configured in the admin panel"""
 
-    contributing_factor_standard_controls: "models.Manager[ContributingFactorStandardControl]"
+    contributing_factor_standard_controls: (
+        "models.Manager[ContributingFactorStandardControl]"
+    )
 
     class Meta:
         verbose_name = "Control (Standard)"
@@ -83,7 +85,9 @@ class ContributingFactorStandardControl(RevisitInImplementationPlan):
 
 
 class ContributingFactor(UniqueNameableModel, TimeStampedModel):
-    contributing_factor_standard_controls: "models.Manager[ContributingFactorStandardControl]"
+    contributing_factor_standard_controls: (
+        "models.Manager[ContributingFactorStandardControl]"
+    )
 
     factors = DecimalRangeField(default_bounds="[)", blank=True, null=True)  # type: ignore
     standard_controls: models.ManyToManyField = models.ManyToManyField(

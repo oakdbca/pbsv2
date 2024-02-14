@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import { helpers } from '@/utils/hooks';
+import { helpers } from "@/utils/hooks";
 
 export default {
-    name: 'RowSlotTemplate',
+    name: "RowSlotTemplate",
     props: {
         name: {
             type: String,
@@ -22,7 +22,7 @@ export default {
         colWidth: {
             type: String,
             required: false,
-            default: 'col-4',
+            default: "col-4",
         },
     },
     methods: {

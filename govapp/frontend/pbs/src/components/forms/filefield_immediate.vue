@@ -68,39 +68,39 @@
 </template>
 
 <script>
-import { api_endpoints, helpers } from '@/utils/hooks';
-import Swal from 'sweetalert2';
+import { api_endpoints, helpers } from "@/utils/hooks";
+import Swal from "sweetalert2";
 
 export default {
-    name: 'FileField',
+    name: "FileField",
     props: {
         headerCSS: {
             type: String,
-            default: '',
+            default: "",
         },
         name: {
             type: String,
-            default: '',
+            default: "",
         },
         label: {
             type: String,
-            default: '',
+            default: "",
         },
         id: {
             type: String,
-            default: '',
+            default: "",
         },
         fileTypes: {
             type: String,
             default: function () {
                 const file_types =
-                    'image/*,' +
-                    'video/*,' +
-                    'audio/*,' +
-                    'application/pdf,text/csv,application/msword,application/vnd.ms-excel,application/x-msaccess,' +
-                    'application/x-7z-compressed,application/x-bzip,application/x-bzip2,application/zip,' +
-                    '.dbf,.gdb,.gpx,.prj,.shp,.shx,' +
-                    '.json,.kml,.gpx';
+                    "image/*," +
+                    "video/*," +
+                    "audio/*," +
+                    "application/pdf,text/csv,application/msword,application/vnd.ms-excel,application/x-msaccess," +
+                    "application/x-7z-compressed,application/x-bzip,application/x-bzip2,application/zip," +
+                    ".dbf,.gdb,.gpx,.prj,.shp,.shx," +
+                    ".json,.kml,.gpx";
                 return file_types;
             },
         },
@@ -128,7 +128,7 @@ export default {
         },
         textString: {
             type: String,
-            default: 'Attach Document',
+            default: "Attach Document",
         },
         approvalType: {
             type: Number,
@@ -139,13 +139,13 @@ export default {
             required: true,
         },
     },
-    emits: ['update-parent', 'update-temp-doc-coll-id'],
+    emits: ["update-parent", "update-temp-doc-coll-id"],
     data: function () {
         return {
             show_spinner: false,
             documents: [],
             filename: null,
-            help_text_url: '',
+            help_text_url: "",
             commsLogId: null,
             temporary_document_collection_id: null,
         };
@@ -160,23 +160,23 @@ export default {
         },
         ffu_input_element_classname: function () {
             if (this.replaceButtonByText) {
-                return 'ffu-input-elem';
+                return "ffu-input-elem";
             }
-            return '';
+            return "";
         },
         csrf_token: function () {
-            return helpers.getCookie('csrftoken');
+            return helpers.getCookie("csrftoken");
         },
         document_action_url: function () {
-            let url = '';
-            if (this.documentActionUrl == 'temporary_document') {
+            let url = "";
+            if (this.documentActionUrl == "temporary_document") {
                 if (!this.temporary_document_collection_id) {
                     url = api_endpoints.temporary_document();
                 } else {
                     url =
                         api_endpoints.temporary_document() +
                         this.temporary_document_collection_id +
-                        '/process_temp_document/';
+                        "/process_temp_document/";
                 }
             } else {
                 url = this.documentActionUrl;
@@ -187,7 +187,7 @@ export default {
     watch: {
         documents: {
             handler: async function () {
-                this.$emit('update-parent');
+                this.$emit("update-parent");
             },
             deep: true,
         },
@@ -203,7 +203,7 @@ export default {
     mounted: async function () {
         await this.$nextTick().then(async () => {
             if (
-                this.documentActionUrl === 'temporary_document' &&
+                this.documentActionUrl === "temporary_document" &&
                 !this.temporary_document_collection_id
             ) {
                 // pass
@@ -218,13 +218,13 @@ export default {
                 // Input field id contains the document name which may contain
                 // special characters (e.g. !"#$%&'()*+,./:;<=>?@[]^`{|}~)
                 // Exact match treats values as strings.
-                $(`input[id='${value}']`).trigger('click');
+                $(`input[id='${value}']`).trigger("click");
             }
         },
         handleChange: async function (
-            /** @type {{ target: { files: string | any[]; }; }} */ e
+            /** @type {{ target: { files: string | any[]; }; }} */ e,
         ) {
-            console.log('Change', e.target.files);
+            console.log("Change", e.target.files);
             if (e.target.files.length > 0) {
                 await this.save_document(e);
             }
@@ -234,15 +234,15 @@ export default {
             this.show_spinner = true;
 
             if (this.document_action_url) {
-                formData.append('action', 'list');
+                formData.append("action", "list");
                 if (this.commsLogId) {
-                    formData.append('comms_log_id', this.commsLogId);
+                    formData.append("comms_log_id", this.commsLogId);
                 }
-                formData.append('input_name', this.name);
-                formData.append('csrfmiddlewaretoken', this.csrf_token);
+                formData.append("input_name", this.name);
+                formData.append("csrfmiddlewaretoken", this.csrf_token);
                 const res = await fetch(this.document_action_url, {
                     body: formData,
-                    method: 'POST',
+                    method: "POST",
                 });
                 const resData = await res.json();
                 this.documents = resData.filedata;
@@ -251,28 +251,28 @@ export default {
             this.show_spinner = false;
         },
         delete_all_documents: function () {
-            console.log('aho');
+            console.log("aho");
             for (const item of this.documents) {
                 this.delete_document(item);
             }
         },
         delete_document: async function (
-            /** @type {{ id: string | Blob; }} */ file
+            /** @type {{ id: string | Blob; }} */ file,
         ) {
             const formData = new FormData();
             this.show_spinner = true;
 
-            formData.append('action', 'delete');
-            formData.append('input_name', this.name);
+            formData.append("action", "delete");
+            formData.append("input_name", this.name);
             if (this.commsLogId) {
-                formData.append('comms_log_id', this.commsLogId);
+                formData.append("comms_log_id", this.commsLogId);
             }
-            formData.append('document_id', file.id);
-            formData.append('csrfmiddlewaretoken', this.csrf_token);
+            formData.append("document_id", file.id);
+            formData.append("csrfmiddlewaretoken", this.csrf_token);
             if (this.document_action_url) {
                 const res = await fetch(this.document_action_url, {
                     body: formData,
-                    method: 'POST',
+                    method: "POST",
                 });
                 const resData = await res.json();
                 this.documents = resData.filedata;
@@ -284,16 +284,16 @@ export default {
             this.show_spinner = true;
 
             const formData = new FormData();
-            formData.append('action', 'cancel');
-            formData.append('input_name', this.name);
+            formData.append("action", "cancel");
+            formData.append("input_name", this.name);
             if (this.commsLogId) {
-                formData.append('comms_log_id', this.commsLogId);
+                formData.append("comms_log_id", this.commsLogId);
             }
-            formData.append('csrfmiddlewaretoken', this.csrf_token);
+            formData.append("csrfmiddlewaretoken", this.csrf_token);
             if (this.document_action_url) {
                 await fetch(this.document_action_url, {
                     body: formData,
-                    method: 'POST',
+                    method: "POST",
                 });
             }
             this.show_spinner = false;
@@ -321,19 +321,19 @@ export default {
         handleChangeWrapper: async function (e) {
             this.show_spinner = true;
             if (
-                this.documentActionUrl === 'temporary_document' &&
+                this.documentActionUrl === "temporary_document" &&
                 !this.temporary_document_collection_id
             ) {
                 // If temporary_document, create TemporaryDocumentCollection object and allow document_action_url to update
                 const res = await fetch(this.document_action_url, {
-                    method: 'POST',
+                    method: "POST",
                 });
                 const resData = await res.json();
                 this.temporary_document_collection_id = resData.id;
                 await this.handleChange(e);
                 this.$emit(
-                    'update-temp-doc-coll-id',
-                    this.temporary_document_collection_id
+                    "update-temp-doc-coll-id",
+                    this.temporary_document_collection_id,
                 );
             } else {
                 await this.handleChange(e);
@@ -347,29 +347,29 @@ export default {
         save_document: async function (e) {
             const formData = new FormData();
             if (this.document_action_url) {
-                formData.append('action', 'save');
+                formData.append("action", "save");
                 if (this.commsLogId) {
-                    formData.append('comms_log_id', this.commsLogId);
+                    formData.append("comms_log_id", this.commsLogId);
                 }
                 if (this.temporary_document_collection_id) {
                     formData.append(
-                        'temporary_document_collection_id',
-                        this.temporary_document_collection_id
+                        "temporary_document_collection_id",
+                        this.temporary_document_collection_id,
                     );
                 }
-                formData.append('input_name', this.name);
-                formData.append('approval_type', this.approvalType.toString());
+                formData.append("input_name", this.name);
+                formData.append("approval_type", this.approvalType.toString());
                 formData.append(
-                    'approval_type_document_type',
-                    this.approvalTypeDocumentType.toString()
+                    "approval_type_document_type",
+                    this.approvalTypeDocumentType.toString(),
                 );
-                formData.append('filename', e.target.files[0].name);
-                formData.append('_file', this.uploadFile(e));
-                formData.append('csrfmiddlewaretoken', this.csrf_token);
+                formData.append("filename", e.target.files[0].name);
+                formData.append("_file", this.uploadFile(e));
+                formData.append("csrfmiddlewaretoken", this.csrf_token);
 
                 await fetch(this.document_action_url, {
                     body: formData,
-                    method: 'POST',
+                    method: "POST",
                 })
                     .then(async (response) => {
                         if (!response.ok) {
@@ -386,9 +386,9 @@ export default {
                     })
                     .catch((error) => {
                         Swal.fire({
-                            title: 'File Error',
+                            title: "File Error",
                             text: error,
-                            icon: 'error',
+                            icon: "error",
                         });
                     });
             }

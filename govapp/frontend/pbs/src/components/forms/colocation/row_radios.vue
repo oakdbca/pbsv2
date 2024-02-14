@@ -18,7 +18,7 @@
                     @change="
                         $emit(
                             'update:value',
-                            /** @type {any} */ ($event.target).value
+                            /** @type {any} */ ($event.target).value,
                         )
                     "
                 />
@@ -31,11 +31,11 @@
 </template>
 
 <script>
-import { helpers } from '@/utils/hooks';
-import RowSlotTemplate from '@/components/forms/colocation/row_slot_template.vue';
+import { helpers } from "@/utils/hooks";
+import RowSlotTemplate from "@/components/forms/colocation/row_slot_template.vue";
 
 export default {
-    name: 'RowRadiosComponent',
+    name: "RowRadiosComponent",
     components: {
         RowSlotTemplate,
     },
@@ -64,7 +64,7 @@ export default {
             default: false,
         },
     },
-    emits: ['update:value'],
+    emits: ["update:value"],
     methods: {
         replaceUnderscores: helpers.replaceUnderscores,
     },

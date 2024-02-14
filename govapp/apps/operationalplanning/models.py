@@ -143,15 +143,17 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         ContributingFactor, on_delete=models.CASCADE
     )
     values_affected = models.TextField(null=True, blank=True)
-    contributing_factor_control_overwrites: models.ManyToManyField = models.ManyToManyField(
-        OverwriteControl,
-        related_name="operational_plan_risk_category_contributing_factors",
-        editable=False,
-        through="OperationalPlanRiskCategoryContributingFactorOverwriteControl",
-        through_fields=(
-            "operational_plan_risk_category_contributing_factor",
-            "overwrite_control",
-        ),
+    contributing_factor_control_overwrites: models.ManyToManyField = (
+        models.ManyToManyField(
+            OverwriteControl,
+            related_name="operational_plan_risk_category_contributing_factors",
+            editable=False,
+            through="OperationalPlanRiskCategoryContributingFactorOverwriteControl",
+            through_fields=(
+                "operational_plan_risk_category_contributing_factor",
+                "overwrite_control",
+            ),
+        )
     )  # In IP the standard control contributing factors can be overwritten if revisit_in_implementation_plan is set
     risk_rating_standard = models.ForeignKey(
         RiskRating,

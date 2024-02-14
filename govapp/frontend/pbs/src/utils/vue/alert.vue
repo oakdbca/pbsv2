@@ -31,7 +31,7 @@ export default {
     props: {
         type: {
             type: String,
-            default: '',
+            default: "",
         },
         dismissable: {
             type: Boolean,
@@ -47,11 +47,11 @@ export default {
         },
         width: {
             type: String,
-            default: '100%',
+            default: "100%",
         },
         placement: {
             type: String,
-            default: '',
+            default: "",
         },
     },
     data: () => ({

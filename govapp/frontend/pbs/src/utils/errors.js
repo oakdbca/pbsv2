@@ -1,4 +1,4 @@
-import { constants } from './hooks';
+import { constants } from "./hooks";
 
 /** @module GovAppBaseError */
 
@@ -15,7 +15,7 @@ export class GovAppBaseError extends Error {
         this.name = this.constructor.name;
 
         /** @property {string} sender The origin call of the error */
-        this.sender = new Error().stack.split('\n')[3].replace(' at ', '');
+        this.sender = new Error().stack.split("\n")[3].replace(" at ", "");
 
         // Error.captureStackTrace(this, this.constructor);
     }
@@ -33,8 +33,8 @@ export class GovAppBaseError extends Error {
 
         let str = this.message;
 
-        while (str.indexOf('  ') > -1) {
-            str = str.replace('  ', ' ');
+        while (str.indexOf("  ") > -1) {
+            str = str.replace("  ", " ");
         }
 
         this.message = str;

@@ -72,7 +72,7 @@
                                     v-if="showRevisedIndicativeTreatmentYear"
                                     :key="
                                         keyRowComponent(
-                                            'revised_indicative_treatment_year'
+                                            'revised_indicative_treatment_year',
                                         )
                                     "
                                     name="revised_indicative_treatment_year"
@@ -211,15 +211,15 @@
 </template>
 
 <script>
-import { utils, api_endpoints } from '@/utils/hooks';
-import FormSection from '@/components/forms/section_toggle.vue';
-import RowInputComponent from '@/components/forms/colocation/row_input.vue';
-import RowSelectComponent from '@/components/forms/colocation/row_select.vue';
-import RowRadiosComponent from '@/components/forms/colocation/row_radios.vue';
-import RowTextareaComponent from '@/components/forms/colocation/row_textarea.vue';
+import { utils, api_endpoints } from "@/utils/hooks";
+import FormSection from "@/components/forms/section_toggle.vue";
+import RowInputComponent from "@/components/forms/colocation/row_input.vue";
+import RowSelectComponent from "@/components/forms/colocation/row_select.vue";
+import RowRadiosComponent from "@/components/forms/colocation/row_radios.vue";
+import RowTextareaComponent from "@/components/forms/colocation/row_textarea.vue";
 
 export default {
-    name: 'BurnPlanElement',
+    name: "BurnPlanElement",
     components: {
         FormSection,
         RowInputComponent,
@@ -236,51 +236,51 @@ export default {
     data: function () {
         return {
             burnPlanElement: {},
-            noTreatment: 'no_treatment',
+            noTreatment: "no_treatment",
         };
     },
     computed: {
         readOnlyFields: () => {
             return [
-                'name',
-                'year',
-                'reference_number',
-                'last_relevant_treatment_year',
-                'indicative_treatment_year',
+                "name",
+                "year",
+                "reference_number",
+                "last_relevant_treatment_year",
+                "indicative_treatment_year",
             ];
         },
         showRevisedIndicativeTreatmentYear: function () {
             return (
-                this.burnPlanElement['year'] ==
-                    this.burnPlanElement['indicative_treatment_year'] &&
-                this.burnPlanElement['treatment'] === this.noTreatment
+                this.burnPlanElement["year"] ==
+                    this.burnPlanElement["indicative_treatment_year"] &&
+                this.burnPlanElement["treatment"] === this.noTreatment
             );
         },
         preferredSeasons: () => {
-            return ['spring', 'summer', 'autumn', 'winter'];
+            return ["spring", "summer", "autumn", "winter"];
         },
         treatments: function () {
-            return ['burn', 'mechanical', 'both', this.noTreatment];
+            return ["burn", "mechanical", "both", this.noTreatment];
         },
         justifications: () => {
-            return ['a', 'b', 'c', 'd'];
+            return ["a", "b", "c", "d"];
         },
         purposes: () => {
-            return ['a', 'b', 'c', 'd'];
+            return ["a", "b", "c", "d"];
         },
         programs: () => {
-            return ['a', 'b', 'c', 'd'];
+            return ["a", "b", "c", "d"];
         },
     },
     mounted: async function () {
-        console.log('BPE template loaded');
+        console.log("BPE template loaded");
 
         utils
             .fetchUrl(api_endpoints.burn_plan_element(this.burnPlanElementId))
             .then((data) => {
                 this.burnPlanElement = Object.assign({}, data.results[0]);
                 console.log(
-                    `BPE fetched ${JSON.stringify(this.burnPlanElement)}`
+                    `BPE fetched ${JSON.stringify(this.burnPlanElement)}`,
                 );
             })
             .catch((error) => {

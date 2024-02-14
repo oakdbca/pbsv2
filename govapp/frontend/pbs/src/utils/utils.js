@@ -1,4 +1,4 @@
-import { NetworkError } from '@/utils/errors';
+import { NetworkError } from "@/utils/errors";
 
 export default {
     /**
@@ -16,18 +16,18 @@ export default {
         return new Promise((resolve, reject) => {
             const f = options === undefined ? fetch(url) : fetch(url, options);
             f.then(async (response) => {
-                const contentType = response.headers.get('content-type');
+                const contentType = response.headers.get("content-type");
                 if (contentType === null) return Promise.resolve(null);
 
                 let data;
-                if (contentType === 'application/vnd.ogc.wms_xml') {
+                if (contentType === "application/vnd.ogc.wms_xml") {
                     // KMI WMS returns XML
                     data = await response.text();
                 } else {
                     data = await response.json();
                     if (!response.ok) {
                         const error =
-                            (data.constructor.name === 'Array' && data) ||
+                            (data.constructor.name === "Array" && data) ||
                             (data && data.message) ||
                             response.statusText;
                         console.error(error);

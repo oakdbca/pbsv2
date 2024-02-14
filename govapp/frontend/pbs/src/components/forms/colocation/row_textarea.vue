@@ -14,11 +14,11 @@
 </template>
 
 <script>
-import { helpers } from '@/utils/hooks';
-import RowSlotTemplate from '@/components/forms/colocation/row_slot_template.vue';
+import { helpers } from "@/utils/hooks";
+import RowSlotTemplate from "@/components/forms/colocation/row_slot_template.vue";
 
 export default {
-    name: 'RowTextComponent',
+    name: "RowTextComponent",
     components: {
         RowSlotTemplate,
     },
@@ -30,7 +30,7 @@ export default {
         value: {
             type: [String, Number],
             required: false,
-            default: '',
+            default: "",
         },
         required: {
             type: Boolean,
@@ -43,7 +43,7 @@ export default {
             default: false,
         },
     },
-    emits: ['update:value'],
+    emits: ["update:value"],
     methods: {
         replaceUnderscores: helpers.replaceUnderscores,
     },
