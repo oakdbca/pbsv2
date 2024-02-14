@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import BurnPlanElement
+from .models import BurnPlanElement, Treatment
 
 
 class BurnPlanElementSerializer(serializers.ModelSerializer):
@@ -17,3 +17,9 @@ class BurnPlanElementSerializer(serializers.ModelSerializer):
 
     def get_district(self, obj):
         return obj.districts
+
+
+class TreatmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Treatment
+        fields = "__all__"
