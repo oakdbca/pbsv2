@@ -1,5 +1,6 @@
 {% extends "webtemplate_dbca/base_b5_auth_session.html" %}
 {% load static %}
+{% load users %}
 
 {% block extra_css %}
     <link rel="icon" type="image/png" href="{% static 'common/img/favicon.ico' %}">
@@ -34,6 +35,7 @@
 {% endblock %}
 
 {% block menu_dropdown %}
+    {% is_django_admin as is_django_admin %}
     {% if user.is_superuser or is_django_admin %}
         {% include 'webtemplate_dbca/includes/staff_menu.html' %}
     {% endif %}
