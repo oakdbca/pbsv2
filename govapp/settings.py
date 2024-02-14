@@ -123,7 +123,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "dbca_utils.middleware.SSOLoginMiddleware",
+    "govapp.middleware.PBSV2SSOLoginMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "govapp.middleware.CacheControl",
 ]
@@ -294,6 +294,9 @@ LOGGING: dict[str, Any] = {
 }
 
 if DEBUG is True:
+    LOGGING["loggers"]["django.template"] = {}
+    LOGGING["loggers"]["django.template"]["handlers"] = ["console_simple"]
+    LOGGING["loggers"]["django.template"]["level"] = "DEBUG"
     LOGGING["loggers"]["govapp"]["handlers"] = ["console_simple"]
     LOGGING["loggers"]["govapp"]["level"] = "DEBUG"
     LOGGING["loggers"]["govapp"]["propagate"] = False
