@@ -1,24 +1,22 @@
 <template lang="html">
     <div id="bp" class="container m-0, p-0">
         Burn Planning
-        <div class="row">
-            <BurnPlanElement :burn-plan-element-id="1"></BurnPlanElement>
-        </div>
+        <div class="row"><TableBurnPlanElements></TableBurnPlanElements></div>
     </div>
 </template>
 
 <script>
-import BurnPlanElement from "@/components/burnplanning/burnplanelement.vue";
+import TableBurnPlanElements from "@/components/burnplanning/table_burnplanelements.vue";
 
 export default {
     name: "BurnPlanning",
-    components: { BurnPlanElement },
+    components: { TableBurnPlanElements },
     data: function () {
         return {};
     },
     computed: {},
     mounted: async function () {
-        console.log("BurnPlanning template loaded");
+        console.log(`${this.$options?.name} template loaded`);
     },
     methods: {},
 };

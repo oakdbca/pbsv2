@@ -9,7 +9,7 @@
     ],
     "plugins": ["vue", "prettier", "@typescript-eslint"],
     "rules": {
-        "no-console": 1,
+        "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
         "prettier/prettier": "error"
     },
     "parserOptions": {

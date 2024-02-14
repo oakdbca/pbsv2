@@ -1,11 +1,18 @@
 from django import urls
+from rest_framework import routers
 
 from govapp.apps.burnplanning import views
 
+router = routers.DefaultRouter()
+router.register(
+    r"burn-plan-elements", views.BurnPlanElementViewSet, basename="burn-plan-elements"
+)
+
 urlpatterns = [
+    urls.path("api/", urls.include(router.urls)),
     urls.path(
-        "api/burn-plan-element/<int:pk>/",
-        views.BurnPlanElementViewSet.as_view({"get": "list"}),
-        name="burn-plan-element",
+        "burn-plan-elements/<int:pk>/",
+        views.BurnPlanElementView.as_view(),
+        name="burn-plan-elements",
     ),
 ]

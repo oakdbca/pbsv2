@@ -227,12 +227,7 @@ export default {
         RowRadiosComponent,
         RowTextareaComponent,
     },
-    props: {
-        burnPlanElementId: {
-            type: Number,
-            required: true,
-        },
-    },
+    props: {},
     data: function () {
         return {
             burnPlanElement: {},
@@ -273,13 +268,15 @@ export default {
         },
     },
     mounted: async function () {
-        console.log("BPE template loaded");
+        console.info(`${this.$options?.name} template loaded`);
+
+        const id = this.$route.params.pk;
 
         utils
-            .fetchUrl(api_endpoints.burn_plan_element(this.burnPlanElementId))
+            .fetchUrl(api_endpoints.burn_plan_elements(id))
             .then((data) => {
-                this.burnPlanElement = Object.assign({}, data.results[0]);
-                console.log(
+                this.burnPlanElement = Object.assign({}, data);
+                console.info(
                     `BPE fetched ${JSON.stringify(this.burnPlanElement)}`,
                 );
             })

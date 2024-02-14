@@ -113,6 +113,7 @@ INSTALLED_APPS = [
     "coverage",
     "protected_media.apps.ProtectedMediaConfig",
     "nested_admin",
+    "appmonitor_client",
     "drf_standardized_errors",
 ]
 MIDDLEWARE = [
@@ -321,7 +322,9 @@ EMAIL_DELIVERY = decouple.config("EMAIL_DELIVERY", default="off")
 
 # Django Cron
 CRON_SCANNER_PERIOD_MINS = 5  # Run every 5 minutes
-CRON_CLASSES: list[str] = []
+CRON_CLASSES: list[str] = [
+    "appmonitor_client.cron.CronJobAppMonitorClient",
+]
 
 # Django debug toolbar
 SHOW_DEBUG_TOOLBAR = decouple.config("SHOW_DEBUG_TOOLBAR", default=False, cast=bool)

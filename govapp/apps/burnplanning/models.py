@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PolygonField
 from django.contrib.gis.db.models.functions import Area
-from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.fields.related_descriptors import ReverseManyToOneDescriptor
 from django.db.models.functions import Cast
@@ -15,6 +14,7 @@ from govapp.apps.main.models import (
     ArchivableModel,
     AssignableModel,
     District,
+    IntervalIntegerField,
     NameableModel,
     ReferenceableModel,
     UniqueNameableModel,
@@ -68,6 +68,7 @@ class BurnPlanUnit(
     polygon = PolygonField(blank=True, null=True)
     active_from = YearField(null=True, blank=True)
     active_to = YearField(null=True, blank=True)
+    return_interval = IntervalIntegerField(min_value=1, null=True, blank=True)
     allow_recording_of_hectares = models.BooleanField(default=False)
 
     def __str__(self):
@@ -179,16 +180,14 @@ class BurnPlanElement(
     last_relevant_treatment_year = YearField(null=True, blank=True)
     indicative_treatment_year = YearField(null=True, blank=True)
     revised_indicative_treatment_year = YearField(null=True, blank=True)
-    return_interval = models.IntegerField(
-        null=True, blank=True, validators=[MinValueValidator(1)]
-    )
+    return_interval = IntervalIntegerField(min_value=1, null=True, blank=True)
     preferred_season = models.CharField(
         max_length=255, choices=settings.SEASON_CHOICES, null=True, blank=True
     )
-    treatment = models.OneToOneField(
+    treatment = models.ForeignKey(
         to=Treatment, on_delete=models.PROTECT, null=True, blank=True
     )
-    justification = models.OneToOneField(
+    justification = models.ForeignKey(
         to=Justification, on_delete=models.PROTECT, null=True, blank=True
     )
     purposes = models.ManyToManyField(Purpose)
@@ -202,6 +201,7 @@ class BurnPlanElement(
         return super().user_is_assignable(user)
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         for output_leader_types in OutputLeaderType.objects.all():
             output_leader, created = OutputLeader.objects.get_or_create(
                 type=output_leader_types, burn_plan_element=self
@@ -209,4 +209,10 @@ class BurnPlanElement(
             if created:
                 logger.info(f"Created output leader: {output_leader}")
 
-        return super().save(*args, **kwargs)
+    @property
+    def districts(self):
+        return "TBI"
+
+    @property
+    def regions(self):
+        return "TBI"
