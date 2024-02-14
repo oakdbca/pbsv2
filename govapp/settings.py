@@ -294,9 +294,10 @@ LOGGING: dict[str, Any] = {
 }
 
 if DEBUG is True:
-    LOGGING["loggers"]["django.template"] = {}
-    LOGGING["loggers"]["django.template"]["handlers"] = ["console_simple"]
-    LOGGING["loggers"]["django.template"]["level"] = "DEBUG"
+    if ENVIRONMENT == "local":
+        LOGGING["loggers"]["django.template"] = {}
+        LOGGING["loggers"]["django.template"]["handlers"] = ["console_simple"]
+        LOGGING["loggers"]["django.template"]["level"] = "DEBUG"
     LOGGING["loggers"]["govapp"]["handlers"] = ["console_simple"]
     LOGGING["loggers"]["govapp"]["level"] = "DEBUG"
     LOGGING["loggers"]["govapp"]["propagate"] = False
