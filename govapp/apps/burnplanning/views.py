@@ -3,11 +3,12 @@ from django.db.models.query import QuerySet
 from django_filters import rest_framework as filters
 from rest_framework import response, viewsets
 
+from govapp.apps.main.views import KeyValueListMixin
 from govapp.common.views import BaseView
 
 from .filters import BurnPlanElementFilter
-from .models import BurnPlanElement
-from .serializers import BurnPlanElementSerializer
+from .models import BurnPlanElement, Treatment
+from .serializers import BurnPlanElementSerializer, TreatmentSerializer
 
 
 class BurnPlanElementViewSet(viewsets.ModelViewSet):
@@ -31,6 +32,13 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
 
 
 class BurnPlanElementView(BaseView):
-    """Burn Plan Element page view."""
+    """Burn Plan Element page view"""
 
     model = BurnPlanElement
+
+
+class TreatmentViewSet(KeyValueListMixin, viewsets.GenericViewSet):
+    """Treatment viewset"""
+
+    queryset = Treatment.objects.all()
+    serializer_class = TreatmentSerializer
