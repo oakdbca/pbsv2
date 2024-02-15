@@ -49,6 +49,11 @@ urlpatterns = [
     # Protected media
     urls.path("protected/", urls.include("protected_media.urls")),
     # Django Administration
+    urls.path(
+        "management-commands/",
+        views.ManagementCommandsView.as_view(),
+        name="management-commands",
+    ),
     urls.path("admin/", admin.site.urls),
     urls.path("sentry-debug/", trigger_error),
     # Include urls from other apps
