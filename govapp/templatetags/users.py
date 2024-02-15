@@ -19,3 +19,9 @@ def is_internal(context):
 def is_django_admin(context):
     request = context["request"]
     return helpers.is_django_admin(request.user)
+
+
+@register.simple_tag(takes_context=True)
+def is_pbs_admin(context):
+    request = context["request"]
+    return helpers.is_pbs_admin(request.user)
