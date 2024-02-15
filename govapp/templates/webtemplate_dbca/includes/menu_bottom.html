@@ -1,5 +1,5 @@
 <li role="separator" class="divider"></li>
-{% if request.user.is_superuser %}
-    <li><a class="dropdown-item" href="{% url 'mgt-commands' %}">Management Commands</a></li>
+{% if user.is_superuser %}
+    <li><a class="dropdown-item" href="{% url 'management-commands' %}">Management Commands</a></li>
 {% endif %}
-<li><a class="dropdown-item" href="/ledger-ui/accounts">Manage Account</a></li>
+<li><a class="dropdown-item" href="/manage-account">Manage Account</a></li>

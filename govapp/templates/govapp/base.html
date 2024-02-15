@@ -1,6 +1,7 @@
 {% extends "webtemplate_dbca/base_b5_auth_session.html" %}
 {% load static %}
 {% load users %}
+{% load utils %}
 
 {% block extra_css %}
     <link rel="icon" type="image/png" href="{% static 'common/img/favicon.ico' %}">
@@ -36,11 +37,12 @@
 
 {% block menu_dropdown %}
     {% is_django_admin as is_django_admin %}
+    {% is_pbs_admin as is_pbs_admin %}
     {% if user.is_superuser or is_django_admin %}
         {% include 'webtemplate_dbca/includes/staff_menu.html' %}
     {% endif %}
     {% block menu_extra_dropdown_staff_top %}
-        {% if user.is_superuser or is_admin %}
+        {% if user.is_superuser or is_pbs_admin %}
             {% include 'webtemplate_dbca/includes/staff_menu_extras.html' %}
         {% endif %}
     {% endblock %}
@@ -103,14 +105,23 @@
     <script type="text/javascript" src="{% static 'pbsv2_vue/js/app.js' %}?v={{build_tag}}"></script>
 {% endblock %}
 
-{% block page_footer %}
-<footer class="footer mt-auto py-3">
-    <div class="container-fluid">
+{% block footer %}
+{% project_version as project_version %}
+{% support_email as support_email %}
+{% support_phone as support_phone %}
+<footer class="footer fixed-bottom mt-3">
+    <div class="container-fluid border-top py-2 bg-light text-secondary">
         <div class="row">
             <div class="col">
-                <small class="float-right">&copy; Department of Biodiversity, Conservation and Attractions</small>
+                <small class="float-start">Version: {% project_version %}</small>
+            </div>
+            <div class="col">
+                <small>Support: <a href="mailto:{% support_email %}">{% support_email %}</a> | <a href="tel:{% support_phone %}">{% support_phone %}</a></small>
+            </div>
+            <div class="col">
+                <small class="float-end">&copy; {% department_name %}</small>
             </div>
         </div>
     </div>
 </footer>
-{% endblock page_footer %}
+{% endblock footer %}
