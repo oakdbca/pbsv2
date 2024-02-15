@@ -69,7 +69,6 @@
         "@types/bootstrap": "^5.2",
         "@types/jquery": "^3.5",
         "@types/lodash": "^4.14.202",
-        "@types/pdfmake": "^0.2.9",
         "@types/uuid": "^9.0",
         "@typescript-eslint/parser": "^7.0",
         "@vue/eslint-config-typescript": "^12.0",
