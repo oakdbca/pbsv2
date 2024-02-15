@@ -9,29 +9,19 @@ UserModel = auth.get_user_model()
 
 
 class HomePage(base.TemplateView):
-    """Home page view."""
-
-    # Template name
     template_name = "govapp/home.html"
 
     def get(
         self, request: http.HttpRequest, *args: Any, **kwargs: Any
     ) -> http.HttpResponse:
-        """Provides the GET request endpoint for the HomePage view.
+        if request.user.is_authenticated:
+            self.template_name = "govapp/index.html"
 
-        Args:
-            request (http.HttpRequest): The incoming HTTP request.
-            *args (Any): Extra positional arguments.
-            **kwargs (Any): Extra keyword arguments.
+        return shortcuts.render(request, self.template_name, context={})
 
-        Returns:
-            http.HttpResponse: The rendered template response.
-        """
-        # Construct Context
-        context: dict[str, Any] = {}
-        # return http.HttpResponseRedirect('/catalogue/entries/')
-        # Render Template and Return
-        return shortcuts.render(request, self.template_name, context)
+
+class IndexPage(base.TemplateView):
+    template_name = "govapp/index.html"
 
 
 class ManagementCommandsView(
