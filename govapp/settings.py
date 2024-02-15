@@ -62,7 +62,12 @@ PROJECT_DESCRIPTION = (
     "A system to manage risk, planning, implementation and post-implementation "
     "review for the mitigation of bushfires in Western Australia"
 )
-PROJECT_VERSION = "v2"
+PROJECT_VERSION = "2.0.0"
+
+DEPARTMENT_NAME = "Department of Biodiversity, Conservation and Attractions"
+SUPPORT_PHONE = "(08) 0000 0000"
+SUPPORT_EMAIL = "oim.servicedesk@dbca.wa.gov.au"
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -409,8 +414,6 @@ SEASON_CHOICES = (
 
 # Groups
 
-DJANGO_ADMIN = "Django Admin"
-
 CORPORATE_EXECUTIVE = "Corporate Executive"
 DISTRICT_DUTY_OFFICER = "District Duty Officer"
 DISTRICT_FIRE_COORDINATOR = "District Fire Coordinator"
@@ -425,6 +428,7 @@ SCHEDULER = "Scheduler"
 STATE_AVIATION = "State Aviation"
 STATE_DUTY_OFFICER = "State Duty Officer"
 STATE_MANAGER = "State Manager"
+PBS_ADMIN = "PBS Admin"
 
 DJANGO_GROUPS = [
     CORPORATE_EXECUTIVE,
@@ -442,6 +446,7 @@ DJANGO_GROUPS = [
     STATE_DUTY_OFFICER,
     STATE_MANAGER,
     DJANGO_ADMIN,
+    PBS_ADMIN,
 ]
 
 # Configure CKEditor 5
