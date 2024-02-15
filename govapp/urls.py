@@ -45,7 +45,7 @@ urlpatterns = [
     # Home Page
     urls.path("", views.HomePage.as_view(), name="home"),
     urls.path("test", views.HomePage.as_view(), name="test"),
-    urls.path("burnplanning", views.HomePage.as_view(), name="burnplanning"),
+    urls.path("burnplanning", views.IndexPage.as_view(), name="burnplanning"),
     # Protected media
     urls.path("protected/", urls.include("protected_media.urls")),
     # Django Administration
