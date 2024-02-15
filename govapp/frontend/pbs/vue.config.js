@@ -1,8 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const {
-    CKEditorTranslationsPlugin,
-} = require('@ckeditor/ckeditor5-dev-translations');
 const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 
 // Useful plugin to find out what is making the bundle so big
