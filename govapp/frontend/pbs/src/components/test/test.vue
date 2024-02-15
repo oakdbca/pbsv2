@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { NotImplementedError } from "@/utils/errors";
-import { utils, helpers } from "@/utils/hooks";
+import { NotImplementedError } from '@/utils/errors';
+import { utils, helpers } from '@/utils/hooks';
 
 /**
  * Test URL for testing fetchUrl
@@ -14,21 +14,21 @@ import { utils, helpers } from "@/utils/hooks";
 const testUrlOk = `https://kmi.dbca.wa.gov.au/geoserver/public/wms/?SERVICE=WMS&VERSION=1.0.0&REQUEST=GetCapabilities`;
 
 export default {
-    name: "TestVue",
+    name: 'TestVue',
     components: {},
     data: function () {
         return {};
     },
     computed: {},
     mounted: async function () {
-        console.log("test template loaded");
+        console.log('test template loaded');
         this.testErrors();
         this.testFetch(testUrlOk);
-        this.testFetch("https://fail.to.fetch");
+        this.testFetch('https://fail.to.fetch');
         /**
          * @type {DateStr} date_str
          */
-        const date_str = "2021-01-01";
+        const date_str = '2021-01-01';
         this.testDate(date_str);
         this.testDate(null);
         this.testDate(undefined);
@@ -37,7 +37,7 @@ export default {
         testErrors: () => {
             try {
                 throw new NotImplementedError(
-                    "test.vue: Testing error handling",
+                    'test.vue: Testing error handling',
                 );
             } catch (error) {
                 console.log(error);

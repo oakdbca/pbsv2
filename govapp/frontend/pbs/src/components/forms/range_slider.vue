@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid';
 
 export default {
-    name: "RangeSlider",
+    name: 'RangeSlider',
     props: {
         min: {
             type: Number,
@@ -34,7 +34,7 @@ export default {
             },
         },
     },
-    emits: ["valueChanged"],
+    emits: ['valueChanged'],
     data: function () {
         return {
             my_id: uuid(),
@@ -43,7 +43,7 @@ export default {
     },
     watch: {
         my_value: function () {
-            this.$emit("valueChanged", this.my_value);
+            this.$emit('valueChanged', this.my_value);
         },
     },
     created: function () {

@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid';
 
 export default {
-    name: "FormSection",
+    name: 'FormSection',
     props: {
         label: {
             type: String,
@@ -48,7 +48,7 @@ export default {
         },
         subtitle: {
             type: String,
-            default: "",
+            default: '',
         },
         index: {
             type: String,
@@ -60,7 +60,7 @@ export default {
         },
         customColor: {
             type: String,
-            default: "",
+            default: '',
         },
         formCollapse: {
             type: Boolean,
@@ -70,18 +70,18 @@ export default {
     data: function () {
         return {
             custom_id: uuid(),
-            chevron_elem_id: "chevron_elem_" + uuid(),
+            chevron_elem_id: 'chevron_elem_' + uuid(),
         };
     },
     computed: {
         detailsClass: function () {
-            return this.formCollapse ? "card-body collapse" : "card-body";
+            return this.formCollapse ? 'card-body collapse' : 'card-body';
         },
         section_header_id: function () {
-            return "section_header_" + this.index;
+            return 'section_header_' + this.index;
         },
         section_body_id: function () {
-            return "section_body_" + this.index;
+            return 'section_body_' + this.index;
         },
     },
     mounted: function () {
@@ -95,7 +95,7 @@ export default {
          * @param {Event} evt An event object
          */
         toggle_show_hide: function (evt) {
-            if (!evt.target["classList"].contains("down-chevron-open")) {
+            if (!evt.target['classList'].contains('down-chevron-open')) {
                 // Only redraw the datatable if the section is being opened
                 return;
             }
@@ -138,7 +138,7 @@ export default {
                     Object.keys(ref).forEach((key) => {
                         if (ref[key].vmDataTable) {
                             console.log(`Calling draw on ${ref[key].id}`);
-                            ref[key].vmDataTable.draw("page");
+                            ref[key].vmDataTable.draw('page');
                         }
                     });
                 });

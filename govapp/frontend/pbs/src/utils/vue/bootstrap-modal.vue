@@ -64,13 +64,13 @@
  * Bootstrap Style Modal Component for Vue
  * Depend on Bootstrap.css
  */
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid';
 
 export default {
     props: {
         title: {
             type: String,
-            default: "Modal",
+            default: 'Modal',
         },
         small: {
             type: Boolean,
@@ -94,23 +94,23 @@ export default {
         },
         transition: {
             type: String,
-            default: "modal",
+            default: 'modal',
         },
         okText: {
             type: String,
-            default: "Confirm",
+            default: 'Confirm',
         },
         cancelText: {
             type: String,
-            default: "Cancel",
+            default: 'Cancel',
         },
         okClass: {
             type: String,
-            default: "btn btn-primary",
+            default: 'btn btn-primary',
         },
         cancelClass: {
             type: String,
-            default: "btn btn-secondary",
+            default: 'btn btn-secondary',
         },
         closeWhenOK: {
             type: Boolean,
@@ -125,7 +125,7 @@ export default {
             default: false,
         },
     },
-    emits: ["created", "mounted", "ok", "cancel"],
+    emits: ['created', 'mounted', 'ok', 'cancel'],
     data() {
         return {
             duration: null,
@@ -135,17 +135,17 @@ export default {
     computed: {
         modalClass() {
             return {
-                "modal-xl": this.extraLarge,
-                "modal-lg": this.large,
-                "modal-sm": this.small,
-                "modal-full": this.full,
-                "modal-dialog-scrollable": this.scrollable,
+                'modal-xl': this.extraLarge,
+                'modal-lg': this.large,
+                'modal-sm': this.small,
+                'modal-full': this.full,
+                'modal-dialog-scrollable': this.scrollable,
             };
         },
         show: function () {
             // Using a type guard to bypass type assertion expressions not being available in JS files
             const parent = this.$parent;
-            if (parent && "isModalOpen" in parent) {
+            if (parent && 'isModalOpen' in parent) {
                 return parent.isModalOpen;
             }
             return false;
@@ -154,12 +154,12 @@ export default {
     watch: {
         show(value) {
             if (value) {
-                document.body.className += " modal-open";
+                document.body.className += ' modal-open';
             } else {
                 window.setTimeout(() => {
                     document.body.className = document.body.className.replace(
                         /\s?modal-open/,
-                        "",
+                        '',
                     );
                 }, this.duration || 0);
             }
@@ -167,30 +167,30 @@ export default {
     },
     created: function () {
         if (this.show) {
-            document.body.className += " modal-open";
+            document.body.className += ' modal-open';
         }
-        this.$emit("created");
+        this.$emit('created');
     },
     mounted: function () {
-        this.$emit("mounted");
+        this.$emit('mounted');
     },
     beforeUnmount() {
         document.body.className = document.body.className.replace(
             /\s?modal-open/,
-            "",
+            '',
         );
     },
     methods: {
         ok() {
-            this.$emit("ok");
+            this.$emit('ok');
             if (this.closeWhenOK) {
                 this.show = false;
             }
         },
         cancel() {
-            this.$emit("cancel");
+            this.$emit('cancel');
             const parent = this.$parent;
-            if ("close" in parent && typeof parent.close === "function") {
+            if ('close' in parent && typeof parent.close === 'function') {
                 parent.close();
             }
         },
@@ -218,7 +218,7 @@ export default {
     background-color: #226fbb;
     color: #fff;
     background: #3580ca
-        url("../../../../../../staticfiles_ll/img/parks-bg-banner.gif") repeat-x
+        url('../../../../../../staticfiles_ll/img/parks-bg-banner.gif') repeat-x
         center bottom;
 }
 

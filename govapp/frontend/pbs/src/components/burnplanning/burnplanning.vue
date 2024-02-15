@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import TableBurnPlanElements from "@/components/burnplanning/table_burnplanelements.vue";
+import TableBurnPlanElements from '@/components/burnplanning/table_burnplanelements.vue';
 
 export default {
-    name: "BurnPlanning",
+    name: 'BurnPlanning',
     components: { TableBurnPlanElements },
     data: function () {
         return {};

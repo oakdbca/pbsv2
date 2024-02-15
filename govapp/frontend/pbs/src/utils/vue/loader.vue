@@ -15,7 +15,7 @@
 
 <script>
 export default {
-    name: "SpinnerLoader",
+    name: 'SpinnerLoader',
     props: {
         isLoading: {
             type: Boolean,

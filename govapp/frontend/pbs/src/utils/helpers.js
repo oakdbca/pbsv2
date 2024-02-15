@@ -4,17 +4,17 @@ export default {
      * @param {Error|any} err An error object
      */
     formatError: function (err) {
-        let returnStr = "";
+        let returnStr = '';
         // object {}
         if (
-            typeof err.body === "object" &&
-            !Object.prototype.hasOwnProperty.call(err.body, "length")
+            typeof err.body === 'object' &&
+            !Object.prototype.hasOwnProperty.call(err.body, 'length')
         ) {
             for (const key of Object.keys(err.body)) {
                 returnStr += `${key}: ${err.body[key]} <br/>`;
             }
             // array
-        } else if (typeof err.body === "object") {
+        } else if (typeof err.body === 'object') {
             returnStr = err.body[0];
             // string
         } else {
@@ -27,21 +27,21 @@ export default {
      * @param {Error} errors
      */
     formatErrorV2: function (errors) {
-        if (typeof errors === "string") {
+        if (typeof errors === 'string') {
             return errors;
         }
         if (Array.isArray(errors)) {
             if (1 == errors.length) {
                 return errors[0];
             } else {
-                let errors_str = "";
+                let errors_str = '';
                 for (let i = 0; i < errors.length; i++) {
-                    errors_str += errors[i] + "<br/>";
+                    errors_str += errors[i] + '<br/>';
                 }
                 return errors_str;
             }
         }
-        if (typeof errors === "object") {
+        if (typeof errors === 'object') {
             if (1 == Object.keys(errors).length) {
                 return Object.values(errors)[0];
             } else {
@@ -51,7 +51,7 @@ export default {
                         errors[key],
                     )}</li>`;
                 }
-                return errors_str + "</ul>";
+                return errors_str + '</ul>';
             }
         }
     },
@@ -61,11 +61,11 @@ export default {
      */
     escapeHtml: function (htmlStr) {
         return htmlStr
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;");
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     },
     /**
      * Returns a cookie value by name
@@ -73,13 +73,13 @@ export default {
      */
     getCookie: function (name) {
         let value = null;
-        if (document.cookie && document.cookie !== "") {
-            const cookies = document.cookie.split(";");
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
                 if (
                     cookie.substring(0, name.length + 1).trim() ===
-                    name + "="
+                    name + '='
                 ) {
                     value = decodeURIComponent(
                         cookie.substring(name.length + 1),
@@ -98,10 +98,10 @@ export default {
     add_endpoint_join: function (api_string, addition) {
         // assumes api_string has trailing forward slash '/' character required for POST
         let endpoint = api_string + addition;
-        endpoint = endpoint.replace("//", "/"); // Remove duplicated '/' just in case
+        endpoint = endpoint.replace('//', '/'); // Remove duplicated '/' just in case
         // if the last character is not a forward slash then add one
-        if (endpoint.slice(-1) != "/") {
-            endpoint += "/";
+        if (endpoint.slice(-1) != '/') {
+            endpoint += '/';
         }
         return endpoint;
     },
@@ -120,30 +120,30 @@ export default {
      * @param {string[]=} additional_class_names
      */
     getFileIconClass: function (filepath, additional_class_names = []) {
-        const ext = filepath.split(".").pop().toLowerCase();
+        const ext = filepath.split('.').pop().toLowerCase();
         const classname = additional_class_names;
 
-        if (["png", "jpg", "jpeg", "bmp", "tiff", "tif"].includes(ext)) {
-            classname.push("bi-file-image-fill");
-        } else if (["pdf"].includes(ext)) {
-            classname.push("bi-file-pdf-fill");
-        } else if (["doc", "docx"].includes(ext)) {
-            classname.push("bi-file-word-fill");
-        } else if (["xls", "xlsx"].includes(ext)) {
-            classname.push("bi-file-excel-fill");
-        } else if (["txt", "text"].includes(ext)) {
-            classname.push("bi-file-text-fill");
-        } else if (["rtf"].includes(ext)) {
-            classname.push("bi-file-richtext-fill");
-        } else if (["mp3", "mp4"].includes(ext)) {
-            classname.push("bi-file-play-fill");
+        if (['png', 'jpg', 'jpeg', 'bmp', 'tiff', 'tif'].includes(ext)) {
+            classname.push('bi-file-image-fill');
+        } else if (['pdf'].includes(ext)) {
+            classname.push('bi-file-pdf-fill');
+        } else if (['doc', 'docx'].includes(ext)) {
+            classname.push('bi-file-word-fill');
+        } else if (['xls', 'xlsx'].includes(ext)) {
+            classname.push('bi-file-excel-fill');
+        } else if (['txt', 'text'].includes(ext)) {
+            classname.push('bi-file-text-fill');
+        } else if (['rtf'].includes(ext)) {
+            classname.push('bi-file-richtext-fill');
+        } else if (['mp3', 'mp4'].includes(ext)) {
+            classname.push('bi-file-play-fill');
         } else {
-            classname.push("bi-file_fill");
+            classname.push('bi-file_fill');
         }
 
-        return classname.join(" ");
+        return classname.join(' ');
     },
     replaceUnderscores: function (/** @type {string} */ str) {
-        return str.replace(/_/g, " ");
+        return str.replace(/_/g, ' ');
     },
 };

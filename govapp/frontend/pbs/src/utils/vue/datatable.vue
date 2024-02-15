@@ -23,7 +23,7 @@
 </template>
 <script>
 export default {
-    name: "DataTable",
+    name: 'DataTable',
     props: {
         dtHeaders: {
             type: Array,
@@ -46,8 +46,8 @@ export default {
     },
     computed: {},
     mounted: function () {
-        this.table = $("#" + this.id);
-        $.fn.dataTable.ext.errMode = "throw";
+        this.table = $('#' + this.id);
+        $.fn.dataTable.ext.errMode = 'throw';
         this.initEvents();
     },
     methods: {
@@ -121,14 +121,14 @@ table.dataTable thead .sorting_asc {
 }
 table.collapsed > tbody > tr > td > span.responsiveExpander,
 table.has-columns-hidden > tbody > tr > td > span.responsiveExpander {
-    background: url("https://raw.githubusercontent.com/Comanche/datatables-responsive/master/files/1.10/img/plus.png")
+    background: url('https://raw.githubusercontent.com/Comanche/datatables-responsive/master/files/1.10/img/plus.png')
         no-repeat 5px center;
     padding-left: 32px;
     cursor: pointer;
 }
 table.collapsed > tbody > tr.parent > td span.responsiveExpander,
 table.has-columns-hidden > tbody > tr.detail-show > td span.responsiveExpander {
-    background: url("https://raw.githubusercontent.com/Comanche/datatables-responsive/master/files/1.10/img/minus.png")
+    background: url('https://raw.githubusercontent.com/Comanche/datatables-responsive/master/files/1.10/img/minus.png')
         no-repeat 5px center;
 }
 table.collapsed > tbody > tr > td.child,
