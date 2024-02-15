@@ -155,7 +155,7 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style scoped lang="css">
 @import '@/../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 @import '@/../node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
