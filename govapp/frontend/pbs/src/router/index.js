@@ -1,6 +1,5 @@
 import { RouterView } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
-import Test from '@/components/test/test.vue';
 import BurnPlanning from '@/components/burnplanning/burnplanning.vue';
 import BurnPlanElement from '@/components/burnplanning/burnplanelement.vue';
 
@@ -17,11 +16,6 @@ const router = createRouter({
         {
             path: '/:pathMatch(.+)',
             component: NotFoundComponent,
-        },
-        {
-            path: '/test',
-            name: 'test-page',
-            component: Test,
         },
         {
             path: '/burnplanning',
