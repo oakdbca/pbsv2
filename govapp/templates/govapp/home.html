@@ -1,5 +1,50 @@
 {% extends 'govapp/base.html' %}
+{% load utils %}
+
 
 {% block content %}
-    <div id="app"></div>
+{% project_title as project_title %}
+<div class="container px-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>
+                Welcome to the {% project_title %}
+            </h2>
+            <p class="w-75">
+                <p>This system can be used to participate in the following activities:</p>
+                <ul class="list-group">
+                    <li class="list-group-item">Risk Management
+                        <p class="text-secondary pt-3">Management of the risks that bush fires pose to Western Australia's rich assets such as people and homes, flora and fauna, cultural sites, infrastructure, business and more.</p>
+                    </li>
+                    <li class="list-group-item">Burn Planning
+                        <p class="text-secondary pt-3">Maecenas aliquet felis lacus. Donec pretium porta elit. Nulla lobortis dapibus augue, at lacinia ipsum feugiat non. Nunc ut justo id massa convallis molestie. Proin sagittis turpis non quam lacinia dignissim.</p>
+                    </li>
+                    <li class="list-group-item">Operational Planning
+                        <p class="text-secondary pt-3">Maecenas aliquet felis lacus. Donec pretium porta elit. Nulla lobortis dapibus augue, at lacinia ipsum feugiat non. Nunc ut justo id massa convallis molestie. Proin sagittis turpis non quam lacinia dignissim.</p>
+                    </li>
+                    <li class="list-group-item">Implementation
+                        <p class="text-secondary pt-3">Maecenas aliquet felis lacus. Donec pretium porta elit. Nulla lobortis dapibus augue, at lacinia ipsum feugiat non. Nunc ut justo id massa convallis molestie. Proin sagittis turpis non quam lacinia dignissim.</p>
+                    </li>
+                    <li class="list-group-item">Post-Implementation
+                        <p class="text-secondary pt-3">Maecenas aliquet felis lacus. Donec pretium porta elit. Nulla lobortis dapibus augue, at lacinia ipsum feugiat non. Nunc ut justo id massa convallis molestie. Proin sagittis turpis non quam lacinia dignissim.</p>
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <strong>{% project_title %} Login</strong>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        When you click the login button you will be logged in automatically using your Single Sign On (SSO) account.
+
+                    </p>
+                    <a href="/ssologin" class="btn btn-primary">Login or Register</a>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
