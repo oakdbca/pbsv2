@@ -46,7 +46,6 @@
         "jszip": "^3.9",
         "lodash": "^4.17",
         "ol": "^8.1",
-        "pdfmake": "^0.2.9",
         "postcss-loader": "^8.1",
         "raw-loader": "^4.0",
         "select2": "^4.0",
