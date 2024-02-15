@@ -240,7 +240,8 @@ else:
 # https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        "govapp.permissions.IsInternal",  # Only internal userscan access the API
+        # TODO: Change this if business requires allowing external users to access the API
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_RENDERER_CLASSES": rest_framework_renderer_classes,
