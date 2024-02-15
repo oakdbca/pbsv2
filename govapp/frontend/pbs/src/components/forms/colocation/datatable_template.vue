@@ -28,14 +28,6 @@ import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import 'datatables.net-select-bs5';
 
-import pdfMake from 'pdfmake';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 DataTable.use(DataTablesCore);
 
 export default {
