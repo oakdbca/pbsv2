@@ -36,7 +36,6 @@
         "@ckeditor/ckeditor5-vue": "^5.1",
         "@dbca/gov-vue3-components": "^0.0.11",
         "@fortawesome/fontawesome-free": "^6.0",
-        "@types/lodash": "^4.14.202",
         "@vue/cli-service": "^5.0.4",
         "datatables.net-bs5": "^1.12.1",
         "datatables.net-buttons-bs5": "^2.3.3",
@@ -70,6 +69,7 @@
     "devDependencies": {
         "@types/bootstrap": "^5.2",
         "@types/jquery": "^3.5",
+        "@types/lodash": "^4.14.202",
         "@types/pdfmake": "^0.2.9",
         "@types/uuid": "^9.0",
         "@typescript-eslint/parser": "^7.0",
