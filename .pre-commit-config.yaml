@@ -20,7 +20,8 @@ repos:
     rev: "v4.0.0-alpha.8"
     hooks:
       - id: prettier
-        args: ["--tab-width", "4"]
+        types_or: [javascript, json, markdown, yaml, html, css, vue]
+        args: ["--single-quote", "--tab-width=4"]
         files: govapp/frontend/pbs
 
   - repo: https://github.com/asottile/pyupgrade
