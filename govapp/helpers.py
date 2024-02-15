@@ -35,3 +35,7 @@ def is_internal(user):
 
 def is_django_admin(user):
     return is_member_of(user, settings.DJANGO_ADMIN)
+
+
+def is_pbs_admin(user):
+    return is_member_of(user, settings.PBS_ADMIN)
