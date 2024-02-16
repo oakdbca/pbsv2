@@ -9,7 +9,14 @@ from govapp.apps.accounts.models import Profile
 User = auth.get_user_model()
 
 
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = "__all__"
+
+
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         fields = (
@@ -24,21 +31,32 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = ("id", "name", "permissions")
-
-
 class ProfileSerializer(serializers.ModelSerializer):
+    district = serializers.CharField(source="district.name_with_region")
+
     class Meta:
         model = Profile
-        fields = "__all__"
+        exclude = (
+            "id",
+            "user",
+        )
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
+    groups = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        exclude = ("password", "is_superuser", "is_staff", "is_active")
+        fields = (
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "profile",
+            "groups",
+        )
+
+    def get_groups(self, obj):
+        return obj.groups.values_list("name", flat=True)
