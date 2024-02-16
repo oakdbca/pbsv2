@@ -6,6 +6,7 @@ from rest_framework import decorators, request, response, viewsets
 
 # Local
 from govapp.apps.accounts import filters, serializers
+from govapp.permissions import IsDjangoAdmin, IsPBSAdmin
 
 # Shortcuts
 UserModel = auth.get_user_model()
@@ -19,8 +20,9 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = UserModel.objects.all()
     serializer_class = serializers.UserSerializer
     filterset_class = filters.UserFilter
+    permission_classes = [IsPBSAdmin | IsDjangoAdmin]
 
-    @utils.extend_schema(request=None, responses=serializers.UserSerializer)
+    @utils.extend_schema(request=None, responses=serializers.UserProfileSerializer)
     @decorators.action(detail=False, methods=["GET"])
     def me(self, request: request.Request) -> response.Response:
         """Retrieves the currently logged in user.
@@ -35,7 +37,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         instance = request.user
 
         # Serialize User
-        serializer = self.get_serializer(instance)
+        serializer = serializers.UserProfileSerializer(instance)
 
         # Return Response
         return response.Response(serializer.data)
@@ -47,3 +49,23 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = GroupModel.objects.all()
     serializer_class = serializers.GroupSerializer
+
+    @utils.extend_schema(request=None, responses=serializers.GroupSerializer)
+    @decorators.action(detail=False, methods=["GET"])
+    def mine(self, request: request.Request) -> response.Response:
+        """Retrieves the currently logged in user.
+
+        Args:
+            request (request.Request): API request.
+
+        Returns:
+            response.Response: The currently logged in user if applicable.
+        """
+        # Retrieve User
+        groups = request.user.groups
+
+        # Serialize User
+        serializer = self.get_serializer(groups, many=True)
+
+        # Return Response
+        return response.Response(serializer.data)
