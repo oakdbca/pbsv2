@@ -100,27 +100,12 @@ TEST 2
 </style>
 {% endblock %}
 
-{% block page_content %}
-<div class="container-fluid">
-    <!-- Messages  -->
-    {% if messages %}
-    <div class="row">
-        <div class="col">
-            {% for message in messages %}
-            <div class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %}">
-                {{ message|safe }}
-            </div>
-            {% endfor %}
-        </div>
+{% block content %}
+    <div class="container-fluid" id="vue-root">
+        {% block vue-component %}
+        <div id="app"></div>
+        {% endblock %}
     </div>
-    {% endif %}
-
-    <div class="row">
-        <div class="col">
-            {% block page_content_inner %}{% endblock %}
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block custom_js %}
