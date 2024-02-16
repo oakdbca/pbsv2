@@ -25,7 +25,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     @utils.extend_schema(request=None, responses=serializers.UserProfileSerializer)
     @decorators.action(detail=False, methods=["GET"])
     def me(self, request: request.Request) -> response.Response:
-        """Retrieves the currently logged in user.
+        """Retrieves the currently logged in user (including their profile and groups)
 
         Args:
             request (request.Request): API request.
@@ -53,7 +53,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     @utils.extend_schema(request=None, responses=serializers.GroupSerializer)
     @decorators.action(detail=False, methods=["GET"])
     def mine(self, request: request.Request) -> response.Response:
-        """Retrieves the currently logged in user.
+        """Retrieves the groups for the currently logged in user
 
         Args:
             request (request.Request): API request.
@@ -61,11 +61,8 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
         Returns:
             response.Response: The currently logged in user if applicable.
         """
-        # Retrieve User
-        groups = request.user.groups
-
         # Serialize User
-        serializer = self.get_serializer(groups, many=True)
+        serializer = self.get_serializer(request.user.groups, many=True)
 
         # Return Response
         return response.Response(serializer.data)
