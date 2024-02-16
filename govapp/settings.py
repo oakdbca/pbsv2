@@ -302,7 +302,9 @@ LOGGING: dict[str, Any] = {
 }
 
 if DEBUG is True:
-    if ENVIRONMENT == "local":
+    if ENVIRONMENT == "local" and decouple.config(
+        "LOG_DJANGO_TEMPLATES", default=False, cast=bool
+    ):
         LOGGING["loggers"]["django.template"] = {}
         LOGGING["loggers"]["django.template"]["handlers"] = ["console_simple"]
         LOGGING["loggers"]["django.template"]["level"] = "DEBUG"
