@@ -1,20 +1,17 @@
 # Third-Party
 from django.contrib import auth
-from django.contrib.auth import models as auth_models
+from django.contrib.auth.models import Group
 from rest_framework import serializers
 
+from govapp.apps.accounts.models import Profile
+
 # Shortcuts
-UserModel = auth.get_user_model()
-GroupModel = auth_models.Group
+User = auth.get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """User Model Serializer."""
-
     class Meta:
-        """User Model Serializer Metadata."""
-
-        model = UserModel
+        model = User
         fields = (
             "id",
             "username",
@@ -28,10 +25,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    """Group Model Serializer."""
+    class Meta:
+        model = Group
+        fields = ("id", "name", "permissions")
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = "__all__"
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer()
 
     class Meta:
-        """Group Model Serializer Metadata."""
-
-        model = GroupModel
-        fields = ("id", "name", "permissions")
+        model = User
+        exclude = ("password", "is_superuser", "is_staff", "is_active")
