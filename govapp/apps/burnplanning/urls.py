@@ -9,7 +9,6 @@ router.register(
 )
 
 urlpatterns = [
-    urls.path("api/", urls.include(router.urls)),
     urls.path(
         "burn-plan-elements/<int:pk>/",
         views.BurnPlanElementView.as_view(),

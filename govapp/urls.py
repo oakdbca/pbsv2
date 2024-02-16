@@ -24,6 +24,8 @@ from rest_framework import routers
 
 # Local
 from govapp import views
+from govapp.apps.accounts.urls import router as accounts_router
+from govapp.apps.burnplanning.urls import router as burnplanning_router
 
 # Admin Site Settings
 admin.site.site_header = conf.settings.PROJECT_TITLE
@@ -37,7 +39,10 @@ def trigger_error(request):
 
 
 router = routers.DefaultRouter()
-# Todo: Register viewsets for each app here then delete this comment
+
+router.registry.extend(accounts_router.registry)
+router.registry.extend(burnplanning_router.registry)
+
 router.registry.sort(key=lambda x: x[0])
 
 # Django URL Patterns
