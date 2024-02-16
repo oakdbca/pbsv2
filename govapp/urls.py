@@ -62,6 +62,7 @@ urlpatterns = [
     urls.path("admin/", admin.site.urls),
     urls.path("sentry-debug/", trigger_error),
     # Include urls from other apps
+    urls.path("", urls.include("govapp.apps.accounts.urls")),
     urls.path("", urls.include("govapp.apps.burnplanning.urls")),
     urls.path("", urls.include("govapp.apps.swagger.urls")),
     # Include api routes
@@ -79,7 +80,7 @@ if conf.settings.ENABLE_DJANGO_LOGIN:
         urls.re_path(r"^ssologin/", auth_views.LoginView.as_view(), name="ssologin")
     )
 
-if conf.settings.DEBUG:  # Serve media locally in development.
+if conf.settings.DEBUG:
     if (
         "debug_toolbar" in conf.settings.INSTALLED_APPS
         and conf.settings.SHOW_DEBUG_TOOLBAR
