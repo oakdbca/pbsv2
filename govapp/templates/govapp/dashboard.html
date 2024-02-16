@@ -1,0 +1,8 @@
+{% extends 'govapp/base.html' %}
+{% load utils %}
+
+{% block title %}
+    {% project_title as project_title %}
+    {% department_name as department_name %}
+    Dashboard - {% project_title %} - {% department_name %}
+{% endblock %}
