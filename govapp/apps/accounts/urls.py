@@ -1,4 +1,6 @@
 # Third-Party
+from django import urls
+from django.views.generic import base
 from rest_framework import routers
 
 # Local
@@ -11,4 +13,10 @@ router.register("groups", views.GroupViewSet)
 
 
 # Accounts URL Patterns
-urlpatterns = router.urls
+urlpatterns = [
+    urls.path(
+        "profile/",
+        base.TemplateView.as_view(template_name="govapp/index.html"),
+        name="profile",
+    ),
+]
