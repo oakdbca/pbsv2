@@ -76,3 +76,14 @@ class PBSV2SSOLoginMiddleware(SSOLoginMiddleware):
                 "is_staff": request.user.is_staff,
             }
             request.session["user_obj"] = user_obj
+
+
+class MissingDataNagScreenMiddleware:
+    """TODO: If there is mandatory user profile information that must be entered before the user can
+    use the application then use this, otherwise delete."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        return self.get_response(request)

@@ -131,6 +131,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "govapp.middleware.PBSV2SSOLoginMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "govapp.middleware.MissingDataNagScreenMiddleware",
     "govapp.middleware.CacheControl",
 ]
 ROOT_URLCONF = "govapp.urls"
