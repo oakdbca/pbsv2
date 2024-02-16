@@ -15,7 +15,7 @@ class HomePage(base.TemplateView):
         self, request: http.HttpRequest, *args: Any, **kwargs: Any
     ) -> http.HttpResponse:
         if request.user.is_authenticated:
-            self.template_name = "govapp/index.html"
+            self.template_name = "govapp/dashboard.html"
 
         return shortcuts.render(request, self.template_name, context={})
 
