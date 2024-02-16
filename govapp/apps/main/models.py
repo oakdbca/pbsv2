@@ -342,6 +342,10 @@ class District(DisplayNameableModel, UniqueNameableModel):
             return self.name
         return self.display_name
 
+    @property
+    def name_with_region(self):
+        return f"{self.name} ({self.region})"
+
 
 class Lga(DisplayNameableModel, UniqueNameableModel):
     operationalplanapprovals: ReverseManyToOneDescriptor
