@@ -14,6 +14,7 @@
                 :options="options"
                 class="capitalize"
                 :class="tableClass"
+                @selection-changed="$emit('selection-changed', $event)"
             />
         </div>
     </div>
@@ -21,9 +22,10 @@
 
 <script>
 import _ from 'lodash';
-
 import { helpers } from '@/utils/hooks';
+import SelectFilter from '@/components/forms/colocation/select_filter.vue';
 
+import { createApp } from 'vue';
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net-bs5';
 import 'datatables.net-responsive-bs5';
@@ -33,14 +35,15 @@ import 'datatables.net-buttons/js/buttons.print';
 import 'datatables.net-select-bs5';
 
 import pdfMake from 'pdfmake';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 DataTable.use(DataTablesCore);
+// Add the selection-changed event to the DataTable component's emits array, to stop vue from complaining about it missing
+if (!DataTable.emits.includes('selection-changed'))
+    DataTable.emits.push('selection-changed');
 
 export default {
     name: 'DataTableTemplate',
@@ -80,9 +83,16 @@ export default {
                 select: false,
                 dom: '<"container-fluid"<"row"<"col"l><"col"f><"col"<"float-end"B>>>>rtip', // 'lfBrtip'
                 buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                // eslint-disable-next-line no-unused-vars
                 initComplete: function (settings, json) {
                     console.log('Table initialized!');
+                    // The datatable-vue3 component
+                    const component =
+                        this.parent()[0].parentElement.__vueParentComponent;
+                    // The selectionChanged function to be called when a filter is changed
+                    const selectionChanged = (e) => {
+                        component.ctx.$emit('selection-changed', e);
+                    };
                     this.api()
                         .columns()
                         .every(function () {
@@ -91,23 +101,24 @@ export default {
                             const filter = columnOptions.filter;
 
                             if (filter == true) {
-                                const select = document.createElement('select');
-                                select.className = 'form-select form-select-sm';
-                                select.id = `filter-select-${columnOptions.data}`;
-
-                                select.options[0] = new Option('All', 'all');
-                                columnOptions.filterOptions.forEach((item) => {
-                                    select.options[select.options.length] =
-                                        new Option(item.text, item.value);
-                                });
+                                const props = {
+                                    id: columnOptions.data,
+                                    title: columnOptions.title,
+                                    filterOptions: columnOptions.filterOptions,
+                                    onSelectionChanged: selectionChanged,
+                                };
+                                const select = createApp(SelectFilter, props);
 
                                 let div = document.createElement('div');
-                                div.textContent = this.header().textContent;
+                                // div.textContent = this.header().textContent;
                                 this.header().replaceChildren(div);
 
                                 div = document.createElement('div');
-                                div.appendChild(select);
+                                const id = `mountpoint-select-filter-${columnOptions.data}`;
+                                div.id = id;
                                 this.header().appendChild(div);
+                                select.mount(`#${id}`);
+                                // div.appendChild(select);
 
                                 $(div).on('click', function (e) {
                                     e.stopPropagation();
@@ -135,6 +146,7 @@ export default {
             default: () => [],
         },
     },
+    emits: ['selection-changed'],
     computed: {
         /**
          * Columns object for the DataTable component
@@ -161,7 +173,7 @@ export default {
     },
     watch: {
         ajax: {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            // eslint-disable-next-line no-unused-vars
             handler: function (val) {
                 // Reload the table when the ajax prop changes
                 this.$refs.datatable.dt.ajax.reload();

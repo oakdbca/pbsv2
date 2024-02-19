@@ -6,6 +6,7 @@
             name="Burn Plan Elements"
             :ajax="ajax"
             :columns="columns"
+            @selection-changed="selectionChanged($event)"
         >
             <template #filter>
                 <SelectFilter
@@ -21,7 +22,7 @@
 </template>
 
 <script>
-import { api_endpoints } from '@/utils/hooks';
+import { utils, api_endpoints } from '@/utils/hooks';
 import DataTableTemplate from '@/components/forms/colocation/datatable_template.vue';
 import SelectFilter from '@/components/forms/colocation/select_filter.vue';
 
@@ -31,15 +32,12 @@ export default {
     // props: {},
     data: function () {
         return {
-            burnPlanElements: [],
             ajaxDataString: '',
             ajaxDataOptions: {},
+            fieldFilterOptions: { treatments: [{ value: 'all', text: 'All' }] },
         };
     },
     computed: {
-        queryset: function () {
-            return this.burnPlanElements;
-        },
         ajax: function () {
             this.ajaxDataOptions;
             return {
@@ -49,6 +47,7 @@ export default {
                     $.each(this.ajaxDataOptions, (k, v) => {
                         d[k] = v;
                     });
+                    d.format = 'datatables'; // ?format=datatables
                 }.bind(this),
             };
         },
@@ -70,18 +69,14 @@ export default {
                     data: 'treatment',
                     title: 'Treatment',
                     filter: true,
-                    // TODO: Get filter options from api
-                    filterOptions: [
-                        { value: '1', text: 'Treat With Care' },
-                        { value: '2', text: 'Burn After Reading' },
-                    ],
+                    filterOptions: this.fieldFilterOptions.treatments,
                 },
                 { data: 'status', title: 'Status' },
                 {
                     data: null,
                     title: 'Action',
                     orderable: false,
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    // eslint-disable-next-line no-unused-vars
                     render: function (data, type, row) {
                         return `<a href="burn-plan-elements/${data.id}" target="_blank">View</a></br>
                                 <a href="#" onclick="alert('Not yet implemented')">History</a>`;
@@ -104,6 +99,29 @@ export default {
     },
     mounted: async function () {
         console.info(`${this.$options?.name} template loaded`);
+        // TODO: outsource to a helper function
+        const requests = Object.keys(this.fieldFilterOptions).map((field) =>
+            utils
+                .fetchUrl(`api/${field}/key-value-list/`)
+                .then((response) => response)
+        );
+
+        await Promise.all(requests)
+            .then((responses) => {
+                responses.forEach((response, index) => {
+                    this.fieldFilterOptions[
+                        Object.keys(this.fieldFilterOptions)[index]
+                    ].push(
+                        ...response.map((item) => {
+                            return { value: item.key, text: item.value };
+                        })
+                    );
+                });
+            })
+            .catch((error) => {
+                console.error('error', error);
+            });
+
         this.$nextTick(() => {
             this.ajaxDataString = api_endpoints.burn_plan_elements();
             // TODO: Get filter params from session storage
