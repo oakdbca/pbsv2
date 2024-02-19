@@ -34,7 +34,13 @@ export default {
         return {
             ajaxDataString: '',
             ajaxDataOptions: {},
-            fieldFilterOptions: { treatments: [{ value: 'all', text: 'All' }] },
+            fieldFilterOptions: {
+                treatments: [{ value: 'all', text: 'All' }],
+                regions: [{ value: 'all', text: 'All' }],
+                districts: [{ value: 'all', text: 'All' }],
+                purposes: [{ value: 'all', text: 'All' }],
+                programs: [{ value: 'all', text: 'All' }],
+            },
         };
     },
     computed: {
@@ -63,8 +69,40 @@ export default {
                     data: 'revised_indicative_treatment_year',
                     title: 'Revised Indicative Treatment Year',
                 },
-                { data: 'region', title: 'Region' },
-                { data: 'district', title: 'District' },
+                {
+                    data: 'region',
+                    title: 'Region',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.regions,
+                },
+                {
+                    data: 'district',
+                    title: 'District',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.districts,
+                },
+                {
+                    data: 'purposes',
+                    title: 'Purpose',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.purposes,
+                    // eslint-disable-next-line no-unused-vars
+                    render: function (data, type, row) {
+                        // TODO: Multi-select display and render
+                        return data ? data[0].name : 'N/A';
+                    },
+                },
+                {
+                    data: 'programs',
+                    title: 'Program',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.programs,
+                    // eslint-disable-next-line no-unused-vars
+                    render: function (data, type, row) {
+                        // TODO: Multi-select display and render
+                        return data ? data[0].name : 'N/A';
+                    },
+                },
                 {
                     data: 'treatment',
                     title: 'Treatment',
