@@ -1,10 +1,7 @@
 # from django.shortcuts import render
-from django.db.models.query import QuerySet
-from django_filters import rest_framework as filters
 from rest_framework import viewsets
-from rest_framework_datatables.django_filters.backends import DatatablesFilterBackend
 
-from govapp.apps.main.views import KeyValueListMixin
+from govapp.apps.main.views import DjangoFiltersModelViewSet, KeyValueListMixin
 from govapp.common.views import BaseView
 
 from .filters import BurnPlanElementFilter
@@ -17,23 +14,12 @@ from .serializers import (
 )
 
 
-class BurnPlanElementViewSet(viewsets.ModelViewSet):
+class BurnPlanElementViewSet(DjangoFiltersModelViewSet):
     queryset = BurnPlanElement.objects.all()
     serializer_class = BurnPlanElementSerializer
     # permission_classes = [permissions.IsAuthenticated] # TODO
-    filter_backends = [DatatablesFilterBackend, filters.DjangoFilterBackend]
     filterset_fields = ["treatment"]
-
-    @property
-    def filterset_class(self):
-        if self.action in ["list"]:
-            return BurnPlanElementFilter
-        return None
-
-    def filter_queryset(self, queryset: QuerySet) -> QuerySet:
-        if self.filterset_class:
-            return self.filterset_class(self.request.GET, queryset=self.queryset).qs
-        return super().filter_queryset(queryset)
+    django_filters_filterset_class = BurnPlanElementFilter
 
 
 class BurnPlanElementView(BaseView):
