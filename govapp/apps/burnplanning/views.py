@@ -9,6 +9,7 @@ from .filters import BurnPlanElementFilter
 from .models import BurnPlanElement, Program, Purpose, Treatment
 from .serializers import (
     BurnPlanElementSerializer,
+    IndicativeTreatmentYearSerializer,
     ProgramSerializer,
     PurposeSerializer,
     TreatmentSerializer,
@@ -55,3 +56,12 @@ class StatusViewSet(ChoicesKeyValueListMixin, viewsets.GenericViewSet):
 
     queryset = BurnPlanElement.objects.none()
     choices_dict = BurnPlanElement.STATUS._display_map
+
+
+class IndicativeTreatmentYearViewSet(KeyValueListMixin, viewsets.GenericViewSet):
+    """Indicative Treatment Year viewset"""
+
+    queryset = BurnPlanElement.objects.all()
+    serializer_class = BurnPlanElementSerializer
+    key_value_display_field = "indicative_treatment_year"
+    key_value_serializer_class = IndicativeTreatmentYearSerializer

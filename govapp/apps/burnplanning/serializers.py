@@ -37,3 +37,10 @@ class TreatmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Treatment
         fields = "__all__"
+
+
+class IndicativeTreatmentYearSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BurnPlanElement
+        fields = ["indicative_treatment_year"]
+        read_only_fields = ["indicative_treatment_year"]
