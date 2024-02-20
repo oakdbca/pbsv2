@@ -13,4 +13,13 @@ export default {
         }
         return '/api/burn-plan-elements/';
     },
+    endPoint: function (slug, pk = null) {
+        if (pk) {
+            return `/api/${slug}/${pk}/`;
+        }
+        return `/api/${slug}/`;
+    },
+    operationalPlans: function (pk = null) {
+        return this.endPoint('operational-plans', pk);
+    },
 };
