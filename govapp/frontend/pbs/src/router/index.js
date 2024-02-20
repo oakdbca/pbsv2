@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import ProfileComponent from '@/components/accounts/Profile.vue';
 import BurnPlanning from '@/components/burnplanning/burnplanning.vue';
 import BurnPlanElement from '@/components/burnplanning/burnplanelement.vue';
+import OperationalPlanning from '@/components/operational-planning/OperationalPlanning.vue';
 
 const NotFoundComponent = null;
 const router = createRouter({
@@ -27,6 +28,11 @@ const router = createRouter({
             path: '/burnplanning',
             name: 'burnplanning',
             component: BurnPlanning,
+        },
+        {
+            path: '/operational-planning',
+            name: 'operational-planning',
+            component: OperationalPlanning,
         },
         {
             path: '/burn-plan-elements/:pk',
