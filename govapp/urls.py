@@ -26,6 +26,7 @@ from rest_framework import routers
 from govapp import views
 from govapp.apps.accounts.urls import router as accounts_router
 from govapp.apps.burnplanning.urls import router as burnplanning_router
+from govapp.apps.operationalplanning.urls import router as operationalplanning_router
 
 # Admin Site Settings
 admin.site.site_header = conf.settings.PROJECT_TITLE
@@ -42,6 +43,7 @@ router = routers.DefaultRouter()
 
 router.registry.extend(accounts_router.registry)
 router.registry.extend(burnplanning_router.registry)
+router.registry.extend(operationalplanning_router.registry)
 
 router.registry.sort(key=lambda x: x[0])
 
