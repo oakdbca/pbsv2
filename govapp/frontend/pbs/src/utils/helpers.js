@@ -146,4 +146,9 @@ export default {
     replaceUnderscores: function (/** @type {string} */ str) {
         return str.replace(/_/g, ' ');
     },
+    bootstrapBadgesFromList: function (/** @type {string[]} */ list) {
+        return list.map((item) => {
+            return `<span class="badge bg-primary">${item}</span>`;
+        });
+    },
 };
