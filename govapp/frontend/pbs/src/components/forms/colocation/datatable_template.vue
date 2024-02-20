@@ -1,18 +1,11 @@
 <template>
-    <div class="row p-1">
-        <div
-            class="col-4 text-start d-flex align-items-center capitalize"
-        ></div>
-        <div class="text-start">
-            <DataTable
-                :columns="table_columns"
-                :ajax="ajaxDataString"
-                :options="options"
-                class="capitalize"
-                :class="tableClass"
-            />
-        </div>
-    </div>
+    <DataTable
+        :columns="table_columns"
+        :ajax="ajaxDataString + '?format=datatables'"
+        :options="options"
+        class="text-capitalize"
+        :class="tableClass"
+    />
 </template>
 
 <script>
@@ -22,8 +15,8 @@ import { helpers } from '@/utils/hooks';
 
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net-bs5';
-import 'datatables.net-responsive-bs5';
-import 'datatables.net-buttons-bs5';
+// import 'datatables.net-responsive-bs5';
+// import 'datatables.net-buttons-bs5';
 import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import 'datatables.net-select-bs5';
@@ -159,8 +152,4 @@ export default {
 @import '@/../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 @import '@/../node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
-
-.capitalize {
-    text-transform: capitalize;
-}
 </style>
