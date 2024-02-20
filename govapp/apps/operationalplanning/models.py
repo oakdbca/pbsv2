@@ -3,6 +3,7 @@ from logging import getLogger
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.gis.db.models import MultiLineStringField, MultiPolygonField
 from django.db import models
+from django.db.models import Q
 from django.forms import ValidationError
 from django.utils.safestring import mark_safe
 from model_utils import Choices
@@ -301,8 +302,21 @@ class OperationalArea(
 
     def initial_not_required_approvals(self):
         # Automatically create entries for other additional required approvals by intersecting with Tenure layer
+        # TODO: Make sure this is correct. Karsten can't remember what this is for
         return LegalApproval.objects.filter(land_type__length__gt=0).values_list(
             "name", flat=True
+        )
+
+    @property
+    def all_approvals(self):
+        """Returns the legal approvals from the initial_required_approvals and initial_not_required_approvals
+        methods without any duplicates"""
+        return (
+            LegalApproval.objects.filter(
+                Q(is_required_for_operational_plan=True) | Q(land_type__length__gt=0)
+            )
+            .distinct()
+            .values_list("name", flat=True)
         )
 
     def copy(self):
@@ -486,8 +500,21 @@ class OperationalPlan(
 
     def initial_not_required_approvals(self):
         # Automatically create entries for other additional required approvals by intersecting with Tenure layer
+        # TODO: Make sure this is correct. Karsten can't remember what this is for
         return LegalApproval.objects.filter(land_type__length__gt=0).values_list(
             "name", flat=True
+        )
+
+    @property
+    def all_approvals(self):
+        """Returns the legal approvals from the initial_required_approvals and initial_not_required_approvals
+        methods without any duplicates"""
+        return (
+            LegalApproval.objects.filter(
+                Q(is_required_for_operational_plan=True) | Q(land_type__length__gt=0)
+            )
+            .distinct()
+            .values_list("name", flat=True)
         )
 
     def save(self, *args, **kwargs):
