@@ -40,6 +40,7 @@ export default {
                 districts: [{ value: 'all', text: 'All' }],
                 purposes: [{ value: 'all', text: 'All' }],
                 programs: [{ value: 'all', text: 'All' }],
+                status: [{ value: 'all', text: 'All' }],
             },
         };
     },
@@ -109,7 +110,12 @@ export default {
                     filter: true,
                     filterOptions: this.fieldFilterOptions.treatments,
                 },
-                { data: 'status', title: 'Status' },
+                {
+                    data: 'status',
+                    title: 'Status',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.status,
+                },
                 {
                     data: null,
                     title: 'Action',

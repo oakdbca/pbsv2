@@ -56,3 +56,16 @@ class KeyValueListMixin:
                 return display_name
 
         return NamedModelKeyValueSerializer
+
+
+class ChoicesKeyValueListMixin:
+    """A mixin for viewsets that return a list of key-value pairs for the available choices of a model field."""
+
+    @action(detail=False, methods=["get"], url_path="key-value-list")
+    def key_value_list(self, request):
+        if not hasattr(self, "choices_dict"):
+            raise AttributeError("choices_dict is not defined on viewset")
+
+        return response.Response(
+            [{"key": s[0], "value": s[1]} for s in self.choices_dict.items()]
+        )

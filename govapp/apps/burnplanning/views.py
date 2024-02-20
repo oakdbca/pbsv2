@@ -1,6 +1,7 @@
 # from django.shortcuts import render
 from rest_framework import viewsets
 
+from govapp.apps.main.mixins import ChoicesKeyValueListMixin
 from govapp.apps.main.views import DjangoFiltersModelViewSet, KeyValueListMixin
 from govapp.common.views import BaseView
 
@@ -47,3 +48,10 @@ class ProgramViewSet(KeyValueListMixin, viewsets.GenericViewSet):
 
     queryset = Program.objects.all()
     serializer_class = ProgramSerializer
+
+
+class StatusViewSet(ChoicesKeyValueListMixin, viewsets.GenericViewSet):
+    """Status viewset"""
+
+    queryset = BurnPlanElement.objects.none()
+    choices_dict = BurnPlanElement.STATUS._display_map
