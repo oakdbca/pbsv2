@@ -7,13 +7,9 @@ import govVue3Components from '@dbca/gov-vue3-components';
 const jsZip = require('jszip');
 // @ts-ignore
 window.JSZip = jsZip;
-import 'select2';
 import 'sweetalert2/dist/sweetalert2.css';
 import '@dbca/gov-vue3-components/dist/library.css';
 import '@/../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
-import 'select2/dist/css/select2.min.css';
-import 'select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css';
-import '@/../node_modules/vue-multiselect/dist/vue-multiselect.css';
 
 // Add CSRF Token to every request
 const customHeaders = new Headers({
