@@ -10,3 +10,10 @@ div#app .container {
 div#app .container h3 {
     margin-bottom: 22px;
 }
+
+@media (min-width: 768px) {
+    .modal-xl {
+      width: 90%;
+     max-width:1200px;
+    }
+  }
