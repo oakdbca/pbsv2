@@ -315,8 +315,8 @@ export default {
         ErrorRenderer,
     },
     props: {
-        modelName: {
-            type: String,
+        contentType: {
+            type: Number,
             required: true,
         },
         pk: {

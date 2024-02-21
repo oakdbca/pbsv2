@@ -17,7 +17,7 @@ export default {
     components: { DataTableTemplate },
     props: {
         contentType: {
-            type: String,
+            type: Number,
             required: true,
         },
         pk: {

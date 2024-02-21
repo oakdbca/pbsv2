@@ -55,8 +55,8 @@ export default {
         ModalActions,
     },
     props: {
-        modelName: {
-            type: String,
+        contentType: {
+            type: Number,
             required: true,
         },
         pk: {

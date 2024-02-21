@@ -12,7 +12,10 @@
         </div>
         <div class="row">
             <div class="col-3">
-                <PanelLogs model-name="OperationalPlan" :pk="1" />
+                <PanelLogs
+                    :content-type="operationalPlan.content_type"
+                    :pk="1"
+                />
                 <div class="card mb-3">
                     <div class="card-header">Workflow</div>
                     <div class="card-body border-bottom">
