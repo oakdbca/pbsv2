@@ -26,22 +26,22 @@ import { helpers } from '@/utils/hooks';
 import SelectFilter from '@/components/forms/colocation/select_filter.vue';
 
 import { createApp } from 'vue';
+
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net-bs5';
-import 'datatables.net-responsive-bs5';
-import 'datatables.net-buttons-bs5';
-import 'datatables.net-buttons/js/buttons.html5';
-import 'datatables.net-buttons/js/buttons.print';
-import 'datatables.net-select-bs5';
-
-import pdfMake from 'pdfmake';
-// @ts-ignore
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-// @ts-ignore
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import Select from 'datatables.net-select-bs5';
+import Responsive from 'datatables.net-responsive';
+import Buttons from 'datatables.net-buttons'; // -bs5 not working
+import ButtonsHtml5 from 'datatables.net-buttons/js/buttons.html5';
+import 'datatables.net-buttons-bs5/js/buttons.bootstrap5.js';
 
 DataTable.use(DataTablesCore);
-// Add the selection-changed event to the DataTable component's emits array, to stop vue from complaining about it missing
+DataTable.use(Select);
+DataTable.use(Responsive);
+DataTable.use(Buttons);
+DataTable.use(ButtonsHtml5);
+
+// Add our custom selection-changed event to the DataTable component's emits array, to stop vue from complaining about it missing
 if (!DataTable.emits.includes('selection-changed'))
     DataTable.emits.push('selection-changed');
 
@@ -82,7 +82,7 @@ export default {
                 responsive: true,
                 select: false,
                 dom: '<"container-fluid"<"row"<"col"l><"col"f><"col"<"float-end"B>>>>rtip', // 'lfBrtip'
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                buttons: ['copy', 'csv', 'excel'],
                 // eslint-disable-next-line no-unused-vars
                 initComplete: function (settings, json) {
                     console.log('Table initialized!');
@@ -221,9 +221,7 @@ export default {
 </script>
 
 <style lang="css">
-@import '@/../node_modules/bootstrap/dist/css/bootstrap.min.css';
-@import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-@import '@/../node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
+@import 'datatables.net-dt';
 
 .capitalize {
     text-transform: capitalize;
