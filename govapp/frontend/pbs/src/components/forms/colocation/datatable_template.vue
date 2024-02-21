@@ -14,12 +14,9 @@ import _ from 'lodash';
 import { helpers } from '@/utils/hooks';
 
 import DataTable from 'datatables.net-vue3';
-import DataTablesCore from 'datatables.net-bs5';
-// import 'datatables.net-responsive-bs5';
-// import 'datatables.net-buttons-bs5';
-import 'datatables.net-buttons/js/buttons.html5';
-import 'datatables.net-buttons/js/buttons.print';
-import 'datatables.net-select-bs5';
+import DataTablesCore from 'datatables.net';
+import 'datatables.net-responsive';
+import 'datatables.net-buttons';
 
 DataTable.use(DataTablesCore);
 
@@ -147,9 +144,3 @@ export default {
     },
 };
 </script>
-
-<style scoped lang="css">
-@import '@/../node_modules/bootstrap/dist/css/bootstrap.min.css';
-@import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-@import '@/../node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
-</style>
