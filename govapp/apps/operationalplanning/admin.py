@@ -862,6 +862,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
                     ),
                     "operational_area",
                     "status",
+                    "assigned_to",
                     "operation_name",
                     "operation",
                     "operational_intent",
