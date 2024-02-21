@@ -108,6 +108,7 @@ INSTALLED_APPS = [
     "govapp.apps.swagger",
     "govapp.apps.traffic",
     "govapp.apps.main",
+    "govapp.apps.logs",
     "rest_framework",
     "rest_framework_datatables",
     "rest_framework_gis",
