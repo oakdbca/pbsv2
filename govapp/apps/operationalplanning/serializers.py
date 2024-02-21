@@ -1,10 +1,11 @@
 # Third-Party
 from rest_framework import serializers
 
+from govapp.apps.main.serializer import ContentTypeModelSerializer
 from govapp.apps.operationalplanning.models import OperationalPlan
 
 
-class OperationalPlanSerializer(serializers.ModelSerializer):
+class OperationalPlanSerializer(ContentTypeModelSerializer):
 
     class Meta:
         model = OperationalPlan
