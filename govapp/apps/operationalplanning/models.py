@@ -5,6 +5,7 @@ from django.contrib.gis.db.models import MultiLineStringField, MultiPolygonField
 from django.db import models
 from django.db.models import Q
 from django.forms import ValidationError
+from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
@@ -17,6 +18,7 @@ from govapp.apps.legalapproval.models import (
     LegalApproval,
 )
 from govapp.apps.main.models import (
+    AssignableModel,
     DisplayNameableModel,
     IntervalFloatField,
     IntervalIntegerField,
@@ -331,6 +333,7 @@ class OperationalPlan(
     UniqueNameableModel,
     TimeStampedModel,
     ApprovableModel,
+    AssignableModel,
 ):
     MODEL_PREFIX = "OP"
 
@@ -350,17 +353,31 @@ class OperationalPlan(
     with_state_manager: models.Manager
     approved: models.Manager
 
+    STATUS_DRAFT = "draft"
+    STATUS_WITH_DISTRICT_OFFICER = "with_district_officer"
+    STATUS_WITH_DISTRICT_OFFICER_REFERRAL = "with_district_officer_referral"
+    STATUS_WITH_REGIONAL_LEADER_FIRE = "with_regional_leader_fire"
+    STATUS_WITH_REGIONAL_LEADER_FIRE_REFERRAL = "with_regional_leader_fire_referral"
+    STATUS_WITH_FMSB_REPRESENTATIVE = "with_fmsb_representative"
+    STATUS_WITH_DISTRICT_MANAGER = "with_district_manager"
+    STATUS_WITH_REGIONAL_MANAGER = "with_regional_manager"
+    STATUS_WITH_STATE_MANAGER = "with_state_manager"
+    STATUS_APPROVED = "approved"
+
     STATUS = Choices(
-        ("draft", "Draft"),
-        ("with_district_officer", "With District Officer"),
-        ("with_district_officer_referral", "With District Officer (Referral)"),
-        ("with_regional_leader_fire", "With Regional Leader Fire"),
-        ("with_regional_leader_fire_referral", "With Regional Leader Fire (Referral)"),
-        ("with_fmsb_representative", "With FMSB Representative"),
-        ("with_district_manager", "With District Manager"),
-        ("with_regional_manager", "With Regional Manager"),
-        ("with_state_manager", "With State Manager"),
-        ("approved", "Approved"),
+        (STATUS_DRAFT, "Draft"),
+        (STATUS_WITH_DISTRICT_OFFICER, "With District Officer"),
+        (STATUS_WITH_DISTRICT_OFFICER_REFERRAL, "With District Officer (Referral)"),
+        (STATUS_WITH_REGIONAL_LEADER_FIRE, "With Regional Leader Fire"),
+        (
+            STATUS_WITH_REGIONAL_LEADER_FIRE_REFERRAL,
+            "With Regional Leader Fire (Referral)",
+        ),
+        (STATUS_WITH_FMSB_REPRESENTATIVE, "With FMSB Representative"),
+        (STATUS_WITH_DISTRICT_MANAGER, "With District Manager"),
+        (STATUS_WITH_REGIONAL_MANAGER, "With Regional Manager"),
+        (STATUS_WITH_STATE_MANAGER, "With State Manager"),
+        (STATUS_APPROVED, "Approved"),
     )
 
     operational_area = models.ForeignKey(
@@ -484,6 +501,34 @@ class OperationalPlan(
     )
 
     @property
+    def year(self):
+        return self.operational_area.burn_plan_element.year
+
+    @cached_property
+    def districts(self):
+        return list(
+            self.operational_area.burn_plan_element.burn_plan_unit.districts.values_list(
+                "display_name", flat=True
+            )
+        )
+
+    @cached_property
+    def regions(self):
+        return list(
+            self.operational_area.burn_plan_element.burn_plan_unit.districts.values_list(
+                "region__display_name", flat=True
+            )
+        )
+
+    @property
+    def burn_plan_unit(self):
+        return self.operational_area.burn_plan_element.burn_plan_unit.reference_number
+
+    @property
+    def assigned_to_name(self):
+        return self.assigned_to.get_full_name()
+
+    @property
     def risk_highest_level(self):
         # Highest risk level from Risk section
         raise NotImplementedError("TODO")
@@ -519,6 +564,10 @@ class OperationalPlan(
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+    def user_is_assignable(self, user):
+        # Todo define conditions for user being assignable to a burn plan element
+        return super().user_is_assignable(user)
 
 
 class OperationalPlanPurpose(TimeStampedModel):
