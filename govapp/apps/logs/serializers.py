@@ -25,6 +25,8 @@ class CommunicationsLogDocumentSerializer(serializers.ModelSerializer):
 class CommunicationsLogEntrySerializer(serializers.ModelSerializer):
     """Communications Log Entry Model Serializer."""
 
+    created_at = serializers.DateTimeField(format="%d/%m/%Y %H:%M")
+    type = serializers.CharField(source="get_type_display")
     documents = CommunicationsLogDocumentSerializer(many=True, read_only=True)
     vars()["from"] = serializers.CharField(
         source="fromm"
