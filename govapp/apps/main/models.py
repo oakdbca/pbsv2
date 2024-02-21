@@ -157,6 +157,11 @@ class DisplayNameableModel(models.Model):
             return "Unknown"
         return self.display_name
 
+    def save(self, *args, **kwargs):
+        if not self.display_name and hasattr(self, "name") and self.name:
+            self.display_name = self.name
+        super().save(*args, **kwargs)
+
 
 class OrdinalScaleModel(NameableModel):
     """A model that allows to associate a scalable value with a qualitative name"""
