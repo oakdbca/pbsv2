@@ -111,8 +111,6 @@ export default {
                                 const select = createApp(SelectFilter, props);
 
                                 let div = document.createElement('div');
-                                // div.textContent = this.header().textContent;
-                                // this.header().replaceChildren(div);
 
                                 div = document.createElement('div');
                                 const id = `mountpoint-select-filter-${columnOptions.data}`;
