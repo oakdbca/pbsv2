@@ -1,7 +1,7 @@
 <template>
     <DataTable
         :columns="table_columns"
-        :ajax="ajaxDataString + '?format=datatables'"
+        :ajax="ajaxDataString"
         :options="options"
         class="text-capitalize"
         :class="tableClass"
