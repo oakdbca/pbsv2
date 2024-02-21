@@ -12,10 +12,7 @@
         </div>
         <div class="row">
             <div class="col-3">
-                <div class="card mb-3">
-                    <div class="card-header">Logs</div>
-                    <div class="card-body">Logs Body</div>
-                </div>
+                <PanelLogs model-name="OperationalPlan" :pk="1" />
                 <div class="card mb-3">
                     <div class="card-header">Workflow</div>
                     <div class="card-body border-bottom">
@@ -157,9 +154,12 @@
 
 <script>
 import { api_endpoints, utils } from '@/utils/hooks';
-
+import PanelLogs from '@/components/logging/PanelLogs.vue';
 export default {
     name: 'OperationalPlan',
+    components: {
+        PanelLogs,
+    },
     data() {
         return {
             operationalPlan: null,
