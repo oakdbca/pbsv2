@@ -22,4 +22,10 @@ export default {
     operationalPlans: function (pk = null) {
         return this.endPoint('operational-plans', pk);
     },
+    actions: function (pk = null) {
+        return this.endPoint('actions', pk);
+    },
+    communications: function (pk = null) {
+        return this.endPoint('communications', pk);
+    },
 };
