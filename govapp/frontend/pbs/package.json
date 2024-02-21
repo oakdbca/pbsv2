@@ -9,18 +9,6 @@
         "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
         "serve": "vue-cli-service serve"
     },
-    "noDependencies": {
-        "datatables.net": "^1.13.10",
-        "datatables.net-bs5": "^1.13.1",
-        "datatables.net-buttons-bs5": "^2.3.3",
-        "datatables.net-responsive-bs5": "^2.3.0",
-        "datatables.net-select-bs5": "^1.7.0",
-        "datatables.net-buttons": "^3.0.0",
-        "datatables.net-buttons-dt": "^3.0.0",
-        "datatables.net-dt": "^2.0.0",
-        "datatables.net-select": "^2.0.0",
-        "datatables.net-select-dt": "^2.0.0"
-    },
     "dependencies": {
         "@ckeditor/ckeditor5-alignment": "^41.0",
         "@ckeditor/ckeditor5-autoformat": "^41.0",
