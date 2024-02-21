@@ -105,13 +105,14 @@ export default {
                                     id: columnOptions.data,
                                     title: columnOptions.title,
                                     filterOptions: columnOptions.filterOptions,
+                                    showTitle: false, // we use the title in the header
                                     onSelectionChanged: selectionChanged,
                                 };
                                 const select = createApp(SelectFilter, props);
 
                                 let div = document.createElement('div');
                                 // div.textContent = this.header().textContent;
-                                this.header().replaceChildren(div);
+                                // this.header().replaceChildren(div);
 
                                 div = document.createElement('div');
                                 const id = `mountpoint-select-filter-${columnOptions.data}`;

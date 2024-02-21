@@ -1,6 +1,6 @@
 <template>
     <div class="form-group">
-        <label for="select-filter">{{ title }}</label>
+        <label v-if="showTitle" for="select-filter">{{ title }}</label>
         <select
             :id="`select-filter-${id}`"
             v-model="selectedFilterItem"
@@ -44,6 +44,11 @@ export default {
             type: String,
             required: false,
             default: 'all',
+        },
+        showTitle: {
+            type: Boolean,
+            required: false,
+            default: true,
         },
     },
     emits: ['selection-changed'],
