@@ -4,6 +4,7 @@ import ProfileComponent from '@/components/accounts/Profile.vue';
 import BurnPlanning from '@/components/burnplanning/burnplanning.vue';
 import BurnPlanElement from '@/components/burnplanning/burnplanelement.vue';
 import OperationalPlanning from '@/components/operational-planning/OperationalPlanning.vue';
+import OperationalPlan from '@/components/operational-planning/OperationalPlan.vue';
 
 const NotFoundComponent = null;
 const router = createRouter({
@@ -30,14 +31,19 @@ const router = createRouter({
             component: BurnPlanning,
         },
         {
+            path: '/burn-plan-elements/:pk',
+            name: 'burn-plan-elements',
+            component: BurnPlanElement,
+        },
+        {
             path: '/operational-planning',
             name: 'operational-planning',
             component: OperationalPlanning,
         },
         {
-            path: '/burn-plan-elements/:pk',
-            name: 'burn-plan-elements',
-            component: BurnPlanElement,
+            path: '/operational-plan/:pk',
+            name: 'operational-plan',
+            component: OperationalPlan,
         },
     ],
 });
