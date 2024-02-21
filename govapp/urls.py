@@ -1,21 +1,3 @@
-"""Prescribed Burns System URL Configuration.
-
-The `urlpatterns` list routes URLs to views.
-For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
-
-Examples:
-    Function views
-        1. Add an import:  from my_app import views
-        2. Add a URL to urlpatterns:  path("", views.home, name="home")
-    Class-based views
-        1. Add an import:  from other_app.views import Home
-        2. Add a URL to urlpatterns:  path("", Home.as_view(), name="home")
-    Including another URLconf
-        1. Import the include() function: from django.urls import include, path
-        2. Add a URL to urlpatterns:  path("blog/", include("blog.urls"))
-"""
-
 # Third-Party
 from django import conf, urls
 from django.contrib import admin
@@ -26,6 +8,7 @@ from rest_framework import routers
 from govapp import views
 from govapp.apps.accounts.urls import router as accounts_router
 from govapp.apps.burnplanning.urls import router as burnplanning_router
+from govapp.apps.logs.urls import router as logs_router
 from govapp.apps.operationalplanning.urls import router as operationalplanning_router
 
 # Admin Site Settings
@@ -41,6 +24,7 @@ def trigger_error(request):
 
 router = routers.DefaultRouter()
 
+router.registry.extend(logs_router.registry)
 router.registry.extend(accounts_router.registry)
 router.registry.extend(burnplanning_router.registry)
 router.registry.extend(operationalplanning_router.registry)
