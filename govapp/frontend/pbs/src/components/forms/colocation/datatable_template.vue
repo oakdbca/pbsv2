@@ -30,7 +30,7 @@ import { createApp } from 'vue';
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net-bs5';
 import Select from 'datatables.net-select-bs5';
-import Responsive from 'datatables.net-responsive';
+import Responsive from 'datatables.net-responsive'; // -bs5 not working
 import Buttons from 'datatables.net-buttons'; // -bs5 not working
 import ButtonsHtml5 from 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons-bs5/js/buttons.bootstrap5.js';

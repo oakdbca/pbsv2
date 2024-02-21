@@ -41,6 +41,7 @@ export default {
                 purposes: [{ value: 'all', text: 'All' }],
                 programs: [{ value: 'all', text: 'All' }],
                 status: [{ value: 'all', text: 'All' }],
+                'indicative-treatment-years': [{ value: 'all', text: 'All' }],
             },
         };
     },
@@ -65,6 +66,9 @@ export default {
                 {
                     data: 'indicative_treatment_year',
                     title: 'Indicative Treatment Year',
+                    filter: true,
+                    filterOptions:
+                        this.fieldFilterOptions['indicative-treatment-years'],
                 },
                 {
                     data: 'revised_indicative_treatment_year',

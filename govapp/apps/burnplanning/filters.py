@@ -8,4 +8,11 @@ class BurnPlanElementFilter(filters.FilterSet):
 
     class Meta:
         model = BurnPlanElement
-        fields = "__all__"
+        fields = [
+            "treatment",
+            "purposes",
+            "programs",
+            "status",
+            "indicative_treatment_year",
+            "revised_indicative_treatment_year",
+        ]

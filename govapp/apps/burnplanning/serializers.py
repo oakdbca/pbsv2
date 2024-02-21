@@ -40,7 +40,10 @@ class TreatmentSerializer(serializers.ModelSerializer):
 
 
 class IndicativeTreatmentYearSerializer(serializers.ModelSerializer):
+    key = serializers.IntegerField(source="indicative_treatment_year")
+    value = serializers.IntegerField(source="indicative_treatment_year")
+
     class Meta:
         model = BurnPlanElement
-        fields = ["indicative_treatment_year"]
-        read_only_fields = ["indicative_treatment_year"]
+        fields = ["key", "value"]
+        read_only_fields = ["key", "value"]

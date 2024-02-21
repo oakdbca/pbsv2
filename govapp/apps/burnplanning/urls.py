@@ -12,9 +12,9 @@ router.register(r"purposes", views.PurposeViewSet, basename="purposes")
 router.register(r"programs", views.ProgramViewSet, basename="programs")
 router.register(r"status", views.StatusViewSet, basename="status")
 router.register(
-    r"indicative_treatment_year",
+    r"indicative-treatment-years",
     views.IndicativeTreatmentYearViewSet,
-    basename="indicative_treatment_year",
+    basename="indicative-treatment-years",
 )
 
 
