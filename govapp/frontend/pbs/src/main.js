@@ -5,14 +5,9 @@ import helpers from '@/utils/helpers';
 import { extendMoment } from 'moment-range';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import govVue3Components from '@dbca/gov-vue3-components';
-import 'datatables.net-bs5';
-import 'datatables.net-buttons-bs5';
-import 'datatables.net-responsive-bs5';
-import 'datatables.net-buttons/js/dataTables.buttons.js';
 const jsZip = require('jszip');
 // @ts-ignore
 window.JSZip = jsZip;
-import 'datatables.net-buttons/js/buttons.html5.js';
 import 'select2';
 import 'currency.js';
 import 'jquery-validation';
@@ -23,8 +18,6 @@ import '@dbca/gov-vue3-components/dist/library.css';
 import '@/../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
 import 'select2/dist/css/select2.min.css';
 import 'select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css';
-import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import '@/../node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import '@/../node_modules/vue-multiselect/dist/vue-multiselect.css';
 
 extendMoment(moment); // eslint-disable-line no-undef
