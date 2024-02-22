@@ -19,6 +19,9 @@ export default {
         }
         return `/api/${slug}/`;
     },
+    userData: function () {
+        return this.endPoint('users/me', null);
+    },
     operationalPlans: function (pk = null) {
         return this.endPoint('operational-plans', pk);
     },
@@ -27,5 +30,14 @@ export default {
     },
     communications: function (pk = null) {
         return this.endPoint('communications', pk);
+    },
+    assignableUsers: function () {
+        return this.endPoint('assignable-users', null);
+    },
+    assignToMe: function () {
+        return this.endPoint('assign-to-me', null);
+    },
+    assignTo: function () {
+        return this.endPoint('assign-to', null);
     },
 };
