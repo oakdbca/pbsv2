@@ -52,14 +52,13 @@ export default {
                     title: 'Action',
                     orderable: false,
                     render: function (data) {
-                        return `<a href="operational-plan/${data.id}/" target="_blank">View</a>`;
+                        return `<a href="operational-plan/${data.id}/">View</a>`;
                     },
                 },
             ];
         },
     },
     mounted: async function () {
-        console.info(`${this.$options?.name} template loaded`);
         this.$nextTick(() => {
             this.ajax = api_endpoints.operationalPlans() + `?format=datatables`;
         });

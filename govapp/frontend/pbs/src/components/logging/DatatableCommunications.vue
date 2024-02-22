@@ -43,7 +43,6 @@ export default {
         },
     },
     mounted: async function () {
-        console.info(`${this.$options?.name} template loaded`);
         this.$nextTick(() => {
             this.ajax =
                 api_endpoints.communications() +
