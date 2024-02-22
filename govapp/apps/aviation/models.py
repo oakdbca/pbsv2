@@ -94,6 +94,10 @@ class AviationRequest(
         # Todo: Change related implementation plan status back to draft
         self.save()
 
-    def user_is_assignable(self, user: User) -> tuple[bool, str]:
-        # Todo - implement this method
-        return super().user_is_assignable(user)
+    def assignable_users(self):
+        # TODO uncomment once groups are listed above
+        #         GROUPS = [
+        #     "TODO: Add appropriate groups here",
+        # ]
+        # return User.objects.filter(is_active=True, groups__name__in=GROUPS).distinct()
+        return User.objects.filter(is_active=True)
