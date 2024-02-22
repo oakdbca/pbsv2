@@ -16,6 +16,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source="get_full_name")
 
     class Meta:
         model = User
@@ -25,9 +26,21 @@ class UserSerializer(serializers.ModelSerializer):
             "groups",
             "first_name",
             "last_name",
+            "full_name",
             "email",
             "is_active",
             "is_staff",
+        )
+
+
+class UserKeyValueListSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source="get_full_name")
+
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "name",
         )
 
 
@@ -43,6 +56,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source="get_full_name")
     profile = ProfileSerializer()
     groups = serializers.SerializerMethodField()
 
@@ -53,6 +67,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "full_name",
             "email",
             "profile",
             "groups",
