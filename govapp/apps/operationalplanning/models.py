@@ -1,5 +1,6 @@
 from logging import getLogger
 
+from django.contrib import auth
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.gis.db.models import MultiLineStringField, MultiPolygonField
 from django.db import models
@@ -42,6 +43,8 @@ from govapp.apps.risk.models import (
 from govapp.apps.traffic.models import Traffic
 
 logger = getLogger(__name__)
+
+User = auth.get_user_model()
 
 
 class OperationalPlanRiskCategory(models.Model):
@@ -565,9 +568,13 @@ class OperationalPlan(
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-    def user_is_assignable(self, user):
-        # Todo define conditions for user being assignable to a burn plan element
-        return super().user_is_assignable(user)
+    def assignable_users(self):
+        # TODO uncomment once which groups members are asignable
+        # GROUPS = [
+        #     "TODO: Add appropriate groups here",
+        # ]
+        # return User.objects.filter(is_active=True, groups__name__in=GROUPS).distinct()
+        return User.objects.filter(is_active=True)
 
 
 class OperationalPlanPurpose(TimeStampedModel):
