@@ -1,7 +1,9 @@
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import router from './router';
 import App from './App.vue';
 import helpers from '@/utils/helpers';
+import { useStore } from '@/stores/state';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import govVue3Components from '@dbca/gov-vue3-components';
 const jsZip = require('jszip');
@@ -35,6 +37,8 @@ window.fetch = ((originalFetch) => {
     };
 })(fetch);
 
+const pinia = createPinia();
+
 const app = createApp(App);
 
 app.config.globalProperties.$filters = {
@@ -51,5 +55,8 @@ app.config.globalProperties.$filters = {
     },
 };
 
-app.use(router).use(govVue3Components).use(CKEditor);
+app.use(router).use(govVue3Components).use(CKEditor).use(pinia);
 router.isReady().then(() => app.mount('#app'));
+
+const store = useStore();
+store.fetchUserData();
