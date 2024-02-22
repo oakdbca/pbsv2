@@ -229,9 +229,8 @@ class AssignableModel(models.Model, metaclass=AbstractModelMeta):
         abstract = True
 
     def assign(self, user: User):
-        user_is_assignable, reason = self.user_is_assignable(user)
-        if not user_is_assignable:
-            raise ValueError(f"{user} is not assignable to {self} because {reason}")
+        if not self.user_is_assignable(user):
+            raise ValueError(f"{user} is not assignable to {self}")
         self.assigned_to = user
         self.save()
 
@@ -239,20 +238,15 @@ class AssignableModel(models.Model, metaclass=AbstractModelMeta):
         self.assigned_to = None
         self.save()
 
+    def user_is_assignable(self, user: User) -> bool:
+        return self.assignable_users().filter(pk=user.pk, is_active=True).exists()
+
     @abstractmethod
-    def user_is_assignable(self, user: User) -> tuple[bool, str]:
-        """Models implementing this class must define a function
-        that checks if a user is assignable to the model.
+    def assignable_users(self) -> models.QuerySet[User]:
+        """Models implementing this class must define
+        a function that returns a queryset of users that are assignable to the model."""
 
-        Returns:
-            A tuple of (bool, str) where the bool is True (and str is empty) if the user is assignable
-            If the user is not assigned, the str is the reason why the user is not assignable.
-
-        Args:
-            user: The auth user model instance to check
-
-        """
-        return True, ""
+        raise NotImplementedError("Must implement method assignable_users")
 
 
 class ArchivableModelManager(models.Manager):
