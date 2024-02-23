@@ -24,9 +24,9 @@ def trigger_error(request):
 
 router = routers.DefaultRouter()
 
-router.registry.extend(logs_router.registry)
 router.registry.extend(accounts_router.registry)
 router.registry.extend(burnplanning_router.registry)
+router.registry.extend(logs_router.registry)
 router.registry.extend(operationalplanning_router.registry)
 
 router.registry.sort(key=lambda x: x[0])
@@ -50,6 +50,7 @@ urlpatterns = [
     # Include urls from other apps
     urls.path("", urls.include("govapp.apps.accounts.urls")),
     urls.path("", urls.include("govapp.apps.burnplanning.urls")),
+    urls.path("", urls.include("govapp.apps.main.urls")),
     urls.path("", urls.include("govapp.apps.operationalplanning.urls")),
     urls.path("", urls.include("govapp.apps.swagger.urls")),
     # Include api routes
