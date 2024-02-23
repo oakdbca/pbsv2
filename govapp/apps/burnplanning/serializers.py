@@ -52,3 +52,8 @@ class BurnPlanElementKeyValueModelSerializer(
 class IndicativeTreatmentYearSerializer(BurnPlanElementKeyValueModelSerializer):
     key = serializers.IntegerField(source="indicative_treatment_year")
     value = serializers.IntegerField(source="indicative_treatment_year")
+
+
+class RevisedIndicativeTreatmentYearSerializer(BurnPlanElementKeyValueModelSerializer):
+    key = serializers.IntegerField(source="revised_indicative_treatment_year")
+    value = serializers.IntegerField(source="revised_indicative_treatment_year")

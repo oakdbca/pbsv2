@@ -12,6 +12,7 @@ from .serializers import (
     IndicativeTreatmentYearSerializer,
     ProgramSerializer,
     PurposeSerializer,
+    RevisedIndicativeTreatmentYearSerializer,
     TreatmentSerializer,
 )
 
@@ -57,9 +58,15 @@ class StatusViewSet(ChoicesKeyValueListMixin, viewsets.GenericViewSet):
     choices_dict = BurnPlanElement.STATUS._display_map
 
 
-# Make generic
 class IndicativeTreatmentYearViewSet(KeyValueListMixin, BurnPlanElementViewSet):
     """Indicative Treatment Year viewset"""
 
     key_value_display_field = "indicative_treatment_year"
     key_value_serializer_class = IndicativeTreatmentYearSerializer
+
+
+class RevisedIndicativeTreatmentYearViewSet(KeyValueListMixin, BurnPlanElementViewSet):
+    """Revised Indicative Treatment Year viewset"""
+
+    key_value_display_field = "revised_indicative_treatment_year"
+    key_value_serializer_class = RevisedIndicativeTreatmentYearSerializer

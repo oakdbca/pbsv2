@@ -16,6 +16,11 @@ router.register(
     views.IndicativeTreatmentYearViewSet,
     basename="indicative-treatment-years",
 )
+router.register(
+    r"revised-indicative-treatment-years",
+    views.RevisedIndicativeTreatmentYearViewSet,
+    basename="revised-indicative-treatment-years",
+)
 
 
 urlpatterns = [
