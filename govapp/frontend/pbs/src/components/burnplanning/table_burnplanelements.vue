@@ -15,11 +15,10 @@
 <script>
 import { utils, api_endpoints } from '@/utils/hooks';
 import DataTableTemplate from '@/components/forms/colocation/datatable_template.vue';
-import SelectFilter from '@/components/forms/colocation/select_filter.vue';
 
 export default {
     name: 'TableBurnPlanElements',
-    components: { DataTableTemplate, SelectFilter },
+    components: { DataTableTemplate },
     // props: {},
     data: function () {
         return {
