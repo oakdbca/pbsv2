@@ -2,17 +2,18 @@
     <div id="bpe" class="container">Burn Plan Elements</div>
     <div class="card text-center">
         <DataTableTemplate
-            v-if="ajax"
+            v-if="ajaxDataString"
             name="Burn Plan Elements"
-            :ajax-data-string="ajax"
+            :ajax="ajax"
             :columns="columns"
+            @selection-changed="selectionChanged($event)"
         >
         </DataTableTemplate>
     </div>
 </template>
 
 <script>
-import { api_endpoints } from '@/utils/hooks';
+import { utils, api_endpoints } from '@/utils/hooks';
 import DataTableTemplate from '@/components/forms/colocation/datatable_template.vue';
 
 export default {
@@ -21,13 +22,35 @@ export default {
     // props: {},
     data: function () {
         return {
-            burnPlanElements: [],
-            ajax: '',
+            ajaxDataString: '',
+            ajaxDataOptions: {},
+            fieldFilterOptions: {
+                treatments: [{ value: 'all', text: 'All' }],
+                regions: [{ value: 'all', text: 'All' }],
+                districts: [{ value: 'all', text: 'All' }],
+                purposes: [{ value: 'all', text: 'All' }],
+                programs: [{ value: 'all', text: 'All' }],
+                status: [{ value: 'all', text: 'All' }],
+                'indicative-treatment-years': [{ value: 'all', text: 'All' }],
+                'revised-indicative-treatment-years': [
+                    { value: 'all', text: 'All' },
+                ],
+            },
         };
     },
     computed: {
-        queryset: function () {
-            return this.burnPlanElements;
+        ajax: function () {
+            this.ajaxDataOptions;
+            return {
+                url: this.ajaxDataString,
+                type: 'GET',
+                data: function (d) {
+                    $.each(this.ajaxDataOptions, (k, v) => {
+                        d[k] = v;
+                    });
+                    d.format = 'datatables'; // ?format=datatables
+                }.bind(this),
+            };
         },
         columns: function () {
             return [
@@ -36,20 +59,90 @@ export default {
                 {
                     data: 'indicative_treatment_year',
                     title: 'Indicative Treatment Year',
+                    filter: true,
+                    filterOptions:
+                        this.fieldFilterOptions['indicative-treatment-years'],
                 },
                 {
                     data: 'revised_indicative_treatment_year',
                     title: 'Revised Indicative Treatment Year',
+                    filter: true,
+                    filterOptions:
+                        this.fieldFilterOptions[
+                            'revised-indicative-treatment-years'
+                        ],
                 },
-                { data: 'region', title: 'Region' },
-                { data: 'district', title: 'District' },
-                { data: 'treatment', title: 'Treatment' },
-                { data: 'status', title: 'Status' },
+                {
+                    data: 'regions',
+                    title: 'Region',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.regions,
+                    // eslint-disable-next-line no-unused-vars
+                    render: function (data, type, row) {
+                        return data
+                            ? data
+                                  .map((item) => {
+                                      return item.name;
+                                  })
+                                  .join(', ')
+                            : 'N/A';
+                    },
+                },
+                {
+                    data: 'districts',
+                    title: 'District',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.districts,
+                    // eslint-disable-next-line no-unused-vars
+                    render: function (data, type, row) {
+                        return data
+                            ? data
+                                  .map((item) => {
+                                      return item.name;
+                                  })
+                                  .join(', ')
+                            : 'N/A';
+                    },
+                },
+                {
+                    data: 'purposes',
+                    title: 'Purpose',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.purposes,
+                    // eslint-disable-next-line no-unused-vars
+                    render: function (data, type, row) {
+                        // TODO: Multi-select display and render
+                        return data ? data[0].name : 'N/A';
+                    },
+                },
+                {
+                    data: 'programs',
+                    title: 'Program',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.programs,
+                    // eslint-disable-next-line no-unused-vars
+                    render: function (data, type, row) {
+                        // TODO: Multi-select display and render
+                        return data ? data[0].name : 'N/A';
+                    },
+                },
+                {
+                    data: 'treatment',
+                    title: 'Treatment',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.treatments,
+                },
+                {
+                    data: 'status',
+                    title: 'Status',
+                    filter: true,
+                    filterOptions: this.fieldFilterOptions.status,
+                },
                 {
                     data: null,
                     title: 'Action',
                     orderable: false,
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    // eslint-disable-next-line no-unused-vars
                     render: function (data, type, row) {
                         return `<a href="burn-plan-elements/${data.id}" target="_blank">View</a></br>
                                 <a href="#" onclick="alert('Not yet implemented')">History</a>`;
@@ -72,10 +165,56 @@ export default {
     },
     mounted: async function () {
         console.info(`${this.$options?.name} template loaded`);
+        // TODO: outsource to a helper function
+        const requests = Object.keys(this.fieldFilterOptions).map((field) =>
+            utils
+                .fetchUrl(`api/${field}/key-value-list/`)
+                .then((response) => response)
+        );
+
+        await Promise.all(requests)
+            .then((responses) => {
+                responses.forEach((response, index) => {
+                    this.fieldFilterOptions[
+                        Object.keys(this.fieldFilterOptions)[index]
+                    ].push(
+                        ...response.map((item) => {
+                            return { value: item.key, text: item.value };
+                        })
+                    );
+                });
+            })
+            .catch((error) => {
+                console.error('error', error);
+            });
+
         this.$nextTick(() => {
-            this.ajax = api_endpoints.burn_plan_elements();
+            this.ajaxDataString = api_endpoints.burn_plan_elements();
+            // TODO: Get filter params from session storage
+            this.setAjax();
         });
     },
-    methods: {},
+    methods: {
+        /**
+         * Sets or unsets a tag and value in the ajaxDataOptions object
+         * @param {String=} tag A tag
+         * @param {String=} value The value to set the tag to
+         * @param {String=} valueAll The value to to use when unsetting the tag / filter all values
+         */
+        setAjax: function (tag, value, valueAll = 'all') {
+            const ajaxDataOptions = { ...this.ajaxDataOptions };
+            if (tag && value) {
+                if (value == valueAll) {
+                    delete ajaxDataOptions[tag];
+                } else {
+                    ajaxDataOptions[tag] = value;
+                }
+                this.ajaxDataOptions = ajaxDataOptions;
+            }
+        },
+        selectionChanged(event) {
+            this.setAjax(event.id, event.value, event.valueAll);
+        },
+    },
 };
 </script>

@@ -3,17 +3,15 @@
     "extends": [
         "eslint:recommended",
         "plugin:vue/vue3-recommended",
-        "@vue/typescript/recommended",
         "prettier",
         "plugin:prettier/recommended"
     ],
-    "plugins": ["vue", "prettier", "@typescript-eslint"],
+    "plugins": ["vue", "prettier"],
     "rules": {
         "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
         "prettier/prettier": "error"
     },
     "parserOptions": {
-        "parser": "@typescript-eslint/parser",
         "sourceType": "module",
         "ecmaVersion": 11
     },

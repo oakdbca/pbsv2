@@ -17,6 +17,7 @@ dbca-utils = {git = "https://github.com/dbca-wa/dbca-utils.git", rev = "1.1.1"}
 webtemplate_dbca = {git = "https://github.com/dbca-wa/webtemplate2.git"}
 wagov_utils = {git = "https://github.com/dbca-wa/wagov_utils.git"}
 drf-spectacular = "^0.26"
+djangorestframework-datatables = "^0.7"
 django-filter = "^23.3"
 python-dateutil = "^2.8"
 django-reversion = "^5.0"
