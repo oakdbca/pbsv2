@@ -57,10 +57,9 @@ class StatusViewSet(ChoicesKeyValueListMixin, viewsets.GenericViewSet):
     choices_dict = BurnPlanElement.STATUS._display_map
 
 
-class IndicativeTreatmentYearViewSet(KeyValueListMixin, viewsets.GenericViewSet):
+# Make generic
+class IndicativeTreatmentYearViewSet(KeyValueListMixin, BurnPlanElementViewSet):
     """Indicative Treatment Year viewset"""
 
-    queryset = BurnPlanElement.objects.all()
-    serializer_class = BurnPlanElementSerializer
     key_value_display_field = "indicative_treatment_year"
     key_value_serializer_class = IndicativeTreatmentYearSerializer
