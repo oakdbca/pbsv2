@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from govapp.apps.main.serializers import GenericKeyValueSerializer
+
 from .models import BurnPlanElement, Program, Purpose, Treatment
 
 
@@ -39,11 +41,14 @@ class TreatmentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class IndicativeTreatmentYearSerializer(serializers.ModelSerializer):
+class BurnPlanElementKeyValueModelSerializer(
+    serializers.ModelSerializer,
+    GenericKeyValueSerializer[serializers.ModelSerializer, BurnPlanElement],
+):
+    class Meta(GenericKeyValueSerializer.Meta):
+        model = BurnPlanElement
+
+
+class IndicativeTreatmentYearSerializer(BurnPlanElementKeyValueModelSerializer):
     key = serializers.IntegerField(source="indicative_treatment_year")
     value = serializers.IntegerField(source="indicative_treatment_year")
-
-    class Meta:
-        model = BurnPlanElement
-        fields = ["key", "value"]
-        read_only_fields = ["key", "value"]

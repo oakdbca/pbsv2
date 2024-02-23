@@ -1,6 +1,8 @@
 from rest_framework import response
 from rest_framework.decorators import action
 
+from govapp.apps.main.serializers import GenericKeyValueSerializer
+
 
 class KeyValueListMixin:
     @action(detail=False, methods=["get"], url_path="key-value-list")
@@ -39,21 +41,14 @@ class KeyValueListMixin:
         class_model = self.get_serializer().Meta.model
         from rest_framework import serializers
 
-        class NamedModelKeyValueSerializer(serializers.ModelSerializer):
+        class NamedModelKeyValueSerializer(
+            serializers.ModelSerializer,
+            GenericKeyValueSerializer[serializers.ModelSerializer, class_model],
+        ):
             key = serializers.IntegerField(source="id")
-            value = serializers.SerializerMethodField()
 
-            class Meta:
+            class Meta(GenericKeyValueSerializer.Meta):
                 model = class_model
-                fields = ["key", "value"]
-
-            def get_value(self, obj):
-                display_name = getattr(obj, "display_name", None)
-                if not display_name:
-                    return getattr(
-                        obj, "name", "No display_name or name field found on model"
-                    )
-                return display_name
 
         return NamedModelKeyValueSerializer
 
