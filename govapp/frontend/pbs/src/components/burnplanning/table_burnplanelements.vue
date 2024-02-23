@@ -73,16 +73,36 @@ export default {
                         ],
                 },
                 {
-                    data: 'region',
+                    data: 'regions',
                     title: 'Region',
                     filter: true,
                     filterOptions: this.fieldFilterOptions.regions,
+                    // eslint-disable-next-line no-unused-vars
+                    render: function (data, type, row) {
+                        return data
+                            ? data
+                                  .map((item) => {
+                                      return item.name;
+                                  })
+                                  .join(', ')
+                            : 'N/A';
+                    },
                 },
                 {
-                    data: 'district',
+                    data: 'districts',
                     title: 'District',
                     filter: true,
                     filterOptions: this.fieldFilterOptions.districts,
+                    // eslint-disable-next-line no-unused-vars
+                    render: function (data, type, row) {
+                        return data
+                            ? data
+                                  .map((item) => {
+                                      return item.name;
+                                  })
+                                  .join(', ')
+                            : 'N/A';
+                    },
                 },
                 {
                     data: 'purposes',

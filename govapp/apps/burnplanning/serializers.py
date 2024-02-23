@@ -1,6 +1,10 @@
 from rest_framework import serializers
 
-from govapp.apps.main.serializers import GenericKeyValueSerializer
+from govapp.apps.main.serializers import (
+    DistrictSerializer,
+    GenericKeyValueSerializer,
+    RegionSerializer,
+)
 
 from .models import BurnPlanElement, Program, Purpose, Treatment
 
@@ -18,8 +22,8 @@ class ProgramSerializer(serializers.ModelSerializer):
 
 
 class BurnPlanElementSerializer(serializers.ModelSerializer):
-    region = serializers.SerializerMethodField()
-    district = serializers.SerializerMethodField()
+    regions = serializers.SerializerMethodField()
+    districts = serializers.SerializerMethodField()
     treatment = serializers.CharField(source="treatment.name", read_only=True)
     purposes = PurposeSerializer(many=True, read_only=True)
     programs = ProgramSerializer(many=True, read_only=True)
@@ -28,11 +32,11 @@ class BurnPlanElementSerializer(serializers.ModelSerializer):
         model = BurnPlanElement
         fields = "__all__"
 
-    def get_region(self, obj):
-        return obj.regions
+    def get_districts(self, obj):
+        return DistrictSerializer(obj.districts, many=True).data
 
-    def get_district(self, obj):
-        return obj.districts
+    def get_regions(self, obj):
+        return RegionSerializer(obj.regions, many=True).data
 
 
 class TreatmentSerializer(serializers.ModelSerializer):
