@@ -1,7 +1,5 @@
 <template>
-    <div class="row p-1">
-        <slot name="filter"></slot>
-    </div>
+    <div class="row p-1"></div>
     <div class="row p-1">
         <div
             class="col-4 text-start d-flex align-items-center capitalize"

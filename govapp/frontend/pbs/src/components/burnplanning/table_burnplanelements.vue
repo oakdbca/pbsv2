@@ -8,15 +8,6 @@
             :columns="columns"
             @selection-changed="selectionChanged($event)"
         >
-            <template #filter>
-                <SelectFilter
-                    id="treatment"
-                    ref="selectFilter"
-                    title="Treatment"
-                    :filter-options="columns[6].filterOptions"
-                    @selection-changed="selectionChanged($event)"
-                />
-            </template>
         </DataTableTemplate>
     </div>
 </template>
