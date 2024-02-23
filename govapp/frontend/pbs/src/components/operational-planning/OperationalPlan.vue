@@ -14,60 +14,16 @@
             <div class="col-3">
                 <PanelLogs
                     :content-type="operationalPlan.content_type"
-                    :pk="1"
+                    :pk="operationalPlan.id"
                 />
-                <div class="card mb-3">
-                    <div class="card-header">Workflow</div>
-                    <div class="card-body border-bottom">
-                        <div class="input-group">
-                            <span id="basic-addon1" class="input-group-text"
-                                >Status</span
-                            >
-                            <input
-                                v-model="operationalPlan.status"
-                                type="text"
-                                class="form-control"
-                                placeholder="Username"
-                                aria-label="Username"
-                                aria-describedby="basic-addon1"
-                                disabled
-                            />
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label for="assigned-to" class="form-label"
-                                >Assigned To</label
-                            >
-                            <select id="assigned-to" class="form-select">
-                                <option>Someone Else</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <button
-                                type="button"
-                                class="btn btn-primary float-end"
-                            >
-                                Assign to me
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    fill="currentColor"
-                                    class="bi bi-person-raised-hand"
-                                    viewBox="0 0 16 16"
-                                >
-                                    <path
-                                        d="M6 6.207v9.043a.75.75 0 0 0 1.5 0V10.5a.5.5 0 0 1 1 0v4.75a.75.75 0 0 0 1.5 0v-8.5a.25.25 0 1 1 .5 0v2.5a.75.75 0 0 0 1.5 0V6.5a3 3 0 0 0-3-3H6.236a1 1 0 0 1-.447-.106l-.33-.165A.83.83 0 0 1 5 2.488V.75a.75.75 0 0 0-1.5 0v2.083c0 .715.404 1.37 1.044 1.689L5.5 5c.32.32.5.754.5 1.207"
-                                    />
-                                    <path
-                                        d="M8 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <PanelWorkflow
+                    :status="operationalPlan.status"
+                    :content-type="operationalPlan.content_type"
+                    :pk="operationalPlan.id"
+                    :assigned-to="operationalPlan.assigned_to"
+                    @assign-to-me="assignToMe"
+                    @assign-to="assignTo"
+                />
                 <div class="card">
                     <div class="card-header">Actions</div>
                     <div class="card-body">
@@ -157,10 +113,14 @@
 
 <script>
 import { api_endpoints, utils } from '@/utils/hooks';
-import PanelLogs from '@/components/logging/PanelLogs.vue';
+
+import PanelLogs from '../logging/PanelLogs.vue';
+import PanelWorkflow from '../workflow/PanelWorkflow.vue';
+
 export default {
     name: 'OperationalPlan',
     components: {
+        PanelWorkflow,
         PanelLogs,
     },
     data() {
@@ -177,6 +137,10 @@ export default {
             utils.fetchUrl(api_endpoints.operationalPlans(pk)).then((data) => {
                 this.operationalPlan = Object.assign({}, data);
             });
+        },
+        assignToMe() {},
+        assignTo(value) {
+            this.operationalPlan.assigned_to = value;
         },
     },
 };
