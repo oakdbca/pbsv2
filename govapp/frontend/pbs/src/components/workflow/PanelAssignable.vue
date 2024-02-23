@@ -16,7 +16,7 @@
             @click.prevent="assignToMe"
         >
             {{ assignToMeButtonText }}
-            <i class="bi bi-person-raised-hand"></i>
+            <i class="bi" :class="assignToMeIconClass"></i>
         </button>
     </div>
 </template>
@@ -59,6 +59,11 @@ export default {
         },
         assignToMeButtonText() {
             return this.assignedToMe ? 'Assigned to you' : 'Assign to me';
+        },
+        assignToMeIconClass() {
+            return this.assignedToMe
+                ? 'bi-person-fill-check'
+                : 'bi-person-raised-hand';
         },
     },
     methods: {
