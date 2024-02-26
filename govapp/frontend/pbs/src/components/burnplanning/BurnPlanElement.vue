@@ -213,10 +213,10 @@
 <script>
 import { utils, api_endpoints } from '@/utils/hooks';
 import FormSection from '@/components/forms/section_toggle.vue';
-import RowInputComponent from '@/components/forms/colocation/row_input.vue';
-import RowSelectComponent from '@/components/forms/colocation/row_select.vue';
-import RowRadiosComponent from '@/components/forms/colocation/row_radios.vue';
-import RowTextareaComponent from '@/components/forms/colocation/row_textarea.vue';
+import RowInputComponent from '@/components/forms/colocation/RowInput.vue';
+import RowSelectComponent from '@/components/forms/colocation/RowSelect.vue';
+import RowRadiosComponent from '@/components/forms/colocation/RowRadios.vue';
+import RowTextareaComponent from '@/components/forms/colocation/RowTextarea.vue';
 
 export default {
     name: 'BurnPlanElement',

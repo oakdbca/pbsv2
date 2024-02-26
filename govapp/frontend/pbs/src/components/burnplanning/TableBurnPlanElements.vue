@@ -14,7 +14,7 @@
 
 <script>
 import { utils, api_endpoints } from '@/utils/hooks';
-import DataTableTemplate from '@/components/forms/colocation/datatable_template.vue';
+import DataTableTemplate from '@/components/forms/colocation/DataTableTemplate.vue';
 
 export default {
     name: 'TableBurnPlanElements',

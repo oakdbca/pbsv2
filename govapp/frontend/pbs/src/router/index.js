@@ -1,8 +1,8 @@
 import { RouterView } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 import Test from '@/components/test/test.vue';
-import BurnPlanning from '@/components/burnplanning/burnplanning.vue';
-import BurnPlanElement from '@/components/burnplanning/burnplanelement.vue';
+import BurnPlanning from '@/components/burnplanning/BurnPlanning.vue';
+import BurnPlanElement from '@/components/burnplanning/BurnPlanElement.vue';
 
 const NotFoundComponent = null;
 const router = createRouter({
