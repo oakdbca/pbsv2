@@ -31,7 +31,7 @@
 
 <script>
 import { helpers } from '@/utils/hooks';
-import RowSlotTemplate from '@/components/forms/colocation/row_slot_template.vue';
+import RowSlotTemplate from '@/components/forms/colocation/RowSlotTemplate.vue';
 
 export default {
     name: 'RowInputComponent',

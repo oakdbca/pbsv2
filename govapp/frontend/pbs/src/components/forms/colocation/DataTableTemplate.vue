@@ -21,7 +21,7 @@
 <script>
 import _ from 'lodash';
 import { helpers } from '@/utils/hooks';
-import SelectFilter from '@/components/forms/colocation/select_filter.vue';
+import SelectFilter from '@/components/forms/colocation/SelectFilter.vue';
 
 import { createApp } from 'vue';
 
