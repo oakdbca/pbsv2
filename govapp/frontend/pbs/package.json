@@ -51,13 +51,14 @@
         "jquery": "^3.6",
         "jszip": "^3.9",
         "lodash": "^4.17",
-        "ol": "^8.1",
+        "ol": "^9.0",
         "pinia": "^2.1.7",
         "postcss-loader": "^8.1",
         "raw-loader": "^4.0",
         "sweetalert2": "^11.4",
         "uuid": "^9.0",
         "vue": "^3.4",
+        "vue-multiselect": "^2.1.8",
         "vue-router": "^4.0"
     },
     "engines": {
