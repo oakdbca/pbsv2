@@ -52,6 +52,7 @@ urlpatterns = [
     # Include urls from other apps
     urls.path("", urls.include("govapp.apps.accounts.urls")),
     urls.path("", urls.include("govapp.apps.burnplanning.urls")),
+    urls.path("", urls.include("govapp.apps.operationalplanning.urls")),
     urls.path("", urls.include("govapp.apps.main.urls")),
     urls.path("", urls.include("govapp.apps.swagger.urls")),
     # Include api routes
