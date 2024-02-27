@@ -86,3 +86,7 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+@import 'vue-multiselect/dist/vue-multiselect.css';
+</style>
