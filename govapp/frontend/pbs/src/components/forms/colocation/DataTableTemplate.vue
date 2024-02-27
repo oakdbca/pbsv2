@@ -6,7 +6,8 @@
         :options="options"
         class="text-capitalize"
         :class="tableClass"
-        @selection-changed="$emit('selection-changed', $event)"
+        @selection-changed="$emit('selection-changed-select', $event)"
+        @selection-changed-remove="$emit('selection-changed-remove', $event)"
         @vue:mounted="() => $emit('mounted')"
     />
 </template>
@@ -32,9 +33,11 @@ DataTable.use(Responsive);
 DataTable.use(Buttons);
 DataTable.use(ButtonsHtml5);
 
-// Add our custom selection-changed event to the DataTable component's emits array, to stop vue from complaining about it missing
-if (!DataTable.emits.includes('selection-changed'))
-    DataTable.emits.push('selection-changed');
+// Add our custom selection-changed- events to the DataTable component's emits array, to stop vue from complaining about it missing
+if (!DataTable.emits.includes('selection-changed-select'))
+    DataTable.emits.push('selection-changed-select');
+if (!DataTable.emits.includes('selection-changed-remove'))
+    DataTable.emits.push('selection-changed-remove');
 
 export default {
     name: 'DataTableTemplate',
@@ -79,9 +82,12 @@ export default {
                     // The datatable-vue3 component
                     const component =
                         this.parent()[0].parentElement.__vueParentComponent;
-                    // The selectionChanged function to be called when a filter is changed
-                    const selectionChanged = (e) => {
-                        component.ctx.$emit('selection-changed', e);
+                    // The selectionChanged function to be called when a filter is select or removed
+                    const selectionChangedSelect = (e) => {
+                        component.ctx.$emit('selection-changed-select', e);
+                    };
+                    const selectionChangedRemove = (e) => {
+                        component.ctx.$emit('selection-changed-remove', e);
                     };
                     this.api()
                         .columns()
@@ -94,9 +100,15 @@ export default {
                                 const props = {
                                     id: columnOptions.data,
                                     title: columnOptions.title,
-                                    filterOptions: columnOptions.filterOptions,
+                                    options: columnOptions.filterOptions,
                                     showTitle: false, // we use the title in the header
-                                    onSelectionChanged: selectionChanged,
+                                    multiple: columnOptions.multiple
+                                        ? true
+                                        : false,
+                                    onSelectionChangedSelect:
+                                        selectionChangedSelect,
+                                    onSelectionChangedRemove:
+                                        selectionChangedRemove,
                                 };
                                 const select = createApp(SelectFilter, props);
 
@@ -135,7 +147,7 @@ export default {
             default: () => [],
         },
     },
-    emits: ['selection-changed', 'mounted'],
+    emits: ['selection-changed-select', 'selection-changed-remove', 'mounted'],
     computed: {
         datatableRefName: function () {
             return this.name + 'Datatable';

@@ -6,7 +6,8 @@
             name="Burn Plan Elements"
             :ajax="ajax"
             :columns="columns"
-            @selection-changed="selectionChanged($event)"
+            @selection-changed-select="selectionChanged($event)"
+            @selection-changed-remove="selectionChanged($event)"
         >
         </DataTableTemplate>
     </div>
@@ -25,16 +26,14 @@ export default {
             ajaxDataString: '',
             ajaxDataOptions: {},
             fieldFilterOptions: {
-                treatments: [{ value: 'all', text: 'All' }],
-                regions: [{ value: 'all', text: 'All' }],
-                districts: [{ value: 'all', text: 'All' }],
-                purposes: [{ value: 'all', text: 'All' }],
-                programs: [{ value: 'all', text: 'All' }],
-                status: [{ value: 'all', text: 'All' }],
-                'indicative-treatment-years': [{ value: 'all', text: 'All' }],
-                'revised-indicative-treatment-years': [
-                    { value: 'all', text: 'All' },
-                ],
+                treatments: [],
+                regions: [],
+                districts: [],
+                purposes: [],
+                programs: [],
+                status: [],
+                'indicative-treatment-years': [],
+                'revised-indicative-treatment-years': [],
             },
         };
     },
@@ -46,7 +45,7 @@ export default {
                 type: 'GET',
                 data: function (d) {
                     $.each(this.ajaxDataOptions, (k, v) => {
-                        d[k] = v;
+                        d[k] = Object.values(v).join(',');
                     });
                     d.format = 'datatables'; // ?format=datatables
                 }.bind(this),
@@ -109,6 +108,7 @@ export default {
                     title: 'Purpose',
                     filter: true,
                     filterOptions: this.fieldFilterOptions.purposes,
+                    multiple: true,
                     // eslint-disable-next-line no-unused-vars
                     render: function (data, type, row) {
                         // TODO: Multi-select display and render
@@ -120,6 +120,7 @@ export default {
                     title: 'Program',
                     filter: true,
                     filterOptions: this.fieldFilterOptions.programs,
+                    multiple: true,
                     // eslint-disable-next-line no-unused-vars
                     render: function (data, type, row) {
                         // TODO: Multi-select display and render
@@ -196,24 +197,37 @@ export default {
     },
     methods: {
         /**
-         * Sets or unsets a tag and value in the ajaxDataOptions object
-         * @param {String=} tag A tag
-         * @param {String=} value The value to set the tag to
-         * @param {String=} valueAll The value to to use when unsetting the tag / filter all values
+         * Sets or unsets an id and value in the ajaxDataOptions object
+         * @param {String=} id An id
+         * @param {Object=} value The table value object to set the id to
+         * @param {Boolean=} multiple Whether the value is an array or not
          */
-        setAjax: function (tag, value, valueAll = 'all') {
+        setAjax: function (id, value, multiple = false) {
             const ajaxDataOptions = { ...this.ajaxDataOptions };
-            if (tag && value) {
-                if (value == valueAll) {
-                    delete ajaxDataOptions[tag];
-                } else {
-                    ajaxDataOptions[tag] = value;
-                }
-                this.ajaxDataOptions = ajaxDataOptions;
+            if (!(id in ajaxDataOptions)) {
+                ajaxDataOptions[id] = [];
             }
+            let values;
+            let empty = false;
+            if (multiple) {
+                empty = value.length == 0 ? true : false;
+                values = value.map(({ value }) => value);
+            } else {
+                empty = value?.value == undefined ? true : false;
+                values = empty ? null : [value.value];
+            }
+
+            if (empty) {
+                delete ajaxDataOptions[id];
+            } else {
+                ajaxDataOptions[id] = values;
+            }
+
+            this.ajaxDataOptions = ajaxDataOptions;
         },
         selectionChanged(event) {
-            this.setAjax(event.id, event.value, event.valueAll);
+            // this.setAjax(event.id, event.value, event.multiple);
+            this.setAjax(...Object.values(event));
         },
     },
 };
