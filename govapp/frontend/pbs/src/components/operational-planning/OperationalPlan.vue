@@ -18,6 +18,7 @@
                 />
                 <PanelWorkflow
                     :status="operationalPlan.status"
+                    :status-display="operationalPlan.status_display"
                     :content-type="operationalPlan.content_type"
                     :pk="operationalPlan.id"
                     :assigned-to="operationalPlan.assigned_to"
