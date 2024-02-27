@@ -2,7 +2,7 @@
     <DataTableTemplate
         v-if="ajax"
         name="Actions"
-        :ajax-data-string="ajax"
+        :ajax="ajax"
         :columns="columns"
     >
     </DataTableTemplate>
