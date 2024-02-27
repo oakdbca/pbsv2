@@ -2,7 +2,7 @@
     <DataTableTemplate
         v-if="ajax"
         name="Operational Plans"
-        :ajax-data-string="ajax"
+        :ajax="ajax"
         :columns="columns"
     >
     </DataTableTemplate>
