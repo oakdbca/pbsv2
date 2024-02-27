@@ -4,9 +4,9 @@
             <span id="basic-addon1" class="input-group-text">Status</span>
             <span
                 id="basic-addon1"
-                class="input-group-text"
+                class="input-group-text text-capitalize"
                 :class="[badgeTextClass, badgeBackgroundClass]"
-                >{{ statusDisplay }}
+                >{{ statusText }}
                 <i v-if="iconClass" class="bi ps-2" :class="iconClass"></i
             ></span>
         </div>
@@ -23,7 +23,8 @@ export default {
         },
         statusDisplay: {
             type: String,
-            required: true,
+            required: false,
+            default: null,
         },
         statusColorMap: {
             type: Object,
@@ -49,6 +50,11 @@ export default {
                     background: 'bg-danger',
                     icon: 'bi-x-square',
                 },
+                discarded: {
+                    text: 'text-white',
+                    background: 'bg-danger',
+                    icon: 'bi-trash3',
+                },
             }),
         },
     },
@@ -61,6 +67,9 @@ export default {
         },
         iconClass() {
             return this.statusColorMap[this.status]?.icon;
+        },
+        statusText() {
+            return this.statusDisplay ? this.statusDisplay : this.status;
         },
     },
 };
