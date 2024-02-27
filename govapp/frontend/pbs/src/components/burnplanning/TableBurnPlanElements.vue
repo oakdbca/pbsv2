@@ -226,7 +226,6 @@ export default {
             this.ajaxDataOptions = ajaxDataOptions;
         },
         selectionChanged(event) {
-            // this.setAjax(event.id, event.value, event.multiple);
             this.setAjax(...Object.values(event));
         },
     },
