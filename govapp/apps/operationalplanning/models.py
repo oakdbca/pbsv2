@@ -366,6 +366,7 @@ class OperationalPlan(
     STATUS_WITH_REGIONAL_MANAGER = "with_regional_manager"
     STATUS_WITH_STATE_MANAGER = "with_state_manager"
     STATUS_APPROVED = "approved"
+    STATUS_DISCARDED = "discarded"
 
     STATUS = Choices(
         (STATUS_DRAFT, "Draft"),
@@ -381,6 +382,7 @@ class OperationalPlan(
         (STATUS_WITH_REGIONAL_MANAGER, "With Regional Manager"),
         (STATUS_WITH_STATE_MANAGER, "With State Manager"),
         (STATUS_APPROVED, "Approved"),
+        (STATUS_DISCARDED, "Discarded"),
     )
 
     operational_area = models.ForeignKey(
