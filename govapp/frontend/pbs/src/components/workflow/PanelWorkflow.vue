@@ -2,11 +2,15 @@
     <div class="card mb-3">
         <div class="card-header">Workflow</div>
         <PanelStatus :status="status" :status-display="statusDisplay" />
-        <div class="card-body">
+        <div v-if="assignableUsers" class="card-body">
             <PanelAssignable
                 :content-type="contentType"
                 :pk="pk"
+                :assignable-users="assignableUsers"
+                :assign-to-me-api-url="assignToMeApiUrl"
+                :assign-to-api-url="assignToApiUrl"
                 :assigned-to="assignedTo"
+                :request-user-id="requestUserId"
                 @assign-to-me="$emit('assignToMe')"
                 @assign-to="assignTo"
             />
@@ -34,7 +38,8 @@ export default {
         },
         statusDisplay: {
             type: String,
-            required: true,
+            required: false,
+            default: null,
         },
         contentType: {
             type: Number,
@@ -44,7 +49,26 @@ export default {
             type: Number,
             required: true,
         },
+        assignableUsers: {
+            type: Array,
+            required: false,
+            default: null,
+        },
+        assignToMeApiUrl: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        assignToApiUrl: {
+            type: String,
+            required: false,
+            default: null,
+        },
         assignedTo: {
+            type: Number,
+            required: true,
+        },
+        requestUserId: {
             type: Number,
             required: true,
         },

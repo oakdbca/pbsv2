@@ -21,7 +21,11 @@
                     :status-display="operationalPlan.status_display"
                     :content-type="operationalPlan.content_type"
                     :pk="operationalPlan.id"
+                    :assignable-users="assignableUsers"
+                    :assign-to-me-api-url="assignToMeApiUrl"
+                    :assign-to-api-url="assignToApiUrl"
                     :assigned-to="operationalPlan.assigned_to"
+                    :request-user-id="store.userData.id"
                     @assign-to-me="assignToMe"
                     @assign-to="assignTo"
                 ></PanelWorkflow>
@@ -113,6 +117,8 @@
 </template>
 
 <script>
+import { useStore } from '@/stores/state';
+
 import { api_endpoints, utils } from '@/utils/hooks';
 
 import PanelLogs from '../logging/PanelLogs.vue';
@@ -126,18 +132,47 @@ export default {
     },
     data() {
         return {
+            store: useStore(),
             operationalPlan: null,
+            assignableUsers: null,
         };
     },
-    created() {
-        this.fetchOperationalPlan();
+    computed: {
+        assignableUsersApiUrl() {
+            return api_endpoints.assignableUsers();
+        },
+        assignToMeApiUrl() {
+            return api_endpoints.assignToMe();
+        },
+        assignToApiUrl() {
+            return (
+                api_endpoints.assignTo() +
+                `?content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.pk}`
+            );
+        },
+    },
+    async created() {
+        await this.fetchOperationalPlan();
+        this.fetchAssignableUsers();
     },
     methods: {
-        fetchOperationalPlan() {
+        async fetchOperationalPlan() {
             var pk = this.$route.params.pk;
-            utils.fetchUrl(api_endpoints.operationalPlans(pk)).then((data) => {
-                this.operationalPlan = Object.assign({}, data);
-            });
+            await utils
+                .fetchUrl(api_endpoints.operationalPlans(pk))
+                .then((data) => {
+                    this.operationalPlan = Object.assign({}, data);
+                });
+        },
+        fetchAssignableUsers() {
+            utils
+                .fetchUrl(
+                    api_endpoints.assignableUsers() +
+                        `?content_type=${this.operationalPlan.content_type}&object_id=${this.operationalPlan.id}`
+                )
+                .then((data) => {
+                    this.assignableUsers = data;
+                });
         },
         assignToMe() {},
         assignTo(value) {

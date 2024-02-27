@@ -2,8 +2,7 @@
     <div class="mb-3">
         <label for="assigned-to" class="form-label">Assigned To</label>
         <SelectAssignable
-            :content-type="contentType"
-            :pk="pk"
+            :assignable-users="assignableUsers"
             :assigned-to="assignedTo"
             @assign-to="assignTo"
         />
@@ -22,10 +21,6 @@
 </template>
 
 <script>
-import { api_endpoints, utils } from '@/utils/hooks';
-
-import { useStore } from '@/stores/state';
-
 import SelectAssignable from './SelectAssignable.vue';
 
 export default {
@@ -42,20 +37,34 @@ export default {
             type: Number,
             required: true,
         },
+        assignableUsers: {
+            type: Array,
+            required: false,
+            default: null,
+        },
         assignedTo: {
             type: Number,
             required: true,
         },
+        requestUserId: {
+            type: Number,
+            required: true,
+        },
+        assignToMeApiUrl: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        assignToApiUrl: {
+            type: String,
+            required: false,
+            default: null,
+        },
     },
     emits: ['assignToMe', 'assignTo'],
-    data() {
-        return {
-            store: useStore(),
-        };
-    },
     computed: {
         assignedToMe() {
-            return this.store.userData.id === this.assignedTo;
+            return this.requestUserId === this.assignedTo;
         },
         assignToMeButtonText() {
             return this.assignedToMe ? 'Assigned to you' : 'Assign to me';
@@ -67,7 +76,7 @@ export default {
         },
     },
     methods: {
-        assignToMe() {
+        async assignToMe() {
             const requestOptions = {
                 method: 'POST',
                 headers: {
@@ -78,15 +87,16 @@ export default {
                     object_id: this.pk,
                 }),
             };
-            utils
-                .fetchUrl(api_endpoints.assignToMe(), requestOptions)
-                .then((data) => {
-                    console.log(data);
-                    this.$emit('assignTo', data.user_id);
-                });
+            await fetch(this.assignToMeApiUrl, requestOptions).then(
+                async (response) => {
+                    await response.json().then((data) => {
+                        this.$emit('assignTo', data.user_id);
+                    });
+                }
+            );
             this.$emit('assignToMe');
         },
-        assignTo(value) {
+        async assignTo(value) {
             const requestOptions = {
                 method: 'POST',
                 headers: {
@@ -98,15 +108,7 @@ export default {
                     user_id: value,
                 }),
             };
-            utils
-                .fetchUrl(
-                    api_endpoints.assignTo() +
-                        `?content_type=${this.content_type}&object_id=${this.pk}&user_id=${value}`,
-                    requestOptions
-                )
-                .then((response) => {
-                    console.log(response);
-                });
+            await fetch(this.assignToApiUrl, requestOptions);
             this.$emit('assignTo', value);
         },
     },
