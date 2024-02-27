@@ -85,8 +85,8 @@ export default {
         },
     },
     mounted: function () {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore, eslint-disable-next-line no-undef
+        // @ts-ignore
+        // eslint-disable-next-line no-undef
         chevron_toggle.init();
     },
     methods: {

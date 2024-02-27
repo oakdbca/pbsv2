@@ -10,7 +10,7 @@
 
 <script>
 import { api_endpoints, helpers } from '@/utils/hooks';
-import DataTableTemplate from '@/components/forms/colocation/datatable_template.vue';
+import DataTableTemplate from '@/components/forms/colocation/DataTableTemplate.vue';
 
 export default {
     name: 'DatatableOperationalPlans',

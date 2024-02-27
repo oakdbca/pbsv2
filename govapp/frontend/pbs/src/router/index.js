@@ -1,8 +1,8 @@
 import { RouterView } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 import ProfileComponent from '@/components/accounts/Profile.vue';
-import BurnPlanning from '@/components/burnplanning/burnplanning.vue';
-import BurnPlanElement from '@/components/burnplanning/burnplanelement.vue';
+import BurnPlanning from '@/components/burnplanning/BurnPlanning.vue';
+import BurnPlanElement from '@/components/burnplanning/BurnPlanElement.vue';
 import OperationalPlanning from '@/components/operational-planning/OperationalPlanning.vue';
 import OperationalPlan from '@/components/operational-planning/OperationalPlan.vue';
 

@@ -9,6 +9,7 @@ from govapp import views
 from govapp.apps.accounts.urls import router as accounts_router
 from govapp.apps.burnplanning.urls import router as burnplanning_router
 from govapp.apps.logs.urls import router as logs_router
+from govapp.apps.main.urls import router as main_router
 from govapp.apps.operationalplanning.urls import router as operationalplanning_router
 
 # Admin Site Settings
@@ -27,6 +28,7 @@ router = routers.DefaultRouter()
 router.registry.extend(accounts_router.registry)
 router.registry.extend(burnplanning_router.registry)
 router.registry.extend(logs_router.registry)
+router.registry.extend(main_router.registry)
 router.registry.extend(operationalplanning_router.registry)
 
 router.registry.sort(key=lambda x: x[0])
@@ -51,7 +53,6 @@ urlpatterns = [
     urls.path("", urls.include("govapp.apps.accounts.urls")),
     urls.path("", urls.include("govapp.apps.burnplanning.urls")),
     urls.path("", urls.include("govapp.apps.main.urls")),
-    urls.path("", urls.include("govapp.apps.operationalplanning.urls")),
     urls.path("", urls.include("govapp.apps.swagger.urls")),
     # Include api routes
     urls.path("api/", urls.include(router.urls)),

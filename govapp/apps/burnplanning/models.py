@@ -214,9 +214,9 @@ class BurnPlanElement(
                 logger.info(f"Created output leader: {output_leader}")
 
     @property
-    def districts(self):
-        return "TBI"
+    def regions(self):
+        return list({d.region for d in self.burn_plan_unit.districts.all()})
 
     @property
-    def regions(self):
-        return "TBI"
+    def districts(self):
+        return self.burn_plan_unit.districts.all()

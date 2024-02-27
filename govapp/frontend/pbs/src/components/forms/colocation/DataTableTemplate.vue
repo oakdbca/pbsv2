@@ -1,24 +1,39 @@
 <template>
     <DataTable
+        ref="datatable"
         :columns="table_columns"
-        :ajax="ajaxDataString"
+        :ajax="ajax"
         :options="options"
         class="text-capitalize"
         :class="tableClass"
+        @selection-changed="$emit('selection-changed', $event)"
     />
 </template>
 
 <script>
 import _ from 'lodash';
-
 import { helpers } from '@/utils/hooks';
+import SelectFilter from '@/components/forms/colocation/SelectFilter.vue';
+
+import { createApp } from 'vue';
 
 import DataTable from 'datatables.net-vue3';
-import DataTablesCore from 'datatables.net';
-import 'datatables.net-responsive';
-import 'datatables.net-buttons';
+import DataTablesCore from 'datatables.net-bs5';
+import Select from 'datatables.net-select-bs5';
+import Responsive from 'datatables.net-responsive'; // -bs5 not working
+import Buttons from 'datatables.net-buttons'; // -bs5 not working
+import ButtonsHtml5 from 'datatables.net-buttons/js/buttons.html5';
+import 'datatables.net-buttons-bs5/js/buttons.bootstrap5.js';
 
 DataTable.use(DataTablesCore);
+DataTable.use(Select);
+DataTable.use(Responsive);
+DataTable.use(Buttons);
+DataTable.use(ButtonsHtml5);
+
+// Add our custom selection-changed event to the DataTable component's emits array, to stop vue from complaining about it missing
+if (!DataTable.emits.includes('selection-changed'))
+    DataTable.emits.push('selection-changed');
 
 export default {
     name: 'DataTableTemplate',
@@ -32,12 +47,11 @@ export default {
             required: true,
         },
         /**
-         * The ajax endpoint string to fetch data from
+         * The ajax endpoint string or object to fetch data from
          */
-        ajaxDataString: {
-            type: String,
-            required: false,
-            default: '',
+        ajax: {
+            type: [String, Object],
+            required: true,
         },
         /**
          * A list of dictionaries in the form of [{data: 'column', title: 'Column Title'}, ...]
@@ -58,7 +72,49 @@ export default {
                 responsive: true,
                 select: false,
                 dom: '<"container-fluid"<"row"<"col"l><"col"f><"col"<"float-end"B>>>>rtip', // 'lfBrtip'
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                buttons: ['copy', 'csv', 'excel'],
+                // eslint-disable-next-line no-unused-vars
+                initComplete: function (settings, json) {
+                    console.log('Table initialized!');
+                    // The datatable-vue3 component
+                    const component =
+                        this.parent()[0].parentElement.__vueParentComponent;
+                    // The selectionChanged function to be called when a filter is changed
+                    const selectionChanged = (e) => {
+                        component.ctx.$emit('selection-changed', e);
+                    };
+                    this.api()
+                        .columns()
+                        .every(function () {
+                            const columnOptions =
+                                this.context[0].aoColumns[this.index()];
+                            const filter = columnOptions.filter;
+
+                            if (filter == true) {
+                                const props = {
+                                    id: columnOptions.data,
+                                    title: columnOptions.title,
+                                    filterOptions: columnOptions.filterOptions,
+                                    showTitle: false, // we use the title in the header
+                                    onSelectionChanged: selectionChanged,
+                                };
+                                const select = createApp(SelectFilter, props);
+
+                                let div = document.createElement('div');
+
+                                div = document.createElement('div');
+                                const id = `mountpoint-select-filter-${columnOptions.data}`;
+                                div.id = id;
+                                this.header().appendChild(div);
+                                select.mount(`#${id}`);
+                                // div.appendChild(select);
+
+                                $(div).on('click', function (e) {
+                                    e.stopPropagation();
+                                });
+                            }
+                        });
+                },
             }),
         },
         /**
@@ -79,6 +135,7 @@ export default {
             default: () => [],
         },
     },
+    emits: ['selection-changed'],
     computed: {
         /**
          * Columns object for the DataTable component
@@ -101,6 +158,16 @@ export default {
             }
             // If no headers are provided, use id as the default
             return [{ data: 'id', title: 'Id' }];
+        },
+    },
+    watch: {
+        ajax: {
+            // eslint-disable-next-line no-unused-vars
+            handler: function (val) {
+                // Reload the table when the ajax prop changes
+                this.$refs.datatable.dt.ajax.reload();
+            },
+            deep: true,
         },
     },
     methods: {
@@ -144,3 +211,7 @@ export default {
     },
 };
 </script>
+
+<style lang="css">
+@import 'datatables.net-dt';
+</style>
