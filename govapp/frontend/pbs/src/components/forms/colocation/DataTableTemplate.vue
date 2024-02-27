@@ -210,15 +210,12 @@ export default {
                     const row_merged = { ...row_full, ...row_serialized };
                     // Sort by headers order, create an array, and push to result
                     const row = _.zip(
-                        ..._.chain(row_merged)
-                            .toPairs()
-                            .sortBy(headers)
-                            .value(),
+                        ..._.chain(row_merged).toPairs().sortBy(headers).value()
                     )[1];
                     result.push(row);
                     return result;
                 },
-                [],
+                []
             );
 
             return table_data;
