@@ -44,6 +44,7 @@ djangorestframework-gis = "^1.0"
 django-debug-toolbar = "^4.3.0"
 appmonitor_client = {git = "https://github.com/dbca-wa/appmonitor_client.git", rev="main"}
 python-decouple = "^3.8"
+tomli = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.2"

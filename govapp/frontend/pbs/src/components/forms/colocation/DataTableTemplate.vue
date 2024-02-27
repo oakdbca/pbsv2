@@ -1,6 +1,6 @@
 <template>
     <DataTable
-        ref="datatable"
+        :ref="datatableRefName"
         :columns="table_columns"
         :ajax="ajax"
         :options="options"
@@ -137,6 +137,9 @@ export default {
     },
     emits: ['selection-changed'],
     computed: {
+        datatableRefName: function () {
+            return this.name + '-datatable';
+        },
         /**
          * Columns object for the DataTable component
          */
@@ -165,7 +168,7 @@ export default {
             // eslint-disable-next-line no-unused-vars
             handler: function (val) {
                 // Reload the table when the ajax prop changes
-                this.$refs.datatable.dt.ajax.reload();
+                this.$refs[this.datatableRefName].dt.ajax.reload();
             },
             deep: true,
         },
@@ -212,6 +215,6 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style scoped lang="css">
 @import 'datatables.net-dt';
 </style>
