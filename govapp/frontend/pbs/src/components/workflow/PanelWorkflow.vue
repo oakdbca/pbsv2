@@ -1,20 +1,7 @@
 <template>
     <div class="card mb-3">
         <div class="card-header">Workflow</div>
-        <div class="card-body border-bottom">
-            <div class="input-group">
-                <span id="basic-addon1" class="input-group-text">Status</span>
-                <input
-                    :value="status"
-                    type="text"
-                    class="form-control"
-                    placeholder="Username"
-                    aria-label="Username"
-                    aria-describedby="basic-addon1"
-                    disabled
-                />
-            </div>
-        </div>
+        <PanelStatus :status="status" :status-display="statusDisplay" />
         <div class="card-body">
             <PanelAssignable
                 :content-type="contentType"
@@ -31,15 +18,21 @@
 </template>
 
 <script>
+import PanelStatus from '@/components/workflow/PanelStatus.vue';
 import PanelAssignable from '@/components/workflow/PanelAssignable.vue';
 
 export default {
     name: 'OperationalPlan',
     components: {
+        PanelStatus,
         PanelAssignable,
     },
     props: {
         status: {
+            type: String,
+            required: true,
+        },
+        statusDisplay: {
             type: String,
             required: true,
         },
