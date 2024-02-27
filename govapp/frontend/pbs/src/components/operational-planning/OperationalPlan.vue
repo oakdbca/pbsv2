@@ -23,7 +23,7 @@
                     :assigned-to="operationalPlan.assigned_to"
                     @assign-to-me="assignToMe"
                     @assign-to="assignTo"
-                />
+                ></PanelWorkflow>
                 <div class="card">
                     <div class="card-header">Actions</div>
                     <div class="card-body">

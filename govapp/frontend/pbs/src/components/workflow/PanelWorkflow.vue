@@ -24,17 +24,18 @@
                 @assign-to="assignTo"
             />
         </div>
+        <slot
+            ><!-- Add any custom workflow elements as card bodies to the parent component --></slot
+        >
     </div>
 </template>
 
 <script>
-import PanelLogs from '@/components/logging/PanelLogs.vue';
 import PanelAssignable from '@/components/workflow/PanelAssignable.vue';
 
 export default {
     name: 'OperationalPlan',
     components: {
-        PanelLogs,
         PanelAssignable,
     },
     props: {
@@ -64,5 +65,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss" scoped></style>
