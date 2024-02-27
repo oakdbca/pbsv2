@@ -13,7 +13,7 @@ from rest_framework_datatables.django_filters.backends import DatatablesFilterBa
 from govapp.apps.accounts.serializers import UserKeyValueListSerializer
 from govapp.apps.main.mixins import KeyValueListMixin
 
-from .models import District, Region
+from .models import AssignableModel, District, Region
 from .serializers import DistrictSerializer, RegionSerializer
 
 logger = logging.getLogger(__name__)
@@ -85,6 +85,11 @@ class AssignToMeAPIView(APIView):
 
         model_class = ContentType.objects.get(id=content_type).model_class()
 
+        if not isinstance(AssignableModel, model_class):
+            raise ValidationError(
+                "The model the object is based on must extend from AssignableModel"
+            )
+
         try:
             instance = model_class.objects.get(id=object_id)
         except model_class.DoesNotExist:
@@ -135,6 +140,11 @@ class AssignableUsersAPIView(APIView):
 
         model_class = ContentType.objects.get(id=content_type).model_class()
 
+        if not isinstance(AssignableModel, model_class):
+            raise ValidationError(
+                "The model the object is based on must extend from AssignableModel"
+            )
+
         try:
             instance = model_class.objects.get(id=object_id)
         except model_class.DoesNotExist:
@@ -173,6 +183,11 @@ class AssignToAPIView(APIView):
             raise ValidationError("AssignToMeAPIView requires an object id")
 
         model_class = ContentType.objects.get(id=content_type).model_class()
+
+        if not isinstance(AssignableModel, model_class):
+            raise ValidationError(
+                "The model the object is based on must extend from AssignableModel"
+            )
 
         try:
             instance = model_class.objects.get(id=object_id)
