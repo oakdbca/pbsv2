@@ -26,8 +26,8 @@ const router = createRouter({
             component: ProfileComponent,
         },
         {
-            path: '/burnplanning',
-            name: 'burnplanning',
+            path: '/burn-planning',
+            name: 'burn-planning',
             component: BurnPlanning,
         },
         {

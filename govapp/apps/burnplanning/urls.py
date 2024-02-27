@@ -2,6 +2,7 @@ from django import urls
 from rest_framework import routers
 
 from govapp.apps.burnplanning import views
+from govapp.views import IndexPage
 
 router = routers.DefaultRouter()
 router.register(
@@ -24,6 +25,7 @@ router.register(
 
 
 urlpatterns = [
+    urls.path("burn-planning", IndexPage.as_view(), name="burn-planning"),
     urls.path(
         "burn-plan-elements/<int:pk>/",
         views.BurnPlanElementView.as_view(),
