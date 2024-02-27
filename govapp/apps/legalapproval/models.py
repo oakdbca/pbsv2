@@ -1,3 +1,4 @@
+import logging
 from abc import abstractmethod
 
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -14,6 +15,8 @@ from govapp.apps.main.models import (
     ModelFile,
     UniqueNameableModel,
 )
+
+logger = logging.getLogger(__name__)
 
 
 # Let's call the class LegalApproval to not confuse with an Approval model
@@ -294,6 +297,8 @@ class ApprovableModel(models.Model, metaclass=AbstractModelMeta):
         blank=True,
     )
 
+    required_approvals = GenericRelation(ModelRequiredApproval)
+
     class Meta:
         abstract = True
 
@@ -306,31 +311,27 @@ class ApprovableModel(models.Model, metaclass=AbstractModelMeta):
 
         if is_new_object:
             # Automatically create required approval entries for the model
-            for name in self.initial_required_approvals():
+            for name in self.all_approvals:
                 ModelRequiredApproval.objects.create(
                     content_object=self,
                     legal_approval_name=name,
                     is_required=True,
                 )
-            for name in self.initial_not_required_approvals():
-                ModelRequiredApproval.objects.create(
-                    content_object=self,
-                    legal_approval_name=name,
-                    is_required=False,
-                )
 
     @abstractmethod
     def initial_required_approvals(self):
-        """Needs to be implemented by the model to return a list of LegalApproval names
-        that are required
-        """
-
-        return LegalApproval.objects.none()
+        raise NotImplementedError(
+            "Needs to be implemented by the model to return a list of LegalApproval names"
+        )
 
     @abstractmethod
     def initial_not_required_approvals(self):
-        """Needs to be implemented by the model to return a list of LegalApproval names
-        that are not required
-        """
+        raise NotImplementedError(
+            "Needs to be implemented by the model to return a list of LegalApproval names"
+        )
 
-        return LegalApproval.objects.none()
+    @abstractmethod
+    def all_approvals(self):
+        raise NotImplementedError(
+            "Model needs to implement a method to return all LegalApproval names"
+        )

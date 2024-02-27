@@ -1,5 +1,7 @@
 {% extends "webtemplate_dbca/base_b5_auth_session.html" %}
 {% load static %}
+{% load users %}
+{% load utils %}
 
 {% block extra_css %}
     <link rel="icon" type="image/png" href="{% static 'common/img/favicon.ico' %}">
@@ -12,24 +14,52 @@
 {% endblock %}
 
 {% block header_top_menu %}
+{% if user.is_authenticated and user.profile %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-0">
+    <div class="container px-4">
+        <form class="d-flex">
+            <input class="form-control form-control-sm me-2" type="search" placeholder="Search" aria-label="Search" autofocus>
+        </form>
+        <div class="navbar-collapse justify-content-end" id="navbarNavDarkDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item text-secondary me-4">
+            <a class="nav-link" href="/profile">
+                <small><span>Home Location:</span><span class="ms-2 fw-bolder">{{ user.profile.district }} ({{ user.profile.district.region }})</span></small>
+            </a>
+          </li>
+        </ul>
+      </div>
+  </nav>
+  {% endif %}
 {% endblock %}
 
 {% block top_menu %}
 {% endblock %}
 
 {% block menubottom %}
-<!-- value -->
-{%endblock %}
+{% endblock %}
 
 {% block menu_items_left_brand %}
-{%endblock %}
+<div class="navbar-nav">
+    <div class="nav-item">
+        <a class="nav-link" href="{% url 'home'%}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fire mb-1" viewBox="0 0 16 16">
+            <path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15"/>
+            </svg>
+            Home
+        </a>
+    </div>
+</div>
+{% endblock %}
 
 {% block menu_dropdown %}
-    {% if request.user.is_superuser or is_django_admin %}
+    {% is_django_admin as is_django_admin %}
+    {% is_pbs_admin as is_pbs_admin %}
+    {% if user.is_superuser or is_django_admin %}
         {% include 'webtemplate_dbca/includes/staff_menu.html' %}
     {% endif %}
     {% block menu_extra_dropdown_staff_top %}
-        {% if request.user.is_superuser or is_admin %}
+        {% if user.is_superuser or is_pbs_admin %}
             {% include 'webtemplate_dbca/includes/staff_menu_extras.html' %}
         {% endif %}
     {% endblock %}
@@ -39,7 +69,7 @@
 
 
 {% block menu_items2_right %}
-{% if request.user.is_authenticated %}
+{% if user.is_authenticated %}
 
 {% else %}
 <a href="/ssologin" class="btn btn-primary btn-sm">Login</a>
@@ -59,52 +89,41 @@
 </style>
 {% endblock %}
 
-{% block page_content %}
-<div class="container-fluid">
-    <!-- Messages  -->
-    {% if messages %}
-    <div class="row">
-        <div class="col">
-            {% for message in messages %}
-            <div class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %}">
-                {{ message|safe }}
-            </div>
-            {% endfor %}
-        </div>
+{% block content %}
+    <div class="container-fluid" id="vue-root">
+        {% block vue-component %}
+        <div id="app"></div>
+        {% endblock %}
     </div>
-    {% endif %}
-
-    <div class="row">
-        <div class="col">
-            {% block page_content_inner %}{% endblock %}
-        </div>
-    </div>
-</div>
 {% endblock %}
+
 {% block custom_js %}
-<script language="javascript">
-        var env = {
-            "kmi_server_url": "{{ KMI_SERVER_URL }}"
-        }
-</script>
-
-<script type="text/javascript" src="{% static 'pbsv2_vue/js/chunk-vendors.js' %}?v={{build_tag}}"></script>
-{% if app_build_url %}
-<script type="module" type="text/javascript" src="{{ app_build_url }}"></script>
-{% else %}
-<script type="text/javascript" src="{% static 'pbsv2_vue/js/app.js' %}?v={{build_tag}}"></script>
-{% endif %}
-
+    <script language="javascript">
+            var env = {
+                "gis_server_url": "{{ GIS_SERVER_URL }}"
+            }
+    </script>
+    <script type="text/javascript" src="{% static 'pbsv2_vue/js/chunk-vendors.js' %}?v={{build_tag}}"></script>
+    <script type="text/javascript" src="{% static 'pbsv2_vue/js/app.js' %}?v={{build_tag}}"></script>
 {% endblock %}
 
-{% block page_footer %}
-<footer class="footer mt-auto py-3">
-    <div class="container-fluid">
+{% block footer %}
+{% project_version as project_version %}
+{% support_email as support_email %}
+{% support_phone as support_phone %}
+<footer class="footer fixed-bottom mt-3">
+    <div class="container-fluid border-top py-2 bg-light text-secondary">
         <div class="row">
             <div class="col">
-                <small class="float-right">&copy; Department of Biodiversity, Conservation and Attractions</small>
+                <small class="float-start">Version: {% project_version %}</small>
+            </div>
+            <div class="col">
+                <small>Support: <a href="mailto:{% support_email %}">{% support_email %}</a> | <a href="tel:{% support_phone %}">{% support_phone %}</a></small>
+            </div>
+            <div class="col">
+                <small class="float-end">&copy; {% department_name %}</small>
             </div>
         </div>
     </div>
 </footer>
-{% endblock page_footer %}
+{% endblock footer %}

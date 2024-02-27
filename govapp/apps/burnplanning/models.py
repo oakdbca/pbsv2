@@ -196,9 +196,13 @@ class BurnPlanElement(
     def __str__(self):
         return f"{self.reference_number} ({self.name})"
 
-    def user_is_assignable(self, user: User) -> tuple[bool, str]:
-        # Todo define conditions for user being assignable to a burn plan element
-        return super().user_is_assignable(user)
+    def assignable_users(self):
+        # TODO uncomment once groups are listed above
+        # GROUPS = [
+        #     "TODO: Add appropriate groups here",
+        # ]
+        # return User.objects.filter(is_active=True, groups__name__in=GROUPS).distinct()
+        return User.objects.filter(is_active=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

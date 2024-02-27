@@ -1,6 +1,5 @@
 """Azure Storage Service."""
 
-
 # Standard
 import pathlib
 

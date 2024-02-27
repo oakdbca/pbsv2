@@ -1,9 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-const {
-    CKEditorTranslationsPlugin,
-} = require('@ckeditor/ckeditor5-dev-translations');
 const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 
 // Useful plugin to find out what is making the bundle so big
@@ -18,7 +14,7 @@ module.exports = {
     chainWebpack: (config) => {
         config.resolve.alias.set(
             '@static-root',
-            path.resolve(__dirname, '../../../staticfiles/')
+            path.resolve(__dirname, '../../../staticfiles/'),
         );
 
         // https://ckeditor.com/docs/ckeditor5/latest/installation/integrations/vuejs-v3.html#webpack
@@ -59,7 +55,7 @@ module.exports = {
                     postcssOptions: styles.getPostCssConfig({
                         themeImporter: {
                             themePath: require.resolve(
-                                '@ckeditor/ckeditor5-theme-lark'
+                                '@ckeditor/ckeditor5-theme-lark',
                             ),
                         },
                         minify: true,
@@ -71,21 +67,15 @@ module.exports = {
     configureWebpack: {
         devtool: webpack_devtool,
         plugins: [
+            new webpack.DefinePlugin({
+                // Vue CLI is in maintenance mode, and probably won't merge my PR to fix this in their tooling
+                // https://github.com/vuejs/vue-cli/pull/7443
+                __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false',
+            }),
             new webpack.ProvidePlugin({
                 $: 'jquery',
-                moment: 'moment',
                 swal: 'sweetalert2',
                 _: 'lodash',
-            }),
-            new MomentLocalesPlugin(),
-            // new BundleAnalyzerPlugin(),
-            // CKEditor 5 needs its own plugin to be built using webpack.
-            new CKEditorTranslationsPlugin({
-                // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
-                language: 'en',
-
-                // Append translations to the file matching the `app` name.
-                translationsOutputFile: /app/,
             }),
         ],
         devServer: {

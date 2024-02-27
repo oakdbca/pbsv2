@@ -79,6 +79,7 @@ class LegalApprovalAdmin(admin.ModelAdmin):
     form = LegalApprovalAdminForm
 
     list_display = (
+        "name",
         "approver",
         "approval_type",
         "land_type",

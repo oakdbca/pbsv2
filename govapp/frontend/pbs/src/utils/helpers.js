@@ -1,6 +1,3 @@
-import * as bootstrap from 'bootstrap';
-import moment from 'moment'; // default import
-
 export default {
     /**
      * Formats an error object into a string
@@ -51,7 +48,7 @@ export default {
                 let errors_str = '<ul class="list-group text-start">';
                 for (const key of Object.keys(errors)) {
                     errors_str += `<li class="list-group-item"><span class="fw-bold">${key}:</span> ${module.exports.escapeHtml(
-                        errors[key]
+                        errors[key],
                     )}</li>`;
                 }
                 return errors_str + '</ul>';
@@ -85,7 +82,7 @@ export default {
                     name + '='
                 ) {
                     value = decodeURIComponent(
-                        cookie.substring(name.length + 1)
+                        cookie.substring(name.length + 1),
                     );
                     break;
                 }
@@ -110,9 +107,10 @@ export default {
     },
     enablePopovers: function () {
         const popoverTriggerList = [].slice.call(
-            document.querySelectorAll('[data-bs-toggle="popover"]')
+            document.querySelectorAll('[data-bs-toggle="popover"]'),
         );
         popoverTriggerList.map(function (popoverTriggerEl) {
+            // @ts-expect-error - bootstrap is already loaded via script in the html from webtemplate_dbca
             new bootstrap.Popover(popoverTriggerEl); // eslint-disable-line no-undef
         });
     },
@@ -145,15 +143,12 @@ export default {
 
         return classname.join(' ');
     },
-    /**
-     *
-     * @param {Date} date
-     * @param {string=} format
-     */
-    formatDateForAPI: function (date, format = 'DD/MM/YYYY') {
-        return date ? moment(date).format(format) : '';
-    },
     replaceUnderscores: function (/** @type {string} */ str) {
         return str.replace(/_/g, ' ');
+    },
+    bootstrapBadgesFromList: function (/** @type {string[]} */ list) {
+        return list.map((item) => {
+            return `<span class="badge bg-primary">${item}</span>`;
+        });
     },
 };

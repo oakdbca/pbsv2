@@ -1,9 +1,12 @@
 from logging import getLogger
 
+from django.contrib import auth
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.gis.db.models import MultiLineStringField, MultiPolygonField
 from django.db import models
+from django.db.models import Q
 from django.forms import ValidationError
+from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
@@ -16,6 +19,7 @@ from govapp.apps.legalapproval.models import (
     LegalApproval,
 )
 from govapp.apps.main.models import (
+    AssignableModel,
     DisplayNameableModel,
     IntervalFloatField,
     IntervalIntegerField,
@@ -39,6 +43,8 @@ from govapp.apps.risk.models import (
 from govapp.apps.traffic.models import Traffic
 
 logger = getLogger(__name__)
+
+User = auth.get_user_model()
 
 
 class OperationalPlanRiskCategory(models.Model):
@@ -143,15 +149,17 @@ class OperationalPlanRiskCategoryContributingFactor(models.Model):
         ContributingFactor, on_delete=models.CASCADE
     )
     values_affected = models.TextField(null=True, blank=True)
-    contributing_factor_control_overwrites: models.ManyToManyField = models.ManyToManyField(
-        OverwriteControl,
-        related_name="operational_plan_risk_category_contributing_factors",
-        editable=False,
-        through="OperationalPlanRiskCategoryContributingFactorOverwriteControl",
-        through_fields=(
-            "operational_plan_risk_category_contributing_factor",
-            "overwrite_control",
-        ),
+    contributing_factor_control_overwrites: models.ManyToManyField = (
+        models.ManyToManyField(
+            OverwriteControl,
+            related_name="operational_plan_risk_category_contributing_factors",
+            editable=False,
+            through="OperationalPlanRiskCategoryContributingFactorOverwriteControl",
+            through_fields=(
+                "operational_plan_risk_category_contributing_factor",
+                "overwrite_control",
+            ),
+        )
     )  # In IP the standard control contributing factors can be overwritten if revisit_in_implementation_plan is set
     risk_rating_standard = models.ForeignKey(
         RiskRating,
@@ -299,8 +307,21 @@ class OperationalArea(
 
     def initial_not_required_approvals(self):
         # Automatically create entries for other additional required approvals by intersecting with Tenure layer
+        # TODO: Make sure this is correct. Karsten can't remember what this is for
         return LegalApproval.objects.filter(land_type__length__gt=0).values_list(
             "name", flat=True
+        )
+
+    @property
+    def all_approvals(self):
+        """Returns the legal approvals from the initial_required_approvals and initial_not_required_approvals
+        methods without any duplicates"""
+        return (
+            LegalApproval.objects.filter(
+                Q(is_required_for_operational_plan=True) | Q(land_type__length__gt=0)
+            )
+            .distinct()
+            .values_list("name", flat=True)
         )
 
     def copy(self):
@@ -315,6 +336,7 @@ class OperationalPlan(
     UniqueNameableModel,
     TimeStampedModel,
     ApprovableModel,
+    AssignableModel,
 ):
     MODEL_PREFIX = "OP"
 
@@ -334,17 +356,31 @@ class OperationalPlan(
     with_state_manager: models.Manager
     approved: models.Manager
 
+    STATUS_DRAFT = "draft"
+    STATUS_WITH_DISTRICT_OFFICER = "with_district_officer"
+    STATUS_WITH_DISTRICT_OFFICER_REFERRAL = "with_district_officer_referral"
+    STATUS_WITH_REGIONAL_LEADER_FIRE = "with_regional_leader_fire"
+    STATUS_WITH_REGIONAL_LEADER_FIRE_REFERRAL = "with_regional_leader_fire_referral"
+    STATUS_WITH_FMSB_REPRESENTATIVE = "with_fmsb_representative"
+    STATUS_WITH_DISTRICT_MANAGER = "with_district_manager"
+    STATUS_WITH_REGIONAL_MANAGER = "with_regional_manager"
+    STATUS_WITH_STATE_MANAGER = "with_state_manager"
+    STATUS_APPROVED = "approved"
+
     STATUS = Choices(
-        ("draft", "Draft"),
-        ("with_district_officer", "With District Officer"),
-        ("with_district_officer_referral", "With District Officer (Referral)"),
-        ("with_regional_leader_fire", "With Regional Leader Fire"),
-        ("with_regional_leader_fire_referral", "With Regional Leader Fire (Referral)"),
-        ("with_fmsb_representative", "With FMSB Representative"),
-        ("with_district_manager", "With District Manager"),
-        ("with_regional_manager", "With Regional Manager"),
-        ("with_state_manager", "With State Manager"),
-        ("approved", "Approved"),
+        (STATUS_DRAFT, "Draft"),
+        (STATUS_WITH_DISTRICT_OFFICER, "With District Officer"),
+        (STATUS_WITH_DISTRICT_OFFICER_REFERRAL, "With District Officer (Referral)"),
+        (STATUS_WITH_REGIONAL_LEADER_FIRE, "With Regional Leader Fire"),
+        (
+            STATUS_WITH_REGIONAL_LEADER_FIRE_REFERRAL,
+            "With Regional Leader Fire (Referral)",
+        ),
+        (STATUS_WITH_FMSB_REPRESENTATIVE, "With FMSB Representative"),
+        (STATUS_WITH_DISTRICT_MANAGER, "With District Manager"),
+        (STATUS_WITH_REGIONAL_MANAGER, "With Regional Manager"),
+        (STATUS_WITH_STATE_MANAGER, "With State Manager"),
+        (STATUS_APPROVED, "Approved"),
     )
 
     operational_area = models.ForeignKey(
@@ -468,6 +504,34 @@ class OperationalPlan(
     )
 
     @property
+    def year(self):
+        return self.operational_area.burn_plan_element.year
+
+    @cached_property
+    def districts(self):
+        return list(
+            self.operational_area.burn_plan_element.burn_plan_unit.districts.values_list(
+                "display_name", flat=True
+            )
+        )
+
+    @cached_property
+    def regions(self):
+        return list(
+            self.operational_area.burn_plan_element.burn_plan_unit.districts.values_list(
+                "region__display_name", flat=True
+            )
+        )
+
+    @property
+    def burn_plan_unit(self):
+        return self.operational_area.burn_plan_element.burn_plan_unit.reference_number
+
+    @property
+    def assigned_to_name(self):
+        return self.assigned_to.get_full_name()
+
+    @property
     def risk_highest_level(self):
         # Highest risk level from Risk section
         raise NotImplementedError("TODO")
@@ -484,12 +548,33 @@ class OperationalPlan(
 
     def initial_not_required_approvals(self):
         # Automatically create entries for other additional required approvals by intersecting with Tenure layer
+        # TODO: Make sure this is correct. Karsten can't remember what this is for
         return LegalApproval.objects.filter(land_type__length__gt=0).values_list(
             "name", flat=True
         )
 
+    @property
+    def all_approvals(self):
+        """Returns the legal approvals from the initial_required_approvals and initial_not_required_approvals
+        methods without any duplicates"""
+        return (
+            LegalApproval.objects.filter(
+                Q(is_required_for_operational_plan=True) | Q(land_type__length__gt=0)
+            )
+            .distinct()
+            .values_list("name", flat=True)
+        )
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+    def assignable_users(self):
+        # TODO uncomment once which groups members are asignable
+        # GROUPS = [
+        #     "TODO: Add appropriate groups here",
+        # ]
+        # return User.objects.filter(is_active=True, groups__name__in=GROUPS).distinct()
+        return User.objects.filter(is_active=True)
 
 
 class OperationalPlanPurpose(TimeStampedModel):

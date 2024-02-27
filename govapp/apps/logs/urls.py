@@ -6,8 +6,5 @@ from govapp.apps.logs import views
 
 # Router
 router = routers.DefaultRouter()
+router.register("actions", views.ActionsLogEntryViewSet)
 router.register("communications", views.CommunicationsLogEntryViewSet)
-
-
-# Logs URL Patterns
-urlpatterns = router.urls

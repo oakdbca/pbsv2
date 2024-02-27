@@ -1,6 +1,5 @@
 """Prescribed Burns System Emails Django Application Configuration."""
 
-
 # Third-Party
 from django import apps
 

@@ -1,0 +1,5 @@
+<li role="separator" class="divider"></li>
+{% if user.is_superuser %}
+    <li><a class="dropdown-item" href="{% url 'management-commands' %}">Management Commands</a></li>
+{% endif %}
+<li><a class="dropdown-item" href="/manage-account">Manage Account</a></li>

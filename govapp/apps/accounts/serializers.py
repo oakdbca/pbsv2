@@ -1,37 +1,77 @@
 # Third-Party
 from django.contrib import auth
-from django.contrib.auth import models as auth_models
+from django.contrib.auth.models import Group
 from rest_framework import serializers
 
+from govapp.apps.accounts.models import Profile
+
 # Shortcuts
-UserModel = auth.get_user_model()
-GroupModel = auth_models.Group
+User = auth.get_user_model()
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = "__all__"
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """User Model Serializer."""
+    full_name = serializers.CharField(source="get_full_name")
 
     class Meta:
-        """User Model Serializer Metadata."""
-
-        model = UserModel
+        model = User
         fields = (
             "id",
             "username",
             "groups",
             "first_name",
             "last_name",
+            "full_name",
             "email",
             "is_active",
             "is_staff",
         )
 
 
-class GroupSerializer(serializers.ModelSerializer):
-    """Group Model Serializer."""
+class UserKeyValueListSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source="get_full_name")
 
     class Meta:
-        """Group Model Serializer Metadata."""
+        model = User
+        fields = (
+            "id",
+            "name",
+        )
 
-        model = GroupModel
-        fields = ("id", "name", "permissions")
+
+class ProfileSerializer(serializers.ModelSerializer):
+    district = serializers.CharField(source="district.name_with_region")
+
+    class Meta:
+        model = Profile
+        exclude = (
+            "id",
+            "user",
+        )
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source="get_full_name")
+    profile = ProfileSerializer()
+    groups = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "full_name",
+            "email",
+            "profile",
+            "groups",
+        )
+
+    def get_groups(self, obj):
+        return obj.groups.values_list("name", flat=True)

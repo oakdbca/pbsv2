@@ -9,6 +9,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import hashlib
 import json
 import os
 import pathlib
@@ -17,7 +18,7 @@ from typing import Any
 
 import decouple
 import dj_database_url
-import sentry_sdk
+import tomli
 
 DEBUG = decouple.config("DEBUG", default=False, cast=bool)
 ENVIRONMENT = decouple.config("ENVIRONMENT", default="dev")
@@ -27,18 +28,32 @@ if DEBUG is True and ENVIRONMENT == "local":
 
     django_stubs_ext.monkeypatch()
 
-SENTRY_DSN = decouple.config("SENTRY_DSN", default=None)
-if SENTRY_DSN and ENVIRONMENT != "local":
-    sentry_sdk.init(
-        dsn=f"{SENTRY_DSN}",
-        # Set traces_sample_rate to 1.0 to capture 100%
-        # of transactions for performance monitoring.
-        traces_sample_rate=1.0,
-        environment=ENVIRONMENT,
-    )
-
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
+project = tomli.load(open(os.path.join(BASE_DIR, "pyproject.toml"), "rb"))
+
+APPLICATION_VERSION = project["tool"]["poetry"]["version"]
+
+# Sentry settings
+SENTRY_DSN = decouple.config("SENTRY_DSN", default=None)
+SENTRY_SAMPLE_RATE = decouple.config(
+    "SENTRY_SAMPLE_RATE", default=1.0, cast=float
+)  # Error sampling rate
+SENTRY_TRANSACTION_SAMPLE_RATE = decouple.config(
+    "SENTRY_TRANSACTION_SAMPLE_RATE", default=0.0, cast=float
+)  # Transaction sampling
+ENVIRONMENT = decouple.config("ENVIRONMENT", default=None)
+if SENTRY_DSN and ENVIRONMENT:
+    import sentry_sdk
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        sample_rate=SENTRY_SAMPLE_RATE,
+        traces_sample_rate=SENTRY_TRANSACTION_SAMPLE_RATE,
+        environment=ENVIRONMENT,
+        release=APPLICATION_VERSION,
+    )
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Project specific settings
@@ -47,7 +62,12 @@ PROJECT_DESCRIPTION = (
     "A system to manage risk, planning, implementation and post-implementation "
     "review for the mitigation of bushfires in Western Australia"
 )
-PROJECT_VERSION = "v2"
+PROJECT_VERSION = "2.0.0"
+
+DEPARTMENT_NAME = "Department of Biodiversity, Conservation and Attractions"
+SUPPORT_PHONE = "(08) 0000 0000"
+SUPPORT_EMAIL = "oim.servicedesk@dbca.wa.gov.au"
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -88,8 +108,10 @@ INSTALLED_APPS = [
     "govapp.apps.swagger",
     "govapp.apps.traffic",
     "govapp.apps.main",
+    "govapp.apps.logs",
     "rest_framework",
     "rest_framework_datatables",
+    "rest_framework_gis",
     "drf_spectacular",
     "django_filters",
     "django_cron",
@@ -98,6 +120,7 @@ INSTALLED_APPS = [
     "protected_media.apps.ProtectedMediaConfig",
     "nested_admin",
     "appmonitor_client",
+    "drf_standardized_errors",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -107,8 +130,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "dbca_utils.middleware.SSOLoginMiddleware",
+    "govapp.middleware.PBSV2SSOLoginMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "govapp.middleware.MissingDataNagScreenMiddleware",
     "govapp.middleware.CacheControl",
 ]
 ROOT_URLCONF = "govapp.urls"
@@ -175,17 +199,23 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Caching settings
 # https://docs.djangoproject.com/en/3.2/ref/settings/#caches
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        "LOCATION": BASE_DIR / "govapp/cache",
-        "OPTIONS": {"MAX_ENTRIES": 10000},
+USE_DUMMY_CACHE = decouple.config("USE_DUMMY_CACHE", False, cast=bool)
+if USE_DUMMY_CACHE:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        },
     }
-}
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+            "LOCATION": os.path.join(BASE_DIR, "govapp", "cache"),
+        },
+    }
 
 # DBCA Template Settings
 # https://github.com/dbca-wa/django-base-template/blob/main/govapp/settings.py
-DEV_APP_BUILD_URL = decouple.config("DEV_APP_BUILD_URL", default=None)
 ENABLE_DJANGO_LOGIN = decouple.config("ENABLE_DJANGO_LOGIN", default=False, cast=bool)
 LEDGER_TEMPLATE = "bootstrap5"
 GIT_COMMIT_HASH = os.popen(
@@ -196,20 +226,34 @@ GIT_COMMIT_DATE = os.popen(
 ).read()  # noqa: S605
 VERSION_NO = "2.00"
 
+if DEBUG:
+    rest_framework_renderer_classes = [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+        "rest_framework_datatables.renderers.DatatablesRenderer",
+    ]
+else:
+    rest_framework_renderer_classes = [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework_datatables.renderers.DatatablesRenderer",
+    ]
+
 # Django REST Framework Settings
 # https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "govapp.permissions.IsInternal",  # Only internal userscan access the API
+        # TODO: Change this if business requires allowing external users to access the API
+    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_RENDERER_CLASSES": (
-        "rest_framework.renderers.JSONRenderer",
-        "rest_framework_datatables.renderers.DatatablesRenderer",
-    ),
+    "DEFAULT_RENDERER_CLASSES": rest_framework_renderer_classes,
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 100,
+    "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
 }
 
 # DRF Spectacular Settings
@@ -259,6 +303,12 @@ LOGGING: dict[str, Any] = {
 }
 
 if DEBUG is True:
+    if ENVIRONMENT == "local" and decouple.config(
+        "LOG_DJANGO_TEMPLATES", default=False, cast=bool
+    ):
+        LOGGING["loggers"]["django.template"] = {}
+        LOGGING["loggers"]["django.template"]["handlers"] = ["console_simple"]
+        LOGGING["loggers"]["django.template"]["level"] = "DEBUG"
     LOGGING["loggers"]["govapp"]["handlers"] = ["console_simple"]
     LOGGING["loggers"]["govapp"]["level"] = "DEBUG"
     LOGGING["loggers"]["govapp"]["propagate"] = False
@@ -266,6 +316,10 @@ if DEBUG is True:
 
 # Email
 DISABLE_EMAIL = decouple.config("DISABLE_EMAIL", default=False, cast=bool)
+BUILD_TAG = decouple.config(
+    "BUILD_TAG", hashlib.sha256(os.urandom(64)).hexdigest()
+)  # URL of the Dev app.js served by webpack & express
+
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_BACKEND = "wagov_utils.components.utils.email_backend.EmailBackend"
 EMAIL_HOST = decouple.config("EMAIL_HOST", default="smtp.lan.fyi")
@@ -276,15 +330,34 @@ NON_PROD_EMAIL = decouple.config("NON_PROD_EMAIL", default="")
 PRODUCTION_EMAIL = decouple.config("PRODUCTION_EMAIL", default=False, cast=bool)
 EMAIL_DELIVERY = decouple.config("EMAIL_DELIVERY", default="off")
 
-# Cron Jobs
-# https://django-cron.readthedocs.io/en/latest/installation.html
-# https://django-cron.readthedocs.io/en/latest/configuration.html
-# CRON_SCANNER_CLASS = "govapp.apps.catalogue.cron.ScannerCronJob"
-CRON_SCANNER_PERIOD_MINS = 3  # Run every 5 minutes
+# Django Cron
+CRON_SCANNER_PERIOD_MINS = 5  # Run every 5 minutes
 CRON_CLASSES: list[str] = [
     "appmonitor_client.cron.CronJobAppMonitorClient",
 ]
 
+# Django debug toolbar
+SHOW_DEBUG_TOOLBAR = decouple.config("SHOW_DEBUG_TOOLBAR", default=False, cast=bool)
+if SHOW_DEBUG_TOOLBAR:
+
+    def show_toolbar(request):
+        if request:
+            return True
+
+    MIDDLEWARE += [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
+    INSTALLED_APPS += ("debug_toolbar",)
+    INTERNAL_IPS = ("127.0.0.1", "localhost", "internalhost", "externalhost")
+
+    # this dict removes check to dtermine if toolbar should display --> works for rks docker container
+    DEBUG_TOOLBAR_CONFIG = {
+        # "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+        "INTERCEPT_REDIRECTS": False,
+    }
+
+# Compress static files
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 # Temporary Fix for ARM Architecture
 if platform.machine() == "arm64":
@@ -294,6 +367,9 @@ if platform.machine() == "arm64":
 
 # Django Timezone
 TIME_ZONE = "Australia/Perth"
+
+# GIS Server
+GIS_SERVER_URL = decouple.config("GIS_SERVER_URL", default="https://kmi.dbca.wa.gov.au")
 
 GOV_APPS = [
     app.replace("govapp.apps.", "")
@@ -357,6 +433,7 @@ SCHEDULER = "Scheduler"
 STATE_AVIATION = "State Aviation"
 STATE_DUTY_OFFICER = "State Duty Officer"
 STATE_MANAGER = "State Manager"
+PBS_ADMIN = "PBS Admin"
 
 DJANGO_GROUPS = [
     CORPORATE_EXECUTIVE,
@@ -373,4 +450,46 @@ DJANGO_GROUPS = [
     STATE_AVIATION,
     STATE_DUTY_OFFICER,
     STATE_MANAGER,
+    DJANGO_ADMIN,
+    PBS_ADMIN,
 ]
+
+# Configure CKEditor 5
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "full",
+        "height": 300,
+        "width": "100%",
+    },
+    "awesome_ckeditor": {
+        "toolbar": "Basic",
+    },
+    "toolbar_minimal": {
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            ["Bold", "Italic", "Underline"],
+            [
+                "BulletedList",
+                "NumberedList",
+                "-",
+                "Outdent",
+                "Indent",
+                "-",
+                "Image",
+                "Blockquote",
+                "Table",
+                "MediaEmbed",
+                "-",
+                "Undo",
+                "Redo",
+                "-",
+                "JustifyLeft",
+                "JustifyCenter",
+                "JustifyRight",
+                "JustifyBlock",
+            ],
+            ["Link", "Unlink"],
+            ["RemoveFormat", "Source"],
+        ],
+    },
+}

@@ -72,7 +72,7 @@
                                     v-if="showRevisedIndicativeTreatmentYear"
                                     :key="
                                         keyRowComponent(
-                                            'revised_indicative_treatment_year'
+                                            'revised_indicative_treatment_year',
                                         )
                                     "
                                     name="revised_indicative_treatment_year"
@@ -277,7 +277,7 @@ export default {
             .then((data) => {
                 this.burnPlanElement = Object.assign({}, data);
                 console.info(
-                    `BPE fetched ${JSON.stringify(this.burnPlanElement)}`
+                    `BPE fetched ${JSON.stringify(this.burnPlanElement)}`,
                 );
             })
             .catch((error) => {

@@ -37,7 +37,7 @@ export default {
         testErrors: () => {
             try {
                 throw new NotImplementedError(
-                    'test.vue: Testing error handling'
+                    'test.vue: Testing error handling',
                 );
             } catch (error) {
                 console.log(error);
@@ -59,7 +59,7 @@ export default {
          * @param {DateStr} date_str
          */
         testDate: (date_str) => {
-            console.log(helpers.formatDateForAPI(new Date(date_str)));
+            console.log(new Date(date_str));
         },
     },
 };

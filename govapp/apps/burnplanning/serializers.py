@@ -22,21 +22,17 @@ class ProgramSerializer(serializers.ModelSerializer):
 
 
 class BurnPlanElementSerializer(serializers.ModelSerializer):
-    regions = serializers.SerializerMethodField()
-    districts = serializers.SerializerMethodField()
-    treatment = serializers.CharField(source="treatment.name", read_only=True)
+    regions = RegionSerializer(many=True)
+    districts = DistrictSerializer(many=True)
+    treatment = serializers.CharField(
+        source="treatment.name", read_only=True, allow_null=True
+    )
     purposes = PurposeSerializer(many=True, read_only=True)
     programs = ProgramSerializer(many=True, read_only=True)
 
     class Meta:
         model = BurnPlanElement
         fields = "__all__"
-
-    def get_districts(self, obj):
-        return DistrictSerializer(obj.districts, many=True).data
-
-    def get_regions(self, obj):
-        return RegionSerializer(obj.regions, many=True).data
 
 
 class TreatmentSerializer(serializers.ModelSerializer):

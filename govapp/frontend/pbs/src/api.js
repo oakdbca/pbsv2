@@ -13,4 +13,31 @@ export default {
         }
         return '/api/burn-plan-elements/';
     },
+    endPoint: function (slug, pk = null) {
+        if (pk) {
+            return `/api/${slug}/${pk}/`;
+        }
+        return `/api/${slug}/`;
+    },
+    userData: function () {
+        return this.endPoint('users/me', null);
+    },
+    operationalPlans: function (pk = null) {
+        return this.endPoint('operational-plans', pk);
+    },
+    actions: function (pk = null) {
+        return this.endPoint('actions', pk);
+    },
+    communications: function (pk = null) {
+        return this.endPoint('communications', pk);
+    },
+    assignableUsers: function () {
+        return this.endPoint('assignable-users', null);
+    },
+    assignToMe: function () {
+        return this.endPoint('assign-to-me', null);
+    },
+    assignTo: function () {
+        return this.endPoint('assign-to', null);
+    },
 };

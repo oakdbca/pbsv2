@@ -18,7 +18,7 @@
                     @change="
                         $emit(
                             'update:value',
-                            /** @type {any} */ ($event.target).value
+                            /** @type {any} */ ($event.target).value,
                         )
                     "
                 />

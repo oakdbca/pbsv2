@@ -17,10 +17,11 @@ repos:
       - id: detect-private-key
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v3.0.3"
+    rev: "v4.0.0-alpha.8"
     hooks:
       - id: prettier
-        args: ["--tab-width", "4"]
+        types_or: [javascript, json, markdown, yaml, html, css, vue]
+        args: ["--single-quote", "--tab-width=4"]
         files: govapp/frontend/pbs
 
   - repo: https://github.com/asottile/pyupgrade
@@ -30,18 +31,18 @@ repos:
         args: [--py39-plus]
 
   - repo: https://github.com/psf/black
-    rev: 23.10.0
+    rev: 24.2.0
     hooks:
       - id: black
 
   - repo: https://github.com/PyCQA/isort
-    rev: 5.12.0
+    rev: 5.13.2
     hooks:
       - id: isort
         args: ["--profile", "black"]
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 6.1.0
+    rev: 7.0.0
     hooks:
       - id: flake8
         args:

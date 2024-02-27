@@ -1,21 +1,13 @@
 <template>
-    <div class="row p-1"></div>
-    <div class="row p-1">
-        <div
-            class="col-4 text-start d-flex align-items-center capitalize"
-        ></div>
-        <div class="text-start">
-            <DataTable
-                ref="datatable"
-                :columns="table_columns"
-                :ajax="ajax"
-                :options="options"
-                class="capitalize"
-                :class="tableClass"
-                @selection-changed="$emit('selection-changed', $event)"
-            />
-        </div>
-    </div>
+    <DataTable
+        ref="datatable"
+        :columns="table_columns"
+        :ajax="ajax"
+        :options="options"
+        class="text-capitalize"
+        :class="tableClass"
+        @selection-changed="$emit('selection-changed', $event)"
+    />
 </template>
 
 <script>
@@ -203,12 +195,15 @@ export default {
                     const row_merged = { ...row_full, ...row_serialized };
                     // Sort by headers order, create an array, and push to result
                     const row = _.zip(
-                        ..._.chain(row_merged).toPairs().sortBy(headers).value()
+                        ..._.chain(row_merged)
+                            .toPairs()
+                            .sortBy(headers)
+                            .value(),
                     )[1];
                     result.push(row);
                     return result;
                 },
-                []
+                [],
             );
 
             return table_data;
@@ -219,8 +214,4 @@ export default {
 
 <style lang="css">
 @import 'datatables.net-dt';
-
-.capitalize {
-    text-transform: capitalize;
-}
 </style>

@@ -1,13 +1,10 @@
 """DBCA Django Project Middleware."""
 
-
-# Typing
 from typing import Callable
 
-# Third-Party
+from dbca_utils.middleware import SSOLoginMiddleware
 from django import http
 
-# Type Shortcuts
 GetResponseFunction = Callable[[http.HttpRequest], http.HttpResponse]
 
 
@@ -55,3 +52,38 @@ class CacheControl:
 
         # Return handled response
         return response
+
+
+class PBSV2SSOLoginMiddleware(SSOLoginMiddleware):
+    """Overide the SSOLoginMiddleware to set or delete the session variablers that
+    are required by webtemplate_dbca. TODO: Remove this once Jason has updated
+    the dbca_utils SSOLoginMiddleware."""
+
+    def process_request(self, request):
+        if request.path.startswith("/logout"):
+            del request.session["is_authenticated"]
+            del request.session["user_obj"]
+
+        super().process_request(request)
+
+        if request.user.is_authenticated:
+            request.session["is_authenticated"] = True
+            user_obj = {
+                "user_id": request.user.id,
+                "email": request.user.email,
+                "first_name": request.user.first_name,
+                "last_name": request.user.last_name,
+                "is_staff": request.user.is_staff,
+            }
+            request.session["user_obj"] = user_obj
+
+
+class MissingDataNagScreenMiddleware:
+    """TODO: If there is mandatory user profile information that must be entered before the user can
+    use the application then use this, otherwise delete."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        return self.get_response(request)

@@ -49,7 +49,6 @@ The backend requires the following environment variables to be set:
 ```shell
 SECRET_KEY=...
 DATABASE_URL=...
-DEV_APP_BUILD_URL="http://localhost:9072/src/main.ts"
 PRODUCTION_EMAIL=False
 EMAIL_INSTANCE='DEV'
 NON_PROD_EMAIL='nonprodemail@dbca.wa.gov.au'

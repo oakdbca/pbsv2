@@ -516,7 +516,7 @@ class ModelLegalApprovalInlineFormSet(BaseGenericInlineFormSet):
             if self.can_delete and self._should_delete_form(form):
                 continue
             legal_approval = form.cleaned_data.get("legal_approval", None)
-            if legal_approval.name in required_approvals:
+            if legal_approval and legal_approval.name in required_approvals:
                 required_approvals.remove(legal_approval.name)
 
         if len(required_approvals) > 0:
@@ -862,6 +862,7 @@ class OperationalPlanAdmin(NestedDeleteRestrictedAdmin):
                     ),
                     "operational_area",
                     "status",
+                    "assigned_to",
                     "operation_name",
                     "operation",
                     "operational_intent",

@@ -22,10 +22,9 @@
         "jquery": true
     },
     "globals": {
-        "moment": "readonly",
-        "swal": "readonly",
-        "bootstrap": "readonly",
-        "env": "readonly",
-        "_": "readonly" // Lodash
+        "swal": true,
+        "bootstrap": true,
+        "env": true,
+        "_": true // Lodash
     }
 }
