@@ -64,7 +64,7 @@ export default {
             utils
                 .fetchUrl(
                     api_endpoints.assignableUsers() +
-                        `?content_type=${this.contentType}&object_id=${this.pk}`,
+                        `?content_type=${this.contentType}&object_id=${this.pk}`
                 )
                 .then((data) => {
                     this.assignableUsers = data;

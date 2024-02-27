@@ -83,7 +83,7 @@ export default {
         toggle_filters_button_clicked: function () {
             // Bootstrap add a 'collapsed' class name to the element
             const filters_expanded_when_clicked = $(
-                '#' + this.button_elem_id,
+                '#' + this.button_elem_id
             ).hasClass('collapsed');
             this.filters_expanded = !filters_expanded_when_clicked;
         },

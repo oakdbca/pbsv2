@@ -206,7 +206,7 @@
                                                                                 uploadFile(
                                                                                     'file-upload-' +
                                                                                         i,
-                                                                                    f,
+                                                                                    f
                                                                                 )
                                                                             "
                                                                         />
@@ -233,7 +233,7 @@
                                                                                 uploadFile(
                                                                                     'file-upload-' +
                                                                                         i,
-                                                                                    f,
+                                                                                    f
                                                                                 )
                                                                             "
                                                                         />
@@ -256,7 +256,7 @@
                                                                         class="btn btn-danger btn-sm"
                                                                         @click.prevent="
                                                                             removeFile(
-                                                                                i,
+                                                                                i
                                                                             )
                                                                         "
                                                                     >

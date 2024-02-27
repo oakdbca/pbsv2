@@ -102,7 +102,7 @@ export default {
                 .fetchUrl(
                     api_endpoints.assignTo() +
                         `?content_type=${this.content_type}&object_id=${this.pk}&user_id=${value}`,
-                    requestOptions,
+                    requestOptions
                 )
                 .then((response) => {
                     console.log(response);

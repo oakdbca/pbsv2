@@ -37,7 +37,7 @@ export default {
         testErrors: () => {
             try {
                 throw new NotImplementedError(
-                    'test.vue: Testing error handling',
+                    'test.vue: Testing error handling'
                 );
             } catch (error) {
                 console.log(error);

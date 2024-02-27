@@ -222,7 +222,7 @@ export default {
             }
         },
         handleChange: async function (
-            /** @type {{ target: { files: string | any[]; }; }} */ e,
+            /** @type {{ target: { files: string | any[]; }; }} */ e
         ) {
             console.log('Change', e.target.files);
             if (e.target.files.length > 0) {
@@ -257,7 +257,7 @@ export default {
             }
         },
         delete_document: async function (
-            /** @type {{ id: string | Blob; }} */ file,
+            /** @type {{ id: string | Blob; }} */ file
         ) {
             const formData = new FormData();
             this.show_spinner = true;
@@ -333,7 +333,7 @@ export default {
                 await this.handleChange(e);
                 this.$emit(
                     'update-temp-doc-coll-id',
-                    this.temporary_document_collection_id,
+                    this.temporary_document_collection_id
                 );
             } else {
                 await this.handleChange(e);
@@ -354,14 +354,14 @@ export default {
                 if (this.temporary_document_collection_id) {
                     formData.append(
                         'temporary_document_collection_id',
-                        this.temporary_document_collection_id,
+                        this.temporary_document_collection_id
                     );
                 }
                 formData.append('input_name', this.name);
                 formData.append('approval_type', this.approvalType.toString());
                 formData.append(
                     'approval_type_document_type',
-                    this.approvalTypeDocumentType.toString(),
+                    this.approvalTypeDocumentType.toString()
                 );
                 formData.append('filename', e.target.files[0].name);
                 formData.append('_file', this.uploadFile(e));
