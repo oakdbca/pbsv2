@@ -85,11 +85,6 @@ class AssignToMeAPIView(APIView):
 
         model_class = ContentType.objects.get(id=content_type).model_class()
 
-        if not isinstance(AssignableModel, model_class):
-            raise ValidationError(
-                "The model the object is based on must extend from AssignableModel"
-            )
-
         try:
             instance = model_class.objects.get(id=object_id)
         except model_class.DoesNotExist:
@@ -97,6 +92,11 @@ class AssignToMeAPIView(APIView):
                 "No object found with content_type: {} and object_id: {}".format(
                     content_type, object_id
                 )
+            )
+
+        if not isinstance(instance, AssignableModel):
+            raise ValidationError(
+                "The model the object is based on must extend from AssignableModel"
             )
 
         if not instance.user_is_assignable(request.user):
@@ -140,11 +140,6 @@ class AssignableUsersAPIView(APIView):
 
         model_class = ContentType.objects.get(id=content_type).model_class()
 
-        if not isinstance(AssignableModel, model_class):
-            raise ValidationError(
-                "The model the object is based on must extend from AssignableModel"
-            )
-
         try:
             instance = model_class.objects.get(id=object_id)
         except model_class.DoesNotExist:
@@ -152,6 +147,11 @@ class AssignableUsersAPIView(APIView):
                 "No object found with content_type: {} and object_id: {}".format(
                     content_type, object_id
                 )
+            )
+
+        if not isinstance(instance, AssignableModel):
+            raise ValidationError(
+                "The model the object is based on must extend from AssignableModel"
             )
 
         assignable_users = instance.assignable_users()
@@ -184,11 +184,6 @@ class AssignToAPIView(APIView):
 
         model_class = ContentType.objects.get(id=content_type).model_class()
 
-        if not isinstance(AssignableModel, model_class):
-            raise ValidationError(
-                "The model the object is based on must extend from AssignableModel"
-            )
-
         try:
             instance = model_class.objects.get(id=object_id)
         except model_class.DoesNotExist:
@@ -196,6 +191,11 @@ class AssignToAPIView(APIView):
                 "No object found with content_type: {} and object_id: {}".format(
                     content_type, object_id
                 )
+            )
+
+        if not isinstance(instance, AssignableModel):
+            raise ValidationError(
+                "The model the object is based on must extend from AssignableModel"
             )
 
         if not instance.user_is_assignable(request.user):
