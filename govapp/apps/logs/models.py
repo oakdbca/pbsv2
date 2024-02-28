@@ -23,8 +23,6 @@ class CommunicationsLogEntry(models.Model):
 
     objects: models.Manager
 
-    # Generic Foreign Key
-    # See: https://docs.djangoproject.com/en/3.2/ref/contrib/contenttypes/#generic-relations
     content_type = models.ForeignKey(ct_models.ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = fields.GenericForeignKey("content_type", "object_id")
@@ -42,29 +40,15 @@ class CommunicationsLogEntry(models.Model):
     )
 
     class Meta:
-        """Communications Log Entry Model Metadata."""
-
         verbose_name = "Communications Log Entry"
         verbose_name_plural = "Communications Log Entries"
 
     def __str__(self) -> str:
-        """Provides a string representation of the object.
-
-        Returns:
-            str: Human readable string representation of the object.
-        """
-        # Generate String and Return
         return f"{self.content_type.name} - {self.content_object}"
 
     @property
     def username(self) -> str:
-        """Provides a string of user's name that combined first and last name.
-
-        Returns:
-            str: A string of combined first and last name.
-        """
-        # Generate String and Return
-        return f"{self.user.first_name} {self.user.last_name}"
+        return self.user.username
 
 
 class CommunicationsLogDocument(models.Model):
@@ -82,28 +66,17 @@ class CommunicationsLogDocument(models.Model):
     )
 
     class Meta:
-        """Communications Log Document Model Metadata."""
-
         verbose_name = "Communications Log Document"
         verbose_name_plural = "Communications Log Documents"
 
     def __str__(self) -> str:
-        """Provides a string representation of the object.
-
-        Returns:
-            str: Human readable string representation of the object.
-        """
         # Generate String and Return
         return f"{self.file}"
 
 
 class ActionsLogEntry(models.Model):
-    """Model for an Actions Log Entry."""
-
     objects: models.Manager
 
-    # Generic Foreign Key
-    # See: https://docs.djangoproject.com/en/3.2/ref/contrib/contenttypes/#generic-relations
     content_type = models.ForeignKey(ct_models.ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = fields.GenericForeignKey("content_type", "object_id")
@@ -122,20 +95,8 @@ class ActionsLogEntry(models.Model):
         verbose_name_plural = "Actions Log Entries"
 
     def __str__(self) -> str:
-        """Provides a string representation of the object.
-
-        Returns:
-            str: Human readable string representation of the object.
-        """
-        # Generate String and Return
-        return f"{self.content_object}"
+        return f"{self.content_type.name} - {self.content_object}"
 
     @property
     def username(self) -> str:
-        """Provides a string of user's name that combined first and last name.
-
-        Returns:
-            str: A string of combined first and last name.
-        """
-        # Generate String and Return
-        return f"{self.who.first_name} {self.who.last_name}"
+        return self.who.username
