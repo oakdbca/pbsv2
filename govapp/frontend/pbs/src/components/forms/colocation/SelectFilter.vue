@@ -1,3 +1,4 @@
+<!-- A single dropdown with selectable items as a component -->
 <template>
     <div class="form-group">
         <label v-if="showTitle" for="select-filter">{{ title }}</label>
@@ -9,6 +10,7 @@
             :name="name"
             :label="label"
             :track-by="name"
+            :placeholder="placeholder"
             class="form-control"
             @select="
                 $emit('selection-changed-select', {
@@ -71,6 +73,11 @@ export default {
             type: Boolean,
             required: false,
             default: false,
+        },
+        placeholder: {
+            type: String,
+            required: false,
+            default: 'Select a value',
         },
     },
     emits: ['selection-changed-select', 'selection-changed-remove'],

@@ -1,4 +1,10 @@
 <template>
+    <SelectFilterTemplate
+        v-if="withFilters"
+        :columns="table_columns"
+        @selection-changed-select="$emit('selection-changed-select', $event)"
+        @selection-changed-remove="$emit('selection-changed-remove', $event)"
+    ></SelectFilterTemplate>
     <DataTable
         :ref="datatableRefName"
         :columns="tableColumns"
@@ -6,8 +12,6 @@
         :options="options"
         class="text-capitalize"
         :class="tableClass"
-        @selection-changed-select="$emit('selection-changed-select', $event)"
-        @selection-changed-remove="$emit('selection-changed-remove', $event)"
         @vue:mounted="() => $emit('mounted')"
     >
     </DataTable>
@@ -16,15 +20,13 @@
 <script>
 import _ from 'lodash';
 import { helpers } from '@/utils/hooks';
-import SelectFilter from '@/components/forms/colocation/SelectFilter.vue';
-
-import { createApp } from 'vue';
+import SelectFilterTemplate from '@/components/forms/colocation/SelectFilterTemplate.vue';
 
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net-bs5';
 import Select from 'datatables.net-select-bs5';
-import Responsive from 'datatables.net-responsive'; // -bs5 not working
-import Buttons from 'datatables.net-buttons'; // -bs5 not working
+import Responsive from 'datatables.net-responsive'; // Note: -bs5 not working
+import Buttons from 'datatables.net-buttons'; // Note: -bs5 not working
 import ButtonsHtml5 from 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons-bs5/js/buttons.bootstrap5.js';
 
@@ -34,15 +36,9 @@ DataTable.use(Responsive);
 DataTable.use(Buttons);
 DataTable.use(ButtonsHtml5);
 
-// Add our custom selection-changed- events to the DataTable component's emits array, to stop vue from complaining about it missing
-if (!DataTable.emits.includes('selection-changed-select'))
-    DataTable.emits.push('selection-changed-select');
-if (!DataTable.emits.includes('selection-changed-remove'))
-    DataTable.emits.push('selection-changed-remove');
-
 export default {
     name: 'DataTableTemplate',
-    components: { DataTable },
+    components: { DataTable, SelectFilterTemplate },
     props: {
         /**
          * Name of the table
@@ -78,68 +74,6 @@ export default {
                 select: false,
                 dom: '<"container-fluid"<"row"<"col"l><"col"f><"col"<"float-end"B>>>>rtip', // 'lfBrtip'
                 buttons: ['copy', 'csv', 'excel'],
-                // eslint-disable-next-line no-unused-vars
-                initComplete: function (settings, json) {
-                    // The datatable-vue3 component
-                    const component =
-                        this.parent()[0].parentElement.__vueParentComponent;
-                    // The selectionChanged function to be called when a filter is select or removed
-                    const selectionChangedSelect = (e) => {
-                        component.ctx.$emit('selection-changed-select', e);
-                    };
-                    const selectionChangedRemove = (e) => {
-                        component.ctx.$emit('selection-changed-remove', e);
-                    };
-                    this.api()
-                        .columns()
-                        .every(function () {
-                            const columnOptions =
-                                this.context[0].aoColumns[this.index()];
-                            const filter = columnOptions.filter;
-
-                            if (filter == true) {
-                                const props = {
-                                    id: columnOptions.data,
-                                    title: columnOptions.title,
-                                    options: columnOptions.filterOptions,
-                                    showTitle: false, // we use the title in the header
-                                    multiple: columnOptions.multiple
-                                        ? true
-                                        : false,
-                                    onSelectionChangedSelect:
-                                        selectionChangedSelect,
-                                    onSelectionChangedRemove:
-                                        selectionChangedRemove,
-                                };
-                                const select = createApp(SelectFilter, props);
-
-                                let div_parent = document.createElement('div');
-
-                                let div_original_header =
-                                    document.createElement('div');
-                                div_original_header.append(
-                                    ...this.header().children
-                                );
-
-                                const id = `mountpoint-select-filter-${columnOptions.data}`;
-
-                                div_parent.appendChild(div_original_header);
-
-                                let div_select = document.createElement('div');
-                                div_select.id = id;
-
-                                div_parent.appendChild(div_select);
-
-                                this.header().replaceChildren(div_parent);
-
-                                select.mount(`#${id}`);
-
-                                $(div_select).on('click', function (e) {
-                                    e.stopPropagation();
-                                });
-                            }
-                        });
-                },
             }),
         },
         /**
@@ -158,6 +92,11 @@ export default {
             type: Array,
             required: false,
             default: () => [],
+        },
+        withFilters: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
     },
     emits: ['selection-changed-select', 'selection-changed-remove', 'mounted'],
