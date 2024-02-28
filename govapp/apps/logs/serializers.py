@@ -85,6 +85,8 @@ class CommunicationsLogCreateEntrySerializer(serializers.ModelSerializer):
 class ActionsLogEntrySerializer(serializers.ModelSerializer):
     """Actions Log Entry Model Serializer."""
 
+    when = serializers.DateTimeField(format="%d/%m/%Y %H:%M")
+
     class Meta:
         """Actions Log Entry Model Serializer Metadata."""
 
