@@ -13,8 +13,11 @@
         <div class="row">
             <div class="col-3">
                 <PanelLogs
-                    :content-type="operationalPlan.content_type"
-                    :pk="operationalPlan.id"
+                    :communications-api-url="communicationsApiUrl"
+                    :post-communications-entry-api-url="
+                        postCommunicationsEntryApiUrl
+                    "
+                    :actions-api-url="actionsApiUrl"
                 />
                 <PanelWorkflow
                     :status="operationalPlan.status"
@@ -26,7 +29,6 @@
                     :assign-to-api-url="assignToApiUrl"
                     :assigned-to="operationalPlan.assigned_to"
                     :request-user-id="store.userData.id"
-                    @assign-to-me="assignToMe"
                     @assign-to="assignTo"
                 ></PanelWorkflow>
                 <div class="card">
@@ -136,6 +138,24 @@ export default {
         };
     },
     computed: {
+        communicationsApiUrl: function () {
+            return (
+                api_endpoints.communications() +
+                `?format=datatables&content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
+            );
+        },
+        postCommunicationsEntryApiUrl() {
+            return (
+                api_endpoints.communications() +
+                `?content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
+            );
+        },
+        actionsApiUrl: function () {
+            return (
+                api_endpoints.actions() +
+                `?format=datatables&content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
+            );
+        },
         assignableUsersApiUrl() {
             return api_endpoints.assignableUsers();
         },
@@ -145,7 +165,7 @@ export default {
         assignToApiUrl() {
             return (
                 api_endpoints.assignTo() +
-                `?content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.pk}`
+                `?content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
             );
         },
     },
@@ -172,7 +192,6 @@ export default {
                     this.assignableUsers = data;
                 });
         },
-        assignToMe() {},
         assignTo(value) {
             this.operationalPlan.assigned_to = value;
         },

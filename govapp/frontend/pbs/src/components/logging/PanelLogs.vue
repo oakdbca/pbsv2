@@ -37,9 +37,11 @@
             </div>
         </div>
     </div>
-    <ModalCommunications :content-type="38" :pk="1" />
-    <ModalCommunicationsAdd :content-type="38" :pk="1" />
-    <ModalActions :content-type="38" :pk="1" />
+    <ModalCommunications :communications-api-url="communicationsApiUrl" />
+    <ModalCommunicationsAdd
+        :post-communications-entry-api-url="postCommunicationsEntryApiUrl"
+    />
+    <ModalActions :actions-api-url="actionsApiUrl" />
 </template>
 
 <script>
@@ -55,12 +57,16 @@ export default {
         ModalActions,
     },
     props: {
-        contentType: {
-            type: Number,
+        communicationsApiUrl: {
+            type: String,
             required: true,
         },
-        pk: {
-            type: Number,
+        postCommunicationsEntryApiUrl: {
+            type: String,
+            required: true,
+        },
+        actionsApiUrl: {
+            type: String,
             required: true,
         },
     },

@@ -17,7 +17,7 @@
                     </h5>
                     <button
                         type="button"
-                        class="btn-close"
+                        class="btn-close btn-close-white"
                         data-bs-dismiss="modal"
                         aria-label="Close"
                     ></button>
@@ -60,6 +60,10 @@
                                                     autofocus
                                                     required
                                                 />
+                                                <div class="invalid-feedback">
+                                                    Please enter who the
+                                                    communication was to.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -81,6 +85,10 @@
                                                     maxlength="200"
                                                     required
                                                 />
+                                                <div class="invalid-feedback">
+                                                    Please enter who the
+                                                    communication was from.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -93,15 +101,16 @@
                                             >
                                             <div class="col-sm-9">
                                                 <select
+                                                    id="type"
                                                     v-model="communication.type"
                                                     class="form-select"
                                                     name="type"
                                                     required
                                                 >
                                                     <option
-                                                        value=""
                                                         selected
                                                         disabled
+                                                        :value.attr="''"
                                                     >
                                                         Select Type
                                                     </option>
@@ -115,6 +124,10 @@
                                                         Phone
                                                     </option>
                                                 </select>
+                                                <div class="invalid-feedback">
+                                                    Please select the type of
+                                                    communication.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -136,6 +149,10 @@
                                                     maxlength="200"
                                                     required
                                                 />
+                                                <div class="invalid-feedback">
+                                                    Please enter subject of the
+                                                    communication.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -153,6 +170,10 @@
                                                     class="form-control"
                                                     required
                                                 ></textarea>
+                                                <div class="invalid-feedback">
+                                                    Please enter text of the
+                                                    communication.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -299,7 +320,14 @@
                         class="btn btn-secondary"
                         data-bs-dismiss="modal"
                     >
-                        Close
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        @click.prevent="validateForm"
+                    >
+                        Add Entry
                     </button>
                 </div>
             </div>
@@ -308,6 +336,8 @@
 </template>
 
 <script>
+import { constants } from '@/utils/constants';
+
 import ErrorRenderer from '@/utils/vue/ErrorRenderer.vue';
 
 export default {
@@ -315,12 +345,8 @@ export default {
         ErrorRenderer,
     },
     props: {
-        contentType: {
-            type: Number,
-            required: true,
-        },
-        pk: {
-            type: Number,
+        postCommunicationsEntryApiUrl: {
+            type: String,
             required: true,
         },
     },
@@ -333,9 +359,137 @@ export default {
                 subject: '',
                 text: '',
             },
-            files: [],
+            files: [
+                {
+                    file: null,
+                    name: '',
+                },
+            ],
             errors: null,
         };
     },
+    methods: {
+        uploadFile(target, file_obj) {
+            let _file = null;
+            let input = $('.' + target)[0];
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.readAsDataURL(input.files[0]);
+                reader.onload = function (e) {
+                    _file = e.target.result;
+                };
+                _file = input.files[0];
+            }
+            file_obj.file = _file;
+            file_obj.name = _file.name;
+        },
+        removeFile(index) {
+            let length = this.files.length;
+            $('.file-row-' + index).remove();
+            this.files.splice(index, 1);
+            this.$nextTick(() => {
+                length == 1 ? this.attachAnother() : '';
+            });
+        },
+        attachAnother() {
+            this.files.push({
+                file: null,
+                name: '',
+            });
+        },
+        cancel: function () {
+            this.close();
+        },
+        close: function () {
+            let vm = this;
+            this.communication = {
+                type: '',
+            };
+            this.errors = null;
+            $('#communications-add-form').removeClass('was-validated');
+            let file_length = vm.files.length;
+            this.files = [];
+            for (let i = 0; i < file_length; i++) {
+                vm.$nextTick(() => {
+                    $('.file-row-' + i).remove();
+                });
+            }
+            this.attachAnother();
+        },
+        validateForm: function () {
+            const form = document.getElementById('communications-add-form');
+
+            if (form.checkValidity()) {
+                this.postCommunicationsEntry();
+            } else {
+                form.classList.add('was-validated');
+                $('#communications-add-form').find(':invalid').first().focus();
+            }
+
+            return false;
+        },
+        postCommunicationsEntry: function () {
+            let vm = this;
+            let comms = new FormData(vm.form);
+            for (let i = 0; i < vm.files.length; i++) {
+                comms.append('files', vm.files[i].file);
+            }
+            vm.addingComms = true;
+            fetch(vm.postCommunicationsEntryApiUrl, {
+                body: comms,
+                method: 'POST',
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        vm.errors = data || response.statusText;
+                        return;
+                    }
+                    swal.fire(
+                        'Success',
+                        'Communication logged successfully',
+                        'success'
+                    );
+                    vm.close();
+                })
+                .catch(() => {
+                    vm.errors = constants.ERRORS.NETWORK_ERROR;
+                })
+                .finally(() => {
+                    vm.addingComms = false;
+                });
+        },
+    },
 };
 </script>
+
+<style scoped lang="css">
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type='file'] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.top-buffer {
+    margin-top: 5px;
+}
+
+.top-buffer-2x {
+    margin-top: 10px;
+}
+</style>

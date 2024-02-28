@@ -23,7 +23,9 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <DatatableCommunications :content-type="38" :pk="1" />
+                    <DatatableCommunications
+                        :communications-api-url="communicationsApiUrl"
+                    />
                 </div>
                 <div class="modal-footer">
                     <button
@@ -45,12 +47,8 @@ import DatatableCommunications from './DatatableCommunications.vue';
 export default {
     components: { DatatableCommunications },
     props: {
-        contentType: {
-            type: Number,
-            required: true,
-        },
-        pk: {
-            type: Number,
+        communicationsApiUrl: {
+            type: String,
             required: true,
         },
     },

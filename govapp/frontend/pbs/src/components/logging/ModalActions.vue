@@ -23,7 +23,7 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <DatatableActions :ajax="actionsAjax" />
+                    <DatatableActions :ajax="actionsApiUrl" />
                 </div>
                 <div class="modal-footer">
                     <button
@@ -40,28 +40,14 @@
 </template>
 
 <script>
-import { api_endpoints } from '@/utils/hooks';
-
 import DatatableActions from './DatatableActions.vue';
 
 export default {
     components: { DatatableActions },
     props: {
-        contentType: {
-            type: Number,
+        actionsApiUrl: {
+            type: String,
             required: true,
-        },
-        pk: {
-            type: Number,
-            required: true,
-        },
-    },
-    computed: {
-        actionsAjax: function () {
-            return (
-                api_endpoints.actions() +
-                `?format=datatables&content_type=${this.contentType}&object_id=${this.pk}`
-            );
         },
     },
 };
