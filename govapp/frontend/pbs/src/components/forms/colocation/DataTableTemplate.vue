@@ -75,7 +75,6 @@ export default {
                 buttons: ['copy', 'csv', 'excel'],
                 // eslint-disable-next-line no-unused-vars
                 initComplete: function (settings, json) {
-                    console.log('Table initialized!');
                     // The datatable-vue3 component
                     const component =
                         this.parent()[0].parentElement.__vueParentComponent;
