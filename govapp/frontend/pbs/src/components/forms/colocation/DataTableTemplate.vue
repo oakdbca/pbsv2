@@ -9,7 +9,8 @@
         @selection-changed-select="$emit('selection-changed-select', $event)"
         @selection-changed-remove="$emit('selection-changed-remove', $event)"
         @vue:mounted="() => $emit('mounted')"
-    />
+    >
+    </DataTable>
 </template>
 
 <script>
@@ -112,16 +113,28 @@ export default {
                                 };
                                 const select = createApp(SelectFilter, props);
 
-                                let div = document.createElement('div');
+                                let div_parent = document.createElement('div');
 
-                                div = document.createElement('div');
+                                let div_original_header =
+                                    document.createElement('div');
+                                div_original_header.append(
+                                    ...this.header().children
+                                );
+
                                 const id = `mountpoint-select-filter-${columnOptions.data}`;
-                                div.id = id;
-                                this.header().appendChild(div);
-                                select.mount(`#${id}`);
-                                // div.appendChild(select);
 
-                                $(div).on('click', function (e) {
+                                div_parent.appendChild(div_original_header);
+
+                                let div_select = document.createElement('div');
+                                div_select.id = id;
+
+                                div_parent.appendChild(div_select);
+
+                                this.header().replaceChildren(div_parent);
+
+                                select.mount(`#${id}`);
+
+                                $(div_select).on('click', function (e) {
                                     e.stopPropagation();
                                 });
                             }
