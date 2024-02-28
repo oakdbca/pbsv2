@@ -6,7 +6,10 @@
         <!-- gx-5 is the gutter between columns -->
         <div class="row gx-5">
             <template v-for="column in columns" :key="column.data">
-                <div v-if="column.filterOptions" class="col-md-3">
+                <div
+                    v-if="column.filterOptions && column.filter"
+                    class="col-md-3"
+                >
                     <SelectFilter
                         :id="column.data"
                         :title="column.title"

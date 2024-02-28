@@ -1,12 +1,13 @@
 <template>
     <SelectFilterTemplate
         v-if="withFilters"
-        :columns="table_columns"
+        :columns="columns"
         @selection-changed-select="$emit('selection-changed-select', $event)"
         @selection-changed-remove="$emit('selection-changed-remove', $event)"
     ></SelectFilterTemplate>
     <DataTable
         :ref="datatableRefName"
+        v-bind="$attrs"
         :columns="tableColumns"
         :ajax="ajax"
         :options="options"
@@ -57,6 +58,16 @@ export default {
         /**
          * A list of dictionaries in the form of [{data: 'column', title: 'Column Title'}, ...]
          * Use either this or headers. Columns take precedence over headers
+         * Example:
+         * [
+         *      {
+                    data: 'data_field',
+                    title: 'Data Field',
+                    filter: false, // Adds a dropdown filter. optional, default is false
+                    filterOptions: ['option1', 'option2', ...],
+                },
+                ...
+            ]
          */
         columns: {
             type: Array,
@@ -71,7 +82,7 @@ export default {
             required: false,
             default: () => ({
                 responsive: true,
-                select: false,
+                select: true,
                 dom: '<"container-fluid"<"row"<"col"l><"col"f><"col"<"float-end"B>>>>rtip', // 'lfBrtip'
                 buttons: ['copy', 'csv', 'excel'],
             }),

@@ -108,6 +108,7 @@ export default {
                     data: 'purposes',
                     title: 'Purpose',
                     filter: true,
+                    visible: false,
                     filterOptions: this.fieldFilterOptions.purposes,
                     multiple: true,
                     // eslint-disable-next-line no-unused-vars
@@ -120,6 +121,7 @@ export default {
                     data: 'programs',
                     title: 'Program',
                     filter: true,
+                    visible: false,
                     filterOptions: this.fieldFilterOptions.programs,
                     multiple: true,
                     // eslint-disable-next-line no-unused-vars
