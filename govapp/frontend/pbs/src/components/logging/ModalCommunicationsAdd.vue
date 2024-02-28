@@ -2,7 +2,7 @@
     <!-- Add New Communication Log Modal -->
     <div
         id="staticBackdropCommunicationsAdd"
-        class="modal fade"
+        class="modal"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         tabindex="-1"
@@ -114,14 +114,20 @@
                                                     >
                                                         Select Type
                                                     </option>
-                                                    <option value="email">
+                                                    <option value="1">
                                                         Email
                                                     </option>
-                                                    <option value="mail">
+                                                    <option value="2">
+                                                        Phone
+                                                    </option>
+                                                    <option value="3">
                                                         Mail
                                                     </option>
-                                                    <option value="phone">
-                                                        Phone
+                                                    <option value="4">
+                                                        Person
+                                                    </option>
+                                                    <option value="5">
+                                                        Other
                                                     </option>
                                                 </select>
                                                 <div class="invalid-feedback">
@@ -336,17 +342,20 @@
 </template>
 
 <script>
-import { constants } from '@/utils/constants';
-
-import ErrorRenderer from '@/utils/vue/ErrorRenderer.vue';
+import { constants } from '@/utils/hooks';
 
 export default {
-    components: {
-        ErrorRenderer,
-    },
     props: {
         postCommunicationsEntryApiUrl: {
             type: String,
+            required: true,
+        },
+        contentType: {
+            type: Number,
+            required: true,
+        },
+        objectId: {
+            type: Number,
             required: true,
         },
     },
@@ -367,6 +376,14 @@ export default {
             ],
             errors: null,
         };
+    },
+    mounted() {
+        var communicationsModal = document.getElementById(
+            'staticBackdropCommunicationsAdd'
+        );
+        communicationsModal.addEventListener('shown.bs.modal', function () {
+            $('input[name="to"]').trigger('focus');
+        });
     },
     methods: {
         uploadFile(target, file_obj) {
@@ -397,9 +414,6 @@ export default {
                 name: '',
             });
         },
-        cancel: function () {
-            this.close();
-        },
         close: function () {
             let vm = this;
             this.communication = {
@@ -415,6 +429,10 @@ export default {
                 });
             }
             this.attachAnother();
+            const communicationsAddModal = bootstrap.Modal.getInstance(
+                document.getElementById('staticBackdropCommunicationsAdd')
+            );
+            communicationsAddModal.hide();
         },
         validateForm: function () {
             const form = document.getElementById('communications-add-form');
@@ -430,13 +448,15 @@ export default {
         },
         postCommunicationsEntry: function () {
             let vm = this;
-            let comms = new FormData(vm.form);
+            const form = document.getElementById('communications-add-form');
+            let formData = new FormData(form);
+            formData.append('content_type', this.contentType);
+            formData.append('object_id', this.objectId);
             for (let i = 0; i < vm.files.length; i++) {
-                comms.append('files', vm.files[i].file);
+                formData.append('files', vm.files[i].file);
             }
-            vm.addingComms = true;
             fetch(vm.postCommunicationsEntryApiUrl, {
-                body: comms,
+                body: formData,
                 method: 'POST',
             })
                 .then(async (response) => {
@@ -445,18 +465,17 @@ export default {
                         vm.errors = data || response.statusText;
                         return;
                     }
-                    swal.fire(
-                        'Success',
-                        'Communication logged successfully',
-                        'success'
-                    );
+                    swal.fire({
+                        title: 'Success',
+                        text: 'Communication log entry added successfully',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
                     vm.close();
                 })
-                .catch(() => {
-                    vm.errors = constants.ERRORS.NETWORK_ERROR;
-                })
-                .finally(() => {
-                    vm.addingComms = false;
+                .catch((error) => {
+                    console.error('There was an error:', error);
                 });
         },
     },
@@ -483,13 +502,5 @@ export default {
     background: white;
     cursor: inherit;
     display: block;
-}
-
-.top-buffer {
-    margin-top: 5px;
-}
-
-.top-buffer-2x {
-    margin-top: 10px;
 }
 </style>
