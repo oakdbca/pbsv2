@@ -10,7 +10,7 @@ const jsZip = require('jszip');
 // @ts-ignore
 window.JSZip = jsZip;
 import 'sweetalert2/dist/sweetalert2.css';
-import '@dbca/gov-vue3-components/dist/library.css';
+import '@dbca/gov-vue3-components/dist/assets/library-DJ5wR63R.css';
 import '@/../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
 
 // Add CSRF Token to every request
