@@ -122,12 +122,10 @@ import { useStore } from '@/stores/state';
 import { api_endpoints, utils } from '@/utils/hooks';
 
 import PanelLogs from '../logging/PanelLogs.vue';
-import PanelWorkflow from '../workflow/PanelWorkflow.vue';
 
 export default {
     name: 'OperationalPlan',
     components: {
-        PanelWorkflow,
         PanelLogs,
     },
     data() {
