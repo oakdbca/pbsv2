@@ -1,12 +1,13 @@
 <template>
     <DataTable
         :ref="datatableRefName"
-        :columns="table_columns"
+        :columns="tableColumns"
         :ajax="ajax"
         :options="options"
         class="text-capitalize"
         :class="tableClass"
         @selection-changed="$emit('selection-changed', $event)"
+        @vue:mounted="() => $emit('mounted')"
     />
 </template>
 
@@ -134,15 +135,15 @@ export default {
             default: () => [],
         },
     },
-    emits: ['selection-changed'],
+    emits: ['selection-changed', 'mounted'],
     computed: {
         datatableRefName: function () {
-            return this.name + '-datatable';
+            return this.name + 'Datatable';
         },
         /**
          * Columns object for the DataTable component
          */
-        table_columns: function () {
+        tableColumns: function () {
             // If columns are provided, use them
             if (this.columns.length) {
                 return this.columns;
