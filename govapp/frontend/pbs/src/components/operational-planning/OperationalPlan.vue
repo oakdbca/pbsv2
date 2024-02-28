@@ -18,6 +18,8 @@
                         postCommunicationsEntryApiUrl
                     "
                     :actions-api-url="actionsApiUrl"
+                    :content-type="operationalPlan.content_type"
+                    :object-id="operationalPlan.id"
                 />
                 <PanelWorkflow
                     :status="operationalPlan.status"
@@ -145,10 +147,7 @@ export default {
             );
         },
         postCommunicationsEntryApiUrl() {
-            return (
-                api_endpoints.communications() +
-                `?content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
-            );
+            return api_endpoints.communications();
         },
         actionsApiUrl: function () {
             return (

@@ -40,6 +40,8 @@
     <ModalCommunications :communications-api-url="communicationsApiUrl" />
     <ModalCommunicationsAdd
         :post-communications-entry-api-url="postCommunicationsEntryApiUrl"
+        :content-type="contentType"
+        :object-id="objectId"
     />
     <ModalActions :actions-api-url="actionsApiUrl" />
 </template>
@@ -67,6 +69,14 @@ export default {
         },
         actionsApiUrl: {
             type: String,
+            required: true,
+        },
+        contentType: {
+            type: Number,
+            required: true,
+        },
+        objectId: {
+            type: Number,
             required: true,
         },
     },
