@@ -1,12 +1,13 @@
 <template>
     <DataTable
         :ref="datatableRefName"
-        :columns="table_columns"
+        :columns="tableColumns"
         :ajax="ajax"
         :options="options"
         class="text-capitalize"
         :class="tableClass"
         @selection-changed="$emit('selection-changed', $event)"
+        @vue:mounted="() => $emit('mounted')"
     />
 </template>
 
@@ -75,7 +76,6 @@ export default {
                 buttons: ['copy', 'csv', 'excel'],
                 // eslint-disable-next-line no-unused-vars
                 initComplete: function (settings, json) {
-                    console.log('Table initialized!');
                     // The datatable-vue3 component
                     const component =
                         this.parent()[0].parentElement.__vueParentComponent;
@@ -135,15 +135,15 @@ export default {
             default: () => [],
         },
     },
-    emits: ['selection-changed'],
+    emits: ['selection-changed', 'mounted'],
     computed: {
         datatableRefName: function () {
-            return this.name + '-datatable';
+            return this.name + 'Datatable';
         },
         /**
          * Columns object for the DataTable component
          */
-        table_columns: function () {
+        tableColumns: function () {
             // If columns are provided, use them
             if (this.columns.length) {
                 return this.columns;
@@ -198,15 +198,12 @@ export default {
                     const row_merged = { ...row_full, ...row_serialized };
                     // Sort by headers order, create an array, and push to result
                     const row = _.zip(
-                        ..._.chain(row_merged)
-                            .toPairs()
-                            .sortBy(headers)
-                            .value(),
+                        ..._.chain(row_merged).toPairs().sortBy(headers).value()
                     )[1];
                     result.push(row);
                     return result;
                 },
-                [],
+                []
             );
 
             return table_data;

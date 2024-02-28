@@ -159,7 +159,7 @@ export default {
                 window.setTimeout(() => {
                     document.body.className = document.body.className.replace(
                         /\s?modal-open/,
-                        '',
+                        ''
                     );
                 }, this.duration || 0);
             }
@@ -177,7 +177,7 @@ export default {
     beforeUnmount() {
         document.body.className = document.body.className.replace(
             /\s?modal-open/,
-            '',
+            ''
         );
     },
     methods: {

@@ -17,13 +17,13 @@
                     </h5>
                     <button
                         type="button"
-                        class="btn-close"
+                        class="btn-close btn-close-white"
                         data-bs-dismiss="modal"
                         aria-label="Close"
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <DatatableActions :content-type="38" :pk="1" />
+                    <DatatableActions :ajax="actionsApiUrl" />
                 </div>
                 <div class="modal-footer">
                     <button
@@ -45,12 +45,8 @@ import DatatableActions from './DatatableActions.vue';
 export default {
     components: { DatatableActions },
     props: {
-        contentType: {
-            type: Number,
-            required: true,
-        },
-        pk: {
-            type: Number,
+        actionsApiUrl: {
+            type: String,
             required: true,
         },
     },

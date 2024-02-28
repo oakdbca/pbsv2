@@ -12,6 +12,15 @@ class CommunicationsLogEntryViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CommunicationsLogEntrySerializer
     filterset_fields = ["content_type", "object_id"]
 
+    def get_serializer_class(self):
+        """Return the serializer class."""
+        if self.action == "create":
+            return serializers.CommunicationsLogCreateEntrySerializer
+        return self.serializer_class
+
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user)
+
 
 @drf_utils.extend_schema(tags=["Logs - Action Logs"])
 class ActionsLogEntryViewSet(viewsets.ModelViewSet):

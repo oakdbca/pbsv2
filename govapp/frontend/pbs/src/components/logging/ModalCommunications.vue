@@ -17,13 +17,16 @@
                     </h5>
                     <button
                         type="button"
-                        class="btn-close"
+                        class="btn-close btn-close-white"
                         data-bs-dismiss="modal"
                         aria-label="Close"
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <DatatableCommunications :content-type="38" :pk="1" />
+                    <DatatableCommunications
+                        :communications-api-url="communicationsApiUrl"
+                        @selected-communication-log="toggleDetailsModal"
+                    />
                 </div>
                 <div class="modal-footer">
                     <button
@@ -37,6 +40,106 @@
             </div>
         </div>
     </div>
+    <div
+        id="detailsModal"
+        class="modal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        aria-hidden="true"
+        aria-labelledby="detailsModalLabel"
+        tabindex="-1"
+    >
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div v-if="selectedCommunicationLog" class="modal-content">
+                <div class="modal-header">
+                    <h5 id="detailsModalLabel" class="modal-title">
+                        {{ selectedCommunicationLog.type }} from
+                        {{ selectedCommunicationLog.from }} logged by
+                        {{ selectedCommunicationLog.username }} on
+                        {{ selectedCommunicationLog.created_at }}
+                    </h5>
+                    <button
+                        type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive p-2">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Logged By</th>
+                                    <td>
+                                        {{ selectedCommunicationLog.username }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Date Logged</th>
+                                    <td>
+                                        {{
+                                            selectedCommunicationLog.created_at
+                                        }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Type</th>
+                                    <td>{{ selectedCommunicationLog.type }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">To</th>
+                                    <td>{{ selectedCommunicationLog.to }}</td>
+                                </tr>
+                                <tr v-if="selectedCommunicationLog.cc">
+                                    <th scope="row">CC</th>
+                                    <td>{{ selectedCommunicationLog.cc }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">From</th>
+                                    <td>{{ selectedCommunicationLog.from }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Subject</th>
+                                    <td>
+                                        {{ selectedCommunicationLog.subject }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Text</th>
+                                    <td>{{ selectedCommunicationLog.text }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Documents</th>
+                                    <td>
+                                        {{ selectedCommunicationLog.documents }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary pe-2"
+                        data-bs-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                    <button
+                        class="btn btn-primary"
+                        data-bs-target="#staticBackdropCommunications"
+                        data-bs-toggle="modal"
+                        data-bs-dismiss="modal"
+                    >
+                        Back to all communications
+                        <i class="bi bi-back ps-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -45,13 +148,32 @@ import DatatableCommunications from './DatatableCommunications.vue';
 export default {
     components: { DatatableCommunications },
     props: {
-        contentType: {
-            type: Number,
+        communicationsApiUrl: {
+            type: String,
             required: true,
         },
-        pk: {
-            type: Number,
-            required: true,
+    },
+    data: function () {
+        return {
+            selectedCommunicationLog: null,
+        };
+    },
+    methods: {
+        toggleDetailsModal: function (selectedCommunicationLog) {
+            this.selectedCommunicationLog = selectedCommunicationLog;
+            var staticBackdropCommunicationsElement = document.getElementById(
+                'staticBackdropCommunications'
+            );
+            var staticBackdropCommunicationsModal =
+                bootstrap.Modal.getOrCreateInstance(
+                    staticBackdropCommunicationsElement
+                );
+            staticBackdropCommunicationsModal.hide();
+
+            var detailsModalElement = document.getElementById('detailsModal');
+            var detailsModal =
+                bootstrap.Modal.getOrCreateInstance(detailsModalElement);
+            detailsModal.show();
         },
     },
 };

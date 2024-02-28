@@ -6,6 +6,7 @@ from govapp.apps.operationalplanning.models import OperationalPlan
 
 
 class OperationalPlanSerializer(ContentTypeModelSerializer):
+    status_display = serializers.CharField(source="get_status_display")
 
     class Meta:
         model = OperationalPlan
@@ -17,6 +18,7 @@ class OperationalPlanDatatableSerializer(serializers.ModelSerializer):
     districts = serializers.ReadOnlyField()
     regions = serializers.ReadOnlyField()
     assigned_to_name = serializers.ReadOnlyField()
+    status_display = serializers.CharField(source="get_status_display")
 
     class Meta:
         model = OperationalPlan
@@ -28,5 +30,6 @@ class OperationalPlanDatatableSerializer(serializers.ModelSerializer):
             "regions",
             "districts",
             "status",
+            "status_display",
             "assigned_to_name",
         ]

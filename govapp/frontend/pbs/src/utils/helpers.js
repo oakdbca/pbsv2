@@ -48,7 +48,7 @@ export default {
                 let errors_str = '<ul class="list-group text-start">';
                 for (const key of Object.keys(errors)) {
                     errors_str += `<li class="list-group-item"><span class="fw-bold">${key}:</span> ${module.exports.escapeHtml(
-                        errors[key],
+                        errors[key]
                     )}</li>`;
                 }
                 return errors_str + '</ul>';
@@ -82,7 +82,7 @@ export default {
                     name + '='
                 ) {
                     value = decodeURIComponent(
-                        cookie.substring(name.length + 1),
+                        cookie.substring(name.length + 1)
                     );
                     break;
                 }
@@ -107,7 +107,7 @@ export default {
     },
     enablePopovers: function () {
         const popoverTriggerList = [].slice.call(
-            document.querySelectorAll('[data-bs-toggle="popover"]'),
+            document.querySelectorAll('[data-bs-toggle="popover"]')
         );
         popoverTriggerList.map(function (popoverTriggerEl) {
             // @ts-expect-error - bootstrap is already loaded via script in the html from webtemplate_dbca

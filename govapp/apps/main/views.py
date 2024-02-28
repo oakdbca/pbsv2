@@ -13,7 +13,7 @@ from rest_framework_datatables.django_filters.backends import DatatablesFilterBa
 from govapp.apps.accounts.serializers import UserKeyValueListSerializer
 from govapp.apps.main.mixins import KeyValueListMixin
 
-from .models import District, Region
+from .models import AssignableModel, District, Region
 from .serializers import DistrictSerializer, RegionSerializer
 
 logger = logging.getLogger(__name__)
@@ -94,6 +94,11 @@ class AssignToMeAPIView(APIView):
                 )
             )
 
+        if not isinstance(instance, AssignableModel):
+            raise ValidationError(
+                "The model the object is based on must extend from AssignableModel"
+            )
+
         if not instance.user_is_assignable(request.user):
             raise ValidationError(
                 "You do not have permission to assign this object to yourself"
@@ -144,6 +149,11 @@ class AssignableUsersAPIView(APIView):
                 )
             )
 
+        if not isinstance(instance, AssignableModel):
+            raise ValidationError(
+                "The model the object is based on must extend from AssignableModel"
+            )
+
         assignable_users = instance.assignable_users()
 
         serializer = UserKeyValueListSerializer(assignable_users, many=True)
@@ -181,6 +191,11 @@ class AssignToAPIView(APIView):
                 "No object found with content_type: {} and object_id: {}".format(
                     content_type, object_id
                 )
+            )
+
+        if not isinstance(instance, AssignableModel):
+            raise ValidationError(
+                "The model the object is based on must extend from AssignableModel"
             )
 
         if not instance.user_is_assignable(request.user):

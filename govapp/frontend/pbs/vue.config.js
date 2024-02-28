@@ -14,7 +14,7 @@ module.exports = {
     chainWebpack: (config) => {
         config.resolve.alias.set(
             '@static-root',
-            path.resolve(__dirname, '../../../staticfiles/'),
+            path.resolve(__dirname, '../../../staticfiles/')
         );
 
         // https://ckeditor.com/docs/ckeditor5/latest/installation/integrations/vuejs-v3.html#webpack
@@ -55,7 +55,7 @@ module.exports = {
                     postcssOptions: styles.getPostCssConfig({
                         themeImporter: {
                             themePath: require.resolve(
-                                '@ckeditor/ckeditor5-theme-lark',
+                                '@ckeditor/ckeditor5-theme-lark'
                             ),
                         },
                         minify: true,

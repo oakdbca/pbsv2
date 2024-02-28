@@ -24,6 +24,8 @@ def trigger_error(request):
 
 
 router = routers.DefaultRouter()
+if not conf.settings.DEBUG:
+    router.include_root_view = False
 
 router.registry.extend(accounts_router.registry)
 router.registry.extend(burnplanning_router.registry)

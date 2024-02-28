@@ -1,4 +1,3 @@
-# Third-Party
 from rest_framework import serializers
 
 # Local
@@ -59,22 +58,23 @@ class CommunicationsLogEntrySerializer(serializers.ModelSerializer):
 class CommunicationsLogCreateEntrySerializer(serializers.ModelSerializer):
     """Communications Log Entry Model Serializer."""
 
+    user: serializers.PrimaryKeyRelatedField = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault()
+    )
     documents = CommunicationsLogDocumentSerializer(many=True, read_only=True)
-    vars()["from"] = serializers.CharField(
-        source="fromm"
-    )  # Work-around to use reserved keywords in serializer
 
     class Meta:
         """Communications Log Entry Model Serializer Metadata."""
 
-        model = CommunicationsLogEntrySerializer.Meta.model
+        model = models.CommunicationsLogEntry
         fields = (
             "id",
-            "created_at",
+            "content_type",
+            "object_id",
             "type",
             "to",
             "cc",
-            "from",
+            "fromm",
             "subject",
             "text",
             "documents",
@@ -84,6 +84,8 @@ class CommunicationsLogCreateEntrySerializer(serializers.ModelSerializer):
 
 class ActionsLogEntrySerializer(serializers.ModelSerializer):
     """Actions Log Entry Model Serializer."""
+
+    when = serializers.DateTimeField(format="%d/%m/%Y %H:%M")
 
     class Meta:
         """Actions Log Entry Model Serializer Metadata."""

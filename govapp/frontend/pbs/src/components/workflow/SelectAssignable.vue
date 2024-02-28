@@ -22,18 +22,13 @@
 </template>
 
 <script>
-import { api_endpoints, utils } from '@/utils/hooks';
-
 export default {
     name: 'SelectAssignable',
     props: {
-        contentType: {
-            type: Number,
-            required: true,
-        },
-        pk: {
-            type: Number,
-            required: true,
+        assignableUsers: {
+            type: Array,
+            required: false,
+            default: null,
         },
         assignedTo: {
             type: Number,
@@ -41,11 +36,6 @@ export default {
         },
     },
     emits: ['assignTo'],
-    data() {
-        return {
-            assignableUsers: null,
-        };
-    },
     computed: {
         assignedToComputed: {
             get() {
@@ -54,21 +44,6 @@ export default {
             set(value) {
                 this.$emit('assignTo', value);
             },
-        },
-    },
-    created() {
-        this.fetchAssignableUsers();
-    },
-    methods: {
-        fetchAssignableUsers() {
-            utils
-                .fetchUrl(
-                    api_endpoints.assignableUsers() +
-                        `?content_type=${this.contentType}&object_id=${this.pk}`,
-                )
-                .then((data) => {
-                    this.assignableUsers = data;
-                });
         },
     },
 };

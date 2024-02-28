@@ -15,9 +15,7 @@ class KeyValueListMixin:
             key_value_display_field = (
                 "display_name"
                 if "display_name" in field_names
-                else "name"
-                if "name" in field_names
-                else None
+                else "name" if "name" in field_names else None
             )
             if not key_value_display_field:
                 raise AttributeError(

@@ -1,46 +1,45 @@
 <template>
     <div class="card mb-3">
         <div class="card-header">Workflow</div>
-        <div class="card-body border-bottom">
-            <div class="input-group">
-                <span id="basic-addon1" class="input-group-text">Status</span>
-                <input
-                    :value="status"
-                    type="text"
-                    class="form-control"
-                    placeholder="Username"
-                    aria-label="Username"
-                    aria-describedby="basic-addon1"
-                    disabled
-                />
-            </div>
-        </div>
-        <div class="card-body">
+        <PanelStatus :status="status" :status-display="statusDisplay" />
+        <div v-if="assignableUsers" class="card-body">
             <PanelAssignable
                 :content-type="contentType"
                 :pk="pk"
+                :assignable-users="assignableUsers"
+                :assign-to-me-api-url="assignToMeApiUrl"
+                :assign-to-api-url="assignToApiUrl"
                 :assigned-to="assignedTo"
+                :request-user-id="requestUserId"
                 @assign-to-me="$emit('assignToMe')"
                 @assign-to="assignTo"
             />
         </div>
+        <slot
+            ><!-- Add any custom workflow elements as card bodies to the parent component --></slot
+        >
     </div>
 </template>
 
 <script>
-import PanelLogs from '@/components/logging/PanelLogs.vue';
+import PanelStatus from '@/components/workflow/PanelStatus.vue';
 import PanelAssignable from '@/components/workflow/PanelAssignable.vue';
 
 export default {
     name: 'OperationalPlan',
     components: {
-        PanelLogs,
+        PanelStatus,
         PanelAssignable,
     },
     props: {
         status: {
             type: String,
             required: true,
+        },
+        statusDisplay: {
+            type: String,
+            required: false,
+            default: null,
         },
         contentType: {
             type: Number,
@@ -50,7 +49,26 @@ export default {
             type: Number,
             required: true,
         },
+        assignableUsers: {
+            type: Array,
+            required: false,
+            default: null,
+        },
+        assignToMeApiUrl: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        assignToApiUrl: {
+            type: String,
+            required: false,
+            default: null,
+        },
         assignedTo: {
+            type: Number,
+            required: true,
+        },
+        requestUserId: {
             type: Number,
             required: true,
         },
@@ -64,5 +82,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss" scoped></style>

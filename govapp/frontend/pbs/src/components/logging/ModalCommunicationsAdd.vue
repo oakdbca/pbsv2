@@ -2,7 +2,7 @@
     <!-- Add New Communication Log Modal -->
     <div
         id="staticBackdropCommunicationsAdd"
-        class="modal fade"
+        class="modal"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         tabindex="-1"
@@ -17,7 +17,7 @@
                     </h5>
                     <button
                         type="button"
-                        class="btn-close"
+                        class="btn-close btn-close-white"
                         data-bs-dismiss="modal"
                         aria-label="Close"
                     ></button>
@@ -60,6 +60,10 @@
                                                     autofocus
                                                     required
                                                 />
+                                                <div class="invalid-feedback">
+                                                    Please enter who the
+                                                    communication was to.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -81,6 +85,10 @@
                                                     maxlength="200"
                                                     required
                                                 />
+                                                <div class="invalid-feedback">
+                                                    Please enter who the
+                                                    communication was from.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -93,28 +101,39 @@
                                             >
                                             <div class="col-sm-9">
                                                 <select
+                                                    id="type"
                                                     v-model="communication.type"
                                                     class="form-select"
                                                     name="type"
                                                     required
                                                 >
                                                     <option
-                                                        value=""
                                                         selected
                                                         disabled
+                                                        :value.attr="''"
                                                     >
                                                         Select Type
                                                     </option>
-                                                    <option value="email">
+                                                    <option value="1">
                                                         Email
                                                     </option>
-                                                    <option value="mail">
-                                                        Mail
-                                                    </option>
-                                                    <option value="phone">
+                                                    <option value="2">
                                                         Phone
                                                     </option>
+                                                    <option value="3">
+                                                        Mail
+                                                    </option>
+                                                    <option value="4">
+                                                        Person
+                                                    </option>
+                                                    <option value="5">
+                                                        Other
+                                                    </option>
                                                 </select>
+                                                <div class="invalid-feedback">
+                                                    Please select the type of
+                                                    communication.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -136,6 +155,10 @@
                                                     maxlength="200"
                                                     required
                                                 />
+                                                <div class="invalid-feedback">
+                                                    Please enter subject of the
+                                                    communication.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -153,6 +176,10 @@
                                                     class="form-control"
                                                     required
                                                 ></textarea>
+                                                <div class="invalid-feedback">
+                                                    Please enter text of the
+                                                    communication.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -206,7 +233,7 @@
                                                                                 uploadFile(
                                                                                     'file-upload-' +
                                                                                         i,
-                                                                                    f,
+                                                                                    f
                                                                                 )
                                                                             "
                                                                         />
@@ -233,7 +260,7 @@
                                                                                 uploadFile(
                                                                                     'file-upload-' +
                                                                                         i,
-                                                                                    f,
+                                                                                    f
                                                                                 )
                                                                             "
                                                                         />
@@ -256,7 +283,7 @@
                                                                         class="btn btn-danger btn-sm"
                                                                         @click.prevent="
                                                                             removeFile(
-                                                                                i,
+                                                                                i
                                                                             )
                                                                         "
                                                                     >
@@ -299,7 +326,14 @@
                         class="btn btn-secondary"
                         data-bs-dismiss="modal"
                     >
-                        Close
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        @click.prevent="validateForm"
+                    >
+                        Add Entry
                     </button>
                 </div>
             </div>
@@ -308,18 +342,19 @@
 </template>
 
 <script>
-import ErrorRenderer from '@/utils/vue/ErrorRenderer.vue';
+import { constants } from '@/utils/hooks';
 
 export default {
-    components: {
-        ErrorRenderer,
-    },
     props: {
+        postCommunicationsEntryApiUrl: {
+            type: String,
+            required: true,
+        },
         contentType: {
             type: Number,
             required: true,
         },
-        pk: {
+        objectId: {
             type: Number,
             required: true,
         },
@@ -333,9 +368,139 @@ export default {
                 subject: '',
                 text: '',
             },
-            files: [],
+            files: [
+                {
+                    file: null,
+                    name: '',
+                },
+            ],
             errors: null,
         };
     },
+    mounted() {
+        var communicationsModal = document.getElementById(
+            'staticBackdropCommunicationsAdd'
+        );
+        communicationsModal.addEventListener('shown.bs.modal', function () {
+            $('input[name="to"]').trigger('focus');
+        });
+    },
+    methods: {
+        uploadFile(target, file_obj) {
+            let _file = null;
+            let input = $('.' + target)[0];
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.readAsDataURL(input.files[0]);
+                reader.onload = function (e) {
+                    _file = e.target.result;
+                };
+                _file = input.files[0];
+            }
+            file_obj.file = _file;
+            file_obj.name = _file.name;
+        },
+        removeFile(index) {
+            let length = this.files.length;
+            $('.file-row-' + index).remove();
+            this.files.splice(index, 1);
+            this.$nextTick(() => {
+                length == 1 ? this.attachAnother() : '';
+            });
+        },
+        attachAnother() {
+            this.files.push({
+                file: null,
+                name: '',
+            });
+        },
+        close: function () {
+            let vm = this;
+            this.communication = {
+                type: '',
+            };
+            this.errors = null;
+            $('#communications-add-form').removeClass('was-validated');
+            let file_length = vm.files.length;
+            this.files = [];
+            for (let i = 0; i < file_length; i++) {
+                vm.$nextTick(() => {
+                    $('.file-row-' + i).remove();
+                });
+            }
+            this.attachAnother();
+            const communicationsAddModal = bootstrap.Modal.getInstance(
+                document.getElementById('staticBackdropCommunicationsAdd')
+            );
+            communicationsAddModal.hide();
+        },
+        validateForm: function () {
+            const form = document.getElementById('communications-add-form');
+
+            if (form.checkValidity()) {
+                this.postCommunicationsEntry();
+            } else {
+                form.classList.add('was-validated');
+                $('#communications-add-form').find(':invalid').first().focus();
+            }
+
+            return false;
+        },
+        postCommunicationsEntry: function () {
+            let vm = this;
+            const form = document.getElementById('communications-add-form');
+            let formData = new FormData(form);
+            formData.append('content_type', this.contentType);
+            formData.append('object_id', this.objectId);
+            for (let i = 0; i < vm.files.length; i++) {
+                formData.append('files', vm.files[i].file);
+            }
+            fetch(vm.postCommunicationsEntryApiUrl, {
+                body: formData,
+                method: 'POST',
+            })
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        vm.errors = data || response.statusText;
+                        return;
+                    }
+                    swal.fire({
+                        title: 'Success',
+                        text: 'Communication log entry added successfully',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    vm.close();
+                })
+                .catch((error) => {
+                    console.error('There was an error:', error);
+                });
+        },
+    },
 };
 </script>
+
+<style scoped lang="css">
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type='file'] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+</style>
