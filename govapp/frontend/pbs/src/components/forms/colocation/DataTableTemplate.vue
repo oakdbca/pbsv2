@@ -82,7 +82,7 @@ export default {
             required: false,
             default: () => ({
                 responsive: true,
-                select: true,
+                select: false,
                 dom: '<"container-fluid"<"row"<"col"l><"col"f><"col"<"float-end"B>>>>rtip', // 'lfBrtip'
                 buttons: ['copy', 'csv', 'excel'],
             }),
@@ -145,7 +145,6 @@ export default {
                 // Reload the table when the ajax prop changes
                 this.$refs[this.datatableRefName].dt.ajax.reload();
             },
-            deep: true,
         },
     },
     methods: {
