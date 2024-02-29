@@ -1,6 +1,6 @@
 <template>
     <div class="accordion-item">
-        <h2 :id="`heading${heading}`" class="accordion-header">
+        <h2 :id="`heading${slugifiedHeading}`" class="accordion-header">
             <button
                 class="accordion-button"
                 :class="[
@@ -9,9 +9,9 @@
                 ]"
                 type="button"
                 data-bs-toggle="collapse"
-                :data-bs-target="`#collapse${heading}`"
+                :data-bs-target="`#collapse${slugifiedHeading}`"
                 :aria-expanded="collapsed ? 'false' : 'true'"
-                :aria-controls="`collapse${heading}`"
+                :aria-controls="`collapse${slugifiedHeading}`"
             >
                 {{ heading }}
                 <div class="ms-auto">
@@ -24,10 +24,10 @@
             </button>
         </h2>
         <div
-            :id="`collapse${heading}`"
+            :id="`collapse${slugifiedHeading}`"
             class="accordion-collapse collapse"
             :class="{ show: !collapsed }"
-            :aria-labelledby="`heading${heading}`"
+            :aria-labelledby="`heading${slugifiedHeading}`"
         >
             <div class="accordion-body">
                 <slot></slot>
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+var slugify = require('slugify');
+
 export default {
     name: 'BootstrapAccordionItem',
     props: {
@@ -55,6 +57,11 @@ export default {
         iconColorClass: {
             type: String,
             default: '',
+        },
+    },
+    computed: {
+        slugifiedHeading() {
+            return slugify(this.heading, { lower: true });
         },
     },
 };
