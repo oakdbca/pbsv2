@@ -1,0 +1,66 @@
+<template>
+    <div class="accordion-item">
+        <h2 :id="`heading${heading}`" class="accordion-header">
+            <button
+                class="accordion-button"
+                :class="[
+                    collapsed ? 'collapsed' : '',
+                    iconColorClass ? iconColorClass : '',
+                ]"
+                type="button"
+                data-bs-toggle="collapse"
+                :data-bs-target="`#collapse${heading}`"
+                :aria-expanded="collapsed ? 'false' : 'true'"
+                :aria-controls="`collapse${heading}`"
+            >
+                {{ heading }}
+                <div class="ms-auto">
+                    <i
+                        v-if="iconClass"
+                        class="accordion-item-icon bi fs-5"
+                        :class="[iconClass, iconColorClass]"
+                    ></i>
+                </div>
+            </button>
+        </h2>
+        <div
+            :id="`collapse${heading}`"
+            class="accordion-collapse collapse"
+            :class="{ show: !collapsed }"
+            :aria-labelledby="`heading${heading}`"
+        >
+            <div class="accordion-body">
+                <slot></slot>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'BootstrapAccordionItem',
+    props: {
+        heading: {
+            type: String,
+            required: true,
+        },
+        collapsed: {
+            type: Boolean,
+            default: true,
+        },
+        iconClass: {
+            type: String,
+            default: '',
+        },
+        iconColorClass: {
+            type: String,
+            default: '',
+        },
+    },
+};
+</script>
+<style scoped lang="css">
+.accordion-button::after {
+    margin-left: 1em;
+}
+</style>
