@@ -453,6 +453,9 @@ DJANGO_GROUPS = [
     PBS_ADMIN,
 ]
 
+# Cache keys
+CACHE_KEY_KEY_VALUE_LIST = "key_value_list"
+
 # Configure CKEditor 5
 CKEDITOR_CONFIGS = {
     "default": {
