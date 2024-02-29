@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import TableBurnPlanElements from '@/components/burnplanning/TableBurnPlanElements.vue';
+import TableBurnPlanElements from '@/components/burn-planning/TableBurnPlanElements.vue';
 
 export default {
     name: 'BurnPlanning',
