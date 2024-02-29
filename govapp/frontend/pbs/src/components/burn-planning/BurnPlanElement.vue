@@ -41,6 +41,27 @@
                 </div>
             </div>
             <div class="col">
+                <BootstrapAccordion
+                    id="burn-plan-element-accordion"
+                    title=""
+                    content=""
+                >
+                    <BootstrapAccodionItem
+                        heading="Details"
+                        icon-class="bi-exclamation-circle-fill"
+                        icon-color-class="text-warning"
+                        heading-border-class="border-warning"
+                    >
+                        Details body
+                    </BootstrapAccodionItem>
+                    <BootstrapAccodionItem heading="Output Leaders">
+                        Output Leaders body
+                    </BootstrapAccodionItem>
+                    <BootstrapAccodionItem heading="Documents">
+                        Documents body
+                    </BootstrapAccodionItem>
+                </BootstrapAccordion>
+
                 <div id="operational-plan-accordion" class="accordion">
                     <div class="accordion-item">
                         <h2
@@ -55,7 +76,7 @@
                                 aria-expanded="false"
                                 aria-controls="panelsStayOpen-collapseOne"
                             >
-                                Overview
+                                Details
                             </button>
                         </h2>
                         <div
@@ -63,7 +84,7 @@
                             class="accordion-collapse collapse"
                             aria-labelledby="panelsStayOpen-headingOne"
                         >
-                            <div class="accordion-body">Overview body</div>
+                            <div class="accordion-body">TODO: Details</div>
                         </div>
                     </div>
                     <div class="accordion-item">
@@ -79,7 +100,7 @@
                                 aria-expanded="false"
                                 aria-controls="panelsStayOpen-collapseTwo"
                             >
-                                Priority
+                                Output Leaders
                             </button>
                         </h2>
                         <div
@@ -87,7 +108,9 @@
                             class="accordion-collapse collapse"
                             aria-labelledby="panelsStayOpen-headingTwo"
                         >
-                            <div class="accordion-body">Priority body</div>
+                            <div class="accordion-body">
+                                TODO: Output Leaders
+                            </div>
                         </div>
                     </div>
                     <div class="accordion-item">
@@ -103,7 +126,7 @@
                                 aria-expanded="false"
                                 aria-controls="panelsStayOpen-collapseThree"
                             >
-                                Context
+                                Documents
                             </button>
                         </h2>
                         <div
@@ -111,7 +134,7 @@
                             class="accordion-collapse collapse"
                             aria-labelledby="panelsStayOpen-headingThree"
                         >
-                            <div class="accordion-body">Context Body</div>
+                            <div class="accordion-body">TODO: Documents</div>
                         </div>
                     </div>
                 </div>
@@ -337,12 +360,16 @@ import { utils, apiEndpoints } from '@/utils/hooks';
 import { useStore } from '@/stores/state';
 
 import PanelLogs from '../logging/PanelLogs.vue';
+// import PanelWorkflow from '../forms/PanelWorkflow.vue';
 
 import FormSection from '@/components/forms/section_toggle.vue';
 import RowInputComponent from '@/components/forms/colocation/RowInput.vue';
 import RowSelectComponent from '@/components/forms/colocation/RowSelect.vue';
 import RowRadiosComponent from '@/components/forms/colocation/RowRadios.vue';
 import RowTextareaComponent from '@/components/forms/colocation/RowTextarea.vue';
+
+import BootstrapAccordion from '../forms/BootstrapAccordion.vue';
+import BootstrapAccodionItem from '../forms/BootstrapAccodionItem.vue';
 
 export default {
     name: 'BurnPlanElement',
@@ -353,6 +380,8 @@ export default {
         RowRadiosComponent,
         RowTextareaComponent,
         PanelLogs,
+        BootstrapAccordion,
+        BootstrapAccodionItem,
     },
     props: {},
     data: function () {
