@@ -20,7 +20,7 @@ class ActionsLogEntryAdmin(reversion.admin.VersionAdmin):
 
 
 class CommunicationsLogDocumentAdmin(reversion.admin.VersionAdmin):
-    list_display = ("id", "name", "description", "uploaded_at", "entry", "file", "user")
+    list_display = ("id", "name", "description", "uploaded_at", "entry", "file")
     ordering = ("id",)
 
 

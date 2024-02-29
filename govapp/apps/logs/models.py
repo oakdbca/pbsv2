@@ -61,9 +61,6 @@ class CommunicationsLogDocument(models.Model):
         CommunicationsLogEntry, related_name="documents", on_delete=models.CASCADE
     )
     file = models.FileField(upload_to="documents")
-    user = models.ForeignKey(
-        UserModel, related_name="communications_log_documents", on_delete=models.CASCADE
-    )
 
     class Meta:
         verbose_name = "Communications Log Document"
