@@ -2,9 +2,11 @@ from abc import ABC, ABCMeta, abstractmethod
 from typing import Any, Generic, TypeVar
 
 from django import forms
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.fields.related_descriptors import ReverseManyToOneDescriptor
@@ -114,6 +116,42 @@ class RichTextEditorWidget(forms.Textarea):
         attrs.setdefault("rows", rows)
 
         super().__init__(*args, **kwargs)
+
+
+class KeyValueListModelMixin:
+    """A mixin class to be used with a model that stores a cached key value list of a model's objects"""
+
+    @classmethod
+    def cache_key(cls):
+        return f"{settings.CACHE_KEY_KEY_VALUE_LIST}-{cls.__name__}"
+
+    @classmethod
+    def key_value_list(cls):
+        value_field_name = None
+        if hasattr(cls, "KEY_VALUE_LIST_DISPLAY_FIELD"):
+            value_field_name = cls.KEY_VALUE_LIST_DISPLAY_FIELD
+        elif issubclass(cls, DisplayNameableModel):
+            value_field_name = "display_name"
+        elif issubclass(cls, NameableModel) or issubclass(cls, UniqueNameableModel):
+            value_field_name = "name"
+        else:
+            raise AttributeError(
+                f"No display_name, name or key_value_display_field found on model {cls}"
+            )
+
+        return list(cls.objects.all().values_list("id", value_field_name))
+
+    @classmethod
+    def cached_key_value_list(cls):
+        key_value_list = cache.get(cls.cache_key())
+        if key_value_list is None:
+            key_value_list = cls.key_value_list()
+            cache.set(cls.cache_key(), key_value_list)
+        return key_value_list
+
+    def save(self, *args, **kwargs):
+        cache.delete(self.__class__.cache_key())
+        super().save(*args, **kwargs)
 
 
 class UniqueNameableModel(models.Model):
@@ -316,7 +354,7 @@ class ModelFile(models.Model):
         return self.name
 
 
-class Region(DisplayNameableModel, UniqueNameableModel):
+class Region(KeyValueListModelMixin, DisplayNameableModel, UniqueNameableModel):
     class Meta:
         ordering = ["name"]
 
@@ -326,7 +364,7 @@ class Region(DisplayNameableModel, UniqueNameableModel):
         return self.display_name
 
 
-class District(DisplayNameableModel, UniqueNameableModel):
+class District(KeyValueListModelMixin, DisplayNameableModel, UniqueNameableModel):
     region = models.ForeignKey(
         Region, on_delete=models.CASCADE, null=False, blank=False
     )
