@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.fields.related_descriptors import ReverseManyToOneDescriptor
+from django.utils.text import slugify
 from protected_media.models import ProtectedFileField
 
 model_type = models.base.ModelBase
@@ -275,7 +276,8 @@ class ArchivableModel(models.Model):
 
 
 def file_upload_location(instance, filename):
-    return f"uploads/{instance._meta.model_name}/{filename}"
+    content_type_name = slugify(instance.content_type.name)
+    return f"uploads/{content_type_name}/{instance.object_id}/files/{filename}"
 
 
 class DocumentCategory(UniqueNameableModel):
