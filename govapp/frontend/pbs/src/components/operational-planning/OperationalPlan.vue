@@ -41,80 +41,22 @@
                 </div>
             </div>
             <div class="col">
-                <div id="operational-plan-accordion" class="accordion">
-                    <div class="accordion-item">
-                        <h2
-                            id="panelsStayOpen-headingOne"
-                            class="accordion-header"
-                        >
-                            <button
-                                class="accordion-button collapsed"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#panelsStayOpen-collapseOne"
-                                aria-expanded="false"
-                                aria-controls="panelsStayOpen-collapseOne"
-                            >
-                                Overview
-                            </button>
-                        </h2>
-                        <div
-                            id="panelsStayOpen-collapseOne"
-                            class="accordion-collapse collapse"
-                            aria-labelledby="panelsStayOpen-headingOne"
-                        >
-                            <div class="accordion-body">Overview body</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2
-                            id="panelsStayOpen-headingTwo"
-                            class="accordion-header"
-                        >
-                            <button
-                                class="accordion-button collapsed"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#panelsStayOpen-collapseTwo"
-                                aria-expanded="false"
-                                aria-controls="panelsStayOpen-collapseTwo"
-                            >
-                                Priority
-                            </button>
-                        </h2>
-                        <div
-                            id="panelsStayOpen-collapseTwo"
-                            class="accordion-collapse collapse"
-                            aria-labelledby="panelsStayOpen-headingTwo"
-                        >
-                            <div class="accordion-body">Priority body</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2
-                            id="panelsStayOpen-headingThree"
-                            class="accordion-header"
-                        >
-                            <button
-                                class="accordion-button collapsed"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#panelsStayOpen-collapseThree"
-                                aria-expanded="false"
-                                aria-controls="panelsStayOpen-collapseThree"
-                            >
-                                Context
-                            </button>
-                        </h2>
-                        <div
-                            id="panelsStayOpen-collapseThree"
-                            class="accordion-collapse collapse"
-                            aria-labelledby="panelsStayOpen-headingThree"
-                        >
-                            <div class="accordion-body">Context Body</div>
-                        </div>
-                    </div>
-                </div>
+                <BootstrapAccordion id="operational-plan-accordion">
+                    <BootstrapAccodionItem
+                        heading="Overview"
+                        icon-class="bi-exclamation-circle-fill"
+                        icon-color-class="text-warning"
+                        heading-border-class="border-warning"
+                    >
+                        Overview body
+                    </BootstrapAccodionItem>
+                    <BootstrapAccodionItem heading="Priority">
+                        Priority body
+                    </BootstrapAccodionItem>
+                    <BootstrapAccodionItem heading="Context">
+                        Context body
+                    </BootstrapAccodionItem>
+                </BootstrapAccordion>
             </div>
         </div>
     </div>
@@ -125,12 +67,17 @@ import { useStore } from '@/stores/state';
 
 import { api_endpoints, utils } from '@/utils/hooks';
 
+import BootstrapAccordion from '../forms/BootstrapAccordion.vue';
+import BootstrapAccodionItem from '../forms/BootstrapAccodionItem.vue';
+
 import PanelLogs from '../logging/PanelLogs.vue';
 
 export default {
     name: 'OperationalPlan',
     components: {
         PanelLogs,
+        BootstrapAccordion,
+        BootstrapAccodionItem,
     },
     data() {
         return {
