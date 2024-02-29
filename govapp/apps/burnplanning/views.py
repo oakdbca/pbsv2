@@ -21,7 +21,6 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
     queryset = BurnPlanElement.objects.all()
     serializer_class = BurnPlanElementSerializer
     # permission_classes = [permissions.IsAuthenticated] # TODO
-    # django_filters_filterset_class = BurnPlanElementFilter
     filterset_class = BurnPlanElementFilter
 
 
