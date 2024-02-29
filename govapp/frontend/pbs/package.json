@@ -58,7 +58,7 @@
         "sweetalert2": "^11.4",
         "uuid": "^9.0",
         "vue": "^3.4",
-        "vue-multiselect": "^2.1.8",
+        "vue-multiselect": "^3.0.0-beta.3",
         "vue-router": "^4.0"
     },
     "engines": {
