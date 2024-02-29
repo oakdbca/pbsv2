@@ -3,6 +3,8 @@ from django.contrib import auth
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes import models as ct_models
 from django.db import models
+from django.utils.text import slugify
+from protected_media.models import ProtectedFileField
 
 # Shortcuts
 UserModel = auth.get_user_model()
@@ -51,6 +53,12 @@ class CommunicationsLogEntry(models.Model):
         return self.user.username
 
 
+def communications_log_document_upload_location(instance, filename):
+    content_type_name = slugify(instance.entry.content_type.name)
+    object_id = instance.entry.object_id
+    return f"uploads/{content_type_name}/{object_id}/communications-log-documents/{filename}"
+
+
 class CommunicationsLogDocument(models.Model):
     """Model for a Communications Log Document."""
 
@@ -60,7 +68,7 @@ class CommunicationsLogDocument(models.Model):
     entry = models.ForeignKey(
         CommunicationsLogEntry, related_name="documents", on_delete=models.CASCADE
     )
-    file = models.FileField(upload_to="documents")
+    file = ProtectedFileField(upload_to=communications_log_document_upload_location)
 
     class Meta:
         verbose_name = "Communications Log Document"
