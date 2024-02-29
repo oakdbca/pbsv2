@@ -46,7 +46,6 @@
                         heading="Overview"
                         icon-class="bi-exclamation-circle-fill"
                         icon-color-class="text-warning"
-                        heading-border-class="border-warning"
                     >
                         Overview body
                     </BootstrapAccordionItem>
