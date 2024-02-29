@@ -2,7 +2,7 @@
 from rest_framework import viewsets
 
 from govapp.apps.main.mixins import ChoicesKeyValueListMixin
-from govapp.apps.main.views import DjangoFiltersModelViewSet, KeyValueListMixin
+from govapp.apps.main.views import KeyValueListMixin
 from govapp.common.views import BaseView
 
 from .filters import BurnPlanElementFilter
@@ -17,11 +17,11 @@ from .serializers import (
 )
 
 
-class BurnPlanElementViewSet(DjangoFiltersModelViewSet):
+class BurnPlanElementViewSet(viewsets.ModelViewSet):
     queryset = BurnPlanElement.objects.all()
     serializer_class = BurnPlanElementSerializer
     # permission_classes = [permissions.IsAuthenticated] # TODO
-    django_filters_filterset_class = BurnPlanElementFilter
+    filterset_class = BurnPlanElementFilter
 
 
 class BurnPlanElementView(BaseView):
