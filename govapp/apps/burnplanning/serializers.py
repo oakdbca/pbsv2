@@ -2,6 +2,7 @@ import logging
 
 from rest_framework import serializers
 
+from govapp.apps.main.serializer import ContentTypeModelSerializer
 from govapp.apps.main.serializers import (
     ContentTypeSerializerMixin,
     DistrictSerializer,
@@ -26,7 +27,7 @@ class ProgramSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BurnPlanElementSerializer(serializers.ModelSerializer):
+class BurnPlanElementSerializer(ContentTypeModelSerializer):
     regions = RegionSerializer(many=True)
     districts = DistrictSerializer(many=True)
     treatment = serializers.CharField(
@@ -34,6 +35,7 @@ class BurnPlanElementSerializer(serializers.ModelSerializer):
     )
     purposes = PurposeSerializer(many=True, read_only=True)
     programs = ProgramSerializer(many=True, read_only=True)
+    status_display = serializers.CharField(source="get_status_display")
 
     class Meta:
         model = BurnPlanElement

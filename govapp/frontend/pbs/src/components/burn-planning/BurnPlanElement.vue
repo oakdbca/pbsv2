@@ -1,5 +1,126 @@
 <template>
-    <div id="bpe" class="container">Burn Plan Element</div>
+    <div v-if="burnPlanElement" id="bpe" class="container">
+        <div class="row">
+            <div class="col">
+                <h3>
+                    Burn Plan Element:
+                    <span class="text-secondary">{{
+                        burnPlanElement.reference_number
+                    }}</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <PanelLogs
+                    :communications-api-url="communicationsApiUrl"
+                    :post-communications-entry-api-url="
+                        postCommunicationsEntryApiUrl
+                    "
+                    :actions-api-url="actionsApiUrl"
+                    :content-type="burnPlanElement.content_type"
+                    :object-id="burnPlanElement.id"
+                />
+                <PanelWorkflow
+                    :status="burnPlanElement.status"
+                    :status-display="burnPlanElement.status_display"
+                    :content-type="burnPlanElement.content_type"
+                    :pk="burnPlanElement.id"
+                    :assignable-users="assignableUsers"
+                    :assign-to-me-api-url="assignToMeApiUrl"
+                    :assign-to-api-url="assignToApiUrl"
+                    :assigned-to="burnPlanElement.assigned_to"
+                    :request-user-id="store.userData.id"
+                    @assign-to="assignTo"
+                ></PanelWorkflow>
+                <div class="card">
+                    <div class="card-header">Actions</div>
+                    <div class="card-body">
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div id="operational-plan-accordion" class="accordion">
+                    <div class="accordion-item">
+                        <h2
+                            id="panelsStayOpen-headingOne"
+                            class="accordion-header"
+                        >
+                            <button
+                                class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#panelsStayOpen-collapseOne"
+                                aria-expanded="false"
+                                aria-controls="panelsStayOpen-collapseOne"
+                            >
+                                Overview
+                            </button>
+                        </h2>
+                        <div
+                            id="panelsStayOpen-collapseOne"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="panelsStayOpen-headingOne"
+                        >
+                            <div class="accordion-body">Overview body</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2
+                            id="panelsStayOpen-headingTwo"
+                            class="accordion-header"
+                        >
+                            <button
+                                class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#panelsStayOpen-collapseTwo"
+                                aria-expanded="false"
+                                aria-controls="panelsStayOpen-collapseTwo"
+                            >
+                                Priority
+                            </button>
+                        </h2>
+                        <div
+                            id="panelsStayOpen-collapseTwo"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="panelsStayOpen-headingTwo"
+                        >
+                            <div class="accordion-body">Priority body</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2
+                            id="panelsStayOpen-headingThree"
+                            class="accordion-header"
+                        >
+                            <button
+                                class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#panelsStayOpen-collapseThree"
+                                aria-expanded="false"
+                                aria-controls="panelsStayOpen-collapseThree"
+                            >
+                                Context
+                            </button>
+                        </h2>
+                        <div
+                            id="panelsStayOpen-collapseThree"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="panelsStayOpen-headingThree"
+                        >
+                            <div class="accordion-body">Context Body</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    OLD BELOW:
+
     <div class="card text-center">
         <div class="card-header">
             <ul
@@ -54,7 +175,7 @@
                         :form-collapse="false"
                     >
                         <div class="container">
-                            <div v-if="Object.keys(burnPlanElement).length > 0">
+                            <div v-if="burnPlanElement">
                                 <!-- Non-editable fields -->
                                 <div v-for="name in readOnlyFields" :key="name">
                                     <RowInputComponent
@@ -212,6 +333,11 @@
 
 <script>
 import { utils, apiEndpoints } from '@/utils/hooks';
+
+import { useStore } from '@/stores/state';
+
+import PanelLogs from '../logging/PanelLogs.vue';
+
 import FormSection from '@/components/forms/section_toggle.vue';
 import RowInputComponent from '@/components/forms/colocation/RowInput.vue';
 import RowSelectComponent from '@/components/forms/colocation/RowSelect.vue';
@@ -226,11 +352,14 @@ export default {
         RowSelectComponent,
         RowRadiosComponent,
         RowTextareaComponent,
+        PanelLogs,
     },
     props: {},
     data: function () {
         return {
-            burnPlanElement: {},
+            store: useStore(),
+            burnPlanElement: null,
+            assignableUsers: null,
             noTreatment: 'no_treatment',
         };
     },
@@ -266,6 +395,34 @@ export default {
         programs: () => {
             return ['a', 'b', 'c', 'd'];
         },
+
+        communicationsApiUrl: function () {
+            return (
+                apiEndpoints.communications() +
+                `?format=datatables&content_type=${this.burnPlanElement?.content_type}&object_id=${this.burnPlanElement?.id}`
+            );
+        },
+        postCommunicationsEntryApiUrl() {
+            return apiEndpoints.communications();
+        },
+        actionsApiUrl: function () {
+            return (
+                apiEndpoints.actions() +
+                `?format=datatables&content_type=${this.burnPlanElement?.content_type}&object_id=${this.burnPlanElement?.id}`
+            );
+        },
+        assignableUsersApiUrl() {
+            return apiEndpoints.assignableUsers();
+        },
+        assignToMeApiUrl() {
+            return apiEndpoints.assignToMe();
+        },
+        assignToApiUrl() {
+            return (
+                apiEndpoints.assignTo() +
+                `?content_type=${this.burnPlanElement?.content_type}&object_id=${this.burnPlanElement?.id}`
+            );
+        },
     },
     mounted: async function () {
         const id = this.$route.params.pk;
@@ -285,6 +442,9 @@ export default {
     methods: {
         keyRowComponent: function (/** @type {String} */ key) {
             return `bpe-${this.burnPlanElement.reference_number}-${key}`;
+        },
+        assignTo(value) {
+            this.operationalPlan.assigned_to = value;
         },
     },
 };
