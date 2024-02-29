@@ -15,6 +15,7 @@ from govapp.apps.main.models import (
     AssignableModel,
     District,
     IntervalIntegerField,
+    KeyValueListModelMixin,
     NameableModel,
     ReferenceableModel,
     UniqueNameableModel,
@@ -116,7 +117,9 @@ class BurnPlanUnitDistrict(TimeStampedModel):
         unique_together = ("burn_plan_unit", "district")
 
 
-class Treatment(UniqueNameableModel, ArchivableModel, TimeStampedModel):
+class Treatment(
+    KeyValueListModelMixin, UniqueNameableModel, ArchivableModel, TimeStampedModel
+):
     pass
 
 
@@ -124,11 +127,15 @@ class Justification(UniqueNameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class Purpose(UniqueNameableModel, ArchivableModel, TimeStampedModel):
+class Purpose(
+    KeyValueListModelMixin, UniqueNameableModel, ArchivableModel, TimeStampedModel
+):
     operationalplanpurposes: ReverseManyToOneDescriptor
 
 
-class Program(UniqueNameableModel, ArchivableModel, TimeStampedModel):
+class Program(
+    KeyValueListModelMixin, UniqueNameableModel, ArchivableModel, TimeStampedModel
+):
     operationalplanprograms: ReverseManyToOneDescriptor
 
 
