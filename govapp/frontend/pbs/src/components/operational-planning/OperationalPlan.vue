@@ -42,20 +42,20 @@
             </div>
             <div class="col">
                 <BootstrapAccordion id="operational-plan-accordion">
-                    <BootstrapAccodionItem
+                    <BootstrapAccordionItem
                         heading="Overview"
                         icon-class="bi-exclamation-circle-fill"
                         icon-color-class="text-warning"
                         heading-border-class="border-warning"
                     >
                         Overview body
-                    </BootstrapAccodionItem>
-                    <BootstrapAccodionItem heading="Priority">
+                    </BootstrapAccordionItem>
+                    <BootstrapAccordionItem heading="Priority">
                         Priority body
-                    </BootstrapAccodionItem>
-                    <BootstrapAccodionItem heading="Context">
+                    </BootstrapAccordionItem>
+                    <BootstrapAccordionItem heading="Context">
                         Context body
-                    </BootstrapAccodionItem>
+                    </BootstrapAccordionItem>
                 </BootstrapAccordion>
             </div>
         </div>
@@ -68,7 +68,7 @@ import { useStore } from '@/stores/state';
 import { api_endpoints, utils } from '@/utils/hooks';
 
 import BootstrapAccordion from '../forms/BootstrapAccordion.vue';
-import BootstrapAccodionItem from '../forms/BootstrapAccodionItem.vue';
+import BootstrapAccordionItem from '../forms/BootstrapAccordionItem.vue';
 
 import PanelLogs from '../logging/PanelLogs.vue';
 
@@ -77,7 +77,7 @@ export default {
     components: {
         PanelLogs,
         BootstrapAccordion,
-        BootstrapAccodionItem,
+        BootstrapAccordionItem,
     },
     data() {
         return {
