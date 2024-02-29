@@ -211,10 +211,9 @@
                                                                             f.file ==
                                                                             null
                                                                         "
-                                                                        class="btn btn-primary btn-sm btn-file float-start"
+                                                                        class="btn btn-primary btn-file float-start"
                                                                         ><i
-                                                                            class="fa fa-upload"
-                                                                            aria-hidden="true"
+                                                                            class="bi bi-file-earmark-arrow-up"
                                                                         ></i>
 
                                                                         Attach
