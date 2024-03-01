@@ -27,8 +27,9 @@ router.register(
 urlpatterns = [
     urls.path("burn-planning", IndexPage.as_view(), name="burn-planning"),
     urls.path(
-        "burn-plan-elements/<int:pk>/",
-        views.BurnPlanElementView.as_view(),
+        "burn-plan-elements/<int:pk>",
+        IndexPage.as_view(),
         name="burn-plan-elements",
     ),
+    urls.path("burn-planning-units", IndexPage.as_view(), name="burn-planning-units"),
 ]
