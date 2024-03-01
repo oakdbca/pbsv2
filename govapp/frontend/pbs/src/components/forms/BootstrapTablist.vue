@@ -63,8 +63,11 @@ export default {
         activeTabIndex: {
             type: Number,
             default: 0,
-            validator: (value) => {
-                return value >= 0;
+            validator: (value, props) => {
+                if (parseInt(value) !== value) {
+                    return false;
+                }
+                return value >= 0 && value < props.tabNames.length;
             },
         },
     },
