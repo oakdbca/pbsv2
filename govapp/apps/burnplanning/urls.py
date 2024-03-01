@@ -8,6 +8,9 @@ router = routers.DefaultRouter()
 router.register(
     r"burn-plan-elements", views.BurnPlanElementViewSet, basename="burn-plan-elements"
 )
+router.register(
+    r"burn-planning-units", views.BurnPlanUnitViewSet, basename="burn-planning-units"
+)
 router.register(r"treatments", views.TreatmentViewSet, basename="treatments")
 router.register(r"purposes", views.PurposeViewSet, basename="purposes")
 router.register(r"programs", views.ProgramViewSet, basename="programs")
