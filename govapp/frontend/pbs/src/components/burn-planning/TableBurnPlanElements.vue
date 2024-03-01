@@ -1,17 +1,14 @@
 <template>
-    <div id="bpe" class="container">Burn Plan Elements</div>
-    <div class="card text-center">
-        <DataTableTemplate
-            v-if="ajaxDataString"
-            name="Burn Plan Elements"
-            :ajax="ajax"
-            :columns="columns"
-            :with-filters="true"
-            @selection-changed-select="selectionChanged($event)"
-            @selection-changed-remove="selectionChanged($event)"
-        >
-        </DataTableTemplate>
-    </div>
+    <DataTableTemplate
+        v-if="ajaxDataString"
+        name="Burn Plan Elements"
+        :ajax="ajax"
+        :columns="columns"
+        :with-filters="true"
+        @selection-changed-select="selectionChanged($event)"
+        @selection-changed-remove="selectionChanged($event)"
+    >
+    </DataTableTemplate>
 </template>
 
 <script>
