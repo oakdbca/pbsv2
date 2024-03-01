@@ -92,7 +92,6 @@ export default {
         };
     },
     mounted: function () {
-        console.log(`${this.$options?.name} template loaded`);
         // TODO: Get from session storage
         this.selectedFilterItem = this.preSelectedFilterItem;
     },

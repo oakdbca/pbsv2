@@ -268,8 +268,6 @@ export default {
         },
     },
     mounted: async function () {
-        console.info(`${this.$options?.name} template loaded`);
-
         const id = this.$route.params.pk;
 
         utils

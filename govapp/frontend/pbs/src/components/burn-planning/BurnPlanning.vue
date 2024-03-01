@@ -23,13 +23,5 @@ import TableBurnPlanElements from '@/components/burn-planning/TableBurnPlanEleme
 export default {
     name: 'BurnPlanning',
     components: { TableBurnPlanElements },
-    data: function () {
-        return {};
-    },
-    computed: {},
-    mounted: async function () {
-        console.log(`${this.$options?.name} template loaded`);
-    },
-    methods: {},
 };
 </script>
