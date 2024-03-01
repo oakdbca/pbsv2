@@ -1,14 +1,16 @@
 # from django.shortcuts import render
 from rest_framework import viewsets
 
+from govapp.apps.burnplanning import serializers
 from govapp.apps.main.mixins import ChoicesKeyValueListMixin
 from govapp.apps.main.models import District, Region
 from govapp.apps.main.views import KeyValueListMixin
 
 from .filters import BurnPlanElementFilter
-from .models import BurnPlanElement, Program, Purpose, Treatment
+from .models import BurnPlanElement, BurnPlanUnit, Program, Purpose, Treatment
 from .serializers import (
     BurnPlanElementSerializer,
+    BurnPlanUnitSerializer,
     IndicativeTreatmentYearSerializer,
     ProgramSerializer,
     PurposeSerializer,
@@ -40,6 +42,17 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
             "treatment": Treatment.cached_key_value_list(),
             "status": BurnPlanElement.STATUS._display_map,
         }
+
+
+class BurnPlanUnitViewSet(viewsets.ModelViewSet):
+    queryset = BurnPlanUnit.objects.all()
+    serializer_class = BurnPlanUnitSerializer
+
+    def get_serializer_class(self):
+        format = self.request.query_params.get("format", None)
+        if self.action == "list" and format == "datatables":
+            return serializers.BurnPlanUnitDatatableSerializer
+        return self.serializer_class
 
 
 class TreatmentViewSet(KeyValueListMixin, viewsets.GenericViewSet):
