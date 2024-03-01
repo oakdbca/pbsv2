@@ -36,12 +36,15 @@ class BurnPlanElementSerializer(serializers.ModelSerializer):
 
 
 class BurnPlanUnitSerializer(serializers.ModelSerializer):
+    district_names = serializers.ReadOnlyField()
+    regions = serializers.ReadOnlyField()
+
     class Meta:
         model = BurnPlanUnit
         fields = "__all__"
 
 
-class BurnPlanUnitDatatableSerializer(serializers.ModelSerializer):
+class BurnPlanUnitDatatableSerializer(BurnPlanUnitSerializer):
     class Meta:
         model = BurnPlanUnit
         fields = "__all__"
