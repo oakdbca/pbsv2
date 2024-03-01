@@ -1,7 +1,7 @@
 <template>
     <div class="card-header">
         <ul
-            id="burn-plan-element-tabs"
+            :id="`${slugifyString(parentComponentNameSlugified)}-tablist`"
             class="nav nav-tabs card-header-tabs"
             role="tablist"
         >
@@ -67,9 +67,21 @@ export default {
             },
         },
     },
+    computed: {
+        parentComponentNameSlugified() {
+            return this.unPascalCaseString(this.$parent.$options.name);
+        },
+    },
     methods: {
         slugifyString(text, options = { lower: true }) {
             return slugify(text, options);
+        },
+        /**
+         * Replaces occurrences of xY in a string with x Y
+         * @param {String} text A string in PascalCase
+         */
+        unPascalCaseString(text) {
+            return text.replace(/([^A-Z])([A-Z])/g, '$1 $2');
         },
         tabIdentifier(tabName) {
             return `tab-${this.slugifyString(tabName)}`;
