@@ -40,7 +40,9 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
             "purpose": Purpose.cached_key_value_list(),
             "program": Program.cached_key_value_list(),
             "treatment": Treatment.cached_key_value_list(),
-            "status": BurnPlanElement.STATUS._display_map,
+            "status": [
+                {"key": x[0], "value": x[1]} for x in BurnPlanElement.STATUS._doubles
+            ],
         }
 
 
