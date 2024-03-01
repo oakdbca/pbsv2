@@ -4,7 +4,6 @@ from rest_framework import viewsets
 from govapp.apps.main.mixins import ChoicesKeyValueListMixin
 from govapp.apps.main.models import District, Region
 from govapp.apps.main.views import KeyValueListMixin
-from govapp.common.views import BaseView
 
 from .filters import BurnPlanElementFilter
 from .models import BurnPlanElement, Program, Purpose, Treatment
@@ -41,12 +40,6 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
             "treatment": Treatment.cached_key_value_list(),
             "status": BurnPlanElement.STATUS._display_map,
         }
-
-
-class BurnPlanElementView(BaseView):
-    """Burn Plan Element page view"""
-
-    model = BurnPlanElement
 
 
 class TreatmentViewSet(KeyValueListMixin, viewsets.GenericViewSet):
