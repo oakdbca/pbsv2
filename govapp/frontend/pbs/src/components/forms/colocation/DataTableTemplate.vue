@@ -1,10 +1,22 @@
 <template>
-    <SelectFilterTemplate
+    <BootstrapAccordion
         v-if="withFilters"
-        :columns="columns"
-        @selection-changed-select="$emit('selection-changed-select', $event)"
-        @selection-changed-remove="$emit('selection-changed-remove', $event)"
-    ></SelectFilterTemplate>
+        :id="datatableRefName + '-filters'"
+        class="px-2 pt-2 pb-4"
+    >
+        <BootstrapAccordionItem heading="Filters">
+            <SelectFilterTemplate
+                :columns="columns"
+                @selection-changed-select="
+                    $emit('selection-changed-select', $event)
+                "
+                @selection-changed-remove="
+                    $emit('selection-changed-remove', $event)
+                "
+            ></SelectFilterTemplate>
+        </BootstrapAccordionItem>
+    </BootstrapAccordion>
+
     <DataTable
         :ref="datatableRefName"
         v-bind="$attrs"
@@ -23,6 +35,9 @@ import _ from 'lodash';
 import { helpers } from '@/utils/hooks';
 import SelectFilterTemplate from '@/components/forms/colocation/SelectFilterTemplate.vue';
 
+import BootstrapAccordion from '@/components/forms/BootstrapAccordion.vue';
+import BootstrapAccordionItem from '@/components/forms/BootstrapAccordionItem.vue';
+
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net-bs5';
 import Select from 'datatables.net-select-bs5';
@@ -39,7 +54,12 @@ DataTable.use(ButtonsHtml5);
 
 export default {
     name: 'DataTableTemplate',
-    components: { DataTable, SelectFilterTemplate },
+    components: {
+        BootstrapAccordion,
+        BootstrapAccordionItem,
+        DataTable,
+        SelectFilterTemplate,
+    },
     props: {
         /**
          * Name of the table
