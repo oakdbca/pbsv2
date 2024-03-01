@@ -52,7 +52,7 @@ export default {
                     title: 'Action',
                     orderable: false,
                     render: function (data) {
-                        return `<a href="operational-plan/${data.id}">View</a>`;
+                        return `<a href="/operational-plan/${data.id}">View</a>`;
                     },
                 },
             ];
