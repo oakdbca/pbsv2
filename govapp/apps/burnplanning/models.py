@@ -1,5 +1,6 @@
 from logging import getLogger
 
+from dirtyfields import DirtyFieldsMixin
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PolygonField
@@ -18,6 +19,7 @@ from govapp.apps.main.models import (
     KeyValueListModelMixin,
     NameableModel,
     ReferenceableModel,
+    UniqueFieldKeyValueListModelMixin,
     UniqueNameableModel,
     YearField,
 )
@@ -159,6 +161,9 @@ class OutputLeader(NameableModel, ArchivableModel, TimeStampedModel):
 
 
 class BurnPlanElement(
+    UniqueFieldKeyValueListModelMixin,
+    KeyValueListModelMixin,
+    DirtyFieldsMixin,
     ReferenceableModel,
     UniqueNameableModel,
     StatusModel,
