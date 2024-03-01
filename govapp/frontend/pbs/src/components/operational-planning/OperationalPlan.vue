@@ -64,7 +64,7 @@
 <script>
 import { useStore } from '@/stores/state';
 
-import { api_endpoints, utils } from '@/utils/hooks';
+import { apiEndpoints, utils } from '@/utils/hooks';
 
 import BootstrapAccordion from '../forms/BootstrapAccordion.vue';
 import BootstrapAccordionItem from '../forms/BootstrapAccordionItem.vue';
@@ -88,28 +88,28 @@ export default {
     computed: {
         communicationsApiUrl: function () {
             return (
-                api_endpoints.communications() +
+                apiEndpoints.communications() +
                 `?format=datatables&content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
             );
         },
         postCommunicationsEntryApiUrl() {
-            return api_endpoints.communications();
+            return apiEndpoints.communications();
         },
         actionsApiUrl: function () {
             return (
-                api_endpoints.actions() +
+                apiEndpoints.actions() +
                 `?format=datatables&content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
             );
         },
         assignableUsersApiUrl() {
-            return api_endpoints.assignableUsers();
+            return apiEndpoints.assignableUsers();
         },
         assignToMeApiUrl() {
-            return api_endpoints.assignToMe();
+            return apiEndpoints.assignToMe();
         },
         assignToApiUrl() {
             return (
-                api_endpoints.assignTo() +
+                apiEndpoints.assignTo() +
                 `?content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
             );
         },
@@ -122,7 +122,7 @@ export default {
         async fetchOperationalPlan() {
             var pk = this.$route.params.pk;
             await utils
-                .fetchUrl(api_endpoints.operationalPlans(pk))
+                .fetchUrl(apiEndpoints.operationalPlans(pk))
                 .then((data) => {
                     this.operationalPlan = Object.assign({}, data);
                 });
@@ -130,7 +130,7 @@ export default {
         fetchAssignableUsers() {
             utils
                 .fetchUrl(
-                    api_endpoints.assignableUsers() +
+                    apiEndpoints.assignableUsers() +
                         `?content_type=${this.operationalPlan.content_type}&object_id=${this.operationalPlan.id}`
                 )
                 .then((data) => {

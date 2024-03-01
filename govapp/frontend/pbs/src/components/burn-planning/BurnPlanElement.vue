@@ -211,7 +211,7 @@
 </template>
 
 <script>
-import { utils, api_endpoints } from '@/utils/hooks';
+import { utils, apiEndpoints } from '@/utils/hooks';
 import FormSection from '@/components/forms/section_toggle.vue';
 import RowInputComponent from '@/components/forms/colocation/RowInput.vue';
 import RowSelectComponent from '@/components/forms/colocation/RowSelect.vue';
@@ -273,7 +273,7 @@ export default {
         const id = this.$route.params.pk;
 
         utils
-            .fetchUrl(api_endpoints.burn_plan_elements(id))
+            .fetchUrl(apiEndpoints.burn_plan_elements(id))
             .then((data) => {
                 this.burnPlanElement = Object.assign({}, data);
                 console.info(

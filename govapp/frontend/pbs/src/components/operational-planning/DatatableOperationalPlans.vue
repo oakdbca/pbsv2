@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { api_endpoints, helpers } from '@/utils/hooks';
+import { apiEndpoints, helpers } from '@/utils/hooks';
 import DataTableTemplate from '@/components/forms/colocation/DataTableTemplate.vue';
 
 export default {
@@ -60,7 +60,7 @@ export default {
     },
     mounted: async function () {
         this.$nextTick(() => {
-            this.ajax = api_endpoints.operationalPlans() + `?format=datatables`;
+            this.ajax = apiEndpoints.operationalPlans() + `?format=datatables`;
         });
     },
 };

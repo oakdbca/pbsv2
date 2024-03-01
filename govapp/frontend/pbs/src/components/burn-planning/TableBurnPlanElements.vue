@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { utils, api_endpoints } from '@/utils/hooks';
+import { utils, apiEndpoints } from '@/utils/hooks';
 import DataTableTemplate from '@/components/forms/colocation/DataTableTemplate.vue';
 
 export default {
@@ -190,7 +190,7 @@ export default {
             });
 
         this.$nextTick(() => {
-            this.ajaxDataString = api_endpoints.burn_plan_elements();
+            this.ajaxDataString = apiEndpoints.burn_plan_elements();
             // TODO: Get filter params from session storage
             this.setAjax();
         });
