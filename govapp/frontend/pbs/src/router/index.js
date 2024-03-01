@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import ProfileComponent from '@/components/accounts/Profile.vue';
 import BurnPlanning from '@/components/burn-planning/BurnPlanning.vue';
 import BurnPlanElement from '@/components/burn-planning/BurnPlanElement.vue';
+import BurnPlanningUnits from '@/components/burn-planning/BurnPlanningUnits.vue';
 import OperationalPlanning from '@/components/operational-planning/OperationalPlanning.vue';
 import OperationalPlan from '@/components/operational-planning/OperationalPlan.vue';
 
@@ -34,6 +35,11 @@ const router = createRouter({
             path: '/burn-plan-elements/:pk',
             name: 'burn-plan-elements',
             component: BurnPlanElement,
+        },
+        {
+            path: '/burn-planning-units',
+            name: 'burn-planning-units',
+            component: BurnPlanningUnits,
         },
         {
             path: '/operational-planning',
