@@ -273,7 +273,7 @@ export default {
         const id = this.$route.params.pk;
 
         utils
-            .fetchUrl(apiEndpoints.burn_plan_elements(id))
+            .fetchUrl(apiEndpoints.burnPlanElements(id))
             .then((data) => {
                 this.burnPlanElement = Object.assign({}, data);
                 console.info(
