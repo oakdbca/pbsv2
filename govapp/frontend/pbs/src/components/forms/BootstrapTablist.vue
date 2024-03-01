@@ -22,6 +22,7 @@
                     :tabindex="index"
                     :aria-current="index === activeTabIndex ? 'true' : 'false'"
                     :aria-selected="index === activeTabIndex ? 'true' : 'false'"
+                    @click="onTabClicked($event, index)"
                     >{{ tabName }}</a
                 >
             </li>
@@ -67,10 +68,19 @@ export default {
             },
         },
     },
+    emits: ['activeTabIndexChanged'],
+    data: function () {
+        return {
+            activeTabIndexInternal: this.activeTabIndex,
+        };
+    },
     computed: {
         parentComponentNameSlugified() {
             return this.unPascalCaseString(this.$parent.$options.name);
         },
+    },
+    created() {
+        console.log(`${this.$options.name} created`);
     },
     methods: {
         slugifyString(text, options = { lower: true }) {
@@ -85,6 +95,12 @@ export default {
         },
         tabIdentifier(tabName) {
             return `tab-${this.slugifyString(tabName)}`;
+        },
+        onTabClicked(event, index) {
+            if (index != this.activeTabIndexInternal) {
+                this.activeTabIndexInternal = index;
+                this.$emit('activeTabIndexChanged', index);
+            }
         },
     },
 };
