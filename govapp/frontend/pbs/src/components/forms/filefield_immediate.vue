@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { api_endpoints, helpers } from '@/utils/hooks';
+import { apiEndpoints, helpers } from '@/utils/hooks';
 import Swal from 'sweetalert2';
 
 export default {
@@ -171,10 +171,10 @@ export default {
             let url = '';
             if (this.documentActionUrl == 'temporary_document') {
                 if (!this.temporary_document_collection_id) {
-                    url = api_endpoints.temporary_document();
+                    url = apiEndpoints.temporary_document();
                 } else {
                     url =
-                        api_endpoints.temporary_document() +
+                        apiEndpoints.temporary_document() +
                         this.temporary_document_collection_id +
                         '/process_temp_document/';
                 }

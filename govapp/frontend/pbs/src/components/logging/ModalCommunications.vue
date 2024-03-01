@@ -112,7 +112,24 @@
                                 <tr>
                                     <th scope="row">Documents</th>
                                     <td>
-                                        {{ selectedCommunicationLog.documents }}
+                                        <div
+                                            v-if="
+                                                selectedCommunicationLog.documents
+                                            "
+                                            class="list-group"
+                                        >
+                                            <a
+                                                v-for="document in selectedCommunicationLog.documents"
+                                                :key="document.id"
+                                                :href="document.file"
+                                                target="_blank"
+                                                class="list-group-item list-group-item-action"
+                                                >{{ document.name }}
+                                                <i
+                                                    class="bi bi-file-earmark-text"
+                                                ></i
+                                            ></a>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

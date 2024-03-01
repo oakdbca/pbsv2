@@ -1,14 +1,16 @@
 # from django.shortcuts import render
 from rest_framework import viewsets
 
+from govapp.apps.burnplanning import serializers
 from govapp.apps.main.mixins import ChoicesKeyValueListMixin
+from govapp.apps.main.models import District, Region
 from govapp.apps.main.views import KeyValueListMixin
-from govapp.common.views import BaseView
 
 from .filters import BurnPlanElementFilter
-from .models import BurnPlanElement, Program, Purpose, Treatment
+from .models import BurnPlanElement, BurnPlanUnit, Program, Purpose, Treatment
 from .serializers import (
     BurnPlanElementSerializer,
+    BurnPlanUnitSerializer,
     IndicativeTreatmentYearSerializer,
     ProgramSerializer,
     PurposeSerializer,
@@ -20,14 +22,39 @@ from .serializers import (
 class BurnPlanElementViewSet(viewsets.ModelViewSet):
     queryset = BurnPlanElement.objects.all()
     serializer_class = BurnPlanElementSerializer
-    # permission_classes = [permissions.IsAuthenticated] # TODO
     filterset_class = BurnPlanElementFilter
 
+    class Meta:
+        datatables_extra_json = ("get_options",)
 
-class BurnPlanElementView(BaseView):
-    """Burn Plan Element page view"""
+    def get_options(self):
+        return "options", {
+            "indicative_treatment_year": BurnPlanElement.cached_unique_field_key_value_list(
+                "indicative_treatment_year"
+            ),
+            "revised_indicative_treatment_year": BurnPlanElement.cached_unique_field_key_value_list(
+                "revised_indicative_treatment_year"
+            ),
+            "region": Region.cached_key_value_list(),
+            "district": District.cached_key_value_list(),
+            "purpose": Purpose.cached_key_value_list(),
+            "program": Program.cached_key_value_list(),
+            "treatment": Treatment.cached_key_value_list(),
+            "status": [
+                {"key": x[0], "value": x[1]} for x in BurnPlanElement.STATUS._doubles
+            ],
+        }
 
-    model = BurnPlanElement
+
+class BurnPlanUnitViewSet(viewsets.ModelViewSet):
+    queryset = BurnPlanUnit.objects.all()
+    serializer_class = BurnPlanUnitSerializer
+
+    def get_serializer_class(self):
+        format = self.request.query_params.get("format", None)
+        if self.action == "list" and format == "datatables":
+            return serializers.BurnPlanUnitDatatableSerializer
+        return self.serializer_class
 
 
 class TreatmentViewSet(KeyValueListMixin, viewsets.GenericViewSet):

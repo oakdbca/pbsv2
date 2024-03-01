@@ -1,21 +1,20 @@
 <template>
-    <div id="bpe" class="container">Burn Plan Elements</div>
-    <div class="card text-center">
-        <DataTableTemplate
-            v-if="ajaxDataString"
-            name="Burn Plan Elements"
-            :ajax="ajax"
-            :columns="columns"
-            :with-filters="true"
-            @selection-changed-select="selectionChanged($event)"
-            @selection-changed-remove="selectionChanged($event)"
-        >
-        </DataTableTemplate>
-    </div>
+    <DataTableTemplate
+        v-if="ajaxDataString"
+        ref="burnPlanElements"
+        name="burnPlanElements"
+        :ajax="ajax"
+        :columns="columns"
+        :with-filters="true"
+        @selection-changed-select="selectionChanged($event)"
+        @selection-changed-remove="selectionChanged($event)"
+        @mounted="populateFilters"
+    >
+    </DataTableTemplate>
 </template>
 
 <script>
-import { utils, api_endpoints } from '@/utils/hooks';
+import { apiEndpoints } from '@/utils/hooks';
 import DataTableTemplate from '@/components/forms/colocation/DataTableTemplate.vue';
 
 export default {
@@ -27,14 +26,14 @@ export default {
             ajaxDataString: '',
             ajaxDataOptions: {},
             fieldFilterOptions: {
-                treatments: [],
-                regions: [],
-                districts: [],
-                purposes: [],
-                programs: [],
+                indicative_treatment_year: [],
+                revised_indicative_treatment_year: [],
+                region: [],
+                district: [],
+                purpose: [],
+                program: [],
+                treatment: [],
                 status: [],
-                'indicative-treatment-years': [],
-                'revised-indicative-treatment-years': [],
             },
         };
     },
@@ -53,6 +52,7 @@ export default {
             };
         },
         columns: function () {
+            if (!this.fieldFilterOptions) return [];
             return [
                 { data: 'id', title: 'ID', visible: false },
                 { data: 'name', title: 'Name' },
@@ -61,22 +61,21 @@ export default {
                     title: 'Indicative Treatment Year',
                     filter: true,
                     filterOptions:
-                        this.fieldFilterOptions['indicative-treatment-years'],
+                        this.fieldFilterOptions.indicative_treatment_year,
                 },
                 {
                     data: 'revised_indicative_treatment_year',
                     title: 'Revised Indicative Treatment Year',
                     filter: true,
                     filterOptions:
-                        this.fieldFilterOptions[
-                            'revised-indicative-treatment-years'
-                        ],
+                        this.fieldFilterOptions
+                            .revised_indicative_treatment_year,
                 },
                 {
                     data: 'regions',
                     title: 'Region',
                     filter: true,
-                    filterOptions: this.fieldFilterOptions.regions,
+                    filterOptions: this.fieldFilterOptions.region,
                     // eslint-disable-next-line no-unused-vars
                     render: function (data, type, row) {
                         return data
@@ -92,7 +91,7 @@ export default {
                     data: 'districts',
                     title: 'District',
                     filter: true,
-                    filterOptions: this.fieldFilterOptions.districts,
+                    filterOptions: this.fieldFilterOptions.district,
                     // eslint-disable-next-line no-unused-vars
                     render: function (data, type, row) {
                         return data
@@ -109,7 +108,7 @@ export default {
                     title: 'Purpose',
                     filter: true,
                     visible: false,
-                    filterOptions: this.fieldFilterOptions.purposes,
+                    filterOptions: this.fieldFilterOptions.purpose,
                     multiple: true,
                     // eslint-disable-next-line no-unused-vars
                     render: function (data, type, row) {
@@ -122,7 +121,7 @@ export default {
                     title: 'Program',
                     filter: true,
                     visible: false,
-                    filterOptions: this.fieldFilterOptions.programs,
+                    filterOptions: this.fieldFilterOptions.program,
                     multiple: true,
                     // eslint-disable-next-line no-unused-vars
                     render: function (data, type, row) {
@@ -134,7 +133,7 @@ export default {
                     data: 'treatment',
                     title: 'Treatment',
                     filter: true,
-                    filterOptions: this.fieldFilterOptions.treatments,
+                    filterOptions: this.fieldFilterOptions.treatment,
                 },
                 {
                     data: 'status',
@@ -148,7 +147,7 @@ export default {
                     orderable: false,
                     // eslint-disable-next-line no-unused-vars
                     render: function (data, type, row) {
-                        return `<a href="burn-plan-elements/${data.id}" target="_blank">View</a></br>
+                        return `<a href="burn-plan-elements/${data.id}">View</a></br>
                                 <a href="#" onclick="alert('Not yet implemented')">History</a>`;
                     },
                 },
@@ -168,32 +167,8 @@ export default {
         },
     },
     mounted: async function () {
-        console.info(`${this.$options?.name} template loaded`);
-        // TODO: outsource to a helper function
-        const requests = Object.keys(this.fieldFilterOptions).map((field) =>
-            utils
-                .fetchUrl(`api/${field}/key-value-list/`)
-                .then((response) => response)
-        );
-
-        await Promise.all(requests)
-            .then((responses) => {
-                responses.forEach((response, index) => {
-                    this.fieldFilterOptions[
-                        Object.keys(this.fieldFilterOptions)[index]
-                    ].push(
-                        ...response.map((item) => {
-                            return { value: item.key, text: item.value };
-                        })
-                    );
-                });
-            })
-            .catch((error) => {
-                console.error('error', error);
-            });
-
         this.$nextTick(() => {
-            this.ajaxDataString = api_endpoints.burn_plan_elements();
+            this.ajaxDataString = apiEndpoints.burnPlanElements();
             // TODO: Get filter params from session storage
             this.setAjax();
         });
@@ -230,6 +205,20 @@ export default {
         },
         selectionChanged(event) {
             this.setAjax(...Object.values(event));
+        },
+        populateFilters() {
+            let vm = this;
+            const table =
+                this.$refs.burnPlanElements.$refs.burnPlanElementsDatatable.dt;
+            table.on('xhr', function () {
+                for (const [key, value] of Object.entries(
+                    table.ajax.json().options
+                )) {
+                    vm.fieldFilterOptions[key] = value.map(function (row) {
+                        return { value: row.key, text: row.value };
+                    });
+                }
+            });
         },
     },
 };

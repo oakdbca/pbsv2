@@ -1,14 +1,11 @@
 <!-- A collection of multiple SelectFilter components -->
 <template>
-    <!-- px-4 is the padding on the left and right -->
-    <!-- py-4 is the top and bottom padding -->
-    <div v-if="show" class="container px-4 py-4">
-        <!-- gx-5 is the gutter between columns -->
+    <div v-if="show" class="container ps-2">
         <div class="row gx-5">
             <template v-for="column in columns" :key="column.data">
                 <div
                     v-if="column.filterOptions && column.filter"
-                    class="col-md-3"
+                    class="col-md-3 mb-3"
                 >
                     <SelectFilter
                         :id="column.data"

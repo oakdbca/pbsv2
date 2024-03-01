@@ -1,5 +1,6 @@
 from logging import getLogger
 
+from dirtyfields import DirtyFieldsMixin
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PolygonField
@@ -7,6 +8,7 @@ from django.contrib.gis.db.models.functions import Area
 from django.db import models
 from django.db.models.fields.related_descriptors import ReverseManyToOneDescriptor
 from django.db.models.functions import Cast
+from django.utils.functional import cached_property
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
 
@@ -15,8 +17,10 @@ from govapp.apps.main.models import (
     AssignableModel,
     District,
     IntervalIntegerField,
+    KeyValueListModelMixin,
     NameableModel,
     ReferenceableModel,
+    UniqueFieldKeyValueListModelMixin,
     UniqueNameableModel,
     YearField,
 )
@@ -92,6 +96,14 @@ class BurnPlanUnit(
     def operational_areas(self):
         return self.operationalareas.all()
 
+    @cached_property
+    def district_names(self):
+        return list(self.districts.values_list("display_name", flat=True))
+
+    @cached_property
+    def regions(self):
+        return list(self.districts.values_list("region__display_name", flat=True))
+
 
 class BurnPlanUnitDistrict(TimeStampedModel):
     """A model to store the relationship between a burn plan unit and a district"""
@@ -116,7 +128,9 @@ class BurnPlanUnitDistrict(TimeStampedModel):
         unique_together = ("burn_plan_unit", "district")
 
 
-class Treatment(UniqueNameableModel, ArchivableModel, TimeStampedModel):
+class Treatment(
+    KeyValueListModelMixin, UniqueNameableModel, ArchivableModel, TimeStampedModel
+):
     pass
 
 
@@ -124,11 +138,15 @@ class Justification(UniqueNameableModel, ArchivableModel, TimeStampedModel):
     pass
 
 
-class Purpose(UniqueNameableModel, ArchivableModel, TimeStampedModel):
+class Purpose(
+    KeyValueListModelMixin, UniqueNameableModel, ArchivableModel, TimeStampedModel
+):
     operationalplanpurposes: ReverseManyToOneDescriptor
 
 
-class Program(UniqueNameableModel, ArchivableModel, TimeStampedModel):
+class Program(
+    KeyValueListModelMixin, UniqueNameableModel, ArchivableModel, TimeStampedModel
+):
     operationalplanprograms: ReverseManyToOneDescriptor
 
 
@@ -152,6 +170,9 @@ class OutputLeader(NameableModel, ArchivableModel, TimeStampedModel):
 
 
 class BurnPlanElement(
+    UniqueFieldKeyValueListModelMixin,
+    KeyValueListModelMixin,
+    DirtyFieldsMixin,
     ReferenceableModel,
     UniqueNameableModel,
     StatusModel,

@@ -7,7 +7,7 @@ export default {
     temporary_document: function () {
         throw new NotImplementedError('temporary_document');
     },
-    burn_plan_elements: function (pk) {
+    burnPlanElements: function (pk) {
         if (pk) {
             return `/api/burn-plan-elements/${pk}/`;
         }
@@ -18,6 +18,9 @@ export default {
             return `/api/${slug}/${pk}/`;
         }
         return `/api/${slug}/`;
+    },
+    burnPlanningUnits: function (pk = null) {
+        return this.endPoint('burn-planning-units', pk);
     },
     userData: function () {
         return this.endPoint('users/me', null);

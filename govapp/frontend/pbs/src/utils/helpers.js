@@ -147,6 +147,9 @@ export default {
         return str.replace(/_/g, ' ');
     },
     bootstrapBadgesFromList: function (/** @type {string[]} */ list) {
+        if (!list) {
+            return '';
+        }
         return list.map((item) => {
             return `<span class="badge bg-primary">${item}</span>`;
         });

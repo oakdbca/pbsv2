@@ -43,3 +43,25 @@ div#app .container h3 {
     url('/static/img/parks-bg-banner.gif') repeat-x
     center bottom;
 }
+
+/* Vue3 Multiselect styles */
+
+.multiselect__spinner::after {
+    border-color: #226fbb transparent transparent !important;
+}
+
+.multiselect__tag {
+    background: #226fbb !important;
+}
+
+.multiselect__tag-icon::after {
+    color: #eee !important;
+}
+
+.multiselect__option--highlight {
+    background: #226fbb !important;
+}
+
+.multiselect__option--highlight::after {
+    background: #226fbb !important;
+}

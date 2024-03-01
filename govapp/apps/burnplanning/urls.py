@@ -8,6 +8,9 @@ router = routers.DefaultRouter()
 router.register(
     r"burn-plan-elements", views.BurnPlanElementViewSet, basename="burn-plan-elements"
 )
+router.register(
+    r"burn-planning-units", views.BurnPlanUnitViewSet, basename="burn-planning-units"
+)
 router.register(r"treatments", views.TreatmentViewSet, basename="treatments")
 router.register(r"purposes", views.PurposeViewSet, basename="purposes")
 router.register(r"programs", views.ProgramViewSet, basename="programs")
@@ -27,8 +30,9 @@ router.register(
 urlpatterns = [
     urls.path("burn-planning", IndexPage.as_view(), name="burn-planning"),
     urls.path(
-        "burn-plan-elements/<int:pk>/",
-        views.BurnPlanElementView.as_view(),
+        "burn-plan-elements/<int:pk>",
+        IndexPage.as_view(),
         name="burn-plan-elements",
     ),
+    urls.path("burn-planning-units", IndexPage.as_view(), name="burn-planning-units"),
 ]
