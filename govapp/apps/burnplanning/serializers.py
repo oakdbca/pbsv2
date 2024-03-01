@@ -6,7 +6,7 @@ from govapp.apps.main.serializers import (
     RegionSerializer,
 )
 
-from .models import BurnPlanElement, Program, Purpose, Treatment
+from .models import BurnPlanElement, BurnPlanUnit, Program, Purpose, Treatment
 
 
 class PurposeSerializer(serializers.ModelSerializer):
@@ -33,6 +33,21 @@ class BurnPlanElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = BurnPlanElement
         fields = "__all__"
+
+
+class BurnPlanUnitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BurnPlanUnit
+        fields = "__all__"
+
+
+class BurnPlanUnitDatatableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BurnPlanUnit
+        fields = "__all__"
+        # exclude = (
+        #     []
+        # )   TODO: Add any fields that are not used in the table so query is faster
 
 
 class TreatmentSerializer(serializers.ModelSerializer):
