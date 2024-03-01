@@ -1,6 +1,8 @@
+import logging
 from abc import ABC, ABCMeta, abstractmethod
 from typing import Any, Generic, TypeVar
 
+from dirtyfields import DirtyFieldsMixin
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -15,6 +17,9 @@ from protected_media.models import ProtectedFileField
 
 model_type = models.base.ModelBase
 T = TypeVar("T")
+
+
+logger = logging.getLogger(__name__)
 
 
 class AbstractModelMeta(ABCMeta, model_type):
@@ -118,11 +123,64 @@ class RichTextEditorWidget(forms.Textarea):
         super().__init__(*args, **kwargs)
 
 
+class UniqueFieldKeyValueListModelMixin:
+    """A mixin class to be used with a model that can store a cached key value list of distinct values
+    based on a specific field of the model"""
+
+    @classmethod
+    def field_exists_on_model(cls, field_name):
+        return len(
+            [field.name for field in cls._meta.get_fields() if field.name == field_name]
+        )
+
+    @classmethod
+    def unique_field_key_value_list_cache_key(cls, field_name):
+        return f"{settings.CACHE_KEY_UNIQUE_FIELD_KEY_VALUE_LIST}-{cls.__name__}-{field_name}"
+
+    @classmethod
+    def unique_field_key_value_list(cls, field_name):
+        filters = {f"{field_name}__isnull": True}
+        query = (
+            cls.objects.exclude(**filters).values_list(field_name, flat=True).distinct()
+        )
+        return [{f"{x}": f"{x}"} for x in query]
+
+    @classmethod
+    def cached_unique_field_key_value_list(cls, field_name):
+        if not cls.field_exists_on_model(field_name):
+            raise AttributeError(f"No field {field_name} found on model {cls}")
+
+        if not issubclass(cls, DirtyFieldsMixin):
+            logger.warning(
+                f"{cls} does not inherit from DirtyFieldsMixin so caching is not supported, "
+                "returning non-cached version."
+            )
+            return cls.unique_field_key_value_list(field_name)
+
+        key_value_list = cache.get(
+            cls.unique_field_key_value_list_cache_key(field_name)
+        )
+        if key_value_list is None:
+            key_value_list = cls.unique_field_key_value_list(field_name)
+            cache.set(
+                cls.unique_field_key_value_list_cache_key(field_name), key_value_list
+            )
+        return key_value_list
+
+    def save(self, *args, **kwargs):
+        for field_name in self.get_dirty_fields().keys():
+            cache.delete(
+                self.__class__.unique_field_key_value_list_cache_key(field_name)
+            )
+
+        super().save(*args, **kwargs)
+
+
 class KeyValueListModelMixin:
     """A mixin class to be used with a model that stores a cached key value list of a model's objects"""
 
     @classmethod
-    def cache_key(cls):
+    def key_value_list_cache_key(cls):
         return f"{settings.CACHE_KEY_KEY_VALUE_LIST}-{cls.__name__}"
 
     @classmethod
@@ -143,14 +201,14 @@ class KeyValueListModelMixin:
 
     @classmethod
     def cached_key_value_list(cls):
-        key_value_list = cache.get(cls.cache_key())
+        key_value_list = cache.get(cls.key_value_list_cache_key())
         if key_value_list is None:
             key_value_list = cls.key_value_list()
-            cache.set(cls.cache_key(), key_value_list)
+            cache.set(cls.key_value_list_cache_key(), key_value_list)
         return key_value_list
 
     def save(self, *args, **kwargs):
-        cache.delete(self.__class__.cache_key())
+        cache.delete(self.__class__.key_value_list_cache_key())
         super().save(*args, **kwargs)
 
 
@@ -354,7 +412,13 @@ class ModelFile(models.Model):
         return self.name
 
 
-class Region(KeyValueListModelMixin, DisplayNameableModel, UniqueNameableModel):
+class Region(
+    UniqueFieldKeyValueListModelMixin,
+    KeyValueListModelMixin,
+    DirtyFieldsMixin,
+    DisplayNameableModel,
+    UniqueNameableModel,
+):
     class Meta:
         ordering = ["name"]
 
@@ -364,7 +428,13 @@ class Region(KeyValueListModelMixin, DisplayNameableModel, UniqueNameableModel):
         return self.display_name
 
 
-class District(KeyValueListModelMixin, DisplayNameableModel, UniqueNameableModel):
+class District(
+    UniqueFieldKeyValueListModelMixin,
+    KeyValueListModelMixin,
+    DirtyFieldsMixin,
+    DisplayNameableModel,
+    UniqueNameableModel,
+):
     region = models.ForeignKey(
         Region, on_delete=models.CASCADE, null=False, blank=False
     )
