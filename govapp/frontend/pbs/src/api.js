@@ -19,6 +19,9 @@ export default {
         }
         return `/api/${slug}/`;
     },
+    burnPlanningUnits: function (pk = null) {
+        return this.endPoint('burn-planning-units', pk);
+    },
     userData: function () {
         return this.endPoint('users/me', null);
     },
