@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { api_endpoints, helpers } from '@/utils/hooks';
+import { apiEndpoints, helpers } from '@/utils/hooks';
 import DataTableTemplate from '@/components/forms/colocation/DataTableTemplate.vue';
 
 export default {
@@ -25,12 +25,9 @@ export default {
             return [
                 { data: 'id', title: 'ID', visible: false },
                 { data: 'name', title: 'Name' },
-                {
-                    data: 'burn_plan_unit',
-                    name: 'operational_area__burn_plan_element__burn_plan_unit__reference_number',
-                    title: 'Burn Plan Unit',
-                },
-                { data: 'year', title: 'Year' },
+                { data: 'active_from', title: 'Active From' },
+                { data: 'active_to', title: 'To' },
+                { data: 'return_interval', title: 'Return Interval' },
                 {
                     data: 'regions',
                     title: 'Regions',
@@ -39,20 +36,21 @@ export default {
                     },
                 },
                 {
-                    data: 'districts',
+                    data: 'district_names',
                     title: 'Districts',
                     render: function (row, type, full) {
-                        return helpers.bootstrapBadgesFromList(full.districts);
+                        return helpers.bootstrapBadgesFromList(
+                            full.district_names
+                        );
                     },
                 },
                 { data: 'status', title: 'Status' },
-                { data: 'assigned_to_name', title: 'Assigned To' },
                 {
                     data: null,
                     title: 'Action',
                     orderable: false,
                     render: function (data) {
-                        return `<a href="operational-plan/${data.id}/">View</a>`;
+                        return `<a href="/burn-planning-units/${data.id}">View</a>`;
                     },
                 },
             ];
@@ -60,7 +58,7 @@ export default {
     },
     mounted: async function () {
         this.$nextTick(() => {
-            this.ajax = api_endpoints.operationalPlans() + `?format=datatables`;
+            this.ajax = apiEndpoints.burnPlanningUnits() + `?format=datatables`;
         });
     },
 };
