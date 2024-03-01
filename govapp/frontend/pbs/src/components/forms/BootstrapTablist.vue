@@ -29,22 +29,41 @@
         </ul>
     </div>
 
-    <div class="card-body">
-        <div class="tab-content mt-3">
+    <div class="card-body h-100">
+        <div class="tab-content mt-3 h-100">
             <div
                 v-for="(tabName, index) in tabNames"
                 :id="`${tabIdentifier(tabName)}`"
                 :key="`${tabIdentifier(tabName)}-${index}`"
                 :class="
-                    index === activeTabIndex ? 'tab-pane active' : 'tab-pane'
+                    index === activeTabIndex
+                        ? 'tab-pane h-100 active'
+                        : 'tab-pane h-100'
                 "
                 role="tabpanel"
             >
                 <slot :name="`tab-${slugifyString(tabName)}`">
-                    {{ `Use '<template #tab-${slugifyString(tabName)}
-                        >Your content</template
-                    >' to slot in your content for the ${tabName} tab.` }}</slot
-                >
+                    <div class="container h-100">
+                        <div
+                            v-if="spinnerOnTabsByIndex.includes(index)"
+                            class="row h-100"
+                        >
+                            <div
+                                class="col-lg-12 text-center w-100 h-100 d-flex align-items-center justify-content-center"
+                            >
+                                <i
+                                    class="fa fa-4x fa-spinner fa-spin align-middle"
+                                ></i>
+                            </div>
+                        </div>
+                        <div v-else class="row">
+                            {{ `Use '<template #tab-${slugifyString(tabName)}
+                                >Your content</template
+                            >' to slot in your content for the ${tabName} tab.`
+                            }}
+                        </div>
+                    </div>
+                </slot>
             </div>
         </div>
     </div>
@@ -75,6 +94,14 @@ export default {
                 }
                 return value >= 0 && value < props.tabNames.length;
             },
+        },
+        /**
+         * An array of indices of tabs that should display a spinner while loading while loading the slot content
+         */
+        spinnerOnTabsByIndex: {
+            type: Array,
+            required: false,
+            default: () => [],
         },
     },
     emits: ['activeTabIndexChanged'],
@@ -112,7 +139,7 @@ export default {
          * Sets the active tab index to the index of the tab that was clicked and
          * emits the activeTabIndexChanged event to the parent component when the active tab is changed
          * @param {Object} event The click event
-         * @param {*} index The index of the tab that was clicked
+         * @param {Number} index The index of the tab that was clicked
          */
         onTabClicked(event, index) {
             if (index != this.activeTabIndexInternal) {
