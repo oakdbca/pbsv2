@@ -56,10 +56,16 @@ var slugify = require('slugify');
 export default {
     name: 'BootstrapTablist',
     props: {
+        /**
+         * An array of tab names
+         */
         tabNames: {
             type: Array,
             required: true,
         },
+        /**
+         * The index of the active tab when the component is created
+         */
         activeTabIndex: {
             type: Number,
             default: 0,
@@ -99,6 +105,12 @@ export default {
         tabIdentifier(tabName) {
             return `tab-${this.slugifyString(tabName)}`;
         },
+        /**
+         * Sets the active tab index to the index of the tab that was clicked and
+         * emits the activeTabIndexChanged event to the parent component when the active tab is changed
+         * @param {Object} event The click event
+         * @param {*} index The index of the tab that was clicked
+         */
         onTabClicked(event, index) {
             if (index != this.activeTabIndexInternal) {
                 this.activeTabIndexInternal = index;
