@@ -92,7 +92,10 @@ export default {
         console.log(`${this.$options.name} created`);
     },
     methods: {
-        slugifyString(text, options = { lower: true }) {
+        slugifyString(
+            text,
+            options = { lower: true, remove: /[*+~.()'"!:@]/g }
+        ) {
             return slugify(text, options);
         },
         /**
