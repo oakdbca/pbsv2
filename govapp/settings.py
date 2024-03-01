@@ -455,6 +455,7 @@ DJANGO_GROUPS = [
 
 # Cache keys
 CACHE_KEY_KEY_VALUE_LIST = "key_value_list"
+CACHE_KEY_UNIQUE_FIELD_KEY_VALUE_LIST = "unique_field_key_value_list"
 
 # Configure CKEditor 5
 CKEDITOR_CONFIGS = {
