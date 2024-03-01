@@ -19,14 +19,14 @@ logger = logging.getLogger(__name__)
 User = auth.get_user_model()
 
 
-class RegionViewSet(KeyValueListMixin, viewsets.GenericViewSet):
+class RegionViewSet(KeyValueListMixin, viewsets.ReadOnlyModelViewSet):
     """Region viewset"""
 
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
 
 
-class DistrictViewSet(KeyValueListMixin, viewsets.GenericViewSet):
+class DistrictViewSet(KeyValueListMixin, viewsets.ReadOnlyModelViewSet):
     """District viewset"""
 
     queryset = District.objects.all()
