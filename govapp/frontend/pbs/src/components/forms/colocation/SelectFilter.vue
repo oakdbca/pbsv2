@@ -1,7 +1,12 @@
 <!-- A single dropdown with selectable items as a component -->
 <template>
-    <div class="form-group">
-        <label v-if="showTitle" for="select-filter">{{ title }}</label>
+    <div class="form-group text-start">
+        <label
+            v-if="showTitle"
+            :for="`select-filter-${id}`"
+            class="text-secondary mb-1"
+            >{{ title }}</label
+        >
         <Multiselect
             :id="`select-filter-${id}`"
             v-model="selectedFilterItem"
