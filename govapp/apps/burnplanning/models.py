@@ -8,6 +8,7 @@ from django.contrib.gis.db.models.functions import Area
 from django.db import models
 from django.db.models.fields.related_descriptors import ReverseManyToOneDescriptor
 from django.db.models.functions import Cast
+from django.utils.functional import cached_property
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
 
@@ -94,6 +95,14 @@ class BurnPlanUnit(
     @property
     def operational_areas(self):
         return self.operationalareas.all()
+
+    @cached_property
+    def district_names(self):
+        return list(self.districts.values_list("display_name", flat=True))
+
+    @cached_property
+    def regions(self):
+        return list(self.districts.values_list("region__display_name", flat=True))
 
 
 class BurnPlanUnitDistrict(TimeStampedModel):
