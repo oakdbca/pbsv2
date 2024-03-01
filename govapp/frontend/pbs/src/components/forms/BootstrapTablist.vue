@@ -102,6 +102,15 @@ export default {
             type: Array,
             required: false,
             default: () => [],
+            validator: (values, props) => {
+                return values.every((val) => {
+                    return (
+                        parseInt(val) === val &&
+                        val >= 0 &&
+                        val < props.tabNames.length
+                    );
+                });
+            },
         },
     },
     emits: ['activeTabIndexChanged'],
