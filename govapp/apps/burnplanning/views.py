@@ -28,8 +28,17 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
 
     def get_options(self):
         return "options", {
+            "indicative_treatment_year": BurnPlanElement.cached_unique_field_key_value_list(
+                "indicative_treatment_year"
+            ),
+            "revised_indicative_treatment_year": BurnPlanElement.cached_unique_field_key_value_list(
+                "revised_indicative_treatment_year"
+            ),
             "region": Region.cached_key_value_list(),
             "district": District.cached_key_value_list(),
+            "purpose": Purpose.cached_key_value_list(),
+            "program": Program.cached_key_value_list(),
+            "treatment": Treatment.cached_key_value_list(),
             "status": BurnPlanElement.STATUS._display_map,
         }
 
