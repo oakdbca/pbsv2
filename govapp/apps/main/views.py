@@ -8,6 +8,8 @@ from rest_framework.serializers import ValidationError
 from rest_framework.views import APIView
 
 from govapp.apps.accounts.serializers import UserKeyValueListSerializer
+from govapp.apps.burnplanning.models import BurnPlanElement
+from govapp.apps.burnplanning.serializers import BurnPlanElementSearchSerializer
 from govapp.apps.main.mixins import KeyValueListMixin
 
 from .models import AssignableModel, District, Region
@@ -189,3 +191,21 @@ class AssignToAPIView(APIView):
         logger.info(f"Assigned: {instance._meta.object_name} {instance} to {user}")
 
         return Response(status=status.HTTP_200_OK)
+
+
+class SearchViewSet(viewsets.ViewSet):
+    """Search viewset"""
+
+    def list(self, request):
+        """List of search results"""
+        query = request.query_params.get("q", None)
+        if not query:
+            return Response([], status=status.HTTP_200_OK)
+
+        results = BurnPlanElementSearchSerializer(
+            BurnPlanElement.objects.filter(reference_number__search=query),
+            context={"request": request},
+            many=True,
+        ).data
+
+        return Response(results, status=status.HTTP_200_OK)

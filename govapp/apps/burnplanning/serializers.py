@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from govapp.apps.main.serializer import ContentTypeModelSerializer
 from govapp.apps.main.serializers import (
     DistrictSerializer,
     GenericKeyValueSerializer,
@@ -33,6 +34,23 @@ class BurnPlanElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = BurnPlanElement
         fields = "__all__"
+
+
+class BurnPlanElementDatatableSerializer(BurnPlanElementSerializer):
+    class Meta:
+        model = BurnPlanElement
+        fields = "__all__"
+        # exclude = (
+        #     [] #TODO: Add any fields that are not used in the table so query is faster
+
+
+class BurnPlanElementSearchSerializer(ContentTypeModelSerializer):
+    reference_number = serializers.CharField(allow_null=True, required=False)
+    link = serializers.HyperlinkedIdentityField(view_name="burn-plan-elements")
+
+    class Meta:
+        model = BurnPlanElement
+        fields = ["id", "reference_number", "link"]
 
 
 class BurnPlanUnitSerializer(serializers.ModelSerializer):
