@@ -2,7 +2,8 @@
 
 import logging
 
-from django.contrib.auth.models import User
+from django.conf import settings
+from django.contrib.auth.models import Group, User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
@@ -68,7 +69,12 @@ class SeleniumTests(StaticLiveServerTestCase):
             is_superuser=True,
         )
 
+    def create_groups(self):
+        for group in settings.DJANGO_GROUPS:
+            Group.objects.create(name=group)
+
     def test_homepage(self):
+        self.create_groups()
         self.create_test_user()
         self.assertTrue(User.objects.filter(username=self.test_username).exists())
 
@@ -154,20 +160,27 @@ class SeleniumTests(StaticLiveServerTestCase):
         self.selenium.implicitly_wait(3)
 
         # They see the navigation bar
-        navbar = self.selenium.find_element(By.CLASS_NAME, "navbar")
-        self.assertTrue(navbar.is_displayed())
+        navbars = self.selenium.find_elements(By.CLASS_NAME, "navbar")
+
+        for navbar in navbars:
+            self.assertTrue(navbar.is_displayed())
 
         # They see the correct elements in the navigation bar
         nav_links_text = [
             "Home",
-            "Risk Management",
-            "Program Planning",
+            "Burn Planning",
             "Operational Planning",
             "Implementation",
+            "Treatment",
+            "Aviation",
+            "Search",
         ]
-        nav_links = navbar.find_elements(By.CLASS_NAME, "nav-link")
+        nav_links = navbars[1].find_elements(By.CLASS_NAME, "nav-link")
         for nav_link in nav_links:
             self.assertIn(nav_link.get_attribute("innerText"), nav_links_text)
+            # Just quick way to ignore the other nav links for not TODO: make more robust
+            if nav_link.get_attribute("innerText") == "Search":
+                break
 
     def test_admin_login(self):
         self.create_test_superuser()
