@@ -143,7 +143,7 @@ class UniqueFieldKeyValueListModelMixin:
         query = (
             cls.objects.exclude(**filters).values_list(field_name, flat=True).distinct()
         )
-        return [{f"{x}": f"{x}"} for x in query]
+        return [{"key": str(x), "value": str(x)} for x in query]
 
     @classmethod
     def cached_unique_field_key_value_list(cls, field_name):
@@ -196,8 +196,8 @@ class KeyValueListModelMixin:
             raise AttributeError(
                 f"No display_name, name or key_value_display_field found on model {cls}"
             )
-
-        return list(cls.objects.all().values_list("id", value_field_name))
+        query = cls.objects.all().values_list("id", value_field_name)
+        return [{"key": str(x[0]), "value": str(x[1])} for x in query]
 
     @classmethod
     def cached_key_value_list(cls):
