@@ -145,7 +145,7 @@ export default {
                     orderable: false,
                     // eslint-disable-next-line no-unused-vars
                     render: function (data, type, row) {
-                        return `<a href="burn-plan-elements/${data.id}" target="_blank">View</a></br>
+                        return `<a href="burn-plan-elements/${data.id}">View</a></br>
                                 <a href="#" onclick="alert('Not yet implemented')">History</a>`;
                     },
                 },
