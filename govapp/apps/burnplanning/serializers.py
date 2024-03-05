@@ -1,6 +1,9 @@
+import logging
+
+from django.urls import reverse
 from rest_framework import serializers
 
-from govapp.apps.main.serializer import ContentTypeModelSerializer
+from govapp.apps.main.serializer import ContentTypeSerializerMixin
 from govapp.apps.main.serializers import (
     DistrictSerializer,
     GenericKeyValueSerializer,
@@ -8,6 +11,8 @@ from govapp.apps.main.serializers import (
 )
 
 from .models import BurnPlanElement, BurnPlanUnit, Program, Purpose, Treatment
+
+logger = logging.getLogger(__name__)
 
 
 class PurposeSerializer(serializers.ModelSerializer):
@@ -44,13 +49,34 @@ class BurnPlanElementDatatableSerializer(BurnPlanElementSerializer):
         #     [] #TODO: Add any fields that are not used in the table so query is faster
 
 
-class BurnPlanElementSearchSerializer(ContentTypeModelSerializer):
+class SearchSerializer(ContentTypeSerializerMixin, serializers.Serializer):
     reference_number = serializers.CharField(allow_null=True, required=False)
-    link = serializers.HyperlinkedIdentityField(view_name="burn-plan-elements")
+    name = serializers.CharField(allow_null=True, required=False)
+    status = serializers.CharField(allow_null=True, required=False)
+    status_display = serializers.CharField(
+        source="get_status_display", allow_null=True, required=False
+    )
+    assigned_to = serializers.CharField(allow_null=True, required=False)
 
     class Meta:
         model = BurnPlanElement
-        fields = ["id", "reference_number", "link"]
+        fields = [
+            "id",
+            "reference_number",
+            "name",
+            "status",
+            "status_display",
+            "assigned_to",
+        ]
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        verbose_name = instance._meta.verbose_name
+        viewname = verbose_name.replace(" ", "-").lower() + "-detail"
+        ret["link"] = self.context.get("request").build_absolute_uri(
+            reverse(viewname, args=[instance.id])
+        )
+        return ret
 
 
 class BurnPlanUnitSerializer(serializers.ModelSerializer):
