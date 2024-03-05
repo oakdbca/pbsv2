@@ -2,18 +2,18 @@ import logging
 
 from django.contrib import auth
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.postgres.search import SearchVector
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.views import APIView
 
 from govapp.apps.accounts.serializers import UserKeyValueListSerializer
-from govapp.apps.burnplanning.models import BurnPlanElement
-from govapp.apps.burnplanning.serializers import BurnPlanElementSearchSerializer
+from govapp.apps.burnplanning.models import BurnPlanElement, BurnPlanUnit
 from govapp.apps.main.mixins import KeyValueListMixin
 
 from .models import AssignableModel, District, Region
-from .serializers import DistrictSerializer, RegionSerializer
+from .serializers import DistrictSerializer, RegionSerializer, SearchSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -202,8 +202,26 @@ class SearchViewSet(viewsets.ViewSet):
         if not query:
             return Response([], status=status.HTTP_200_OK)
 
-        results = BurnPlanElementSearchSerializer(
-            BurnPlanElement.objects.filter(reference_number__search=query),
+        search_vector = SearchVector("reference_number", "name")
+
+        queryset = (
+            BurnPlanElement.objects.annotate(search=search_vector)
+            .filter(search=query)
+            .only("id", "reference_number", "name", "status")
+        )
+
+        burn_plan_unit_queryset = (
+            BurnPlanUnit.objects.annotate(search=search_vector)
+            .filter(search=query)
+            .only("id", "reference_number", "name", "status")
+        )
+
+        queryset = queryset.union(burn_plan_unit_queryset)
+
+        # logger.debug(queryset.query)
+
+        results = SearchSerializer(
+            queryset,
             context={"request": request},
             many=True,
         ).data
