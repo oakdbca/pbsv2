@@ -1,20 +1,28 @@
 <template>
-    <div class="card">
-        <div class="card-header">{{ result.reference_number }}</div>
+    <div class="card mb-3">
+        <div class="card-header text-capitalize">
+            {{ result.verbose_name }} - {{ result.reference_number }}
+            <BadgeStatus
+                class="float-end p-2"
+                :status="result.status"
+                :status-display="result.status_display"
+            />
+        </div>
         <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">
-                With supporting text below as a natural lead-in to additional
-                content.
-            </p>
-            <a :href="result.link" class="btn btn-primary">View Details Page</a>
+            <h5 class="card-title">{{ result.name }}</h5>
+            <a :href="result.link">View Details Page</a>
         </div>
     </div>
 </template>
 
 <script>
+import BadgeStatus from '@/components/forms/BadgeStatus.vue';
+
 export default {
     name: 'SearchResult',
+    components: {
+        BadgeStatus,
+    },
     props: {
         result: {
             type: Object,

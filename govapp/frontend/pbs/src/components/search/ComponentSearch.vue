@@ -15,23 +15,32 @@
         <template #left-menu>
             <div class="card">
                 <div class="card-header">Advanced Search</div>
-                <div class="card-body border-bottom">
+                <div class="card-body">TODO: Add advanced search options</div>
+            </div>
+        </template>
+        <div class="container">
+            <div class="row">
+                <div class="col">
                     <form method="GET" action="/search">
-                        <p class="card-text">
+                        <div class="input-group mb-3">
                             <input
                                 v-model="query"
                                 class="form-control"
                                 type="search"
                                 name="q"
                                 autofocus
+                                placeholder="Search"
                             />
-                        </p>
+                            <button
+                                class="btn btn-outline-secondary"
+                                type="submit"
+                            >
+                                Search
+                            </button>
+                        </div>
                     </form>
                 </div>
-                <div class="card-body">TODO: Add advanced search options</div>
             </div>
-        </template>
-        <div class="container">
             <div class="row">
                 <div class="col">
                     <SearchResults :results="results"></SearchResults>
@@ -44,7 +53,7 @@
 <script>
 import { utils, apiEndpoints } from '@/utils/hooks';
 
-import LayoutDetails from '../layout/LayoutDetails.vue';
+import LayoutDetails from '@/components/layout/LayoutDetails.vue';
 
 import SearchResults from './SearchResults.vue';
 
