@@ -43,4 +43,7 @@ export default {
     assignTo: function () {
         return this.endPoint('assign-to', null);
     },
+    search: function (query = null) {
+        return `/api/search/?q=${query}`;
+    },
 };

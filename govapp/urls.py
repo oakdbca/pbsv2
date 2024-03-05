@@ -39,7 +39,7 @@ router.registry.sort(key=lambda x: x[0])
 urlpatterns = [
     # Home Page
     urls.path("", views.HomePage.as_view(), name="home"),
-    urls.path("search-results", views.IndexPage.as_view(), name="search-results"),
+    urls.path("search", views.IndexPage.as_view(), name="search"),
     # Protected media
     urls.path("protected/", urls.include("protected_media.urls")),
     # Django Administration

@@ -1,11 +1,13 @@
 # Third-Party
 from rest_framework import serializers
 
-from govapp.apps.main.serializer import ContentTypeModelSerializer
+from govapp.apps.main.serializer import ContentTypeSerializerMixin
 from govapp.apps.operationalplanning.models import OperationalPlan
 
 
-class OperationalPlanSerializer(ContentTypeModelSerializer):
+class OperationalPlanSerializer(
+    ContentTypeSerializerMixin, serializers.ModelSerializer
+):
     status_display = serializers.CharField(source="get_status_display")
 
     class Meta:

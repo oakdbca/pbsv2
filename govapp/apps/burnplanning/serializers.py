@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import serializers
 
 from govapp.apps.main.serializers import (
@@ -7,6 +9,8 @@ from govapp.apps.main.serializers import (
 )
 
 from .models import BurnPlanElement, BurnPlanUnit, Program, Purpose, Treatment
+
+logger = logging.getLogger(__name__)
 
 
 class PurposeSerializer(serializers.ModelSerializer):
@@ -33,6 +37,14 @@ class BurnPlanElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = BurnPlanElement
         fields = "__all__"
+
+
+class BurnPlanElementDatatableSerializer(BurnPlanElementSerializer):
+    class Meta:
+        model = BurnPlanElement
+        fields = "__all__"
+        # exclude = (
+        #     [] #TODO: Add any fields that are not used in the table so query is faster
 
 
 class BurnPlanUnitSerializer(serializers.ModelSerializer):

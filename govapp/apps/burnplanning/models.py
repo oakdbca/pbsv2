@@ -29,7 +29,7 @@ logger = getLogger(__name__)
 
 
 class BurnPlanUnitManager(models.Manager):
-    def get_queryset(self):
+    def get_queryset_with_polygons(self):
         return (
             super()
             .get_queryset()

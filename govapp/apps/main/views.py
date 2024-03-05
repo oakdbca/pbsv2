@@ -1,7 +1,10 @@
 import logging
 
+from django.apps import apps
 from django.contrib import auth
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.postgres.search import SearchVector
+from model_utils.models import StatusModel
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
@@ -10,8 +13,8 @@ from rest_framework.views import APIView
 from govapp.apps.accounts.serializers import UserKeyValueListSerializer
 from govapp.apps.main.mixins import KeyValueListMixin
 
-from .models import AssignableModel, District, Region
-from .serializers import DistrictSerializer, RegionSerializer
+from .models import AssignableModel, District, ReferenceableModel, Region
+from .serializers import DistrictSerializer, RegionSerializer, SearchSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -189,3 +192,48 @@ class AssignToAPIView(APIView):
         logger.info(f"Assigned: {instance._meta.object_name} {instance} to {user}")
 
         return Response(status=status.HTTP_200_OK)
+
+
+class SearchViewSet(viewsets.ViewSet):
+    """Search viewset"""
+
+    def list(self, request):
+        """List of search results"""
+        query = request.query_params.get("q", None)
+        if not query:
+            return Response([], status=status.HTTP_200_OK)
+
+        search_vector = SearchVector("reference_number", "name")
+
+        models_to_search = []
+        for model in apps.get_models():
+            if (
+                issubclass(model, ReferenceableModel)
+                and issubclass(model, StatusModel)
+                and hasattr(model, "name")
+            ):
+                models_to_search.append(model)
+
+        queryset = (
+            models_to_search[0]
+            .objects.annotate(search=search_vector)
+            .filter(search=query)
+            .only("id", "reference_number", "name", "status")
+        )
+        for model in models_to_search[1:]:
+            union_queryset = queryset.union(
+                model.objects.annotate(search=search_vector)
+                .filter(search=query)
+                .only("id", "reference_number", "name", "status")
+            )
+            queryset = queryset.union(union_queryset)
+
+        # logger.debug(queryset.query)
+
+        results = SearchSerializer(
+            queryset,
+            context={"request": request},
+            many=True,
+        ).data
+
+        return Response(results, status=status.HTTP_200_OK)

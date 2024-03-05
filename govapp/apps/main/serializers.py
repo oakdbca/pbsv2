@@ -1,6 +1,9 @@
 from typing import ClassVar, Generic, TypeVar
 
+from django.urls import reverse
 from rest_framework import serializers
+
+from govapp.helpers import get_model_by_reference_number
 
 from .models import District, Region
 
@@ -54,3 +57,32 @@ class DistrictSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
         fields = "__all__"
+
+
+class SearchSerializer(serializers.Serializer):
+    reference_number = serializers.CharField(allow_null=True, required=False)
+    name = serializers.CharField(allow_null=True, required=False)
+    status = serializers.CharField(allow_null=True, required=False)
+    status_display = serializers.CharField(
+        source="get_status_display", allow_null=True, required=False
+    )
+
+    class Meta:
+        fields = [
+            "id",
+            "reference_number",
+            "name",
+            "status",
+            "status_display",
+        ]
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        model = get_model_by_reference_number(instance.reference_number)
+        verbose_name = model._meta.verbose_name
+        ret["verbose_name"] = verbose_name
+        viewname = verbose_name.replace(" ", "-").lower() + "-detail"
+        ret["link"] = self.context.get("request").build_absolute_uri(
+            reverse(viewname, args=[instance.id])
+        )
+        return ret

@@ -13,8 +13,8 @@ router.register("operational-plans", views.OperationalPlanViewSet)
 urlpatterns = [
     urls.path("operational-planning", IndexPage.as_view(), name="operational-planning"),
     urls.path(
-        "operational-plan/<int:pk>/",
+        "operational-plan/<int:pk>",
         IndexPage.as_view(),
-        name="operational-plans",
+        name="operational-plan-detail",
     ),
 ]
