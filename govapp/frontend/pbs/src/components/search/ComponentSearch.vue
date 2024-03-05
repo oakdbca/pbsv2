@@ -16,14 +16,17 @@
             <div class="card">
                 <div class="card-header">Advanced Search</div>
                 <div class="card-body border-bottom">
-                    <p class="card-text">
-                        <input
-                            v-model="query"
-                            class="form-control"
-                            type="search"
-                            autofocus
-                        />
-                    </p>
+                    <form method="GET" action="/search">
+                        <p class="card-text">
+                            <input
+                                v-model="query"
+                                class="form-control"
+                                type="search"
+                                name="q"
+                                autofocus
+                            />
+                        </p>
+                    </form>
                 </div>
                 <div class="card-body">TODO: Add advanced search options</div>
             </div>
