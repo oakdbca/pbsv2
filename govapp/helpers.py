@@ -39,3 +39,21 @@ def is_django_admin(user):
 
 def is_pbs_admin(user):
     return is_member_of(user, settings.PBS_ADMIN)
+
+
+def get_model_by_reference_number(reference_number):
+    model_prefix = "".join([c for c in reference_number if c.isupper()])
+    logger.debug(f"Model prefix: {model_prefix}")
+    return get_model_by_model_prefix(model_prefix)
+
+
+def get_model_by_model_prefix(prefix):
+    """A bit annoying to have to use this however when using union
+    all the instances in a queryset are cast to one model type so it's
+    seemingly impossible to generate a details url for the real instance type."""
+    from django.apps import apps
+
+    for model in apps.get_models():
+        if hasattr(model, "MODEL_PREFIX") and model.MODEL_PREFIX == prefix:
+            return model
+    return None
