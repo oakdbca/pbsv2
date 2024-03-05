@@ -32,7 +32,7 @@ urlpatterns = [
     urls.path(
         "burn-plan-elements/<int:pk>",
         IndexPage.as_view(),
-        name="burn-plan-elements",
+        name="burn-plan-element-detail",
     ),
     urls.path("burn-planning-units", IndexPage.as_view(), name="burn-planning-units"),
 ]
