@@ -168,6 +168,11 @@ class UniqueFieldKeyValueListModelMixin:
         return key_value_list
 
     def save(self, *args, **kwargs):
+        if not issubclass(self.__class__, DirtyFieldsMixin):
+            AttributeError(
+                "Model must inherit from DirtyFieldsMixin to use UniqueFieldKeyValueListModelMixin"
+            )
+
         for field_name in self.get_dirty_fields().keys():
             cache.delete(
                 self.__class__.unique_field_key_value_list_cache_key(field_name)
