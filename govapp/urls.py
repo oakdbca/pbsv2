@@ -39,7 +39,11 @@ router.registry.sort(key=lambda x: x[0])
 urlpatterns = [
     # Home Page
     urls.path("", views.HomePage.as_view(), name="home"),
-    urls.path("search", views.IndexPage.as_view(), name="search"),
+    urls.path(
+        "search",
+        views.IndexPage.as_view(template_name="govapp/search.html"),
+        name="search",
+    ),
     # Protected media
     urls.path("protected/", urls.include("protected_media.urls")),
     # Django Administration
@@ -52,10 +56,13 @@ urlpatterns = [
     urls.path("sentry-debug/", trigger_error),
     # Include urls from other apps
     urls.path("", urls.include("govapp.apps.accounts.urls")),
+    urls.path("", urls.include("govapp.apps.aviation.urls")),
     urls.path("", urls.include("govapp.apps.burnplanning.urls")),
+    urls.path("", urls.include("govapp.apps.implementation.urls")),
     urls.path("", urls.include("govapp.apps.operationalplanning.urls")),
     urls.path("", urls.include("govapp.apps.main.urls")),
     urls.path("", urls.include("govapp.apps.swagger.urls")),
+    urls.path("", urls.include("govapp.apps.treatment.urls")),
     # Include api routes
     urls.path("api/", urls.include(router.urls)),
 ]
