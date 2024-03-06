@@ -15,7 +15,7 @@ router.register("groups", views.GroupViewSet)
 # Accounts URL Patterns
 urlpatterns = [
     urls.path(
-        "profile/",
+        "profile",
         base.TemplateView.as_view(template_name="govapp/profile.html"),
         name="profile",
     ),
