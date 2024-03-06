@@ -6,7 +6,7 @@ from govapp.apps.main.mixins import ChoicesKeyValueListMixin
 from govapp.apps.main.models import District, Region
 from govapp.apps.main.views import KeyValueListMixin
 
-from .filters import BurnPlanElementFilter
+from .filters import BurnPlanElementFilter, BurnPlanUnitFilter
 from .models import BurnPlanElement, BurnPlanUnit, Program, Purpose, Treatment
 from .serializers import (
     BurnPlanElementSerializer,
@@ -49,12 +49,32 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
 class BurnPlanUnitViewSet(viewsets.ModelViewSet):
     queryset = BurnPlanUnit.objects.all()
     serializer_class = BurnPlanUnitSerializer
+    filterset_class = BurnPlanUnitFilter
+
+    class Meta:
+        datatables_extra_json = ("get_options",)
 
     def get_serializer_class(self):
         format = self.request.query_params.get("format", None)
         if self.action == "list" and format == "datatables":
             return serializers.BurnPlanUnitDatatableSerializer
         return self.serializer_class
+
+    def get_options(self):
+        return "options", {
+            "active_from": BurnPlanUnit.cached_unique_field_key_value_list(
+                "active_from"
+            ),
+            "active_to": BurnPlanUnit.cached_unique_field_key_value_list("active_to"),
+            "return_interval": BurnPlanUnit.cached_unique_field_key_value_list(
+                "return_interval"
+            ),
+            "region": Region.cached_key_value_list(),
+            "district": District.cached_key_value_list(),
+            "status": [
+                {"key": x[0], "value": x[1]} for x in BurnPlanUnit.STATUS._doubles
+            ],
+        }
 
 
 class TreatmentViewSet(KeyValueListMixin, viewsets.GenericViewSet):
