@@ -28,7 +28,11 @@ router.register(
 
 
 urlpatterns = [
-    urls.path("burn-planning", IndexPage.as_view(), name="burn-planning"),
+    urls.path(
+        "burn-planning",
+        IndexPage.as_view(template_name="govapp/burn-planning.html"),
+        name="burn-planning",
+    ),
     urls.path(
         "burn-plan-elements/<int:pk>",
         IndexPage.as_view(),

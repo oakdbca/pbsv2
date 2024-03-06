@@ -11,7 +11,11 @@ router = routers.DefaultRouter()
 router.register("operational-plans", views.OperationalPlanViewSet)
 
 urlpatterns = [
-    urls.path("operational-planning", IndexPage.as_view(), name="operational-planning"),
+    urls.path(
+        "operational-planning",
+        IndexPage.as_view(template_name="govapp/operational-planning.html"),
+        name="operational-planning",
+    ),
     urls.path(
         "operational-plan/<int:pk>",
         IndexPage.as_view(),
