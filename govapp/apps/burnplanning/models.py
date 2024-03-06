@@ -39,7 +39,13 @@ class BurnPlanUnitManager(models.Manager):
 
 
 class BurnPlanUnit(
-    ReferenceableModel, UniqueNameableModel, StatusModel, TimeStampedModel
+    UniqueFieldKeyValueListModelMixin,
+    KeyValueListModelMixin,
+    DirtyFieldsMixin,
+    ReferenceableModel,
+    UniqueNameableModel,
+    StatusModel,
+    TimeStampedModel,
 ):
     """A burn plan unit is a model to contain geometry information for
     an area that may be assigned to a burn plan element"""
