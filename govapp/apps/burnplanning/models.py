@@ -16,6 +16,7 @@ from govapp.apps.main.models import (
     ArchivableModel,
     AssignableModel,
     District,
+    EndorsableModel,
     IntervalIntegerField,
     KeyValueListModelMixin,
     NameableModel,
@@ -177,6 +178,7 @@ class BurnPlanElement(
     UniqueNameableModel,
     StatusModel,
     AssignableModel,
+    EndorsableModel,
     TimeStampedModel,
 ):
     MODEL_PREFIX = "BPE"

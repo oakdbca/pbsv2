@@ -319,7 +319,11 @@ class ReferenceableModel(models.Model):
 
 class AssignableModel(models.Model, metaclass=AbstractModelMeta):
     assigned_to = models.ForeignKey(
-        User, on_delete=models.PROTECT, null=True, blank=True
+        User,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="%(class)s_assignments",
     )
 
     class Meta:
@@ -344,6 +348,39 @@ class AssignableModel(models.Model, metaclass=AbstractModelMeta):
         a function that returns a queryset of users that are assignable to the model."""
 
         raise NotImplementedError("Must implement method assignable_users")
+
+
+class EndorsableModel(models.Model, metaclass=AbstractModelMeta):
+    seeking_endorsement_from = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="%(class)s_endorsements",
+    )
+
+    class Meta:
+        abstract = True
+
+    def assign(self, user: User):
+        if not self.user_can_endorse(user):
+            raise ValueError(f"{user} can not endorse {self}")
+        self.seeking_endorsement_from = user
+        self.save()
+
+    def unassign(self):
+        self.seeking_endorsement_from = None
+        self.save()
+
+    def user_can_endorse(self, user: User) -> bool:
+        return self.users_able_to_endorse().filter(pk=user.pk, is_active=True).exists()
+
+    @abstractmethod
+    def users_able_to_endorse(self) -> models.QuerySet[User]:
+        """Models implementing this class must define
+        a function that returns a queryset of users that are can endorse the model."""
+
+        raise NotImplementedError("Must implement method users_able_to_endorse")
 
 
 class ArchivableModelManager(models.Manager):
