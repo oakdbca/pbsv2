@@ -30,6 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "is_active",
             "is_staff",
+            "last_login",
         )
 
 
@@ -59,6 +60,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source="get_full_name")
     profile = ProfileSerializer()
     groups = serializers.SerializerMethodField()
+    last_login_display = serializers.DateTimeField(
+        source="last_login", format="%d/%m/%Y %H:%M:%S"
+    )
 
     class Meta:
         model = User
@@ -69,6 +73,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "last_name",
             "full_name",
             "email",
+            "last_login",
+            "last_login_display",
             "profile",
             "groups",
         )
