@@ -2,6 +2,7 @@ import logging
 
 from rest_framework import serializers
 
+from govapp.apps.main.mixins import GetFilterOptionsMixin
 from govapp.apps.main.serializer import ContentTypeModelSerializer
 from govapp.apps.main.serializers import (
     ContentTypeSerializerMixin,
@@ -27,7 +28,7 @@ class ProgramSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BurnPlanElementSerializer(ContentTypeModelSerializer):
+class BurnPlanElementSerializer(GetFilterOptionsMixin, ContentTypeModelSerializer):
     regions = RegionSerializer(many=True)
     districts = DistrictSerializer(many=True)
     treatment = serializers.CharField(
