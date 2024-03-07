@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="row">
-            <div :class="`col-${leftMenuColWidth}`">
+            <div :class="`col-lg-${leftMenuColWidth}`">
                 <slot v-if="!loading" name="left-menu"></slot>
                 <ContentLoader
                     v-else
