@@ -11,6 +11,8 @@ export const useStore = defineStore('main', {
             last_name: '',
             full_name: '',
             email: '',
+            last_login: '',
+            last_login_display: '',
             profile: {
                 district: '',
             },

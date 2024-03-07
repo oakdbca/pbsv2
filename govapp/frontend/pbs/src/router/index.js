@@ -1,5 +1,5 @@
-import { RouterView } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
+import AccountsHome from '@/components/accounts/AccountsHome.vue';
 import ComponentSearch from '@/components/search/ComponentSearch.vue';
 import ProfileComponent from '@/components/accounts/Profile.vue';
 import BurnPlanning from '@/components/burn-planning/BurnPlanning.vue';
@@ -16,7 +16,7 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: RouterView,
+            component: AccountsHome,
         },
         {
             path: '/search',

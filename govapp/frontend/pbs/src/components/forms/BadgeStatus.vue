@@ -1,5 +1,7 @@
 <template>
-    <span class="badge" :class="[badgeTextClass, badgeBackgroundClass]"
+    <span
+        class="badge text-capitalize"
+        :class="[badgeTextClass, badgeBackgroundClass]"
         >{{ statusText }}
         <i v-if="iconClass" class="bi ps-2" :class="iconClass"></i
     ></span>
@@ -27,7 +29,42 @@ export default {
                     background: 'bg-secondary',
                     icon: 'bi-pencil-square',
                 },
-                'with assessor': {
+                with_district_officer: {
+                    text: 'text-white',
+                    background: 'bg-primary',
+                    icon: 'bi-clipboard',
+                },
+                with_district_officer_referral: {
+                    text: 'text-white',
+                    background: 'bg-primary',
+                    icon: 'bi-clipboard',
+                },
+                with_regional_leader_fire: {
+                    text: 'text-white',
+                    background: 'bg-primary',
+                    icon: 'bi-clipboard',
+                },
+                with_regional_leader_fire_referral: {
+                    text: 'text-white',
+                    background: 'bg-primary',
+                    icon: 'bi-clipboard',
+                },
+                with_fmsb_representative: {
+                    text: 'text-white',
+                    background: 'bg-primary',
+                    icon: 'bi-clipboard',
+                },
+                with_district_manager: {
+                    text: 'text-white',
+                    background: 'bg-primary',
+                    icon: 'bi-clipboard',
+                },
+                with_regional_manager: {
+                    text: 'text-white',
+                    background: 'bg-primary',
+                    icon: 'bi-clipboard',
+                },
+                with_state_manager: {
                     text: 'text-white',
                     background: 'bg-primary',
                     icon: 'bi-clipboard',
