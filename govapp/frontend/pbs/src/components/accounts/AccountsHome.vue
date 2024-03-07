@@ -5,118 +5,59 @@
         </template>
         <template #left-menu>
             <div class="card mb-3">
-                <div class="card-header">Messages</div>
+                <div class="card-header">
+                    Messages
+                    <small class="float-end"
+                        ><button
+                            class="btn btn-sm btn-secondary"
+                            @click="viewMessageHistory"
+                        >
+                            View Message History
+                            <i class="bi bi-clock-history ms-1"></i></button
+                    ></small>
+                </div>
                 <div class="card-body">
-                    <div v-if="toasts" class="toast-container">
+                    <div
+                        v-if="Object.keys(messages).length > 0"
+                        class="toast-container"
+                    >
                         <div
+                            v-for="(message, key) in messages"
+                            :key="key"
                             class="toast show"
                             role="alert"
                             aria-live="assertive"
                             aria-atomic="true"
                         >
-                            <div class="toast-header bg-success text-white">
+                            <div
+                                class="toast-header bg-success text-white"
+                                :class="`bg-${message.type}`"
+                            >
                                 <strong class="me-auto"
-                                    >Burn Plan Element Approved
+                                    >{{ message.title }}
                                 </strong>
-                                <small class="text-white">just now</small>
+                                <small class="text-white">{{
+                                    message.time
+                                }}</small>
                                 <button
                                     type="button"
                                     class="btn-close btn-close-white"
                                     data-bs-dismiss="toast"
                                     aria-label="Close"
+                                    @click="markDismissed(key)"
                                 ></button>
                             </div>
                             <div class="toast-body">
-                                A burn plan element BPE000109 that you endorsed
-                                has been approved by:
+                                {{ message.message }}
                                 <div class="mt-2">
-                                    John Johns (Corporate Executive)
+                                    {{ message.from }}
                                 </div>
                             </div>
                         </div>
-
-                        <div
-                            class="toast show"
-                            role="alert"
-                            aria-live="assertive"
-                            aria-atomic="true"
-                        >
-                            <div class="toast-header bg-primary text-white">
-                                <strong class="me-auto"
-                                    >Burn Plan Element Assignment
-                                </strong>
-                                <small class="text-white">5 hours ago</small>
-                                <button
-                                    type="button"
-                                    class="btn-close btn-close-white"
-                                    data-bs-dismiss="toast"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                            <div class="toast-body">
-                                A new burn plan element BPE000099 has been
-                                assigned to you:
-                                <div class="mt-2">
-                                    Fred Smith (Swan Coastal, District Manager)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            class="toast"
-                            role="alert"
-                            aria-live="assertive"
-                            aria-atomic="true"
-                        >
-                            <div class="toast-header bg-primary text-white">
-                                <img src="" class="rounded me-2" alt="" />
-                                <strong class="me-auto"
-                                    >Aviation Awaiting Endorsement</strong
-                                >
-                                <small class="text-white">2 days ago</small>
-                                <button
-                                    type="button"
-                                    class="btn-close btn-close-white"
-                                    data-bs-dismiss="toast"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                            <div class="toast-body">
-                                Aviation request AR000343 is awaiting your
-                                endorsement:
-                                <div class="mt-2">
-                                    Greg Sidebottom (Swan, Region Manager)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            class="toast"
-                            role="alert"
-                            aria-live="assertive"
-                            aria-atomic="true"
-                        >
-                            <div class="toast-header bg-primary text-white">
-                                <img src="" class="rounded me-2" alt="" />
-                                <strong class="me-auto"
-                                    >Another Important Message</strong
-                                >
-                                <small class="text-white">5 days ago</small>
-                                <button
-                                    type="button"
-                                    class="btn-close btn-close-white"
-                                    data-bs-dismiss="toast"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                            <div class="toast-body">
-                                You're in big trouble for not working fast
-                                enough.
-                                <div class="mt-2">
-                                    John Johns (Corporate Executive)
-                                </div>
-                            </div>
-                        </div>
+                    </div>
+                    <div v-else class="text-secondary">
+                        No messages to display
+                        <i class="bi bi-emoji-smile text-warning"></i>
                     </div>
                 </div>
             </div>
@@ -128,7 +69,10 @@
                         <div class="card-header">Items Assigned to You</div>
                         <div class="card-body">
                             <ItemList class="mb-3" />
-                            <button class="btn btn-primary btn-sm float-end">
+                            <button
+                                class="btn btn-primary btn-sm float-end"
+                                @click="viewAllItems"
+                            >
                                 View all <i class="bi bi-back ps-1"></i>
                             </button>
                         </div>
@@ -139,7 +83,10 @@
                         </div>
                         <div class="card-body">
                             <ItemList class="mb-3" />
-                            <button class="btn btn-primary btn-sm float-end">
+                            <button
+                                class="btn btn-primary btn-sm float-end"
+                                @click="viewAllItems"
+                            >
                                 View all <i class="bi bi-back ps-1"></i>
                             </button>
                         </div>
@@ -171,8 +118,8 @@ export default {
             store: useStore(),
             now: Date.now(),
             loading: true,
-            toasts: [
-                {
+            messages: {
+                1: {
                     title: 'Burn Plan Element Approved',
                     message:
                         'A burn plan element BPE000109 that you endorsed has been approved by:',
@@ -180,7 +127,7 @@ export default {
                     time: 'just now',
                     type: 'success',
                 },
-                {
+                2: {
                     title: 'Burn Plan Element Assignment',
                     message:
                         'A new burn plan element BPE000099 has been assigned to you:',
@@ -188,7 +135,7 @@ export default {
                     time: '5 hours ago',
                     type: 'primary',
                 },
-                {
+                3: {
                     title: 'Aviation Awaiting Endorsement',
                     message:
                         'Aviation request AR000343 is awaiting your endorsement:',
@@ -196,7 +143,7 @@ export default {
                     time: '2 days ago',
                     type: 'primary',
                 },
-                {
+                4: {
                     title: 'Another Important Message',
                     message:
                         "You're in big trouble for not working fast enough.",
@@ -204,7 +151,7 @@ export default {
                     time: '5 days ago',
                     type: 'primary',
                 },
-            ],
+            },
         };
     },
     computed: {
@@ -247,6 +194,19 @@ export default {
             for (var i = 0; i < toastList.length; i++) {
                 toastList[i].show();
             }
+        },
+        viewMessageHistory() {
+            alert('TODO: Show message history');
+        },
+        viewAllItems() {
+            alert('TODO: Show all items');
+        },
+        markDismissed(id) {
+            delete this.messages[id];
+            console.log(
+                'TODO: Mark message as dismissed in api so it does not show here again. ',
+                id
+            );
         },
     },
 };
