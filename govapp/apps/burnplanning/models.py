@@ -16,6 +16,7 @@ from govapp.apps.main.models import (
     ArchivableModel,
     AssignableModel,
     District,
+    EndorsableModel,
     IntervalIntegerField,
     KeyValueListModelMixin,
     NameableModel,
@@ -38,7 +39,13 @@ class BurnPlanUnitManager(models.Manager):
 
 
 class BurnPlanUnit(
-    ReferenceableModel, UniqueNameableModel, StatusModel, TimeStampedModel
+    UniqueFieldKeyValueListModelMixin,
+    KeyValueListModelMixin,
+    DirtyFieldsMixin,
+    ReferenceableModel,
+    UniqueNameableModel,
+    StatusModel,
+    TimeStampedModel,
 ):
     """A burn plan unit is a model to contain geometry information for
     an area that may be assigned to a burn plan element"""
@@ -177,6 +184,7 @@ class BurnPlanElement(
     UniqueNameableModel,
     StatusModel,
     AssignableModel,
+    EndorsableModel,
     TimeStampedModel,
 ):
     MODEL_PREFIX = "BPE"
@@ -218,7 +226,15 @@ class BurnPlanElement(
         return f"{self.reference_number} ({self.name})"
 
     def assignable_users(self):
-        # TODO uncomment once groups are listed above
+        # TODO uncomment once groups are listed above (will probably change based on the status of the instance too)
+        # GROUPS = [
+        #     "TODO: Add appropriate groups here",
+        # ]
+        # return User.objects.filter(is_active=True, groups__name__in=GROUPS).distinct()
+        return User.objects.filter(is_active=True)
+
+    def users_able_to_endorse(self):
+        # TODO uncomment once groups are listed above (will probably change based on the status of the instance too)
         # GROUPS = [
         #     "TODO: Add appropriate groups here",
         # ]

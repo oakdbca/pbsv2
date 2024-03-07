@@ -1,6 +1,6 @@
 <!-- A collection of multiple SelectFilter components -->
 <template>
-    <div v-if="show" class="container ps-2">
+    <div class="container ps-2">
         <div class="row gx-5">
             <template v-for="column in columns" :key="column.data">
                 <div
@@ -37,11 +37,6 @@ export default {
         columns: {
             type: Array,
             required: true,
-        },
-        show: {
-            type: Boolean,
-            required: false,
-            default: true,
         },
     },
     emits: ['selection-changed-select', 'selection-changed-remove'],

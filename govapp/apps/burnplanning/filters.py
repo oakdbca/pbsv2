@@ -1,6 +1,22 @@
 from django_filters import rest_framework as filters
 
-from .models import BurnPlanElement
+from .models import BurnPlanElement, BurnPlanUnit
+
+
+class BurnPlanUnitFilter(filters.FilterSet):
+    regions = filters.NumberFilter(field_name="districts__region", distinct=True)
+    district_names = filters.NumberFilter(field_name="districts", distinct=True)
+
+    class Meta:
+        model = BurnPlanUnit
+        fields = [
+            "active_from",
+            "active_to",
+            "return_interval",
+            "regions",
+            "districts",
+            "status",
+        ]
 
 
 class BurnPlanElementFilter(filters.FilterSet):
