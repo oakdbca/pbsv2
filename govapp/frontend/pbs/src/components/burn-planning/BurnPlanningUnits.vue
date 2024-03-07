@@ -2,7 +2,15 @@
     <div id="bp" class="container px-4">
         <div class="row">
             <div class="col-12">
-                <h3 class="text-secondary">Burn Planning Units</h3>
+                <h3 class="text-secondary">
+                    Burn Planning Units
+                    <button class="btn btn-primary float-end">
+                        Export <i class="bi bi-box-arrow-up"></i>
+                    </button>
+                    <button class="btn btn-primary float-end me-2">
+                        Import <i class="bi bi-box-arrow-down"></i>
+                    </button>
+                </h3>
             </div>
         </div>
         <div class="row">
