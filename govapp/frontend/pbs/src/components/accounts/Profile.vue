@@ -44,6 +44,22 @@
                                                     {{ store.userData.email }}
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td>Last Login</td>
+                                                <td>
+                                                    {{
+                                                        store.userData
+                                                            .last_login_display
+                                                    }}
+                                                    (<TimeSince
+                                                        :date="
+                                                            store.userData
+                                                                .last_login
+                                                        "
+                                                        suffix=" ago"
+                                                    />)
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -83,16 +99,17 @@
 <script>
 import { useStore } from '@/stores/state';
 
+import TimeSince from '@/utils/vue/TimeSince.vue';
+
 export default {
     name: 'ProfileComponent',
+    components: {
+        TimeSince,
+    },
     data() {
         return {
             store: useStore(),
         };
     },
-    created() {},
-    methods: {},
 };
 </script>
-
-<style lang="scss" scoped></style>
