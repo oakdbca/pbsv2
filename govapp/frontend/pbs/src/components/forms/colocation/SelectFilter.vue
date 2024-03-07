@@ -11,7 +11,7 @@
             :id="`select-filter-${id}`"
             v-model="selectedFilterItem"
             :multiple="multiple"
-            :options="options"
+            :options="optionsFormatted"
             :name="name"
             :label="label"
             :track-by="name"
@@ -53,6 +53,18 @@ export default {
         options: {
             type: Object,
             required: true,
+            validator: (values) => {
+                if (typeof values !== 'object') return false;
+
+                return values.every((value) => {
+                    const keys = Object.keys(value);
+                    if (keys.length != 2) return false;
+                    return (
+                        (keys.includes('key') && keys.includes('value')) ||
+                        (keys.includes('value') && keys.includes('text'))
+                    );
+                });
+            },
         },
         preSelectedFilterItem: {
             type: Array,
@@ -90,6 +102,21 @@ export default {
         return {
             selectedFilterItem: [],
         };
+    },
+    computed: {
+        optionsFormatted: function () {
+            // Allows to pass in key-value pairs or value-text pairs
+            return this.options.map((option) => {
+                return {
+                    value: Object.hasOwn(option, 'key')
+                        ? option.key
+                        : option.value,
+                    text: Object.hasOwn(option, 'key')
+                        ? option.value
+                        : option.text,
+                };
+            });
+        },
     },
     mounted: function () {
         // TODO: Get from session storage
