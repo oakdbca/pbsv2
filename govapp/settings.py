@@ -54,6 +54,16 @@ if SENTRY_DSN and ENVIRONMENT:
         release=APPLICATION_VERSION,
     )
 
+if DEBUG:
+    ADMINS = [
+        ("Oak McIlwain", "oak.mcilwain@dbca.wa.gov.au"),
+        ("Karsten Prehn", "karsten.prehn@dbca.wa.gov.au"),
+    ]
+else:
+    ADMINS = [
+        ("ASI", "asi@dpaw.wa.gov.au"),
+    ]
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Project specific settings
