@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-3">
+            <div :class="`col-${leftMenuColWidth}`">
                 <slot v-if="!loading" name="left-menu"></slot>
                 <ContentLoader
                     v-else
@@ -43,6 +43,10 @@ export default {
         ContentLoader,
     },
     props: {
+        leftMenuColWidth: {
+            type: String,
+            default: '3',
+        },
         loading: {
             type: Boolean,
             default: true,
