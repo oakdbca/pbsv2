@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.contrib import auth
 from django.db import models
@@ -6,15 +8,17 @@ from model_utils.models import TimeStampedModel
 
 User = auth.get_user_model()
 
+logger = logging.getLogger(__name__)
+
 
 class MessageBatch(TimeStampedModel):
     """Used as a template to send messages to multiple groups and/or users."""
 
     groups: models.ManyToManyField = models.ManyToManyField(
-        "auth.Group", related_name="%(class)smessage_batches"
+        "auth.Group", related_name="%(class)smessage_batches", blank=True
     )
     users: models.ManyToManyField = models.ManyToManyField(
-        User, related_name="%(class)smessage_batches"
+        User, related_name="%(class)smessage_batches", blank=True
     )
     sender = models.ForeignKey(
         User,
@@ -38,20 +42,23 @@ class MessageBatch(TimeStampedModel):
     def __str__(self):
         return self.subject
 
-    def send(self):
-        if self.sent:
-            raise ValueError("Message batch has already been sent")
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not self.sent:
+            self.send()
 
-        users_to_send_to = self.users.all()
+    def send(self):
+        users_to_send_to = User.objects.none()
         for group in self.groups.all():
             users_to_send_to = users_to_send_to.union(group.user_set.all())
 
-        for user in users_to_send_to:
+        for user in users_to_send_to.filter():
             Message.objects.create(
-                to=user,
+                user=user,
                 sender=self.sender,
                 subject=self.subject,
-                body=self.body,
+                content=self.content,
+                html_content=self.html_content,
                 dismissable=self.dismissable,
                 type=self.type,
                 send_email=self.send_email,
@@ -90,6 +97,9 @@ class Message(TimeStampedModel):
     type = models.CharField(max_length=100, choices=settings.BOOTSTRAP_COLORS)
     send_email = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.subject
+
     def save(self, *args, **kwargs):
         # Note: Overriden save method is atomic by default
         send_email = False
@@ -102,16 +112,16 @@ class Message(TimeStampedModel):
         if not send_email:
             return
 
+        if not self.user.email:
+            logger.warning(f"Message {self.id}: User {self.user} has no email address")
+
         message = MailerMessage()
         message.subject = self.subject
         message.to_address = self.user.email
         if self.sender:
-            message.from_address = f"{self.sender.full_name} <{self.sender.email}>"
+            message.from_address = self.sender.email
         else:
-            message.from_address = (
-                f"{settings.PROJECT_NAME} <{settings.DEFAULT_FROM_EMAIL}"
-            )
-
+            message.from_address = settings.DEFAULT_FROM_EMAIL
         message.content = self.content
         message.html_content = self.html_content
         message.app = Message._meta.app_label
