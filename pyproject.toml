@@ -46,6 +46,7 @@ appmonitor_client = {git = "https://github.com/dbca-wa/appmonitor_client.git", r
 python-decouple = "^3.8"
 tomli = "^2.0.1"
 django-dirtyfields = "^1.9.2"
+django-mail-queue = "^3.2.5"
 
 [tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.2"

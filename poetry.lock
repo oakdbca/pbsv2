@@ -741,6 +741,16 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-mail-queue"
+version = "3.2.5"
+description = "Simple Mail Queuing for Django"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-mail-queue-3.2.5.tar.gz", hash = "sha256:b39b123e744daa7bcf5f9bb32334c0eb31646bdaa5ceb1f591479a4cf0285488"},
+]
+
+[[package]]
 name = "django-model-utils"
 version = "4.4.0"
 description = "Django model mixins and utilities"
@@ -2854,4 +2864,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "66c4cb33bd744d75f9f553c55026595b532eee046a234bd201f8cda0a7f75f01"
+content-hash = "618bfe8402fee31a27d23d1c3f3a41d9ac01b7fa59c4f7db7113c420c39a0361"
