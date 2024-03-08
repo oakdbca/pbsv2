@@ -1,10 +1,13 @@
 import logging
 
 from django.conf import settings
+from django.contrib import auth
 from django.contrib.auth.models import Group
 from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
+
+User = auth.get_user_model()
 
 
 def cached_groups():
@@ -57,3 +60,10 @@ def get_model_by_model_prefix(prefix):
         if hasattr(model, "MODEL_PREFIX") and model.MODEL_PREFIX == prefix:
             return model
     return None
+
+
+def get_system_email_sender():
+    return User.objects.get_or_create(
+        email=settings.DEFAULT_FROM_EMAIL,
+        defaults={"username": settings.PROJECT_TITLE, "password": ""},
+    )
