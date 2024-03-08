@@ -99,7 +99,9 @@ class ContributingFactor(UniqueNameableModel, TimeStampedModel):
 
 
 class RiskCategory(UniqueNameableModel, TimeStampedModel):
-    pass
+    class Meta:
+        verbose_name = "Risk Category"
+        verbose_name_plural = "Risk Categories"
 
 
 class Consequence(UniqueNameableModel):
