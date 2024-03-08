@@ -31,6 +31,13 @@ class MessageBatch(TimeStampedModel):
     send_email = models.BooleanField(default=False)
     sent = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = "Message Batch"
+        verbose_name_plural = "Message Batches"
+
+    def __str__(self):
+        return self.subject
+
     def send(self):
         if self.sent:
             raise ValueError("Message batch has already been sent")
@@ -55,9 +62,6 @@ class MessageBatch(TimeStampedModel):
 
     def recall(self):
         self.messages.all().delete()
-
-    def __str__(self):
-        return self.subject
 
 
 class Message(TimeStampedModel):
