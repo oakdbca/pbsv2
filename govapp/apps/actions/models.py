@@ -15,6 +15,10 @@ logger = getLogger(__name__)
 class ActionResponsibility(UniqueNameableModel):
     actions: "models.Manager[Action]"
 
+    class Meta:
+        verbose_name = "Action Responsibility"
+        verbose_name_plural = "Action Responsibilities"
+
 
 class Action(StatusModel, TimeStampedModel):
     STATUS = Choices(("open", "Open"), ("closed", "Closed"))
