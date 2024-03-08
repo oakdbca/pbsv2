@@ -119,6 +119,7 @@ INSTALLED_APPS = [
     "govapp.apps.swagger",
     "govapp.apps.traffic",
     "govapp.apps.main",
+    "govapp.apps.messaging",
     "govapp.apps.logs",
     "rest_framework",
     "rest_framework_datatables",
@@ -132,6 +133,7 @@ INSTALLED_APPS = [
     "nested_admin",
     "appmonitor_client",
     "drf_standardized_errors",
+    "mailqueue",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -266,6 +268,10 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 100,
     "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
 }
+
+# Mail queue settings
+MAILQUEUE_QUEUE_UP = True
+
 
 # DRF Spectacular Settings
 # https://drf-spectacular.readthedocs.io/en/latest/settings.html
@@ -507,3 +513,24 @@ CKEDITOR_CONFIGS = {
         ],
     },
 }
+
+# Bootstrap 5 Types (Yes, yanky spelling, 'colour' is for non programmers)
+BOOTSTRAP_COLOR_PRIMARY = "primary"
+BOOTSTRAP_COLOR_SECONDARY = "secondary"
+BOOTSTRAP_COLOR_SUCCESS = "success"
+BOOTSTRAP_COLOR_DANGER = "danger"
+BOOTSTRAP_COLOR_WARNING = "warning"
+BOOTSTRAP_COLOR_INFO = "info"
+BOOTSTRAP_COLOR_LIGHT = "light"
+BOOTSTRAP_COLOR_DARK = "dark"
+
+BOOTSTRAP_COLORS = (
+    (BOOTSTRAP_COLOR_PRIMARY, "Primary"),
+    (BOOTSTRAP_COLOR_SECONDARY, "Secondary"),
+    (BOOTSTRAP_COLOR_SUCCESS, "Success"),
+    (BOOTSTRAP_COLOR_DANGER, "Danger"),
+    (BOOTSTRAP_COLOR_WARNING, "Warning"),
+    (BOOTSTRAP_COLOR_INFO, "Info"),
+    (BOOTSTRAP_COLOR_LIGHT, "Light"),
+    (BOOTSTRAP_COLOR_DARK, "Dark"),
+)
