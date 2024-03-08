@@ -31,6 +31,7 @@ class ProgramSerializer(serializers.ModelSerializer):
 class BurnPlanElementSerializer(GetFilterOptionsMixin, ContentTypeModelSerializer):
     regions = RegionSerializer(many=True)
     districts = DistrictSerializer(many=True)
+    treatment_id = serializers.IntegerField(allow_null=True, required=False)
     treatment = serializers.CharField(
         source="treatment.name", read_only=True, allow_null=True
     )
