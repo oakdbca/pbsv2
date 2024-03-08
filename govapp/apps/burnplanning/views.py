@@ -43,6 +43,10 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
             "status": [
                 {"key": x[0], "value": x[1]} for x in BurnPlanElement.STATUS._doubles
             ],
+            "season": [
+                {"key": x[0], "value": x[1]}
+                for x in BurnPlanElement.preferred_season.field.choices._doubles
+            ],
         }
 
 
