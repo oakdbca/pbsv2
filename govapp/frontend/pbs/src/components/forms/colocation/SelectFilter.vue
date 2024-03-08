@@ -53,7 +53,7 @@ export default {
         options: {
             type: Object,
             required: true,
-            validator: (values) => {
+            validator: (/** @type Object */ values) => {
                 if (typeof values !== 'object') return false;
 
                 return values.every((value) => {
@@ -106,7 +106,21 @@ export default {
     computed: {
         optionsFormatted: function () {
             // Allows to pass in key-value pairs or value-text pairs
-            return this.options.map((option) => {
+            return this.mapKeyValuePairs(this.options);
+        },
+    },
+    mounted: function () {
+        // TODO: Get from session storage
+        this.selectedFilterItem = this.mapKeyValuePairs(
+            this.preSelectedFilterItem
+        );
+    },
+    methods: {
+        /**
+         * Maps key-value pairs to value-text pairs to be used by the MultiSelect component
+         */
+        mapKeyValuePairs: function (options) {
+            return options.map((option) => {
                 return {
                     value: Object.hasOwn(option, 'key')
                         ? option.key
@@ -117,10 +131,6 @@ export default {
                 };
             });
         },
-    },
-    mounted: function () {
-        // TODO: Get from session storage
-        this.selectedFilterItem = this.preSelectedFilterItem;
     },
 };
 </script>
