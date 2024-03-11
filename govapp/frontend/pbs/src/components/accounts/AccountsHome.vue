@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { useStore } from '@/stores/state';
+import { useUserStore } from '@/stores/user';
 
 import ItemList from '@/components/accounts/ItemList.vue';
 import LayoutDetails from '@/components/layout/LayoutDetails.vue';
@@ -54,7 +54,7 @@ export default {
     },
     data() {
         return {
-            store: useStore(),
+            store: useUserStore(),
             now: Date.now(),
             loading: true,
         };
