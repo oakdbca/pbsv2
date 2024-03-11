@@ -71,6 +71,11 @@ class MessageBatch(TimeStampedModel):
         self.messages.all().delete()
 
 
+class MessageManager(models.Manager):
+    def get_queryset(self) -> models.QuerySet:
+        return super().get_queryset().select_related("user", "sender")
+
+
 class Message(TimeStampedModel):
     message_batch = models.ForeignKey(
         MessageBatch,
@@ -126,3 +131,6 @@ class Message(TimeStampedModel):
         message.html_content = self.html_content
         message.app = Message._meta.app_label
         message.save()
+
+    def has_object_permission(self, user: auth.models.User) -> bool:
+        return user == self.user
