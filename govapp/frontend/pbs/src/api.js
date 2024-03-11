@@ -53,4 +53,10 @@ export default {
         var endPoint = this.endPoint('messages', pk);
         return `${endPoint}dismiss/`;
     },
+    assignedItems: function () {
+        return this.endPoint('assigned-items', null);
+    },
+    endorsmentItems: function () {
+        return this.endPoint('items-requiring-endorsement', null);
+    },
 };
