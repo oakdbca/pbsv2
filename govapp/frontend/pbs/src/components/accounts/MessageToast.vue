@@ -12,7 +12,9 @@
             :class="`bg-${message.type}`"
         >
             <strong class="me-auto">{{ message.subject }} </strong>
-            <small class="text-white">{{ message.time }}</small>
+            <small class="text-white"
+                ><TimeSince :date="message.created" suffix=" ago"
+            /></small>
             <button
                 type="button"
                 class="btn-close btn-close-white"
@@ -29,8 +31,13 @@
 </template>
 
 <script>
+import TimeSince from '@/utils/vue/TimeSince.vue';
+
 export default {
     name: 'MessageToast',
+    components: {
+        TimeSince,
+    },
     props: {
         message: {
             type: Object,
