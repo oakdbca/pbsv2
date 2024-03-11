@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { RouterView } from 'vue-router';
 import AccountsHome from '@/components/accounts/AccountsHome.vue';
 import ComponentSearch from '@/components/search/ComponentSearch.vue';
 import ProfileComponent from '@/components/accounts/Profile.vue';
 import BurnPlanning from '@/components/burn-planning/BurnPlanning.vue';
 import BurnPlanElement from '@/components/burn-planning/BurnPlanElement.vue';
 import BurnPlanningUnits from '@/components/burn-planning/BurnPlanningUnits.vue';
+import BurnPlanUnit from '@/components/burn-planning/BurnPlanUnit.vue';
 import OperationalPlanning from '@/components/operational-planning/OperationalPlanning.vue';
 import OperationalPlan from '@/components/operational-planning/OperationalPlan.vue';
 
@@ -45,7 +47,18 @@ const router = createRouter({
         {
             path: '/burn-planning-units',
             name: 'burn-planning-units',
-            component: BurnPlanningUnits,
+            component: RouterView,
+            children: [
+                {
+                    path: '',
+                    component: BurnPlanningUnits,
+                },
+                {
+                    path: ':pk',
+                    name: 'burn-planning-unit',
+                    component: BurnPlanUnit,
+                },
+            ],
         },
         {
             path: '/operational-planning',
