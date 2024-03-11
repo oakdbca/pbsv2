@@ -46,4 +46,11 @@ export default {
     search: function (query = null) {
         return `/api/search/?q=${query}`;
     },
+    latestMessages: function () {
+        return this.endPoint('messages/latest', null);
+    },
+    dismissMessage: function (pk) {
+        var endPoint = this.endPoint('messages', pk);
+        return `${endPoint}dismiss/`;
+    },
 };
