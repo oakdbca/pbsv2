@@ -239,8 +239,6 @@ class SearchViewSet(viewsets.ViewSet):
             )
             queryset = queryset.union(union_queryset)
 
-        # logger.debug(queryset.query)
-
         results = SearchSerializer(
             queryset,
             context={"request": request},
