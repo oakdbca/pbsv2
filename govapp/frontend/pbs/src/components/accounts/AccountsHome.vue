@@ -17,48 +17,7 @@
                     ></small>
                 </div>
                 <div class="card-body">
-                    <div
-                        v-if="Object.keys(messages).length > 0"
-                        class="toast-container"
-                    >
-                        <div
-                            v-for="(message, key) in messages"
-                            :key="key"
-                            class="toast show"
-                            role="alert"
-                            aria-live="assertive"
-                            aria-atomic="true"
-                        >
-                            <div
-                                class="toast-header bg-success text-white"
-                                :class="`bg-${message.type}`"
-                            >
-                                <strong class="me-auto"
-                                    >{{ message.title }}
-                                </strong>
-                                <small class="text-white">{{
-                                    message.time
-                                }}</small>
-                                <button
-                                    type="button"
-                                    class="btn-close btn-close-white"
-                                    data-bs-dismiss="toast"
-                                    aria-label="Close"
-                                    @click="markDismissed(key)"
-                                ></button>
-                            </div>
-                            <div class="toast-body">
-                                {{ message.message }}
-                                <div class="mt-2">
-                                    {{ message.from }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-else class="text-secondary">
-                        No messages to display
-                        <i class="bi bi-emoji-smile text-warning"></i>
-                    </div>
+                    <LatestMessages />
                 </div>
             </div>
         </template>
@@ -104,12 +63,14 @@ import TimeSince from '@/utils/vue/TimeSince.vue';
 import ItemList from '@/components/forms/ItemList.vue';
 import BadgeStatus from '@/components/forms/BadgeStatus.vue';
 import LayoutDetails from '@/components/layout/LayoutDetails.vue';
+import LatestMessages from '@/components/accounts/LatestMessages.vue';
 
 export default {
     name: 'AccountsHome',
     components: {
         BadgeStatus,
         ItemList,
+        LatestMessages,
         LayoutDetails,
         TimeSince,
     },
