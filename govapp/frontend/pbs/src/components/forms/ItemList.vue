@@ -46,7 +46,12 @@
 </template>
 
 <script>
+import BadgeStatus from '@/components/forms/BadgeStatus.vue';
+
 export default {
     name: 'ToastList',
+    components: {
+        BadgeStatus,
+    },
 };
 </script>
