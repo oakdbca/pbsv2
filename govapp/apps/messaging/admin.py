@@ -14,7 +14,7 @@ class MessageBatchAdmin(admin.ModelAdmin):
 
 class MessageAdmin(admin.ModelAdmin):
     model = Message
-    list_display = ("user", "sender", "subject", "created")
+    list_display = ("user", "sender", "subject", "dismissed", "created")
 
 
 admin.site.register(MessageBatch, MessageBatchAdmin)
