@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { useStore } from '@/stores/state';
+import { useUserStore } from '@/stores/user';
 
 import TimeSince from '@/utils/vue/TimeSince.vue';
 
@@ -119,7 +119,7 @@ export default {
     },
     data() {
         return {
-            store: useStore(),
+            store: useUserStore(),
         };
     },
 };
