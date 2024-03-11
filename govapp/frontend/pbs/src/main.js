@@ -3,7 +3,7 @@ import { createPinia } from 'pinia';
 import router from './router';
 import App from './App.vue';
 import helpers from '@/utils/helpers';
-import { useStore } from '@/stores/state';
+import { useUserStore } from '@/stores/user';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import govVue3Components from '@dbca/gov-vue3-components';
 const jsZip = require('jszip');
@@ -58,5 +58,8 @@ app.config.globalProperties.$filters = {
 app.use(router).use(govVue3Components).use(CKEditor).use(pinia);
 router.isReady().then(() => app.mount('#app'));
 
-const store = useStore();
+const store = useUserStore();
+
+// For every request at the moment in case groups / profile etc are updated
+// TODO: Consider only updating when the user logs in or out
 store.fetchUserData();
