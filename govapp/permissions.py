@@ -39,3 +39,10 @@ class IsPBSAdmin(BasePermission):
         if request.user.is_superuser:
             return True
         return is_member_of(request.user, settings.PBS_ADMIN)
+
+
+class HasObjectPermission(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_superuser:
+            return True
+        return obj.has_object_permission(request.user)
