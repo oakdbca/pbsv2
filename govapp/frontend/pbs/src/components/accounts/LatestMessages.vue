@@ -4,7 +4,7 @@
         class="toast-container"
     >
         <MessageToast
-            v-for="message in Object.values(messages)"
+            v-for="message in orderedMessages"
             :key="message.id"
             :message="message"
             @dismiss-message="markDismissed"
@@ -26,6 +26,15 @@ export default {
     data: () => ({
         messages: null,
     }),
+    computed: {
+        orderedMessages() {
+            // Javascript will reorder the response object keys according to it's own rules
+            // so we need to sort it again
+            return Object.values(this.messages).sort(
+                (a, b) => new Date(b.created) - new Date(a.created)
+            );
+        },
+    },
     created() {
         this.fetchLatestMessages();
     },
