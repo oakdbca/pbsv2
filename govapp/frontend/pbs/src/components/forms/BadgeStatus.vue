@@ -2,8 +2,8 @@
     <span
         class="badge text-capitalize"
         :class="[badgeTextClass, badgeBackgroundClass]"
-        >{{ statusText }}
-        <i v-if="iconClass" class="bi ps-2" :class="iconClass"></i
+        >{{ statusText
+        }}<i v-if="iconClass" class="bi ps-1" :class="iconClass"></i
     ></span>
 </template>
 
