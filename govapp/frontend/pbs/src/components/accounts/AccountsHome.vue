@@ -24,32 +24,10 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <div class="card mb-3">
-                        <div class="card-header">Items Assigned to You</div>
-                        <div class="card-body">
-                            <ItemList class="mb-3" />
-                            <button
-                                class="btn btn-primary btn-sm float-end"
-                                @click="viewAllItems"
-                            >
-                                View all <i class="bi bi-back ps-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            Items Awaiting Your Endorsement
-                        </div>
-                        <div class="card-body">
-                            <ItemList class="mb-3" />
-                            <button
-                                class="btn btn-primary btn-sm float-end"
-                                @click="viewAllItems"
-                            >
-                                View all <i class="bi bi-back ps-1"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <AssignedItems :assigned-items="assignedItems" />
+                    <EndorsmentItems
+                        :items-awaiting-endorsement="itemsAwaitingEndorsement"
+                    />
                 </div>
             </div>
         </div>
@@ -59,60 +37,26 @@
 <script>
 import { useStore } from '@/stores/state';
 
-import TimeSince from '@/utils/vue/TimeSince.vue';
-import ItemList from '@/components/forms/ItemList.vue';
-import BadgeStatus from '@/components/forms/BadgeStatus.vue';
+import ItemList from '@/components/accounts/ItemList.vue';
 import LayoutDetails from '@/components/layout/LayoutDetails.vue';
 import LatestMessages from '@/components/accounts/LatestMessages.vue';
+import AssignedItems from '@/components/accounts/AssignedItems.vue';
+import EndorsmentItems from '@/components/accounts/EndorsmentItems.vue';
 
 export default {
     name: 'AccountsHome',
     components: {
-        BadgeStatus,
+        AssignedItems,
+        EndorsmentItems,
         ItemList,
         LatestMessages,
         LayoutDetails,
-        TimeSince,
     },
     data() {
         return {
             store: useStore(),
             now: Date.now(),
             loading: true,
-            messages: {
-                1: {
-                    title: 'Burn Plan Element Approved',
-                    message:
-                        'A burn plan element BPE000109 that you endorsed has been approved by:',
-                    from: 'John Johns (Corporate Executive)',
-                    time: 'just now',
-                    type: 'success',
-                },
-                2: {
-                    title: 'Burn Plan Element Assignment',
-                    message:
-                        'A new burn plan element BPE000099 has been assigned to you:',
-                    from: 'Fred Smith (Swan Coastal, District Manager)',
-                    time: '5 hours ago',
-                    type: 'primary',
-                },
-                3: {
-                    title: 'Aviation Awaiting Endorsement',
-                    message:
-                        'Aviation request AR000343 is awaiting your endorsement:',
-                    from: 'Greg Sidebottom (Swan, Region Manager)',
-                    time: '2 days ago',
-                    type: 'primary',
-                },
-                4: {
-                    title: 'Another Important Message',
-                    message:
-                        "You're in big trouble for not working fast enough.",
-                    from: 'John Johns (Corporate Executive)',
-                    time: '5 days ago',
-                    type: 'primary',
-                },
-            },
         };
     },
     computed: {
@@ -144,6 +88,9 @@ export default {
             this.showToasts();
         });
     },
+    beforeUnmount() {
+        clearInterval(this.now);
+    },
     methods: {
         showToasts() {
             var toastElList = [].slice.call(
@@ -161,13 +108,6 @@ export default {
         },
         viewAllItems() {
             alert('TODO: Show all items');
-        },
-        markDismissed(id) {
-            delete this.messages[id];
-            console.log(
-                'TODO: Mark message as dismissed in api so it does not show here again. ',
-                id
-            );
         },
     },
 };
