@@ -1,10 +1,10 @@
 <ul class="nav navbar-expand-lg navbar-light align-items-center">
     {% if user.is_authenticated %}
-    <li class="nav-item"><a class="nav-link" href="/burn-planning">Burn Planning</a></li>
-    <li class="nav-item"><a class="nav-link" href="/operational-planning">Operational Planning</a></li>
-    <li class="nav-item"><a class="nav-link" href="/implementation">Implementation</a></li>
-    <li class="nav-item"><a class="nav-link" href="/treatment">Treatment</a></li>
-    <li class="nav-item"><a class="nav-link" href="/aviation">Aviation</a></li>
-    <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
+    <li class="nav-item"><a class="nav-link{% if request.path == '/burn-planning' %} active{% endif %}" href="/burn-planning">Burn Planning</a></li>
+    <li class="nav-item"><a class="nav-link{% if request.path == '/operational-planning' %} active{% endif %}" href="/operational-planning">Operational Planning</a></li>
+    <li class="nav-item"><a class="nav-link{% if request.path == '/implementation' %} active{% endif %}" href="/implementation">Implementation</a></li>
+    <li class="nav-item"><a class="nav-link{% if request.path == '/treatment' %} active{% endif %}" href="/treatment">Treatment</a></li>
+    <li class="nav-item"><a class="nav-link{% if request.path == '/aviation' %} active{% endif %}" href="/aviation">Aviation</a></li>
+    <li class="nav-item"><a class="nav-link{% if request.path == '/search' %} active{% endif %}" href="/search">Search</a></li>
     {% endif %}
 </ul>
