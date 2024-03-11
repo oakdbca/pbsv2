@@ -319,7 +319,7 @@ class EndorsingItemsViewSet(viewsets.ViewSet):
 
         queryset = queryset.order_by("-created")
 
-        serializer = SearchSerializer(
+        serializer = AssignedItemSerializer(
             queryset,
             context={"request": request},
             many=True,
