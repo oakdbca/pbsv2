@@ -237,17 +237,16 @@ GIT_COMMIT_HASH = os.popen(
 GIT_COMMIT_DATE = os.popen(
     f"cd {BASE_DIR}; git log -1 --format=%cd"
 ).read()  # noqa: S605
-VERSION_NO = "2.00"
 
 if DEBUG:
     rest_framework_renderer_classes = [
-        "rest_framework.renderers.JSONRenderer",
+        "drf_orjson_renderer.renderers.ORJSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
         "rest_framework_datatables.renderers.DatatablesRenderer",
     ]
 else:
     rest_framework_renderer_classes = [
-        "rest_framework.renderers.JSONRenderer",
+        "drf_orjson_renderer.renderers.ORJSONRenderer",
         "rest_framework_datatables.renderers.DatatablesRenderer",
     ]
 
@@ -534,3 +533,6 @@ BOOTSTRAP_COLORS = (
     (BOOTSTRAP_COLOR_LIGHT, "Light"),
     (BOOTSTRAP_COLOR_DARK, "Dark"),
 )
+
+# Messaging settings
+MESSAGING_LATEST_MESSAGES_COUNT = 5
