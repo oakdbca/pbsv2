@@ -3,6 +3,7 @@ import logging
 from rest_framework import serializers
 
 from govapp.apps.main.serializers import (
+    ContentTypeSerializerMixin,
     DistrictSerializer,
     GenericKeyValueSerializer,
     RegionSerializer,
@@ -47,7 +48,7 @@ class BurnPlanElementDatatableSerializer(BurnPlanElementSerializer):
         #     [] #TODO: Add any fields that are not used in the table so query is faster
 
 
-class BurnPlanUnitSerializer(serializers.ModelSerializer):
+class BurnPlanUnitSerializer(ContentTypeSerializerMixin, serializers.ModelSerializer):
     district_names = serializers.ReadOnlyField()
     regions = serializers.ReadOnlyField()
 
