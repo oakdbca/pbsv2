@@ -39,16 +39,23 @@
         </template>
         <BootstrapAccordion id="operational-plan-accordion">
             <BootstrapAccordionItem
+                :id="`${operationalPlan.content_type}-${operationalPlan.id}-overview-one-two`"
                 heading="Overview One Two"
                 icon-class="bi-exclamation-circle-fill"
                 icon-color-class="text-warning"
             >
                 Overview body
             </BootstrapAccordionItem>
-            <BootstrapAccordionItem heading="Priority">
+            <BootstrapAccordionItem
+                :id="`${operationalPlan.content_type}-${operationalPlan.id}-priority`"
+                heading="Priority"
+            >
                 Priority body
             </BootstrapAccordionItem>
-            <BootstrapAccordionItem heading="Context">
+            <BootstrapAccordionItem
+                :id="`${operationalPlan.content_type}-${operationalPlan.id}-context`"
+                heading="Context"
+            >
                 Context body
             </BootstrapAccordionItem>
         </BootstrapAccordion>
@@ -56,7 +63,7 @@
 </template>
 
 <script>
-import { useStore } from '@/stores/state';
+import { useUserStore } from '@/stores/user';
 
 import { apiEndpoints, utils } from '@/utils/hooks';
 
@@ -77,7 +84,7 @@ export default {
     },
     data() {
         return {
-            store: useStore(),
+            store: useUserStore(),
             operationalPlan: null,
             assignableUsers: null,
         };
