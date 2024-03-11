@@ -106,3 +106,13 @@ class SearchSerializer(serializers.Serializer):
             reverse(viewname, args=[instance.id])
         )
         return ret
+
+
+class AssignedItemSerializer(SearchSerializer):
+    created = serializers.DateTimeField()
+    created_display = serializers.DateTimeField(
+        source="created", format="%Y-%m-%d %H:%M:%S"
+    )
+
+    class Meta:
+        fields = SearchSerializer.Meta.fields + ["created", "created_display"]
