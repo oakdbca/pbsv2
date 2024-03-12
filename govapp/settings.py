@@ -19,6 +19,7 @@ from typing import Any
 import decouple
 import dj_database_url
 import tomli
+from django.core.exceptions import ImproperlyConfigured
 
 DEBUG = decouple.config("DEBUG", default=False, cast=bool)
 ENVIRONMENT = decouple.config("ENVIRONMENT", default="dev")
@@ -53,16 +54,6 @@ if SENTRY_DSN and ENVIRONMENT:
         environment=ENVIRONMENT,
         release=APPLICATION_VERSION,
     )
-
-if DEBUG:
-    ADMINS = [
-        ("Oak McIlwain", "oak.mcilwain@dbca.wa.gov.au"),
-        ("Karsten Prehn", "karsten.prehn@dbca.wa.gov.au"),
-    ]
-else:
-    ADMINS = [
-        ("ASI", "asi@dpaw.wa.gov.au"),
-    ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
@@ -341,10 +332,28 @@ EMAIL_BACKEND = "wagov_utils.components.utils.email_backend.EmailBackend"
 EMAIL_HOST = decouple.config("EMAIL_HOST", default="smtp.lan.fyi")
 EMAIL_PORT = decouple.config("EMAIL_PORT", default=25, cast=int)
 DEFAULT_FROM_EMAIL = "no-reply@dbca.wa.gov.au"
-EMAIL_INSTANCE = decouple.config("EMAIL_INSTANCE", default="PROD")
+EMAIL_INSTANCE = decouple.config("EMAIL_INSTANCE", default="DEV")
 NON_PROD_EMAIL = decouple.config("NON_PROD_EMAIL", default="")
 PRODUCTION_EMAIL = decouple.config("PRODUCTION_EMAIL", default=False, cast=bool)
 EMAIL_DELIVERY = decouple.config("EMAIL_DELIVERY", default="off")
+
+if not PRODUCTION_EMAIL:
+    if not NON_PROD_EMAIL:
+        raise ImproperlyConfigured(
+            "NON_PROD_EMAIL must not be empty if PRODUCTION_EMAIL is set to False"
+        )
+    if EMAIL_INSTANCE not in ["PROD", "DEV", "TEST", "UAT"]:
+        raise ImproperlyConfigured(
+            'EMAIL_INSTANCE must be either "PROD","DEV","TEST","UAT"'
+        )
+    if EMAIL_INSTANCE == "PROD":
+        raise ImproperlyConfigured(
+            "EMAIL_INSTANCE cannot be 'PROD' if PRODUCTION_EMAIL is set to False"
+        )
+
+ADMINS = decouple.config(
+    "ADMINS", cast=lambda v: [s.strip() for s in v.split(",")], default=[]
+)
 
 # Django Cron
 CRON_SCANNER_PERIOD_MINS = 5  # Run every 5 minutes
