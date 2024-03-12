@@ -1,4 +1,4 @@
-from rest_framework import response
+from rest_framework import response, serializers
 from rest_framework.decorators import action
 
 from govapp.apps.main.serializers import GenericKeyValueSerializer
@@ -62,3 +62,21 @@ class ChoicesKeyValueListMixin:
         return response.Response(
             [{"key": s[0], "value": s[1]} for s in self.choices_dict.items()]
         )
+
+
+class GetFilterOptionsMixin:
+    # To be used on a serializer. Adds a filter_options method field.
+    def get_filter_options(self, obj):
+        if not self.fields.get("filter_options", None):
+            # Check is not necessary, but it's here for good measure
+            raise AttributeError("filter_options field is not defined on serializer")
+
+        view = self.context.get("view", None)
+        if view and hasattr(view, "get_options"):
+            return view.get_options()[1]
+        return None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.fields.get("filter_options", None):
+            self.fields["filter_options"] = serializers.SerializerMethodField()
