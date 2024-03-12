@@ -18,13 +18,13 @@ logger = logging.getLogger(__name__)
 class PurposeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purpose
-        fields = "__all__"
+        fields = ["id", "name"]
 
 
 class ProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
-        fields = "__all__"
+        fields = ["id", "name"]
 
 
 class BurnPlanElementSerializer(
