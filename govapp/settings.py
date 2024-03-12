@@ -54,6 +54,16 @@ if SENTRY_DSN and ENVIRONMENT:
         release=APPLICATION_VERSION,
     )
 
+if DEBUG:
+    ADMINS = [
+        ("Oak McIlwain", "oak.mcilwain@dbca.wa.gov.au"),
+        ("Karsten Prehn", "karsten.prehn@dbca.wa.gov.au"),
+    ]
+else:
+    ADMINS = [
+        ("ASI", "asi@dpaw.wa.gov.au"),
+    ]
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Project specific settings
@@ -109,6 +119,7 @@ INSTALLED_APPS = [
     "govapp.apps.swagger",
     "govapp.apps.traffic",
     "govapp.apps.main",
+    "govapp.apps.messaging",
     "govapp.apps.logs",
     "rest_framework",
     "rest_framework_datatables",
@@ -122,6 +133,7 @@ INSTALLED_APPS = [
     "nested_admin",
     "appmonitor_client",
     "drf_standardized_errors",
+    "mailqueue",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -225,17 +237,16 @@ GIT_COMMIT_HASH = os.popen(
 GIT_COMMIT_DATE = os.popen(
     f"cd {BASE_DIR}; git log -1 --format=%cd"
 ).read()  # noqa: S605
-VERSION_NO = "2.00"
 
 if DEBUG:
     rest_framework_renderer_classes = [
-        "rest_framework.renderers.JSONRenderer",
+        "drf_orjson_renderer.renderers.ORJSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
         "rest_framework_datatables.renderers.DatatablesRenderer",
     ]
 else:
     rest_framework_renderer_classes = [
-        "rest_framework.renderers.JSONRenderer",
+        "drf_orjson_renderer.renderers.ORJSONRenderer",
         "rest_framework_datatables.renderers.DatatablesRenderer",
     ]
 
@@ -256,6 +267,10 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 100,
     "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
 }
+
+# Mail queue settings
+MAILQUEUE_QUEUE_UP = True
+
 
 # DRF Spectacular Settings
 # https://drf-spectacular.readthedocs.io/en/latest/settings.html
@@ -497,3 +512,27 @@ CKEDITOR_CONFIGS = {
         ],
     },
 }
+
+# Bootstrap 5 Types (Yes, yanky spelling, 'colour' is for non programmers)
+BOOTSTRAP_COLOR_PRIMARY = "primary"
+BOOTSTRAP_COLOR_SECONDARY = "secondary"
+BOOTSTRAP_COLOR_SUCCESS = "success"
+BOOTSTRAP_COLOR_DANGER = "danger"
+BOOTSTRAP_COLOR_WARNING = "warning"
+BOOTSTRAP_COLOR_INFO = "info"
+BOOTSTRAP_COLOR_LIGHT = "light"
+BOOTSTRAP_COLOR_DARK = "dark"
+
+BOOTSTRAP_COLORS = (
+    (BOOTSTRAP_COLOR_PRIMARY, "Primary"),
+    (BOOTSTRAP_COLOR_SECONDARY, "Secondary"),
+    (BOOTSTRAP_COLOR_SUCCESS, "Success"),
+    (BOOTSTRAP_COLOR_DANGER, "Danger"),
+    (BOOTSTRAP_COLOR_WARNING, "Warning"),
+    (BOOTSTRAP_COLOR_INFO, "Info"),
+    (BOOTSTRAP_COLOR_LIGHT, "Light"),
+    (BOOTSTRAP_COLOR_DARK, "Dark"),
+)
+
+# Messaging settings
+MESSAGING_LATEST_MESSAGES_COUNT = 5

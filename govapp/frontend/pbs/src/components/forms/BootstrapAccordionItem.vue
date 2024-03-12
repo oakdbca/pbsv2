@@ -12,6 +12,7 @@
                 :data-bs-target="`#collapse${slugifiedHeading}`"
                 :aria-expanded="collapsed ? 'false' : 'true'"
                 :aria-controls="`collapse${slugifiedHeading}`"
+                @click="toggleCollapsed"
             >
                 {{ heading }}
                 <div class="ms-auto">
@@ -37,18 +38,22 @@
 </template>
 
 <script>
+import { useAccordionStore } from '@/stores/accordions';
+
 var slugify = require('slugify');
 
 export default {
     name: 'BootstrapAccordionItem',
     props: {
+        id: {
+            // Unique id for the accordion item
+            // If it's not present then the state of the accordion item will not be persisted
+            type: String,
+            default: null,
+        },
         heading: {
             type: String,
             required: true,
-        },
-        collapsed: {
-            type: Boolean,
-            default: true,
         },
         iconClass: {
             type: String,
@@ -59,9 +64,26 @@ export default {
             default: '',
         },
     },
+    data: () => ({
+        collapsed: true,
+        store: useAccordionStore(),
+    }),
     computed: {
         slugifiedHeading() {
-            return slugify(this.heading, { lower: true });
+            return this.id ? this.id : slugify(this.heading, { lower: true });
+        },
+    },
+    created() {
+        if (this.id && this.id in this.store.accordionData) {
+            this.collapsed = this.store.accordionData[this.id];
+        }
+    },
+    methods: {
+        toggleCollapsed() {
+            this.collapsed = !this.collapsed;
+            if (this.id) {
+                this.store.accordionData[this.id] = this.collapsed;
+            }
         },
     },
 };

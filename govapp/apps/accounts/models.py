@@ -13,6 +13,9 @@ class Profile(models.Model):
         District, on_delete=models.CASCADE, null=True, blank=True
     )
 
+    def __str__(self):
+        return self.user.username
+
     @cached_property
     def cached_groups(self):
         return self.user.groups.all()

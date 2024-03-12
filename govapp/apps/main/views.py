@@ -13,8 +13,19 @@ from rest_framework.views import APIView
 from govapp.apps.accounts.serializers import UserKeyValueListSerializer
 from govapp.apps.main.mixins import KeyValueListMixin
 
-from .models import AssignableModel, District, ReferenceableModel, Region
-from .serializers import DistrictSerializer, RegionSerializer, SearchSerializer
+from .models import (
+    AssignableModel,
+    District,
+    EndorsableModel,
+    ReferenceableModel,
+    Region,
+)
+from .serializers import (
+    AssignedItemSerializer,
+    DistrictSerializer,
+    RegionSerializer,
+    SearchSerializer,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -228,8 +239,6 @@ class SearchViewSet(viewsets.ViewSet):
             )
             queryset = queryset.union(union_queryset)
 
-        # logger.debug(queryset.query)
-
         results = SearchSerializer(
             queryset,
             context={"request": request},
@@ -237,3 +246,81 @@ class SearchViewSet(viewsets.ViewSet):
         ).data
 
         return Response(results, status=status.HTTP_200_OK)
+
+
+class AssignedItemsViewSet(viewsets.ViewSet):
+    """ViewSet that returns a list of items that are assigned to the requeust user"""
+
+    def list(self, request):
+        """List of items the request user is assigned to"""
+        models_to_search = []
+        for model in apps.get_models():
+            if (
+                issubclass(model, AssignableModel)
+                and hasattr(model, "status")
+                and hasattr(model, "name")
+                and hasattr(model, "created")
+            ):
+                models_to_search.append(model)
+
+        queryset = (
+            models_to_search[0]
+            .objects.filter(assigned_to=request.user)
+            .only("id", "reference_number", "name", "status", "created")
+        )
+        for model in models_to_search[1:]:
+            union_queryset = queryset.union(
+                model.objects.filter(assigned_to=request.user).only(
+                    "id", "reference_number", "name", "status", "created"
+                )
+            )
+            queryset = queryset.union(union_queryset)
+
+        queryset = queryset.order_by("-created")
+
+        serializer = AssignedItemSerializer(
+            queryset,
+            context={"request": request},
+            many=True,
+        )
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class EndorsingItemsViewSet(viewsets.ViewSet):
+    """ViewSet that returns a list of items that are requiring endorsment from the requeust user"""
+
+    def list(self, request):
+        """List of items that are requiring endorsment from the request user"""
+        models_to_search = []
+        for model in apps.get_models():
+            if (
+                issubclass(model, EndorsableModel)
+                and hasattr(model, "status")
+                and hasattr(model, "name")
+                and hasattr(model, "created")
+            ):
+                models_to_search.append(model)
+
+        queryset = (
+            models_to_search[0]
+            .objects.filter(seeking_endorsement_from=request.user)
+            .only("id", "reference_number", "name", "status", "created")
+        )
+        for model in models_to_search[1:]:
+            union_queryset = queryset.union(
+                model.objects.filter(seeking_endorsement_from=request.user).only(
+                    "id", "reference_number", "name", "status", "created"
+                )
+            )
+            queryset = queryset.union(union_queryset)
+
+        queryset = queryset.order_by("-created")
+
+        serializer = AssignedItemSerializer(
+            queryset,
+            context={"request": request},
+            many=True,
+        )
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

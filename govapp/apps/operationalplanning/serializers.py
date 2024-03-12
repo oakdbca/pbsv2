@@ -1,7 +1,7 @@
 # Third-Party
 from rest_framework import serializers
 
-from govapp.apps.main.serializer import ContentTypeSerializerMixin
+from govapp.apps.main.serializers import ContentTypeSerializerMixin
 from govapp.apps.operationalplanning.models import OperationalPlan
 
 

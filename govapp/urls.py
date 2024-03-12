@@ -10,6 +10,7 @@ from govapp.apps.accounts.urls import router as accounts_router
 from govapp.apps.burnplanning.urls import router as burnplanning_router
 from govapp.apps.logs.urls import router as logs_router
 from govapp.apps.main.urls import router as main_router
+from govapp.apps.messaging.urls import router as messaging_router
 from govapp.apps.operationalplanning.urls import router as operationalplanning_router
 
 # Admin Site Settings
@@ -31,6 +32,7 @@ router.registry.extend(accounts_router.registry)
 router.registry.extend(burnplanning_router.registry)
 router.registry.extend(logs_router.registry)
 router.registry.extend(main_router.registry)
+router.registry.extend(messaging_router.registry)
 router.registry.extend(operationalplanning_router.registry)
 
 router.registry.sort(key=lambda x: x[0])

@@ -1,5 +1,6 @@
 from typing import ClassVar, Generic, TypeVar
 
+from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from rest_framework import serializers
 
@@ -45,6 +46,25 @@ class GenericKeyValueSerializer(serializers.Serializer, Generic[T, MT]):
         return display_name
 
 
+class ContentTypeSerializerMixin:
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        # TODO: This will cause N+1 queries, need to optimize
+        # in cases where union of multiple models is used this will be necesary
+        # however in all other cases it is not
+        content_type = ContentType.objects.get_for_model(instance)
+        ret["content_type"] = content_type.id
+        ret["content_type_model"] = content_type.model
+        ret["verbose_name"] = instance._meta.verbose_name
+        return ret
+
+
+class KeyObjectSerializerMixin:
+    def to_representation(self, instance):
+        row = super().to_representation(instance)
+        return {row["id"]: row}
+
+
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
@@ -56,7 +76,7 @@ class DistrictSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = District
-        fields = "__all__"
+        fields = "id", "name", "region"
 
 
 class SearchSerializer(serializers.Serializer):
@@ -86,3 +106,13 @@ class SearchSerializer(serializers.Serializer):
             reverse(viewname, args=[instance.id])
         )
         return ret
+
+
+class AssignedItemSerializer(SearchSerializer):
+    created = serializers.DateTimeField()
+    created_display = serializers.DateTimeField(
+        source="created", format="%Y-%m-%d %H:%M:%S"
+    )
+
+    class Meta:
+        fields = SearchSerializer.Meta.fields + ["created", "created_display"]

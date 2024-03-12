@@ -5,6 +5,14 @@ from govapp.apps.main import views
 
 router = routers.DefaultRouter()
 router.register(r"search", views.SearchViewSet, basename="search")
+router.register(
+    r"assigned-items", views.AssignedItemsViewSet, basename="assigned-items"
+)
+router.register(
+    r"items-requiring-endorsement",
+    views.EndorsingItemsViewSet,
+    basename="items-requiring-endorsement",
+)
 router.register(r"regions", views.RegionViewSet, basename="regions")
 router.register(r"districts", views.DistrictViewSet, basename="districts")
 

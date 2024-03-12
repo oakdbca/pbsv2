@@ -1,10 +1,13 @@
 import logging
 
 from django.conf import settings
+from django.contrib import auth
 from django.contrib.auth.models import Group
 from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
+
+User = auth.get_user_model()
 
 
 def cached_groups():

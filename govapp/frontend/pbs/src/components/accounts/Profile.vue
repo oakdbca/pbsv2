@@ -71,9 +71,20 @@
                             <div class="card-body">
                                 <h5 class="card-title">District</h5>
                                 <p class="card-text">
-                                    <span class="badge bg-primary fs-6">{{
-                                        store.userData.profile.district
-                                    }}</span>
+                                    <span class="badge bg-primary fs-6">
+                                        <template
+                                            v-if="
+                                                store.userData.profile.district
+                                            "
+                                        >
+                                            {{
+                                                store.userData.profile.district
+                                            }}
+                                        </template>
+                                        <template v-else
+                                            >Not Yet Assigned</template
+                                        ></span
+                                    >
                                 </p>
                             </div>
                             <div class="card-body">
@@ -97,7 +108,7 @@
 </template>
 
 <script>
-import { useStore } from '@/stores/state';
+import { useUserStore } from '@/stores/user';
 
 import TimeSince from '@/utils/vue/TimeSince.vue';
 
@@ -108,7 +119,7 @@ export default {
     },
     data() {
         return {
-            store: useStore(),
+            store: useUserStore(),
         };
     },
 };

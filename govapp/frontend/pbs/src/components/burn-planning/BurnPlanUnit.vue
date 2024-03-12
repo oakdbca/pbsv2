@@ -1,10 +1,10 @@
 <template>
-    <LayoutDetails :loading="!operationalPlan">
+    <LayoutDetails :loading="!burnPlanUnit">
         <template #heading>
             <h3>
-                Operational Plan:
+                Burn Planning Unit:
                 <span class="text-secondary">{{
-                    operationalPlan.reference_number
+                    burnPlanUnit.reference_number
                 }}</span>
             </h3>
         </template>
@@ -15,18 +15,18 @@
                     postCommunicationsEntryApiUrl
                 "
                 :actions-api-url="actionsApiUrl"
-                :content-type="operationalPlan.content_type"
-                :object-id="operationalPlan.id"
+                :content-type="burnPlanUnit.content_type"
+                :object-id="burnPlanUnit.id"
             />
             <PanelWorkflow
-                :status="operationalPlan.status"
-                :status-display="operationalPlan.status_display"
-                :content-type="operationalPlan.content_type"
-                :pk="operationalPlan.id"
+                :status="burnPlanUnit.status"
+                :status-display="burnPlanUnit.status_display"
+                :content-type="burnPlanUnit.content_type"
+                :pk="burnPlanUnit.id"
                 :assignable-users="assignableUsers"
                 :assign-to-me-api-url="assignToMeApiUrl"
                 :assign-to-api-url="assignToApiUrl"
-                :assigned-to="operationalPlan.assigned_to"
+                :assigned-to="burnPlanUnit.assigned_to"
                 :request-user-id="store.userData.id"
                 @assign-to="assignTo"
             ></PanelWorkflow>
@@ -37,26 +37,18 @@
                 </div>
             </div>
         </template>
-        <BootstrapAccordion id="operational-plan-accordion">
+        <BootstrapAccordion id="burn-plan-unit-accordion">
             <BootstrapAccordionItem
-                :id="`${operationalPlan.content_type}-${operationalPlan.id}-overview-one-two`"
-                heading="Overview One Two"
-                icon-class="bi-exclamation-circle-fill"
-                icon-color-class="text-warning"
+                :id="`${burnPlanUnit.content_type}-${burnPlanUnit.id}-details`"
+                heading="Details"
             >
-                Overview body
+                Details body
             </BootstrapAccordionItem>
             <BootstrapAccordionItem
-                :id="`${operationalPlan.content_type}-${operationalPlan.id}-priority`"
-                heading="Priority"
+                :id="`${burnPlanUnit.content_type}-${burnPlanUnit.id}-documents`"
+                heading="Documents"
             >
-                Priority body
-            </BootstrapAccordionItem>
-            <BootstrapAccordionItem
-                :id="`${operationalPlan.content_type}-${operationalPlan.id}-context`"
-                heading="Context"
-            >
-                Context body
+                Documents
             </BootstrapAccordionItem>
         </BootstrapAccordion>
     </LayoutDetails>
@@ -75,7 +67,7 @@ import BootstrapAccordionItem from '../forms/BootstrapAccordionItem.vue';
 import PanelLogs from '../logging/PanelLogs.vue';
 
 export default {
-    name: 'OperationalPlan',
+    name: 'BurnPlanUnit',
     components: {
         LayoutDetails,
         PanelLogs,
@@ -85,7 +77,7 @@ export default {
     data() {
         return {
             store: useUserStore(),
-            operationalPlan: null,
+            burnPlanUnit: null,
             assignableUsers: null,
         };
     },
@@ -93,7 +85,7 @@ export default {
         communicationsApiUrl: function () {
             return (
                 apiEndpoints.communications() +
-                `?format=datatables&content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
+                `?format=datatables&content_type=${this.burnPlanUnit?.content_type}&object_id=${this.burnPlanUnit?.id}`
             );
         },
         postCommunicationsEntryApiUrl() {
@@ -102,7 +94,7 @@ export default {
         actionsApiUrl: function () {
             return (
                 apiEndpoints.actions() +
-                `?format=datatables&content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
+                `?format=datatables&content_type=${this.burnPlanUnit?.content_type}&object_id=${this.burnPlanUnit?.id}`
             );
         },
         assignableUsersApiUrl() {
@@ -114,35 +106,35 @@ export default {
         assignToApiUrl() {
             return (
                 apiEndpoints.assignTo() +
-                `?content_type=${this.operationalPlan?.content_type}&object_id=${this.operationalPlan?.id}`
+                `?content_type=${this.burnPlanUnit?.content_type}&object_id=${this.burnPlanUnit?.id}`
             );
         },
     },
     async created() {
-        await this.fetchOperationalPlan();
+        await this.fetchBurnPlanUnit();
         this.fetchAssignableUsers();
     },
     methods: {
-        async fetchOperationalPlan() {
+        async fetchBurnPlanUnit() {
             var pk = this.$route.params.pk;
             await utils
-                .fetchUrl(apiEndpoints.operationalPlans(pk))
+                .fetchUrl(apiEndpoints.burnPlanningUnits(pk))
                 .then((data) => {
-                    this.operationalPlan = Object.assign({}, data);
+                    this.burnPlanUnit = Object.assign({}, data);
                 });
         },
         fetchAssignableUsers() {
             utils
                 .fetchUrl(
                     apiEndpoints.assignableUsers() +
-                        `?content_type=${this.operationalPlan.content_type}&object_id=${this.operationalPlan.id}`
+                        `?content_type=${this.burnPlanUnit.content_type}&object_id=${this.burnPlanUnit.id}`
                 )
                 .then((data) => {
                     this.assignableUsers = data;
                 });
         },
         assignTo(value) {
-            this.operationalPlan.assigned_to = value;
+            this.burnPlanUnit.assigned_to = value;
         },
     },
 };

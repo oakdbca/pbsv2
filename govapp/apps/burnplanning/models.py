@@ -45,6 +45,7 @@ class BurnPlanUnit(
     ReferenceableModel,
     UniqueNameableModel,
     StatusModel,
+    AssignableModel,
     TimeStampedModel,
 ):
     """A burn plan unit is a model to contain geometry information for
@@ -110,6 +111,14 @@ class BurnPlanUnit(
     @cached_property
     def regions(self):
         return list(self.districts.values_list("region__display_name", flat=True))
+
+    def assignable_users(self):
+        # TODO uncomment once groups are listed above (will probably change based on the status of the instance too)
+        # GROUPS = [
+        #     "TODO: Add appropriate groups here",
+        # ]
+        # return User.objects.filter(is_active=True, groups__name__in=GROUPS).distinct()
+        return User.objects.filter(is_active=True)
 
 
 class BurnPlanUnitDistrict(TimeStampedModel):

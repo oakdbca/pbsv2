@@ -46,7 +46,9 @@ class UserKeyValueListSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    district = serializers.CharField(source="district.name_with_region")
+    district = serializers.CharField(
+        source="district.name_with_region", allow_null=True
+    )
 
     class Meta:
         model = Profile
