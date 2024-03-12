@@ -242,7 +242,7 @@
 <script>
 import { utils, apiEndpoints } from '@/utils/hooks';
 
-import { useStore } from '@/stores/state';
+import { useUserStore } from '@/stores/user';
 
 import PanelLogs from '../logging/PanelLogs.vue';
 
@@ -271,7 +271,7 @@ export default {
     props: {},
     data: function () {
         return {
-            store: useStore(),
+            store: useUserStore(),
             burnPlanElement: null,
             assignableUsers: null,
             noTreatment: 'no_treatment',
