@@ -352,7 +352,7 @@ if not PRODUCTION_EMAIL:
         )
 
 ADMINS = decouple.config(
-    "ADMINS", cast=lambda v: [s.strip() for s in v.split(",")], default=[]
+    "ADMINS", cast=lambda v: [s.strip() for s in v.split(",")], default="[]"
 )
 
 # Django Cron
