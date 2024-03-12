@@ -53,7 +53,9 @@ export default {
         options: {
             type: Object,
             required: true,
-            validator: (/** @type Object */ values) => {
+            validator: (
+                /** @type {{ key: String, value: String; }[] | { value: String, text: String; }[] } */ values
+            ) => {
                 if (typeof values !== 'object') return false;
 
                 return values.every((value) => {
@@ -67,7 +69,7 @@ export default {
             },
         },
         preSelectedFilterItem: {
-            type: Array,
+            type: [Number, String, Object, Array],
             required: false,
             default: () => [],
         },
@@ -111,25 +113,81 @@ export default {
     },
     mounted: function () {
         // TODO: Get from session storage
-        this.selectedFilterItem = this.mapKeyValuePairs(
+        // Purpose needs to use this function to map the key-value pairs to value-text pairs
+        this.selectedFilterItem = this.getSelectedFilterItemByKey(
             this.preSelectedFilterItem
         );
     },
     methods: {
         /**
          * Maps key-value pairs to value-text pairs to be used by the MultiSelect component
+         * @param {{ key: String, value: String; }[] | { value: String, text: String; }[] } options The key-value pair(s) to be mapped
          */
         mapKeyValuePairs: function (options) {
             return options.map((option) => {
                 return {
                     value: Object.hasOwn(option, 'key')
-                        ? option.key
-                        : option.value,
+                        ? option.key.toString() // Casting to string to avoid potential type mismatch
+                        : option.value.toString(),
                     text: Object.hasOwn(option, 'key')
-                        ? option.value
-                        : option.text,
+                        ? option.value.toString()
+                        : option.text.toString(),
                 };
             });
+        },
+        /**
+         * Returns value-text pair(s) from the model's filter_options property by filter id and item key(s)
+         * to be used by the MultiSelect component as selected value(s).
+         * The key being the respective model field entry and the value being its human readable representation.
+         * For example: `[ { "value": ..., "text": ... }, ... ]`
+         * @param {Number|String|(Number|String|{value:String|Number;})[]} selected The selected filter item key(s),
+         * or an object in the form of { value: string | number; text: string; }, or an array of such objects
+         * @returns {Object[]} An array of filter item objects
+         */
+        getSelectedFilterItemByKey: function (selected) {
+            const filterOptions = this.optionsFormatted;
+            if (selected === null) return [];
+
+            return filterOptions.filter(
+                (/** @type {{ value: string | number; }} */ item) => {
+                    if (['number', 'string'].includes(typeof selected)) {
+                        // Single value number or string
+                        return item.value === selected.toString();
+                    }
+
+                    if (Array.isArray(selected)) {
+                        // Array
+                        if (
+                            selected.length > 0 &&
+                            typeof selected[0] === 'object'
+                        ) {
+                            // Array of objects
+                            return selected.some(
+                                (s) =>
+                                    /** @type {{value: Number | String}} */ (
+                                        s
+                                    ).value.toString() === item.value
+                            );
+                        } else {
+                            // Array of numbers or strings
+                            return selected
+                                .map((s) => s.toString())
+                                .includes(
+                                    /** @type {{value: String}} */ (item).value
+                                );
+                        }
+                    }
+
+                    // Object in the form of { value: string | number; text: string; }
+                    if (typeof selected === 'object') {
+                        return (
+                            item.value ===
+                            /** @type {Object} */ (selected).value?.toString()
+                        );
+                    }
+                    return []; // Else
+                }
+            );
         },
     },
 };
