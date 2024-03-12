@@ -35,6 +35,10 @@ class BurnPlanElementSerializer(GetFilterOptionsMixin, ContentTypeModelSerialize
     treatment = serializers.CharField(
         source="treatment.name", read_only=True, allow_null=True
     )
+    justification_id = serializers.IntegerField(allow_null=True, required=False)
+    justification = serializers.CharField(
+        source="justification.name", read_only=True, allow_null=True
+    )
     purposes = PurposeSerializer(many=True, read_only=True)
     programs = ProgramSerializer(many=True, read_only=True)
     status_display = serializers.CharField(source="get_status_display")

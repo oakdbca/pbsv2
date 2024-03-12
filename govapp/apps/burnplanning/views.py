@@ -7,7 +7,14 @@ from govapp.apps.main.models import District, Region
 from govapp.apps.main.views import KeyValueListMixin
 
 from .filters import BurnPlanElementFilter, BurnPlanUnitFilter
-from .models import BurnPlanElement, BurnPlanUnit, Program, Purpose, Treatment
+from .models import (
+    BurnPlanElement,
+    BurnPlanUnit,
+    Justification,
+    Program,
+    Purpose,
+    Treatment,
+)
 from .serializers import (
     BurnPlanElementSerializer,
     BurnPlanUnitSerializer,
@@ -47,6 +54,7 @@ class BurnPlanElementViewSet(viewsets.ModelViewSet):
                 {"key": x[0], "value": x[1]}
                 for x in BurnPlanElement.preferred_season.field.choices._doubles
             ],
+            "justification": Justification.cached_key_value_list(),
         }
 
 

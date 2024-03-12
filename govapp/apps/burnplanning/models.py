@@ -150,7 +150,9 @@ class Treatment(
     pass
 
 
-class Justification(UniqueNameableModel, ArchivableModel, TimeStampedModel):
+class Justification(
+    KeyValueListModelMixin, UniqueNameableModel, ArchivableModel, TimeStampedModel
+):
     pass
 
 
