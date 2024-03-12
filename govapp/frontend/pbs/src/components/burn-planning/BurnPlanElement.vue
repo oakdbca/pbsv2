@@ -1,5 +1,6 @@
 <template>
     <div v-if="burnPlanElement" id="bpe" class="container">
+        {{ burnPlanElement }}
         <div class="row">
             <div class="col">
                 <h3>
@@ -115,7 +116,10 @@
                                             "
                                             :show-title="false"
                                             @selection-changed-select="
-                                                console.log($event)
+                                                selectionChanged(
+                                                    $event,
+                                                    'preferred_season'
+                                                )
                                             "
                                             @selection-changed-remove="
                                                 console.log($event)
@@ -138,7 +142,11 @@
                                             :show-title="false"
                                             placeholder="No treatment"
                                             @selection-changed-select="
-                                                console.log($event)
+                                                selectionChanged(
+                                                    $event,
+                                                    'treatment_id',
+                                                    'treatment'
+                                                )
                                             "
                                             @selection-changed-remove="
                                                 console.log($event)
@@ -162,7 +170,11 @@
                                             "
                                             :show-title="false"
                                             @selection-changed-select="
-                                                console.log($event)
+                                                selectionChanged(
+                                                    $event,
+                                                    'justification_id',
+                                                    'justification'
+                                                )
                                             "
                                             @selection-changed-remove="
                                                 console.log($event)
@@ -184,7 +196,10 @@
                                             "
                                             :show-title="false"
                                             @selection-changed-select="
-                                                console.log($event)
+                                                selectionChanged(
+                                                    $event,
+                                                    'purpose'
+                                                )
                                             "
                                             @selection-changed-remove="
                                                 console.log($event)
@@ -206,7 +221,10 @@
                                             "
                                             :show-title="false"
                                             @selection-changed-select="
-                                                console.log($event)
+                                                selectionChanged(
+                                                    $event,
+                                                    'program'
+                                                )
                                             "
                                             @selection-changed-remove="
                                                 console.log($event)
@@ -366,6 +384,24 @@ export default {
             const ct = this.burnPlanElement.content_type;
             const id = this.burnPlanElement.id;
             return `select-filter--content-type-${ct}-id-${id}-name-${filterName}`;
+        },
+        selectionChanged(selected, idField, textField = null) {
+            if (Object.hasOwn(this.burnPlanElement, idField)) {
+                this.burnPlanElement[idField] = selected.value.value;
+            } else {
+                console.error(
+                    `selectionChanged: ${idField} not found in burnPlanElement`
+                );
+            }
+            if (textField !== null) {
+                if (Object.hasOwn(this.burnPlanElement, textField)) {
+                    this.burnPlanElement[textField] = selected.value.text;
+                } else {
+                    console.error(
+                        `selectionChanged: ${textField} not found in burnPlanElement`
+                    );
+                }
+            }
         },
     },
 };
