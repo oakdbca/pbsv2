@@ -1,9 +1,5 @@
 <template>
     <div v-if="burnPlanElement" id="bpe" class="container">
-        <div v-for="(option, key) in burnPlanElement.filter_options" :key="key">
-            {{ key }}: {{ option }}
-        </div>
-
         <div class="row">
             <div class="col">
                 <h3>
@@ -115,7 +111,7 @@
                                                     .season
                                             "
                                             :pre-selected-filter-item="
-                                                selectedSeason
+                                                burnPlanElement.preferred_season
                                             "
                                             :show-title="false"
                                             @selection-changed-select="
@@ -137,7 +133,7 @@
                                                     .treatment
                                             "
                                             :pre-selected-filter-item="
-                                                selectedTreatment
+                                                burnPlanElement.treatment_id
                                             "
                                             :show-title="false"
                                             placeholder="No treatment"
@@ -151,64 +147,71 @@
                                         </SelectFilter>
                                     </RowSlotTemplate>
 
-                                    <RowRadiosComponent
-                                        :key="keyRowComponent('treatment')"
-                                        name="treatment"
-                                        :selection="treatments"
-                                        :selected-value="
-                                            burnPlanElement['treatment'] == null
-                                                ? noTreatment
-                                                : burnPlanElement['treatment']
-                                        "
-                                        :disabled="false"
-                                        @update:value="
-                                            $event === noTreatment
-                                                ? (burnPlanElement[
-                                                      'treatment'
-                                                  ] = null)
-                                                : (burnPlanElement[
-                                                      'treatment'
-                                                  ] = $event)
-                                        "
-                                    ></RowRadiosComponent>
+                                    <RowSlotTemplate name="Justification">
+                                        <SelectFilter
+                                            id="justification"
+                                            title="Justification"
+                                            :options="
+                                                burnPlanElement.filter_options
+                                                    .justification
+                                            "
+                                            :pre-selected-filter-item="
+                                                burnPlanElement.justification_id
+                                            "
+                                            :show-title="false"
+                                            @selection-changed-select="
+                                                console.log($event)
+                                            "
+                                            @selection-changed-remove="
+                                                console.log($event)
+                                            "
+                                        >
+                                        </SelectFilter>
+                                    </RowSlotTemplate>
 
-                                    <RowSelectComponent
-                                        :key="keyRowComponent('justification')"
-                                        name="justification"
-                                        :selection="justifications"
-                                        :selected-value="
-                                            burnPlanElement['justification']
-                                        "
-                                        :disabled="false"
-                                        @update:value="
-                                            burnPlanElement['justification'] =
-                                                $event
-                                        "
-                                    ></RowSelectComponent>
-                                    <RowSelectComponent
-                                        :key="keyRowComponent('purpose')"
-                                        name="purpose"
-                                        :selection="purposes"
-                                        :selected-value="
-                                            burnPlanElement['purpose']
-                                        "
-                                        :disabled="false"
-                                        @update:value="
-                                            burnPlanElement['purpose'] = $event
-                                        "
-                                    ></RowSelectComponent>
-                                    <RowSelectComponent
-                                        :key="keyRowComponent('program')"
-                                        name="program"
-                                        :selection="programs"
-                                        :selected-value="
-                                            burnPlanElement['program']
-                                        "
-                                        :disabled="false"
-                                        @update:value="
-                                            burnPlanElement['program'] = $event
-                                        "
-                                    ></RowSelectComponent>
+                                    <RowSlotTemplate name="Purpose">
+                                        <SelectFilter
+                                            id="purpose"
+                                            title="Purpose"
+                                            :options="
+                                                burnPlanElement.filter_options
+                                                    .purpose
+                                            "
+                                            :pre-selected-filter-item="
+                                                selectedPurposes
+                                            "
+                                            :show-title="false"
+                                            @selection-changed-select="
+                                                console.log($event)
+                                            "
+                                            @selection-changed-remove="
+                                                console.log($event)
+                                            "
+                                        >
+                                        </SelectFilter>
+                                    </RowSlotTemplate>
+
+                                    <RowSlotTemplate name="Program">
+                                        <SelectFilter
+                                            id="program"
+                                            title="Program"
+                                            :options="
+                                                burnPlanElement.filter_options
+                                                    .program
+                                            "
+                                            :pre-selected-filter-item="
+                                                selectedPurposes
+                                            "
+                                            :show-title="false"
+                                            @selection-changed-select="
+                                                console.log($event)
+                                            "
+                                            @selection-changed-remove="
+                                                console.log($event)
+                                            "
+                                        >
+                                        </SelectFilter>
+                                    </RowSlotTemplate>
 
                                     <RowTextareaComponent
                                         :key="keyRowComponent('comments')"
@@ -244,8 +247,6 @@ import { useStore } from '@/stores/state';
 import PanelLogs from '../logging/PanelLogs.vue';
 
 import RowInputComponent from '@/components/forms/colocation/RowInput.vue';
-import RowSelectComponent from '@/components/forms/colocation/RowSelect.vue';
-import RowRadiosComponent from '@/components/forms/colocation/RowRadios.vue';
 import RowTextareaComponent from '@/components/forms/colocation/RowTextarea.vue';
 import RowSlotTemplate from '@/components/forms/colocation/RowSlotTemplate.vue';
 
@@ -259,8 +260,6 @@ export default {
     name: 'BurnPlanElement',
     components: {
         RowInputComponent,
-        RowSelectComponent,
-        RowRadiosComponent,
         RowTextareaComponent,
         PanelLogs,
         BootstrapTablist,
@@ -296,29 +295,16 @@ export default {
                 this.burnPlanElement['treatment'] === null
             );
         },
-        selectedSeason: function () {
-            return this.getSelectedFilterItemByKey(
-                'season',
-                this.burnPlanElement.preferred_season
-            );
+
+        selectedPurposes: function () {
+            return this.burnPlanElement.purposes.map((purpose) => {
+                return { value: purpose.id, text: purpose.name };
+            });
         },
-        selectedTreatment: function () {
-            return this.getSelectedFilterItemByKey(
-                'treatment',
-                this.burnPlanElement.treatment_id
-            );
-        },
-        treatments: function () {
-            return ['burn', 'mechanical', 'both', this.noTreatment];
-        },
-        justifications: () => {
-            return ['a', 'b', 'c', 'd'];
-        },
-        purposes: () => {
-            return ['a', 'b', 'c', 'd'];
-        },
-        programs: () => {
-            return ['a', 'b', 'c', 'd'];
+        selectedPrograms: function () {
+            return this.burnPlanElement.programs.map((program) => {
+                return { value: program.id, text: program.name };
+            });
         },
 
         communicationsApiUrl: function () {
@@ -373,37 +359,6 @@ export default {
         },
         activeTabIndexChanged(index) {
             console.log(`activeTabIndexChanged ${index}`);
-        },
-        /**
-         * Returns key-value pair(s) from the model's filter_options property by filter id and item key(s)
-         * to be used by the SelectFilter component as selected value(s).
-         * The key being the respective model field entry and the value being its human readable representation.
-         * For example: `{filterId: [ { "key": ..., "value": ... }, ... ], ...}`
-         * @param {String} filterId The filter option id / model field name to use
-         * @param {Number|String|(Number|String)[]} itemKeys The selected filter item key(s)
-         * @returns {Object[]} An array of filter item objects
-         */
-        getSelectedFilterItemByKey: function (filterId, itemKeys) {
-            const filterOptions = this.burnPlanElement.filter_options;
-            if (!Object.hasOwn(filterOptions, filterId)) {
-                console.error(
-                    `Filter ${filterId} not found in ${filterOptions}`
-                );
-                return [];
-            }
-
-            return filterOptions[filterId].filter(
-                (/** @type {{ key: string | number; }} */ item) => {
-                    if (['number', 'string'].includes(typeof itemKeys)) {
-                        // Single value number or string
-                        return item.key === itemKeys.toString();
-                    }
-                    // Array
-                    return (
-                        Array.isArray(itemKeys) && itemKeys.includes(item.key)
-                    );
-                }
-            );
         },
     },
 };
