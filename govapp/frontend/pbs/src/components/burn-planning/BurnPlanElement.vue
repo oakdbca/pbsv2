@@ -104,7 +104,7 @@
 
                                     <RowSlotTemplate name="Preferred Season">
                                         <SelectFilter
-                                            id="preferred_season"
+                                            :id="selectFilterId('season')"
                                             title="Preferred Season"
                                             :options="
                                                 burnPlanElement.filter_options
@@ -126,7 +126,7 @@
 
                                     <RowSlotTemplate name="Treatment">
                                         <SelectFilter
-                                            id="treatment"
+                                            :id="selectFilterId('treatment')"
                                             title="Treatment"
                                             :options="
                                                 burnPlanElement.filter_options
@@ -149,7 +149,9 @@
 
                                     <RowSlotTemplate name="Justification">
                                         <SelectFilter
-                                            id="justification"
+                                            :id="
+                                                selectFilterId('justification')
+                                            "
                                             title="Justification"
                                             :options="
                                                 burnPlanElement.filter_options
@@ -171,7 +173,7 @@
 
                                     <RowSlotTemplate name="Purpose">
                                         <SelectFilter
-                                            id="purpose"
+                                            :id="selectFilterId('purpose')"
                                             title="Purpose"
                                             :options="
                                                 burnPlanElement.filter_options
@@ -193,7 +195,7 @@
 
                                     <RowSlotTemplate name="Program">
                                         <SelectFilter
-                                            id="program"
+                                            :id="selectFilterId('program')"
                                             title="Program"
                                             :options="
                                                 burnPlanElement.filter_options
@@ -359,6 +361,11 @@ export default {
         },
         activeTabIndexChanged(index) {
             console.log(`activeTabIndexChanged ${index}`);
+        },
+        selectFilterId(filterName) {
+            const ct = this.burnPlanElement.content_type;
+            const id = this.burnPlanElement.id;
+            return `select-filter--content-type-${ct}-id-${id}-name-${filterName}`;
         },
     },
 };
