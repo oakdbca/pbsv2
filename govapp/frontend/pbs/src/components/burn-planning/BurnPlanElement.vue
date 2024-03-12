@@ -1,6 +1,5 @@
 <template>
     <div v-if="burnPlanElement" id="bpe" class="container">
-        {{ burnPlanElement }}
         <div class="row">
             <div class="col">
                 <h3>
