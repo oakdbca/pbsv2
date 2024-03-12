@@ -11,12 +11,18 @@ class AccountsConfig(apps.AppConfig):
 
     def ready(self):
         """Ready the application."""
-        from django.contrib import auth
-
         import govapp.apps.accounts.signals  # noqa: F401
 
-        User = auth.get_user_model()
-        User.objects.get_or_create(
-            email=settings.DEFAULT_FROM_EMAIL,
-            defaults={"username": settings.PROJECT_TITLE, "password": ""},
-        )
+        # When running collectstatic in the docker build the database is not available
+        # so we need to catch the OperationalError and pass
+        try:
+            from django.contrib import auth
+            from django.db.utils import OperationalError
+
+            User = auth.get_user_model()
+            User.objects.get_or_create(
+                email=settings.DEFAULT_FROM_EMAIL,
+                defaults={"username": settings.PROJECT_TITLE, "password": ""},
+            )
+        except OperationalError:
+            pass
