@@ -122,7 +122,10 @@
                                                 )
                                             "
                                             @selection-changed-remove="
-                                                console.log($event)
+                                                selectionChanged(
+                                                    $event,
+                                                    'preferred_season'
+                                                )
                                             "
                                         >
                                         </SelectFilter>
@@ -149,7 +152,11 @@
                                                 )
                                             "
                                             @selection-changed-remove="
-                                                console.log($event)
+                                                selectionChanged(
+                                                    $event,
+                                                    'treatment_id',
+                                                    'treatment'
+                                                )
                                             "
                                         >
                                         </SelectFilter>
@@ -177,7 +184,11 @@
                                                 )
                                             "
                                             @selection-changed-remove="
-                                                console.log($event)
+                                                selectionChanged(
+                                                    $event,
+                                                    'justification_id',
+                                                    'justification'
+                                                )
                                             "
                                         >
                                         </SelectFilter>
@@ -195,14 +206,18 @@
                                                 selectedPurposes
                                             "
                                             :show-title="false"
+                                            :multiple="true"
                                             @selection-changed-select="
                                                 selectionChanged(
                                                     $event,
-                                                    'purpose'
+                                                    'purposes'
                                                 )
                                             "
                                             @selection-changed-remove="
-                                                console.log($event)
+                                                selectionChanged(
+                                                    $event,
+                                                    'purposes'
+                                                )
                                             "
                                         >
                                         </SelectFilter>
@@ -220,6 +235,7 @@
                                                 selectedPurposes
                                             "
                                             :show-title="false"
+                                            :multiple="true"
                                             @selection-changed-select="
                                                 selectionChanged(
                                                     $event,
@@ -227,7 +243,10 @@
                                                 )
                                             "
                                             @selection-changed-remove="
-                                                console.log($event)
+                                                selectionChanged(
+                                                    $event,
+                                                    'program'
+                                                )
                                             "
                                         >
                                         </SelectFilter>
@@ -385,14 +404,39 @@ export default {
             const id = this.burnPlanElement.id;
             return `select-filter--content-type-${ct}-id-${id}-name-${filterName}`;
         },
+        /**
+         * Selection-changed event callback function
+         * @param {Object} selected The event from the SelectFilter component
+         * @param {String} idField The id field in burnPlanElement to update, e.g. field_id=1
+         * @param {String=} textField The text field in burnPlanElement to update, e.g. field='field name'
+         */
         selectionChanged(selected, idField, textField = null) {
-            if (Object.hasOwn(this.burnPlanElement, idField)) {
-                this.burnPlanElement[idField] = selected.value.value;
-            } else {
+            if (!Object.hasOwn(this.burnPlanElement, idField)) {
                 console.error(
                     `selectionChanged: ${idField} not found in burnPlanElement`
                 );
+                return false;
             }
+
+            let empty = selected.value === null || selected.value.length == 0;
+            if (empty) {
+                // Nothing selected
+                this.burnPlanElement[idField] = selected.multiple
+                    ? selected.value
+                    : null;
+                if (Object.hasOwn(this.burnPlanElement, textField)) {
+                    this.burnPlanElement[textField] = null;
+                }
+                return true;
+            }
+
+            // TODO: Was adding selectionChanged callbacks to SelectFilter selection-changed-remove events
+            // when I stopped working on this.
+            // TODO: Differentiate between single and multiple selections
+            // TODO: Map selected {value: x, text: y} to {id: x, name: y}
+            // TODO: Probably other things to do when I pick this up again
+            this.burnPlanElement[idField] = selected.value.value;
+
             if (textField !== null) {
                 if (Object.hasOwn(this.burnPlanElement, textField)) {
                     this.burnPlanElement[textField] = selected.value.text;
@@ -402,6 +446,7 @@ export default {
                     );
                 }
             }
+            return true;
         },
     },
 };
