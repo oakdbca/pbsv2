@@ -150,7 +150,9 @@ class Treatment(
     pass
 
 
-class Justification(UniqueNameableModel, ArchivableModel, TimeStampedModel):
+class Justification(
+    KeyValueListModelMixin, UniqueNameableModel, ArchivableModel, TimeStampedModel
+):
     pass
 
 
@@ -220,7 +222,7 @@ class BurnPlanElement(
     revised_indicative_treatment_year = YearField(null=True, blank=True)
     return_interval = IntervalIntegerField(min_value=1, null=True, blank=True)
     preferred_season = models.CharField(
-        max_length=255, choices=settings.SEASON_CHOICES, null=True, blank=True
+        max_length=255, choices=Choices(*settings.SEASON_CHOICES), null=True, blank=True
     )
     treatment = models.ForeignKey(
         to=Treatment, on_delete=models.PROTECT, null=True, blank=True

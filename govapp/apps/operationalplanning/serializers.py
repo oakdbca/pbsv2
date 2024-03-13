@@ -19,7 +19,7 @@ class OperationalPlanDatatableSerializer(serializers.ModelSerializer):
     year = serializers.CharField()
     districts = serializers.ReadOnlyField()
     regions = serializers.ReadOnlyField()
-    assigned_to_name = serializers.ReadOnlyField()
+    assigned_to_name = serializers.ReadOnlyField(allow_null=True)
     status_display = serializers.CharField(source="get_status_display")
 
     class Meta:

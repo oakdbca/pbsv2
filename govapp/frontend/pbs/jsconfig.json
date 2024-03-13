@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "checkJs": true,
         "resolveJsonModule": true,
         "moduleResolution": "node",
         "module": "esnext",
