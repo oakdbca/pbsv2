@@ -110,6 +110,10 @@ FROM collect_static_pbsv2 as install_build_vue3_pbsv2
 RUN cd /app/govapp/frontend/pbs ; npm ci --omit=dev && \
     cd /app/govapp/frontend/pbs ; npm run build
 
+# Health checks for kubernetes
+RUN wget https://raw.githubusercontent.com/dbca-wa/wagov_utils/main/wagov_utils/bin/health_check.sh -O /bin/health_check.sh
+RUN chmod 755 /bin/health_check.sh
+
 # Launch the application
 FROM install_build_vue3_pbsv2 as launch_pbsv2
 
