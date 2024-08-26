@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block extra_js %}
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
 {% endblock %}
 
 {% block header_top_menu %}
@@ -100,6 +101,8 @@
         <div id="app"></div>
         {% endblock %}
     </div>
+    {% include "govapp/assignable.html" %}
+
 {% endblock %}
 
 {% block custom_js %}

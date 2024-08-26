@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pbsv2"
-version = "1.0.0"
+version = "2.0.0"
 description = "Bushfire Management System"
 authors = ["DBCA OIM <asi@dbca.wa.gov.au>"]
 license = "Apache-2.0"
