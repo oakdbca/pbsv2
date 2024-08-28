@@ -40,13 +40,13 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update && \
     libspatialindex-dev \
     mtr \
     patch \
-    pipx \
     postgresql-client \
     python3-dev \
+    python3-gdal \
     python3-pip \
     python3-poetry \
     python3-setuptools \
-    python3-gdal \
+    python3-venv \
     rsyslog \
     software-properties-common \
     sqlite3 \
@@ -90,15 +90,19 @@ FROM configure_pbsv2 as python_dependencies_pbsv2
 
 WORKDIR /app
 USER oim
+
+ENV POETRY_HOME=/app/poetry
+ENV PATH=$POETRY_HOME/bin:$PATH
 COPY --chown=oim:oim pyproject.toml poetry.lock ./
-RUN pipx install poetry==$POETRY_VERSION && \
-    poetry completions bash > ~/.bash_completion && \
+RUN python3 -m venv $POETRY_HOME
+RUN $POETRY_HOME/bin/pip install poetry==$POETRY_VERSION
+RUN poetry completions bash > ~/.bash_completion && \
     poetry run pip install --upgrade pip
 RUN --mount=type=cache,target=~/.cache/pypoetry/cache poetry install --only main --no-interaction --no-ansi
 
 FROM python_dependencies_pbsv2 as collectstatic_pbsv2
 
-COPY --chown=oim:oim gunicorn.conf.py manage.py manage.sh startup.sh ./
+COPY --chown=oim:oim gunicorn.conf.py manage.py manage.sh ./
 COPY --chown=oim:oim govapp ./govapp
 COPY --chown=oim:oim .git ./.git
 
