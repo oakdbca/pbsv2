@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import hashlib
-import json
 import os
 import pathlib
 import platform
@@ -87,9 +86,10 @@ if DEBUG is True:
     ALLOWED_HOSTS = ["*"]
     CSRF_TRUSTED_ORIGINS = ["https://*.dbca.wa.gov.au"]
 else:
-    ALLOWED_HOSTS_STRING = decouple.config("ALLOWED_HOSTS", default='[""]')
-    CSRF_TRUSTED_ORIGINS = decouple.config("CSRF_TRUSTED_ORIGINS", default='[""]')
-    ALLOWED_HOSTS = json.loads(ALLOWED_HOSTS_STRING)
+    ALLOWED_HOSTS = decouple.config("ALLOWED_HOSTS", default="", cast=decouple.Csv())
+    CSRF_TRUSTED_ORIGINS = decouple.config(
+        "CSRF_TRUSTED_ORIGINS", default="", cast=decouple.Csv()
+    )
 
 # Application definition
 INSTALLED_APPS = [
@@ -352,9 +352,18 @@ if not PRODUCTION_EMAIL:
             "EMAIL_INSTANCE cannot be 'PROD' if PRODUCTION_EMAIL is set to False"
         )
 
-ADMINS = decouple.config(
-    "ADMINS", cast=lambda v: [s.strip() for s in v.split(",")], default="[]"
-)
+
+def parse_admins(value):
+    if not value:
+        return ()
+    return tuple(
+        tuple(admin.strip() for admin in pair.split(":", 1))
+        for pair in value.split(",")
+        if ":" in pair
+    )
+
+
+ADMINS = decouple.config("ADMINS", cast=parse_admins, default="")
 
 # Django Cron
 CRON_SCANNER_PERIOD_MINS = 5  # Run every 5 minutes
